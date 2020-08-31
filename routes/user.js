@@ -7,3 +7,5 @@ router.get('/test', (req, res, next)=> {
     userController.getUser(req, res, next);
 });
 
+//export router for use index.js
+module.exports = router;

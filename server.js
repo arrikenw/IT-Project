@@ -1,4 +1,4 @@
-//code resued from web information technology project code
+//code reused from web information technology project code
 
 const express = require('express');
 const path = require('path');

@@ -50,4 +50,20 @@ server.listen(PORT, () => {
   console.log(`IT-Project test backend running on port: ${PORT}`);
 });
 
+//*****************************************
+//Testing DB, can be deleted later
+const mongoose = require("mongoose");
+const Media = mongoose.model("media");
+const mediaitem = {
+  mediaType: 'Text',
+  mediaURL: '/fake/faketext.txt',
+  tags: ['test'],
+  creator: '5f4cd968f6b0b12dc8f5afd8',
+  isPrivate: false,
+  canAccess: []
+};
+data = new Media(mediaitem);
+data.save();
+//*****************************************
+
 module.exports = server;

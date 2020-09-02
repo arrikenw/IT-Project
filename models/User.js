@@ -12,7 +12,7 @@ const userSchema = new Schema({
         }},
     firstName:  {type: String, required: true, maxLength: 50},
     lastName:  {type: String, required: true, maxLength: 50},
-    username: {type: String, minLength: 1, maxLength: 20, trim: true, unique: true},
+    username: {type: String, minLength: 1, maxLength: 20, trim: true, unique: true, required: true},
     picURL: {type: String},
     password: {type: String, required: true, minLength: 8, maxLength: 50},
     organization: {type: String},

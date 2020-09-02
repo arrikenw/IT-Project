@@ -7,9 +7,9 @@ router.use("/user", userRouter);
 
 
 /* GET home page. */
-// router.use('/', (req, res, next) => {
-//   res.send("this is the backend!");
-// });
+router.get('/', (req, res, next) => {
+  res.send("this is the backend!");
+});
 
 
 

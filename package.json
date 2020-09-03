@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "test": "jest"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
@@ -19,5 +20,8 @@
     "mongoose": "^5.10.2",
     "morgan": "~1.9.1",
     "pug": "^3.0.0"
+  },
+  "devDependencies": {
+    "jest": "^26.4.2"
   }
 }

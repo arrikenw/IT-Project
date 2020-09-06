@@ -1,8 +1,9 @@
 import React from 'react';
 import './App.css';
 import Axios from "axios";
-import { BrowserRouter as Router, Route} from "react-router-dom";
+import { BrowserRouter as Router, Route, Link} from "react-router-dom";
 import Login from "./components/Login/Login";
+import Signup from "./components/Signup/Signup";
 
 class App extends React.Component {
     state = {
@@ -30,7 +31,15 @@ class App extends React.Component {
                 <Route path = "/login">
                     <Login></Login>
                 </Route>
+                <Route path = "/signup">
+                    <Signup></Signup>
+                </Route>
+                
             </Router>
+
+
+
+            
                 <p>
                     Hello this is the front end!
                 </p>
@@ -38,6 +47,8 @@ class App extends React.Component {
                 <p>
                     {this.state.backend}
                 </p>
+                
+                
                 
             </div>
             

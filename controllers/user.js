@@ -2,6 +2,7 @@
 const bcrypt = require("bcrypt");
 const emailValidator = require("email-validator");
 const mongoose = require("mongoose");
+const { generateToken, authenticateToken } = require("../utils/jwtTokens");
 
 //import the users model
 const UserModel = mongoose.model("users");
@@ -9,137 +10,336 @@ const UserModel = mongoose.model("users");
 //get a user's private user information
 //must be authenticated first
 const getUser = (req, res, next) => {
-    if (!req.body.email || !req.body.password) {
-        console.log("AddUser not successful: missing forum attributes");
-        //res.statusCode(400);
-        res.send("Sign up failed - Missing forum attributes");
-        return;
-    }
-    let user = "";
+    const id = req.user.id;
 
-    const validatePassword = (err, valid) => {
-        if (valid) {
-            res.send(user);
-        }
-        else {
-            res.send("Get user failed - invalid password");
-        }
-    }
-
-    const validateAccount = (err, docs) => {
-        if (docs.length === 0) {
-            res.send("Get user failed - no account exists with email: " + req.body.email);
-            return;
-        }
-        user = docs[0];
-        bcrypt.compare(req.body.password, user.password, validatePassword);
-        console.log(err);
-        console.log(docs);
-        return;
-    }
-    UserModel.find({email: req.body.email}, validateAccount);
-}
-
-//gets a user's public user information
-const getUserPublic = (req, res, next) => {
-    res.statusCode(200);
-    res.send("this is the users route");
+    //find user by id
+    UserModel.findById(id).lean()
+        .then((doc) => {
+            //send user data back
+            const payload = doc;
+            delete payload.password;
+            delete payload.updatedAt;
+            delete payload.createdAt;
+            delete payload.__v;
+            console.log("getUser successful: found user with id " + id);
+            res.status(200);
+            res.send(doc);
+        }).catch((err) => {
+            console.log("getUser not successful: " + err.message);
+            res.status(500);
+            res.send("Get user not successful- something went wrong, try again");
+        });
 }
 
 //gets a list of user's public user information
-const getUsersPublic = (req, res, next) => {
-    res.statusCode(200);
-    res.send("this is the users route");
+const getPublicUser = (req, res, next) => {
+    if (!req.body.ids) {
+        console.log("getPublicUser not successful: missing forum attributes");
+        res.status(400);
+        res.send("Get public user not successful - missing forum attributes");
+        return;
+    }
+
+    const processUsers = (err, docs) => {
+        if (err) {
+            res.status(500);
+            console.log("getPublicUser not successful: " + err.message);
+            res.send("Get public user not successful - something went wrong, try again");
+            return;
+        }
+
+        let payload = JSON.parse(JSON.stringify(docs));
+
+        for (let i = 0; i < payload.length; i ++) {
+            delete payload[i].email;
+            delete payload[i].password;
+            delete payload[i].createdAt;
+            delete payload[i].updatedAt;
+            delete payload[i].role;
+            delete payload[i].__v;
+        }
+
+        console.log("getPublicUser successful: returned " + payload.length + " users");
+        res.status(200);
+        res.send(payload);
+    }
+
+    UserModel.find().where('_id').in(req.body.ids).exec(processUsers);
 }
 
 //adds a new user to the database
 const addUser = (req, res, next) => {
 
     //checks if request has all required attributes to add a user
-    if (!req.body.email || !req.body.password || !req.body.firstName || !req.body.lastName) {
-        console.log("AddUser not successful: missing forum attributes");
-        //res.statusCode(400);
-        res.send("Sign up failed - Missing forum attributes");
+    if (!req.body.email || !req.body.password || !req.body.firstName || !req.body.lastName || !req.body.userName) {
+        console.log("addUser not successful: missing forum attributes");
+        res.status(400);
+        res.send("Sign up failed - missing forum attributes");
         return;
     }
 
     //checks if password is greater than 8 characters
-    else if (req.body.password.length < 8) {
-        //res.statusCode(400);
+    if (req.body.password.length < 8) {
+        console.log("addUser not successful: password less than 8 characters");
+        res.status(400);
         res.send("Sign up failed - password must be greater than 8 characters");
         return;
     }
 
     //checks if password is less than or equal to 80 characters
-    else if (req.body.password.length > 80) {
-        //res.statusCode(400);
+    if (req.body.password.length > 80) {
+        console.log("addUser not successful: password greater than 80 characters");
+        res.status(400);
         res.send("Sign up failed - password must be less than or equal to 80 characters");
         return;
     }
 
     //checks if email address is valid
-    else if (!emailValidator.validate(req.body.email)) {
-        //res.statusCode(400);
+    if (!emailValidator.validate(req.body.email)) {
+        console.log("addUser not successful: invalid email");
+        res.status(400);
         res.send("Sign up failed - invalid email address");
         return;
     }
 
-    else {
-        const onUserSave = (err, newUser) => {
-            if (err) {
-                if (err.message.startsWith("MongoError: E11000 duplicate key error collection: developmentDB.Users index: email_1")) {
-                    console.error(err);
-                    res.send("Sign up failed - email address already has an account");
-                    return;
-                }
-                //TODO Handle different errors
-
-                //res.statusCode(500);
-                console.error(err);
-                console.log(err.message);
-                console.log("we are here");
+    //callback after saving new user to database
+    const onUserSave = (err, newUser) => {
+        //catch different errors
+        if (err) {
+            if (err.message.startsWith("E11000 duplicate key error collection: developmentDB.Users index: email_1")) {
+                console.log("addUser not successful: email address already has an account")
+                res.status(400);
+                res.send("Sign up failed - email address already has an account");
+                return;
+            }
+            //TODO Handle different errors
+            else {
+                res.status(500);
+                console.log("addUser not successful: " + err.message);
                 res.send("Sign up failed - something went wrong, try again");
                 return;
             }
-            console.log("Sign up successful");
-            //res.statusCode(200);
-            res.send("Sign up successful - account made for email: " + newUser.email);
-
         }
-        const saveUser = (err, hash) => {
-            if (err) {
-                console.error(err);
-                //res.statusCode(500);
-                res.send("Sign up failed - something went wrong, try again");
-                return;
-            }
-            const item = req.body;
-            item.password = hash;
-            const data = new UserModel(item);
-            data.save(onUserSave);
-        }
-        bcrypt.hash(req.body.password, 12, saveUser);
+        console.log("addUser successful: "  + newUser.email);
+        res.status(201);
+        res.send("Sign up successful - account made for email: " + newUser.email);
     }
+
+    //callback after hashing password
+    const saveUser = (err, hash) => {
+        if (err) {
+            console.log("addUser not successful: " + err.message);
+            res.status(500);
+            res.send("Sign up failed - something went wrong, try again");
+            return;
+        }
+        const item = req.body;
+        item.password = hash;
+        const data = new UserModel(item);
+        data.save(onUserSave);
+    }
+
+    //hash password
+    bcrypt.hash(req.body.password, 12, saveUser);
+
 }
 
 //return an access token for a given user
 const loginUser = (req, res, next) => {
-    res.statusCode(200);
-    res.send("this is the users route");
+    //if user details are missing
+    if (!req.body.email || !req.body.password) {
+        console.log("loginUser not successful: missing forum attributes");
+        res.status(400);
+        res.send("Login not successful - missing forum attributes");
+        return;
+    }
+
+    let user = "";
+
+    //callback on validated password
+    const validatePassword = (err, valid) => {
+        if (err) {
+            console.log("loginUser not successful: " + err.message);
+            res.status(500);
+            res.send("Login not successful - something went wrong, try again");
+        }
+        if (valid) {
+            const payload = {
+                id: user._id,
+            };
+            console.log("loginUser successful: " + user.email);
+            res.status(200);
+            res.send({token: generateToken(payload)});
+        }
+        else {
+            console.log("loginUser not successful: invalid password for user " + user.email);
+            res.status(400);
+            res.send("Login user failed - invalid password");
+        }
+    }
+
+    //callback on found user
+    const validateAccount = (err, docs) => {
+        if (docs.length === 0) {
+            console.log("loginUser not successful: no account exists with email: " + req.body.email);
+            res.status(400);
+            res.send("Login user failed - no account exists with email: " + req.body.email);
+            return;
+        }
+        if (err) {
+            console.log("loginUser not successful: " + err.message);
+            res.status(500);
+            res.send("Login not successful - something went wrong, try again");
+            return;
+        }
+        user = docs[0];
+        bcrypt.compare(req.body.password, user.password, validatePassword);
+    }
+
+    //find user with matching email
+    UserModel.find({email: req.body.email}, validateAccount);
 }
 
 //update a user's information
 const updateUser = (req, res, next) => {
-    res.statusCode(200);
-    res.send("this is the users route");
+    const id = req.user.id;
+    const update = JSON.parse(JSON.stringify(req.body.update));
+
+    const onUpdateUser = (err, results) => {
+        if (err) {
+            console.log("updateUser not successful: " + err.message);
+            res.status(500);
+            res.send("update not successful - something went wrong, try again");
+            return;
+        }
+        if (results.n === 1) {
+            console.log("updateUser successful: updated user " + id);
+            res.status(500);
+            res.send("update successful - updated user " + id);
+            return;
+        }
+        console.log("updateUser not successful: could not find user " + id);
+        res.status(400);
+        res.send("update not successful - could not find user " + id);
+    }
+
+    const onHashPassword = (err, hash) => {
+        if (err) {
+            console.log("updateUser not successful: " + err.message);
+            res.status(500);
+            res.send("update not successful - something went wrong, try again");
+            return;
+        }
+        update.password = hash;
+        UserModel.updateOne({_id: id}, update, onUpdateUser);
+    }
+
+    const onCheckPassword = (err, valid) => {
+        if (err) {
+            console.log("updateUser not successful: " + err.message);
+            res.status(500);
+            res.send("update not successful - something went wrong, try again");
+            return;
+        }
+        if (valid) {
+            if (update.password) {
+                bcrypt.hash(update.password, 12, onHashPassword);
+            }
+            else {
+                UserModel.updateOne({_id: id}, update, onUpdateUser);
+            }
+        }
+        else {
+            console.log("updateUser not successful: invalid password for user " + id);
+            res.status(400);
+            res.send("Update not successful - invalid password");
+        }
+    }
+
+    //find user by id
+    UserModel.findById(id).lean()
+        .then((doc) => {
+            bcrypt.compare(req.body.password, doc.password, onCheckPassword);
+        })
+        .catch((err) => {
+            console.log("updateUser not successful: " + err.message);
+            res.status(500);
+            res.send("Update not successful - something went wrong, try again");
+        });
 }
 
 //delete a user from the database
 const deleteUser = (req, res, next) => {
-    res.statusCode(200);
-    res.send("this is the users route");
+    const id = req.user.id;
+    const update = JSON.parse(JSON.stringify(req.body.update));
+
+    const onUpdateUser = (err, results) => {
+        if (err) {
+            console.log("deleteUser not successful: " + err.message);
+            res.status(500);
+            res.send("Delete not successful - something went wrong, try again");
+            return;
+        }
+        if (results.n === 1) {
+            console.log("deleteUser successful: updated user " + id);
+            res.status(500);
+            res.send("Delete successful - updated user " + id);
+            return;
+        }
+        console.log("deleteUser not successful: could not find user " + id);
+        res.status(400);
+        res.send("Delete not successful - could not find user " + id);
+    }
+
+    const onHashPassword = (err, hash) => {
+        if (err) {
+            console.log("deleteUser not successful: " + err.message);
+            res.status(500);
+            res.send("Delete not successful - something went wrong, try again");
+            return;
+        }
+        update.password = hash;
+        UserModel.deleteOne({_id: id}, update, onUpdateUser);
+    }
+
+    const onCheckPassword = (err, valid) => {
+        if (err) {
+            console.log("deleteUser not successful: " + err.message);
+            res.status(500);
+            res.send("Delete not successful - something went wrong, try again");
+            return;
+        }
+        if (valid) {
+            if (update.password) {
+                bcrypt.hash(update.password, 12, onHashPassword);
+            }
+            else {
+                UserModel.deleteOne({_id: id}, update, onUpdateUser);
+            }
+        }
+        else {
+            console.log("deleteUser not successful: invalid password for user " + id);
+            res.status(400);
+            res.send("Delete not successful - invalid password");
+        }
+    }
+
+    //find user by id
+    UserModel.findById(id).lean()
+        .then((doc) => {
+            bcrypt.compare(req.body.password, doc.password, onCheckPassword);
+        })
+        .catch((err) => {
+            console.log("deleteUser not successful: " + err.message);
+            res.status(500);
+            res.send("Delete not successful - something went wrong, try again");
+        });
 }
 
 
 module.exports.getUser = getUser;
+module.exports.getPublicUser = getPublicUser;
 module.exports.addUser = addUser;
+module.exports.loginUser = loginUser;
+module.exports.updateUser = updateUser;
+module.exports.deleteUser = deleteUser;

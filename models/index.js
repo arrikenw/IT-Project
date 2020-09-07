@@ -1,6 +1,5 @@
 //set up schemas and connect to database
 
-if (process.env.NODE_ENV !== 'production') require('dotenv').config()
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
@@ -33,3 +32,19 @@ model.once("open", async () => {
 //import the other collections
 require('./User');
 require('./Media');
+
+
+//function to disconnect from database
+const disconnectDB = () => {
+    mongoose.disconnect();
+}
+
+//function to clear all collections from connected database
+const clearCollections = async () => {
+    Object.values(model.collections).forEach((collection) => {
+        collection.deleteMany({});
+    });
+}
+
+module.exports.disconnectDB = disconnectDB;
+module.exports.clearCollections = clearCollections;

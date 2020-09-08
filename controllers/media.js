@@ -17,8 +17,12 @@ const sendhelper = function(res, response){
 }
 
 
+//*****************************************************************************************
+//HELPER FUNCTIONS AND CONTROLLER FOR MEDIA UPLOADS
+
+
 //put info about uploaded file into the database
-const dbSaveMetadata = function(file, fields, user, resourceurl){
+const dbSaveMetadata = function(res, file, fields, user, resourceurl){
     const item = {
         mediaType: file.type.split('/')[0],
         mediaURL: resourceurl,
@@ -27,25 +31,26 @@ const dbSaveMetadata = function(file, fields, user, resourceurl){
         isPrivate: fields.isPrivate,
         canAccess: fields.canAccess
     }
+    console.log(item);
     const newmedia = new Media(item);
     newmedia.save()
         .then(function (media, err){
             if (err){
-                console.log("saving to db failed")
-                sendhelper({status:503, msg:err});
+                console.log("saving to db failed");
+                sendhelper(res, {status:503, msg:err});
             }
             else{
-                console.log(media);
-                sendhelper({status:200, msg:media});
+                console.log("saving to db succeeded, request complete");
+                sendhelper(res, {status:200, msg:media});
             }
         });
 }
 
 
-const uploadMedia = function(file, fields, user){
+const saveBucketAndDB = function(res, file, fields, user){
     //information about bucket and upload
     const bucketName = 'it-project-media';
-    const keyName = user + '/' + file.name; //TODO check for key collisions
+    const keyName = user._id + '/' + file.name; //TODO check for key collisions
     const baseurl = 'https://it-project-media.s3-ap-southeast-2.amazonaws.com/'
 
     //actual resource url
@@ -57,10 +62,10 @@ const uploadMedia = function(file, fields, user){
         //check upload success
         if (err){
             console.log("Upload to bucket failed");
-            sendhelper({status:503, msg:"upload failed"});
+            sendhelper(res, {status:503, msg:"upload failed"});
         }
         console.log("Successfully uploaded data to " + bucketName + '/' + keyName);
-        dbSaveMetadata(file, fields, user, resourceurl);
+        dbSaveMetadata(res, file, fields, user, resourceurl);
     });
 }
 
@@ -85,7 +90,7 @@ const validateFields = function(fields){
     return 'SUCCESS';
 }
 
-const validateAll = function(file){
+const validateAll = function(file, fields){
     if (!validateMediaSize(file)){
         return {status: 400, msg:'ERROR. File was too large'};
     }
@@ -96,7 +101,7 @@ const validateAll = function(file){
     return fieldStatus;
 }
 
-const handleMediaUpload = function(req, res){
+const uploadMedia = function(req, res, next){
     const form = new formidable.IncomingForm();
     form.maxFileSize = 15 * 1024 * 1024; //15 meg
     form.parse(req, (err, fields, files) => {
@@ -105,19 +110,24 @@ const handleMediaUpload = function(req, res){
             sendhelper(res,{status:500, msg:"ERROR. Form data could not be parsed"});
             return;
         }
-        const validationStatus = validateAll(files[0], fields);
+        const validationStatus = validateAll(files.mediafile, fields);
         if (validationStatus != 'SUCCESS'){
             console.log(validationStatus);
-            sendhelper(validationStatus);
+            sendhelper(res, validationStatus);
             return;
         }
         console.log('validation success');
-        uploadMedia(file, fields, user);
+        let user = {_id: '5f55e6762988b53ca870398f'}; //ignore auth and user until implemented by arriken. ID is hardcoded to allow for other sections of functionality to be tested.
+        saveBucketAndDB(res, files.mediafile, fields, user);
     })
-    .catch('error', function (err){
+    .on('error', function (err){
             console.log(err);
             res.status = 500;
             res.send("Unknown error when parsing form");
     });
 }
 
+//*****************************************************************************************
+
+//exports
+module.exports.uploadMedia = uploadMedia;

@@ -25,10 +25,11 @@ const sendhelper = function(res, response){
 
 
 //put info about uploaded file into the database
-const dbSaveMetadata = function(res, file, fields, user, resourceurl){
+const dbSaveMetadata = function(res, file, fields, user, resourceurl, filePath){
     const item = {
         mediaType: file.type.split('/')[0],
         mediaURL: resourceurl,
+        filePath: filePath,
         tags: fields.tags,
         creator: user._id,
         isPrivate: fields.isPrivate,
@@ -68,7 +69,7 @@ const saveBucketAndDB = function(res, file, fields, user, filedata){
             sendhelper(res, {status:503, msg:"upload failed"});
         }
         console.log("Successfully uploaded data to " + bucketName + '/' + keyName);
-        dbSaveMetadata(res, file, fields, user, resourceurl);
+        dbSaveMetadata(res, file, fields, user, resourceurl, file.name);
     });
 }
 
@@ -136,7 +137,49 @@ const uploadMedia = function(req, res, next){
     });
 }
 
+
+
 //*****************************************************************************************
+//CONTROLLER FOR SERVING MEDIA
+const serveMedia = function(req, res, next){
+
+    //ignore auth and user until implemented by arriken
+    //so that we can still work on file access
+    const USER_AUTH_SUCCESS = true;
+    if (!USER_AUTH_SUCCESS){
+        sendhelper(res, {status:401, msg: 'authentication failed'});
+        return;
+    }
+
+    const bucketName = 'it-project-media';
+    console.log(req.body);
+    const filepath = req.body.userid + '/' + req.body.filepath;
+    const params = {Bucket: bucketName, Key: filepath};
+    s3.getObject(params, function(err, data){
+        if (err){
+            console.log(err);
+            sendhelper(res, {status: 500, msg: 'Error retrieving file'});
+            return;
+        }
+
+        //conversion of octet stream to b64
+        //I don't think converting here is necessary as it wastes server time, but I've included it to make it easier to check my responses are valid
+        //code retrieved from https://stackoverflow.com/questions/23097928/node-js-throws-btoa-is-not-defined-error
+        const base64form = Buffer.from(data.Body, 'binary').toString('base64');
+        sendhelper(res, {status: 200, msg: base64form});
+        console.log('Successfully returned file, request complete.')
+    });
+};
+
+
+
+
+
+
+
+
+
 
 //exports
 module.exports.uploadMedia = uploadMedia;
+module.exports.serveMedia = serveMedia;

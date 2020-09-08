@@ -10,8 +10,14 @@ router.post('/add', authenticateToken, (req, res, next) => {
 });
 */
 
+
+router.get('/', (req, res, next) => {
+   console.log('getting media');
+    mediaController.serveMedia(req, res, next);
+});
+
 router.post('/add', (req, res, next) => {
-    console.log("posting");
+    console.log('posting');
     mediaController.uploadMedia(req, res, next);
 });
 

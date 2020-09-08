@@ -1,6 +1,9 @@
 //forms
 const formidable = require('formidable');
 
+//fs
+var fs = require('fs');
+
 //db
 const mongoose = require('mongoose');
 const Media = mongoose.model('media');
@@ -47,7 +50,7 @@ const dbSaveMetadata = function(res, file, fields, user, resourceurl){
 }
 
 
-const saveBucketAndDB = function(res, file, fields, user){
+const saveBucketAndDB = function(res, file, fields, user, filedata){
     //information about bucket and upload
     const bucketName = 'it-project-media';
     const keyName = user._id + '/' + file.name; //TODO check for key collisions
@@ -57,7 +60,7 @@ const saveBucketAndDB = function(res, file, fields, user){
     const resourceurl = baseurl + keyName;
 
     //writing to bucket
-    const params = {Bucket: bucketName, Key: keyName, Body: file.body}; //idk if it is file.body, file.data etc.
+    const params = {Bucket: bucketName, Key: keyName, Body: filedata};
     s3.putObject(params, function(err, data) {
         //check upload success
         if (err){
@@ -92,10 +95,10 @@ const validateFields = function(fields){
 
 const validateAll = function(file, fields){
     if (!validateMediaSize(file)){
-        return {status: 400, msg:'ERROR. File was too large'};
+        return {status: 400, msg:'File was too large'};
     }
     if (!validateMediaType(file)){
-        return {status: 415, msg:'ERROR. File type is unsupported'};
+        return {status: 415, msg:'File type is unsupported'};
     }
     fieldStatus = validateFields(fields);
     return fieldStatus;
@@ -107,7 +110,7 @@ const uploadMedia = function(req, res, next){
     form.parse(req, (err, fields, files) => {
         if (err) {
             console.log(err);
-            sendhelper(res,{status:500, msg:"ERROR. Form data could not be parsed"});
+            sendhelper(res,{status:500, msg:'Error in form data'});
             return;
         }
         const validationStatus = validateAll(files.mediafile, fields);
@@ -118,7 +121,13 @@ const uploadMedia = function(req, res, next){
         }
         console.log('validation success');
         let user = {_id: '5f55e6762988b53ca870398f'}; //ignore auth and user until implemented by arriken. ID is hardcoded to allow for other sections of functionality to be tested.
-        saveBucketAndDB(res, files.mediafile, fields, user);
+        fs.readFile(files.mediafile.path, function(err, data){
+            if (err){
+                sendhelper(res, {status:400, msg: 'Error reading file'});
+                return;
+            }
+            saveBucketAndDB(res, files.mediafile, fields, user, data);
+        });
     })
     .on('error', function (err){
             console.log(err);

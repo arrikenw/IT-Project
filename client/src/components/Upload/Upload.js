@@ -24,6 +24,7 @@ class Upload extends Component {
     this.renderActions = this.renderActions.bind(this);
   }
 
+  //adds files to a list of files
   onFilesAdded(files) {
     this.setState(prevState => ({
       files: prevState.files.concat(files)
@@ -134,6 +135,7 @@ class Upload extends Component {
             <span className="Title">Upload Files</span>
             <div className="Content">
               <div>
+                  HI
                 <Dropzone
                   onFilesAdded={this.onFilesAdded}
                   disabled={this.state.uploading || this.state.successfullUploaded}

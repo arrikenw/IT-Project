@@ -32,6 +32,12 @@ class App extends React.Component {
                 <Route path = "/login">
                     <Login></Login>
                 </Route>
+                <Route path = "/signup">
+                    <Signup></Signup>
+                </Route>
+                <Route path = "/upload">
+                    <Upload></Upload>
+                </Route>
             </Router>
                 <p>
                     Hello this is the front end!

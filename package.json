@@ -4,12 +4,14 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "start": "SET NODE_ENV=development&node server.js",
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "test": "SET NODE_ENV=test&jest --runInBand",
+    "lint": "eslint --fix app.js server.js controllers models routes utils"
   },
   "dependencies": {
-    "aws-sdk": "^2.747.0",
-    "cookie-parser": "~1.4.4",
+    "@jest/globals": "^26.4.2",
+    "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
@@ -17,8 +19,22 @@
     "express": "^4.16.4",
     "formidable": "^1.2.2",
     "http-errors": "~1.6.3",
-    "mongoose": "^5.10.2",
-    "morgan": "~1.9.1",
-    "pug": "2.0.0-beta11"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-node": "^4.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jsx-a11y": "^6.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "^4.0.0",
+    "jest": "^26.4.2",
+    "prettier": "^2.1.1",
+    "supertest": "^4.0.2"
   }
 }

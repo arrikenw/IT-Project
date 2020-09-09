@@ -1,0 +1,25 @@
+{
+    "env": {
+        "commonjs": true,
+        "es2020": true,
+        "node": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2020
+    },
+    "extends": ["eslint:recommended", "airbnb", "prettier", "plugin:node/recommended"],
+    "plugins": ["prettier"],
+    "rules": {
+        "prettier/prettier": "error",
+        "no-console": "off",
+        "no-underscore-dangle": "off",
+        "prefer-destructuring": "off",
+        "no-process-exit": "off",
+        "global-require": "off"
+    },
+    "settings": {
+        "react" : {
+            "version": "999.999.999"
+        }
+    }
+}

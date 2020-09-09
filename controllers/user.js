@@ -83,7 +83,7 @@ const addUser = (req, res) => {
   ) {
     console.log("addUser not successful: missing forum attributes");
     res.status(400);
-    res.send("Sign up failed - missing forum attributes");
+    res.send("Sign up not successful - missing forum attributes");
     return;
   }
 
@@ -91,7 +91,9 @@ const addUser = (req, res) => {
   if (req.body.password.length < 8) {
     console.log("addUser not successful: password less than 8 characters");
     res.status(400);
-    res.send("Sign up failed - password must be greater than 8 characters");
+    res.send(
+      "Sign up not successful - password must be greater than 8 characters"
+    );
     return;
   }
 
@@ -100,7 +102,7 @@ const addUser = (req, res) => {
     console.log("addUser not successful: password greater than 80 characters");
     res.status(400);
     res.send(
-      "Sign up failed - password must be less than or equal to 80 characters"
+      "Sign up not successful - password must be less than or equal to 80 characters"
     );
     return;
   }
@@ -109,7 +111,7 @@ const addUser = (req, res) => {
   if (!emailValidator.validate(req.body.email)) {
     console.log("addUser not successful: invalid email");
     res.status(400);
-    res.send("Sign up failed - invalid email address");
+    res.send("Sign up not successful - invalid email address");
     return;
   }
 
@@ -126,19 +128,21 @@ const addUser = (req, res) => {
           "addUser not successful: email address already has an account"
         );
         res.status(400);
-        res.send("Sign up failed - email address already has an account");
+        res.send(
+          "Sign up not successful - email address already has an account"
+        );
         return;
       }
       // TODO Handle different errors
 
       res.status(500);
       console.log(`addUser not successful: ${err.message}`);
-      res.send("Sign up failed - something went wrong, try again");
+      res.send("Sign up not successful - something went wrong, try again");
       return;
     }
     console.log(`addUser successful: ${newUser.email}`);
     res.status(201);
-    res.send(`Sign up successful - account made with id ${newUser._id}`);
+    res.send({ id: newUser._id });
   };
 
   // callback after hashing password
@@ -146,7 +150,7 @@ const addUser = (req, res) => {
     if (err) {
       console.log(`addUser not successful: ${err.message}`);
       res.status(500);
-      res.send("Sign up failed - something went wrong, try again");
+      res.send("Sign up not successful - something went wrong, try again");
       return;
     }
     const item = req.body;
@@ -190,7 +194,7 @@ const loginUser = (req, res) => {
         `loginUser not successful: invalid password for user ${user._id}`
       );
       res.status(400);
-      res.send("Login user failed - invalid password");
+      res.send("Login user not successful - invalid password");
     }
   };
 
@@ -202,7 +206,7 @@ const loginUser = (req, res) => {
       );
       res.status(400);
       res.send(
-        `Login user failed - no account exists with email: ${req.body.email}`
+        `Login user not successful - no account exists with email: ${req.body.email}`
       );
       return;
     }
@@ -235,7 +239,7 @@ const updateUser = (req, res) => {
     if (results.n === 1) {
       console.log(`updateUser successful: updated user ${id}`);
       res.status(200);
-      res.send(`update successful - updated user ${id}`);
+      res.send({ id });
       return;
     }
     console.log(`updateUser not successful: could not find user ${id}`);
@@ -301,7 +305,7 @@ const deleteUser = (req, res) => {
     if (results.n === 1) {
       console.log(`deleteUser successful: updated user ${id}`);
       res.status(200);
-      res.send(`Delete successful - updated user ${id}`);
+      res.send({ id });
       return;
     }
     console.log(`deleteUser not successful: could not find user ${id}`);

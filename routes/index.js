@@ -2,6 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
+const mediaRouter = require('./media');
+router.use('/media', mediaRouter);
 const userRouter = require("./user");
 
 router.use("/user", userRouter);

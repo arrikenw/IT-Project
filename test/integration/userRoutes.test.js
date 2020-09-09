@@ -21,9 +21,8 @@ describe("test /api/user/add route and the addUser controller", () => {
     };
     const response = await request(app).post("/api/user/add").send(payload);
     expect(response.status).toBe(201);
-    expect(response.text).toMatch(
-      /Sign up successful - account made with id [a-z0-9]{24}/
-    );
+    expect(response.body).toHaveProperty("id");
+    // /Sign up successful - account made with id [a-z0-9]{24}/
     done();
   });
 });
@@ -92,7 +91,7 @@ describe("test /api/user/add route and the addUser controller", () => {
 });
 
 // getPublicUser testing
-describe("test /api/user/add route and the addUser controller", () => {
+describe("test /api/user/getPublic route and the getPublicUser controller", () => {
   // add database entries and get ids to test getPublicUser
   const users = {
     ids: [],
@@ -118,12 +117,12 @@ describe("test /api/user/add route and the addUser controller", () => {
     const responseOne = await request(app)
       .post("/api/user/add")
       .send(payloadAddFirst);
-    users.ids.push(responseOne.text.split(" ")[8]);
+    users.ids.push(responseOne.body.id);
 
     const responseTwo = await request(app)
       .post("/api/user/add")
       .send(payloadAddSecond);
-    users.ids.push(responseTwo.text.split(" ")[8]);
+    users.ids.push(responseTwo.body.id);
     return true;
   });
 

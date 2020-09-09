@@ -31,7 +31,7 @@ const userSchema = new Schema(
     },
     picURL: { type: String },
     password: { type: String, required: true, minLength: 8, maxLength: 50 },
-    organization: { type: String },
+    organisation: { type: String },
     professionalFields: [String],
     DOB: { type: Date },
     phone: { type: String }, // research lengths etc. later - this is just initial setup

@@ -1,5 +1,7 @@
 node_modules
 .idea
-.env
+utils/.*
 client/node_modules
 client/.idea
+.env.*
+coverage

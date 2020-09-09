@@ -1,6 +1,7 @@
 node_modules
 .idea
-.env.development
-.env.test
+utils/.*
 client/node_modules
 client/.idea
+.env.*
+coverage

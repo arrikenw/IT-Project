@@ -43,7 +43,7 @@ class Login extends Component {
                           />
                     </Form.Group>
 
-                    <div>
+                    <div className="row justify-content-center">
                 <Button
                     variant="success"
                     size="lg"
@@ -52,8 +52,6 @@ class Login extends Component {
                 >
                   Login
                 </Button>
-                    Don't have an account?&nbsp;
-                  <Link to="/signup"> Sign up here</Link>
                 </div>
                 </Form>
                 

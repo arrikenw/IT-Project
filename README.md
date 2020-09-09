@@ -32,7 +32,7 @@ To run the linter for the backend code,  run the command `npm run lint` in the r
 To run the tests for the backend code,  run the command `npm run test` in the root directory of the repository
 ##Style Guide
 ### Code Style:
-- ####Use arrow functions when possible:
+- #### Use arrow functions when possible:
   - may not be possible in all scenarios
   - wrong:
   - ```javascript
@@ -43,7 +43,7 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
   - ```javascript
     const myFunc = (param) => {};
     ```
-- ####Arrow functions with one parameter should not have brackets:
+- #### Arrow functions with one parameter should not have brackets:
     - wrong:
     - ```javascript
       const myFunc = (param) => {};
@@ -52,7 +52,7 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
     - ```javascript
       const myFunc = param => {};
       ```
-- ####Use promises over callbacks when possible:
+- #### Use promises over callbacks when possible:
   - may not be possible in all scenarios
   - wrong:
   - ```javascript
@@ -61,7 +61,7 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
   - right:
   - ```javascript
     synchronousFunc(param).then(result).catch(err);
-- ####Indentation is done with two spaces
+- #### Indentation is done with two spaces
   - tabs are not used
   - wrong:
   - ```javascript
@@ -75,7 +75,7 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
       console.log("two spaces for indentation");
     };
     ```
-- ####Camel case is used for variable and function names
+- #### Camel case is used for variable and function names
   - wrong:
   - ```javascript
     const myvariablename = 5;
@@ -90,7 +90,7 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
     
     const myFuncName = (param) => {};
     ```
-- ####Callbacks must be declared individually
+- #### Callbacks must be declared individually
   - required to avoid "callback hell"
   - wrong:
   - ```javascript
@@ -102,7 +102,7 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
     
     synchronousFunc(param, callBack);
     ```
-- ####When possible, Australian English spelling is used
+- #### When possible, Australian English spelling is used
   - May not be possible for specific packages
   - wrong:
   - ```javascript
@@ -112,7 +112,7 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
   - ```javascript
     const bestColour = "#4132";
     ```
-- ####Spaces after double slash for comments
+- #### Spaces after double slash for comments
   - wrong:
   - ```javascript
     //This is a function
@@ -123,7 +123,7 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
     // This is a function
     const myFunc = () => {};
     ```
-- ####Use FIXME and TODO to annoate
+- #### Use FIXME and TODO to annoate
   - wrong:
   - ```javascript
     // this needs to be fixed
@@ -190,7 +190,7 @@ a string with the correct form:
       res.status(500);
       res.send("File upload not successful - something went wrong, try again");
       ```
-###Git Hub:
+### Git Hub:
 - Branches should be named `<developerName>/<featureName>`:
     - wrong:
     - ```
@@ -263,7 +263,7 @@ Responses:
     ```
 
 #### Login User
-######Generates and returns an authentication token for a given valid user
+###### Generates and returns an authentication token for a given valid user
 Request to: `/api/user/login` as a `POST` request
 
 Takes a: JSON in the body, requiring the key-value pairs:
@@ -293,7 +293,7 @@ Responses:
     "Login in not successful - <reasonForError>"
     ```
 #### Get User
-######Returns a user's details from a valid authentication token
+###### Returns a user's details from a valid authentication token
 Request to: `/api/user/get` as a `GET` request
 
 Takes a: Authorization header with the format
@@ -330,7 +330,7 @@ Responses:
     "Get user not successful - <reasonForError>"
     ```
 #### Get Public User
-######Returns a list user's public details from a list user IDs
+###### Returns a list user's public details from a list user IDs
 Request to: `/api/user/getPublic` as a `POST` request
 
 Takes a: JSON in the body, requiring the key-value pairs:
@@ -375,7 +375,7 @@ Responses:
     "Get public user not successful - <reasonForError>"
     ```
 #### Update User
-######Updates a user's detail from an update, a password and an authentication token
+###### Updates a user's detail from an update, a password and an authentication token
 Request to: `/api/user/update` as a `POST` request
 
 Takes a: Authorization header with the format
@@ -429,7 +429,7 @@ Responses:
     "Update user not successful - <reasonForError>"
     ```
 #### Delete User
-######Deletes a user from a password and an authentication token
+###### Deletes a user from a password and an authentication token
 Request to: `/api/user/delete` as a `POST` request
 
 Takes a: Authorization header with the format

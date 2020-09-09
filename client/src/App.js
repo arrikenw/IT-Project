@@ -4,6 +4,7 @@ import Axios from "axios";
 import { BrowserRouter as Router, Route, Link} from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
+import Upload from "./components/Upload/Upload";
 
 class App extends React.Component {
     state = {
@@ -35,6 +36,10 @@ class App extends React.Component {
                     <Signup></Signup>
                 </Route>
                 
+                <Route path = "/upload">
+                    <Upload></Upload>
+                </Route>
+
             </Router>
 
 

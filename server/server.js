@@ -10,10 +10,10 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 //connect to database and register schemas
-require('./models');
+require('../models');
 
 //import index router
-const routes = require('./routes/index');
+const routes = require('../routes/index');
 
 //create express app
 const server = express();
@@ -24,6 +24,20 @@ server.use(express.urlencoded({ extended: true }));
 
 //enable cors
 server.use(cors());
+
+//configure cors to allow any domain
+var corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200,
+}
+
+//tell express to use the cors-middleware with our specified options
+server.use(cors(corsOptions))
+
+//configure route for uploads
+const upload = require('./upload')
+server.post('/upload', upload)
+
 
 //router all traffic to index router
 server.use('/api', (req, res, next) => {

@@ -28,7 +28,7 @@ class App extends React.Component {
             password: this.state.password
         }
 
-        Axios.post("api/user/test", payload).then((resp) => {
+        Axios.post("api/user/login", payload).then((resp) => {
             this.setState({response: resp.data});
         }).catch((err) => {
             console.error(err);

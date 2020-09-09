@@ -7,12 +7,16 @@ const MediaSchema = new Schema(
   {
     mediaType: {
       type: String,
-      enum: ["Video", "Sound", "Image", "Text", "Code", "PDF", "Document"],
+      enum: ["image", "audio", "text", "video", "application"],
       required: true,
     },
-    mediaURL: { type: String, required: true },
-    tags: [String],
-    creator: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
+    extension: { type: String, maxLength: 10, required: true },
+    name: { type: String, required: true, maxLength: 20 },
+    creator: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
     isPrivate: { type: Boolean, required: true },
     canAccess: [mongoose.Schema.Types.ObjectId],
   },

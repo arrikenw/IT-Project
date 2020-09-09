@@ -3,4 +3,5 @@ node_modules
 utils/.*
 client/node_modules
 client/.idea
-.*
+.env.*
+coverage

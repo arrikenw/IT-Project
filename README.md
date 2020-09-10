@@ -59,11 +59,11 @@ Responses:
    "contentCategory": "<fileCategory>",
    "extension": "<fileExtension>",
    "isPrivate": "<privacyBoolean>",
-   "canAccess": ["<UserOneID>", "<UserTwoID">, "<...>"],
+   "canAccess": ["<UserOneID>", "<UserTwoID>", "<...>"],
    "creator": "<creatorUserID",
    "name": "<mediaDisplayName>"
 }
-    ```
+```
 - On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error

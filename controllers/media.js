@@ -18,23 +18,22 @@ const s3 = new AWS.S3();
 const mime = require("mime-types");
 
 // send helper
-const sendhelper = function (res, response) {
+const sendHelper = (res, response) => {
   res.status = response.status;
   res.send(response.msg);
 };
-
 //* ****************************************************************************************
 // HELPER FUNCTIONS AND CONTROLLER FOR MEDIA UPLOADS
 
 // write file to bucket
-const saveBucket = function (res, file, fields, filedata, DBEntry) {
+const saveBucket = (res, file, fields, fileData, DBEntry) => {
   // information about bucket and upload
   const bucketName = "it-project-media";
   const keyName = `${DBEntry._id.toString()}.${DBEntry.extension}`;
 
   // writing to bucket
-  const params = { Bucket: bucketName, Key: keyName, Body: filedata };
-  s3.putObject(params, function (err) {
+  const params = { Bucket: bucketName, Key: keyName, Body: fileData };
+  s3.putObject(params, (err) => {
     if (err) {
       console.log("Upload to bucket failed");
       console.error(err);
@@ -66,7 +65,7 @@ const saveBucket = function (res, file, fields, filedata, DBEntry) {
 };
 
 // create metadata in database and save file to bucket
-const saveDBAndBucket = function (res, file, fields, filedata, userid) {
+const saveDBAndBucket = (res, file, fields, fileData, userId) => {
   const item = {
     mimeType: file.type,
     contentCategory: file.type.split("/")[0],
@@ -77,8 +76,8 @@ const saveDBAndBucket = function (res, file, fields, filedata, userid) {
     name: fields.name,
   };
   console.log(item);
-  const newmedia = new Media(item);
-  newmedia.save().then(function (media, err) {
+  const newMedia = new Media(item);
+  newMedia.save().then((media, err) => {
     if (err) {
       console.log(err);
       sendhelper(res, {
@@ -87,7 +86,7 @@ const saveDBAndBucket = function (res, file, fields, filedata, userid) {
       });
     } else {
       console.log("saving to db succeeded");
-      saveBucket(res, file, fields, filedata, media);
+      saveBucket(res, file, fields, fileData, media);
     }
   });
 };
@@ -119,7 +118,7 @@ const validateMediaType = function (file) {
 };
 
 // ensure media is a reasonable size
-const validateMediaSize = function (file) {
+const validateMediaSize = (file) => {
   const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 mb
   if (file.size >= MAX_FILE_SIZE) return false;
   return true;
@@ -141,7 +140,7 @@ const validateFields = function (fields) {
   return "valid";
 };
 
-const validateAll = function (file, fields) {
+const validateAll = (file, fields) => {
   if (!validateMediaSize(file)) {
     return { status: 400, msg: "Media upload failed - File was too large" };
   }
@@ -152,11 +151,10 @@ const validateAll = function (file, fields) {
       msg: "Media upload failed - File type is unsupported",
     };
   }
-  const fieldStatus = validateFields(fields);
-  return fieldStatus;
+  return validateFields(fields);
 };
 
-const uploadMedia = function (req, res) {
+const uploadMedia = (req, res) => {
   console.log(`id is: ${req.user.id}`);
   const form = new formidable.IncomingForm();
   form.maxFileSize = 15 * 1024 * 1024; // 15 meg
@@ -173,11 +171,11 @@ const uploadMedia = function (req, res) {
       const validationStatus = validateAll(files.mediafile, fields);
       if (validationStatus !== "valid") {
         console.log("validation failure");
-        sendhelper(res, validationStatus);
+        sendHelper(res, validationStatus);
         return;
       }
       console.log("validation success");
-      fs.readFile(files.mediafile.path, function (err2, data) {
+      fs.readFile(files.mediafile.path, (err2, data) => {
         if (err2) {
           sendhelper(res, {
             status: 400,
@@ -188,7 +186,7 @@ const uploadMedia = function (req, res) {
         saveDBAndBucket(res, files.mediafile, fields, data, req.user.id);
       });
     })
-    .on("error", function (err) {
+    .on("error", (err) => {
       console.log(err);
       sendhelper(res, {
         status: 500,
@@ -199,7 +197,7 @@ const uploadMedia = function (req, res) {
 
 //* ****************************************************************************************
 // CONTROLLER FOR SERVING MEDIA
-const serveMedia = function (req, res) {
+const serveMedia = (req, res) => {
   if (!req.body.mediaID) {
     console.log("no media id provided");
     sendhelper(res, {
@@ -221,7 +219,7 @@ const serveMedia = function (req, res) {
         doc.canAccess.includes(req.user.id)
       ) {
         console.log("user does not have permission to view media");
-        sendhelper(res, {
+        sendHelper(res, {
           status: 401,
           msg:
             "Media retrieval failed - user does not have permission to view media",
@@ -234,7 +232,7 @@ const serveMedia = function (req, res) {
       const bucketName = "it-project-media";
       const params = { Bucket: bucketName, Key: filepath };
 
-      s3.getObject(params, function (err, data) {
+      s3.getObject(params, (err, data) => {
         if (err) {
           console.log(err);
           sendhelper(res, {
@@ -249,7 +247,7 @@ const serveMedia = function (req, res) {
         // I don't think converting here is necessary as it wastes server time, but I've included it to make it easier to check responses
         // code retrieved from https://stackoverflow.com/questions/23097928/node-js-throws-btoa-is-not-defined-error
         const base64form = Buffer.from(data.Body, "binary").toString("base64");
-        sendhelper(res, { status: 200, msg: base64form });
+        sendHelper(res, { status: 200, msg: base64form });
         console.log("Successfully returned file, request complete.");
       });
     })

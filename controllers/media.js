@@ -39,7 +39,7 @@ const saveBucket = (res, file, fields, fileData, DBEntry) => {
       console.error(err);
       Media.deleteOne(
         { _id: DBEntry._id },
-        sendhelper(res, {
+        sendHelper(res, {
           status: 503,
           msg: "Media upload failed - error saving media to file bucket",
         })
@@ -60,7 +60,7 @@ const saveBucket = (res, file, fields, fileData, DBEntry) => {
       creator: DBEntry.creator,
       name: DBEntry.name,
     };
-    sendhelper(res, { status: 201, msg: successMsg });
+    sendHelper(res, { status: 201, msg: successMsg });
   });
 };
 
@@ -70,7 +70,7 @@ const saveDBAndBucket = (res, file, fields, fileData, userId) => {
     mimeType: file.type,
     contentCategory: file.type.split("/")[0],
     extension: mime.extension(file.type),
-    creator: userid,
+    creator: userId,
     isPrivate: fields.isPrivate,
     canAccess: [],
     name: fields.name,
@@ -80,7 +80,7 @@ const saveDBAndBucket = (res, file, fields, fileData, userId) => {
   newMedia.save().then((media, err) => {
     if (err) {
       console.log(err);
-      sendhelper(res, {
+      sendHelper(res, {
         status: 503,
         msg: "Media upload failed - saving to database failed",
       });
@@ -162,7 +162,7 @@ const uploadMedia = (req, res) => {
     .parse(req, (err, fields, files) => {
       if (err) {
         console.log(err);
-        sendhelper(res, {
+        sendHelper(res, {
           status: 500,
           msg: "Media upload failed - Error parsing form data",
         });
@@ -177,7 +177,7 @@ const uploadMedia = (req, res) => {
       console.log("validation success");
       fs.readFile(files.mediafile.path, (err2, data) => {
         if (err2) {
-          sendhelper(res, {
+          sendHelper(res, {
             status: 400,
             msg: "Media upload failed - Error reading file",
           });
@@ -188,7 +188,7 @@ const uploadMedia = (req, res) => {
     })
     .on("error", (err) => {
       console.log(err);
-      sendhelper(res, {
+      sendHelper(res, {
         status: 500,
         msg: "Media upload failed - Unknown error while parsing form",
       });
@@ -200,7 +200,7 @@ const uploadMedia = (req, res) => {
 const serveMedia = (req, res) => {
   if (!req.body.mediaID) {
     console.log("no media id provided");
-    sendhelper(res, {
+    sendHelper(res, {
       status: 400,
       msg: "Media retrieval failed - No media id provided",
     });
@@ -235,7 +235,7 @@ const serveMedia = (req, res) => {
       s3.getObject(params, (err, data) => {
         if (err) {
           console.log(err);
-          sendhelper(res, {
+          sendHelper(res, {
             status: 500,
             msg:
               "Media retrieval failed - error retrieving media from s3 bucket",
@@ -253,7 +253,7 @@ const serveMedia = (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      sendhelper(res, {
+      sendHelper(res, {
         status: 503,
         msg:
           "Media retrieval failed - error retrieving media information from database",

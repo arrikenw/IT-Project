@@ -15,8 +15,8 @@ class Upload extends Component {
         super(props);
     this.state = {
       file: null,
-      name: "",
-      private:false,
+      givenFileName: "",
+      isPrivate:false,
 
       uploading: false,
       uploadProgress: {},
@@ -44,22 +44,29 @@ class Upload extends Component {
 
   }
 
-  uploadfile = () => {
+  uploadfile = (e) => {
 
-    const formData = new FormData();
-    console.log("file name:" + this.state.file.name);
-    formData.append("mediafile", this.state.file);
+
+    e.preventDefault();
+
+    const fileData = {
+      givenFileName: e.target.givenFileName.value,
+      isPrivate: e.target.isPrivate.value
+    }
     
-  
+
+    console.log(e.target.isPrivate);
+    const formData = new FormData();
+    console.log("file name:" + this.state.givenFileName);
+    formData.append("mediafile", this.state.file);
+    formData.append("givenFileName", fileData.givenFileName);
+    formData.append("isPrivate", fileData.isPrivate);
+    
+
      Axios.post("/api/media/add", formData, {headers:{
         ContentType:"multipart/form-data",
         Authorization: "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNTg1MjVlODExNTAwOGExY2U1N2UwOCIsImlhdCI6MTU5OTY5NDM4MywiZXhwIjoxNTk5NzE1OTgzfQ.j2fVPAF4OKoy5eYDUNopphJMCFRxB4BHN4PcOFexjEY"}});
-
-     console.log("uploaded file!");
   }
-
-
-
     
     render() {
         return (
@@ -68,39 +75,25 @@ class Upload extends Component {
             <div className="Content">
               <div>
                 
-                {/* <input type = "file" onChange = {this.onfileAdded}/> */}
-
-                <Form>
+                <Form className ="uploadForm" onSubmit={this.uploadfile}>
 
                   <div className="mb-3">
-                  <Form.Group controlId="file">
-                    <Form.File id="formcheck-api-regular" onChange = {this.handleChange} value = {this.state.file} >
-                      <Form.File.Label>File input</Form.File.Label>
-                      <Form.File.Input />
-                    </Form.File>
-                    </Form.Group>
+                    <input type = "file" onChange = {this.onfileAdded}/>
                   </div>
 
-                <Form.Group controlId="name">
-                  <Form.Label>file name</Form.Label>
-                  <Form.Control type = "text" name = "name" placeholder="example.png" onChange={this.handleChange} value = {this.state.name} required/>
-                </Form.Group>
-                <Form.Group controlId="private">
-                  <Form.Check type="checkbox" label="private" onChange={this.handleChange} value = {this.state.private} required/>
-                </Form.Group>
+                  <Form.Group controlId="givenFileName">
+                    <Form.Label>file name</Form.Label>
+                    <Form.Control type = "text" name = "givenFileName" placeholder="example.png" onChange={this.handleChange} value = {this.state.givenFileName} required/>
+                  </Form.Group>
+                  <Form.Group controlId="private">
+                    <Form.Check type="checkbox" label= "make this file private" name = "isPrivate" onChange={this.handleChange} value = {this.state.isPrivate} required/>
+                  </Form.Group>
 
-
-
-
-                  <button onClick={this.uploadfile} type="submit"> 
+                  <button type="submit"> 
                     Upload! 
                   </button>
 
                 </Form>
-
-
-
-
               </div>
 
              

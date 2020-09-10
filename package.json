@@ -21,13 +21,9 @@
     "formidable": "^1.2.2",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
-<<<<<<< HEAD
-    "mongoose": "^5.10.2",
-    "react-router-dom": "^5.2.0"
-=======
+    "react-router-dom": "^5.2.0",
     "mime-types": "^2.1.27",
     "mongoose": "^5.10.2"
->>>>>>> origin/master
   },
   "devDependencies": {
     "eslint": "^7.2.0",

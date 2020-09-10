@@ -12,7 +12,7 @@ const MediaSchema = new Schema(
       required: true,
     },
     extension: { type: String, maxLength: 6, required: true },
-    name: { type: String, required: true, maxLength: 20 },
+    givenFileName: { type: String, required: true, maxLength: 20 },
     creator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",

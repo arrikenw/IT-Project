@@ -480,7 +480,7 @@ Authorization: "Bearer <authenticationToken>"
 and HTML form data containing the following fields:
 ```
 -isPrivate: "<privacyBoolean>",
--name: "<fileDisplayName>",
+-givenFileName: "<fileDisplayName>",
 -mediafile: <mediablob>"
 ```
 Requirements:
@@ -503,7 +503,7 @@ Responses:
    "isPrivate": "<privacyBoolean>",
    "canAccess": ["<UserOneID>", "<UserTwoID>", "<...>"],
    "creator": "<creatorUserID",
-   "name": "<mediaDisplayName>"
+   "givenFileName": "<mediaDisplayName>"
 }
 ```
 - On failure: 

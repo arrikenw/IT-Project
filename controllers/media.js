@@ -58,7 +58,7 @@ const saveBucket = (res, file, fields, fileData, DBEntry) => {
       isPrivate: DBEntry.isPrivate,
       canAccess: DBEntry.canAccess,
       creator: DBEntry.creator,
-      name: DBEntry.name,
+      givenFileName: DBEntry.givenFileName,
     };
     sendHelper(res, { status: 201, msg: successMsg });
   });
@@ -73,7 +73,7 @@ const saveDBAndBucket = (res, file, fields, fileData, userId) => {
     creator: userId,
     isPrivate: fields.isPrivate,
     canAccess: [],
-    name: fields.name,
+    givenFileName: fields.givenFileName,
   };
   console.log(item);
   const newMedia = new Media(item);
@@ -92,7 +92,7 @@ const saveDBAndBucket = (res, file, fields, fileData, userId) => {
 };
 
 // validate media type is acceptable
-const validateMediaType = function (file) {
+const validateMediaType = (file) => {
   const type = mime.extension(file.type);
   if (
     type !== "jpg" &&
@@ -124,14 +124,14 @@ const validateMediaSize = (file) => {
   return true;
 };
 
-const validateFields = function (fields) {
-  if (!fields.isPrivate || !fields.name) {
+const validateFields = (fields) => {
+  if (!fields.isPrivate || !fields.givenFileName) {
     return {
       status: 400,
       msg: "Media upload failed - fields absent or invalid",
     };
   }
-  if (fields.name.length > 20) {
+  if (fields.givenFileName.length > 20) {
     return {
       status: 400,
       msg: "Media upload failed - file display name is too large",

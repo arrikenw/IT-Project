@@ -29,7 +29,7 @@ const userSchema = new Schema(
       unique: true,
       required: true,
     },
-    picURL: { type: String },
+    picURL: { type: mongoose.Schema.Types.ObjectId },
     password: { type: String, required: true, minLength: 8, maxLength: 50 },
     organisation: { type: String },
     professionalFields: [String],

@@ -36,12 +36,10 @@ Authorization: "Bearer <authenticationToken>"
 ```
 
 and HTML form data containing the following fields:
-```JSON
-{
-   "isPrivate": "<privacyBoolean>",
-   "name": "<fileDisplayName>",
-   "mediafile": <mediablob>"
-}
+```
+-isPrivate: "<privacyBoolean>",
+-name: "<fileDisplayName>",
+-mediafile: <mediablob>"
 ```
 Requirements:
 - Authorization header is required

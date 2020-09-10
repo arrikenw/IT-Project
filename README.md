@@ -218,7 +218,7 @@ Here is the needed documentation of the APIs used by the frontend to request to 
 ###### Creates a new user in the database and returns the user's ID
 Request to: `/api/user/add` as a `POST` request
 
-Takes a: JSON in the body, requiring the key-value pairs:
+Takes: a JSON in the body, requiring the key-value pairs:
 ```JSON
 {
    "email": "<userEmail>",
@@ -266,7 +266,7 @@ Responses:
 ###### Generates and returns an authentication token for a given valid user
 Request to: `/api/user/login` as a `POST` request
 
-Takes a: JSON in the body, requiring the key-value pairs:
+Takes: a JSON in the body, requiring the key-value pairs:
 ```JSON
 {
     "email": "<userEmail>",
@@ -296,7 +296,7 @@ Responses:
 ###### Returns a user's details from a valid authentication token
 Request to: `/api/user/get` as a `GET` request
 
-Takes a: Authorization header with the format
+Takes: an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
@@ -333,7 +333,7 @@ Responses:
 ###### Returns a list user's public details from a list user IDs
 Request to: `/api/user/getPublic` as a `POST` request
 
-Takes a: JSON in the body, requiring the key-value pairs:
+Takes: a JSON in the body, requiring the key-value pairs:
 ```JSON
 {
     "ids": ["<userIDOne>", "<userIDTwo", "<...>"]
@@ -378,7 +378,7 @@ Responses:
 ###### Updates a user's detail from an update, a password and an authentication token
 Request to: `/api/user/update` as a `POST` request
 
-Takes a: Authorization header with the format
+Takes: an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
@@ -432,7 +432,7 @@ Responses:
 ###### Deletes a user from a password and an authentication token
 Request to: `/api/user/delete` as a `POST` request
 
-Takes a: Authorization header with the format
+Takes: an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
@@ -465,4 +465,83 @@ Responses:
   - status code in the form of "5XX" are for server error
   - ```
     "Delete user not successful - <reasonForError>"
+    ```
+
+### Media
+#### Add media 
+###### Creates a new media document in the database, saves the media blob to a s3 bucket, returns the media document id
+Request to: `/api/media/add` as a `POST` request
+
+Takes: an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+
+and HTML form data containing the following fields:
+```
+-isPrivate: "<privacyBoolean>",
+-givenFileName: "<fileDisplayName>",
+-mediafile: <mediablob>"
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- file display name must be <= 20 characters
+- a privacy status must be provided
+- a media file must be provided
+- the media file must have a size <= 100 mb
+
+Responses:
+- On success: 
+  - the response will have a status code of "201" and will contain the media metadata
+```JSON
+{
+   "_id": "<mediaID>",
+   "mimeType": "<mimeType>",
+   "contentCategory": "<fileCategory>",
+   "extension": "<fileExtension>",
+   "isPrivate": "<privacyBoolean>",
+   "canAccess": ["<UserOneID>", "<UserTwoID>", "<...>"],
+   "creator": "<creatorUserID",
+   "givenFileName": "<mediaDisplayName>"
+}
+```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Media upload failed - <reasonForError>"
+    ```
+
+
+#### Get media 
+###### Retrieves
+Request to: `/api/media/` as a `GET` request
+
+Takes: an Authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON request body containing the following key-value pair:
+```JSON
+{
+   "mediaID": "<mediaDocumentID>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- MediaID must be a valid document id
+
+Responses:
+- On success: 
+  - the response will have a status code of "200" and will contain a base64 encoding of the media file
+
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Media retrieval failed - <reasonForError>"
     ```

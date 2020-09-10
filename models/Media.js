@@ -5,13 +5,14 @@ const Schema = mongoose.Schema;
 // schema for media content
 const MediaSchema = new Schema(
   {
-    mediaType: {
+    mimeType: { type: String, maxLength: 25, required: true },
+    contentCategory: {
       type: String,
       enum: ["image", "audio", "text", "video", "application"],
       required: true,
     },
-    extension: { type: String, maxLength: 10, required: true },
-    name: { type: String, required: true, maxLength: 20 },
+    extension: { type: String, maxLength: 6, required: true },
+    givenFileName: { type: String, required: true, maxLength: 20 },
     creator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",

@@ -9,10 +9,13 @@ const mongoose = require("mongoose");
 
 const Media = mongoose.model("media");
 
-// Load the SDK and AWS client
+// AWS
 const AWS = require("aws-sdk");
 
 const s3 = new AWS.S3();
+
+// MIME types
+const mime = require("mime-types");
 
 // send helper
 const sendHelper = (res, response) => {
@@ -36,22 +39,37 @@ const saveBucket = (res, file, fields, fileData, DBEntry) => {
       console.error(err);
       Media.deleteOne(
         { _id: DBEntry._id },
-        sendHelper(res, { status: 503, msg: "upload failed" })
+        sendHelper(res, {
+          status: 503,
+          msg: "Media upload failed - error saving media to file bucket",
+        })
       ); // not sure how to handle an error here
       return;
     }
     console.log(
       `Successfully uploaded data to ${bucketName}/${keyName}. Request complete.`
     );
-    sendHelper(res, { status: 200, msg: DBEntry.toString() });
+    // creating new object to avoid sending over creation / update timestamps
+    const successMsg = {
+      _id: DBEntry._id,
+      mimeType: DBEntry.mimeType,
+      contentCategory: DBEntry.contentCategory,
+      extension: DBEntry.extension,
+      isPrivate: DBEntry.isPrivate,
+      canAccess: DBEntry.canAccess,
+      creator: DBEntry.creator,
+      name: DBEntry.name,
+    };
+    sendHelper(res, { status: 201, msg: successMsg });
   });
 };
 
 // create metadata in database and save file to bucket
 const saveDBAndBucket = (res, file, fields, fileData, userId) => {
   const item = {
-    mediaType: file.type.split("/")[0],
-    extension: file.type.split("/").pop(),
+    mimeType: file.type,
+    contentCategory: file.type.split("/")[0],
+    extension: mime.extension(file.type),
     creator: userId,
     isPrivate: fields.isPrivate,
     canAccess: [],
@@ -61,8 +79,11 @@ const saveDBAndBucket = (res, file, fields, fileData, userId) => {
   const newMedia = new Media(item);
   newMedia.save().then((media, err) => {
     if (err) {
-      console.log("saving to db failed");
-      sendHelper(res, { status: 503, msg: err });
+      console.log(err);
+      sendHelper(res, {
+        status: 503,
+        msg: "Media upload failed - saving to database failed",
+      });
     } else {
       console.log("saving to db succeeded");
       saveBucket(res, file, fields, fileData, media);
@@ -71,8 +92,8 @@ const saveDBAndBucket = (res, file, fields, fileData, userId) => {
 };
 
 // validate media type is acceptable
-const validateMediaType = (file) => {
-  const type = file.type.split("/").pop();
+const validateMediaType = function (file) {
+  const type = mime.extension(file.type);
   if (
     type !== "jpg" &&
     type !== "png" &&
@@ -103,24 +124,32 @@ const validateMediaSize = (file) => {
   return true;
 };
 
-const validateFields = (fields) => {
-  if (
-    !fields.mediaType ||
-    !fields.extension ||
-    !fields.isPrivate ||
-    !fields.name
-  ) {
-    return { status: 400, msg: "fields absent" };
+const validateFields = function (fields) {
+  if (!fields.isPrivate || !fields.name) {
+    return {
+      status: 400,
+      msg: "Media upload failed - fields absent or invalid",
+    };
+  }
+  if (fields.name.length > 20) {
+    return {
+      status: 400,
+      msg: "Media upload failed - file display name is too large",
+    };
   }
   return "valid";
 };
 
 const validateAll = (file, fields) => {
   if (!validateMediaSize(file)) {
-    return { status: 400, msg: "File was too large" };
+    return { status: 400, msg: "Media upload failed - File was too large" };
   }
   if (!validateMediaType(file)) {
-    return { status: 415, msg: "File type is unsupported" };
+    // unsure if 415 is appropriate here
+    return {
+      status: 400,
+      msg: "Media upload failed - File type is unsupported",
+    };
   }
   return validateFields(fields);
 };
@@ -133,7 +162,10 @@ const uploadMedia = (req, res) => {
     .parse(req, (err, fields, files) => {
       if (err) {
         console.log(err);
-        sendHelper(res, { status: 500, msg: "Error parsing form data" });
+        sendHelper(res, {
+          status: 500,
+          msg: "Media upload failed - Error parsing form data",
+        });
         return;
       }
       const validationStatus = validateAll(files.mediafile, fields);
@@ -145,7 +177,10 @@ const uploadMedia = (req, res) => {
       console.log("validation success");
       fs.readFile(files.mediafile.path, (err2, data) => {
         if (err2) {
-          sendHelper(res, { status: 400, msg: "Error reading file" });
+          sendHelper(res, {
+            status: 400,
+            msg: "Media upload failed - Error reading file",
+          });
           return;
         }
         saveDBAndBucket(res, files.mediafile, fields, data, req.user.id);
@@ -153,8 +188,10 @@ const uploadMedia = (req, res) => {
     })
     .on("error", (err) => {
       console.log(err);
-      res.status = 500;
-      res.send("Unknown error when parsing form");
+      sendHelper(res, {
+        status: 500,
+        msg: "Media upload failed - Unknown error while parsing form",
+      });
     });
 };
 
@@ -163,7 +200,10 @@ const uploadMedia = (req, res) => {
 const serveMedia = (req, res) => {
   if (!req.body.mediaID) {
     console.log("no media id provided");
-    sendHelper(res, { status: 400, msg: "No media id provided" });
+    sendHelper(res, {
+      status: 400,
+      msg: "Media retrieval failed - No media id provided",
+    });
     return;
   }
 
@@ -181,7 +221,8 @@ const serveMedia = (req, res) => {
         console.log("user does not have permission to view media");
         sendHelper(res, {
           status: 401,
-          msg: "user does not have permission to view media",
+          msg:
+            "Media retrieval failed - user does not have permission to view media",
         });
         return;
       }
@@ -194,7 +235,11 @@ const serveMedia = (req, res) => {
       s3.getObject(params, (err, data) => {
         if (err) {
           console.log(err);
-          sendHelper(res, { status: 500, msg: "Error retrieving file" });
+          sendHelper(res, {
+            status: 500,
+            msg:
+              "Media retrieval failed - error retrieving media from s3 bucket",
+          });
           return;
         }
         console.log("serving media");
@@ -208,7 +253,11 @@ const serveMedia = (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      sendHelper(res, { status: 503, msg: "unknown error" });
+      sendHelper(res, {
+        status: 503,
+        msg:
+          "Media retrieval failed - error retrieving media information from database",
+      });
     });
 };
 

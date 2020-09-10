@@ -68,7 +68,7 @@ class App extends React.Component {
 
             
                 <p>
-                    Hello this is the front end!
+                    Hello this is the front end! 
                 </p>
 
                 <p>

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Image} from 'react-bootstrap';
+import {Image, Form} from 'react-bootstrap';
 
-import Progress from '../Progress/Progress'
-import Dropzone from '../Dropzone/Dropzone'
-import './Upload.css'
+import Progress from '../Progress/Progress';
+import Dropzone from '../Dropzone/Dropzone';
+import './Upload.css';
+
+import Axios from 'axios';
 
 class Upload extends Component {
 
@@ -12,147 +14,98 @@ class Upload extends Component {
     constructor(props){
         super(props);
     this.state = {
-      files: [],
+      file: null,
+      name: "",
+      private:false,
+
       uploading: false,
       uploadProgress: {},
       successfullUploaded: false
     };
 
-    this.onFilesAdded = this.onFilesAdded.bind(this);
-    this.uploadFiles = this.uploadFiles.bind(this);
-    this.sendRequest = this.sendRequest.bind(this);
-    this.renderActions = this.renderActions.bind(this);
+    this.onfileAdded = this.onfileAdded.bind(this);
+    this.uploadfile = this.uploadfile.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+
   }
 
-  //adds files to a list of files
-  onFilesAdded(files) {
-    this.setState(prevState => ({
-      files: prevState.files.concat(files)
-    }));
+
+  handleChange = e => {
+
+    this.setState({[e.target.name]: e.target.value});
+    console.log("changed");
   }
 
-  async uploadFiles() {
-    this.setState({ uploadProgress: {}, uploading: true });
-    const promises = [];
-    this.state.files.forEach(file => {
-      promises.push(this.sendRequest(file));
-    });
-    try {
-      await Promise.all(promises);
+
+  onfileAdded = e => {
   
-      this.setState({ successfullUploaded: true, uploading: false });
-    } catch (e) {
-      // Not Production ready! Do some error handling here instead...
-      this.setState({ successfullUploaded: true, uploading: false });
-    }
+    this.setState({file: e.target.files[0]});
+    console.log("added file: "+ this.state.file);
+
   }
 
-  sendRequest(file) {
-    return new Promise((resolve, reject) => {
-      const req = new XMLHttpRequest();
+  uploadfile = () => {
 
-      req.upload.addEventListener("progress", event => {
-        if (event.lengthComputable) {
-         const copy = { ...this.state.uploadProgress };
-         copy[file.name] = {
-          state: "pending",
-          percentage: (event.loaded / event.total) * 100
-         };
-         this.setState({ uploadProgress: copy });
-        }
-       });
-        
-       req.upload.addEventListener("load", event => {
-        const copy = { ...this.state.uploadProgress };
-        copy[file.name] = { state: "done", percentage: 100 };
-        this.setState({ uploadProgress: copy });
-        resolve(req.response);
-       });
-        
-       req.upload.addEventListener("error", event => {
-        const copy = { ...this.state.uploadProgress };
-        copy[file.name] = { state: "error", percentage: 0 };
-        this.setState({ uploadProgress: copy });
-        reject(req.response);
-       });
-      const formData = new FormData();
-      formData.append("file", file, file.name);
+    const formData = new FormData();
+    console.log("file name:" + this.state.file.name);
+    formData.append("mediafile", this.state.file);
+    
   
-      req.open("POST", "http://localhost:8000/upload");
-      req.send(formData);
-    });
+     Axios.post("/api/media/add", formData, {headers:{
+        ContentType:"multipart/form-data",
+        Authorization: "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNTg1MjVlODExNTAwOGExY2U1N2UwOCIsImlhdCI6MTU5OTY5NDM4MywiZXhwIjoxNTk5NzE1OTgzfQ.j2fVPAF4OKoy5eYDUNopphJMCFRxB4BHN4PcOFexjEY"}});
+
+     console.log("uploaded file!");
   }
 
 
-
-  renderActions() {
-    if (this.state.successfullUploaded) {
-      return (
-        <button
-          onClick={() =>
-            this.setState({ files: [], successfullUploaded: false })
-          }
-        >
-          Clear
-        </button>
-      );
-    } else {
-      return (
-        <button
-          disabled={this.state.files.length < 0 || this.state.uploading}
-          onClick={this.uploadFiles}
-        >
-          Upload
-        </button>
-      );
-    }
-  }
-
-  renderProgress(file) {
-    const uploadProgress = this.state.uploadProgress[file.name];
-    if (this.state.uploading || this.state.successfullUploaded) {
-      return (
-        <div className="ProgressWrapper">
-          <Progress progress={uploadProgress ? uploadProgress.percentage : 0} />
-          <Image
-            className="CheckIcon"
-            alt="done"
-            src={require("./baseline-check_circle_outline-24px.svg")}
-            style={{
-              opacity:
-                uploadProgress && uploadProgress.state === "done" ? 0.5 : 0
-            }}
-          />
-        </div>
-      );
-    }
-  }
 
     
     render() {
         return (
             <div className="Upload">
-            <span className="Title">Upload Files</span>
+            <span className="Title">File upload page</span>
             <div className="Content">
               <div>
-                  HI
-                <Dropzone
-                  onFilesAdded={this.onFilesAdded}
-                  disabled={this.state.uploading || this.state.successfullUploaded}
-                />
+                
+                {/* <input type = "file" onChange = {this.onfileAdded}/> */}
+
+                <Form>
+
+                  <div className="mb-3">
+                  <Form.Group controlId="file">
+                    <Form.File id="formcheck-api-regular" onChange = {this.handleChange} value = {this.state.file} >
+                      <Form.File.Label>File input</Form.File.Label>
+                      <Form.File.Input />
+                    </Form.File>
+                    </Form.Group>
+                  </div>
+
+                <Form.Group controlId="name">
+                  <Form.Label>file name</Form.Label>
+                  <Form.Control type = "text" name = "name" placeholder="example.png" onChange={this.handleChange} value = {this.state.name} required/>
+                </Form.Group>
+                <Form.Group controlId="private">
+                  <Form.Check type="checkbox" label="private" onChange={this.handleChange} value = {this.state.private} required/>
+                </Form.Group>
+
+
+
+
+                  <button onClick={this.uploadfile} type="submit"> 
+                    Upload! 
+                  </button>
+
+                </Form>
+
+
+
+
               </div>
-              <div className="Files">
-                {this.state.files.map(file => {
-                  return (
-                    <div key={file.name} className="Row">
-                      <span className="Filename">{file.name}</span>
-                      {this.renderProgress(file)}
-                    </div>
-                  );
-                })}
-              </div>
+
+             
             </div>
-            <div className="Actions">{this.renderActions()}</div>
+            {/* <div className="Actions">{this.renderActions()}</div> */}
           </div>
         );
     }

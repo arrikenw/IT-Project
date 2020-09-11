@@ -65,7 +65,7 @@ class Upload extends Component {
 
      Axios.post("/api/media/add", formData, {headers:{
         ContentType:"multipart/form-data",
-        Authorization: "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNTg1MjVlODExNTAwOGExY2U1N2UwOCIsImlhdCI6MTU5OTY5NDM4MywiZXhwIjoxNTk5NzE1OTgzfQ.j2fVPAF4OKoy5eYDUNopphJMCFRxB4BHN4PcOFexjEY"}});
+        Authorization: "Bearer " + window.localStorage.getItem("token")}});
   }
     
     render() {

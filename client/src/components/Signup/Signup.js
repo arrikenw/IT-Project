@@ -74,11 +74,11 @@ class Signup extends Component {
                             //store the token in window.localStorage
                             this.props.setToken.call(this, res2.data.token);
                             this.warningRef.current.setColor("green");
-                            this.warningRef.current.setMessage("Login successful... redirecting to upload page");
+                            //this.warningRef.current.setMessage("Login successful... redirecting to upload page");
                             this.warningRef.current.setActive(true);
                             
                             //in future redirect to home page
-                            this.props.history.push("/upload");
+                            //this.props.history.push("/upload");
                         }
                         else{
                             //shouldnt reach here unless error in backend
@@ -156,11 +156,6 @@ class Signup extends Component {
                     <Form.Group  controlId="userName">
                         <Form.Label>Username</Form.Label>
                         <Form.Control type="text" name="userName" placeholder="Username"onChange={this.onChange} value={this.state.userName || ""} required></Form.Control>
-                    </Form.Group>
-                    <Form.Group controlId="image">
-                        <Form.Label>Profile Pic</Form.Label>
-                        <Form.Control type="file" name="image" onChange={(e)=>{this.handleImageChange(e, true)}} accept="image/*"></Form.Control>
-                        
                     </Form.Group>
                     <div>
                         <Warning ref={this.warningRef}/>

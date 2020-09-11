@@ -58,21 +58,7 @@ class App extends React.Component {
                 <Route path = "/upload">
                     <Upload token = {this.state.token}></Upload>
                 </Route>
-                <div><Link to="/login">Login</Link></div>
-
-                <div><Link to="/signup">Create an account</Link></div>
             </Router>
-
-        
-                <p>
-                    Hello this is the front end! 
-                </p>
-
-                <p>
-                    {this.state.backend}
-                </p>
-
-                
             
             </div>
             

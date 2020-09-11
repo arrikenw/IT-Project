@@ -1,12 +1,15 @@
 import React from 'react';
 import './App.css';
 import Axios from "axios";
-import { Form, Button, Image, Col, Row } from "react-bootstrap";
 import { BrowserRouter as Router, Route, Link} from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
+import Upload from "./components/Upload/Upload";
 
 class App extends React.Component {
+    constructor (props){
+        super(props);
+    }
     state = {
         backend: "did not connect to backend :(",
         email: "",
@@ -16,24 +19,18 @@ class App extends React.Component {
         token:""
     };
 
-    onChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
-    };
+    
+    setUser = (user) => {
+        window.localStorage.setItem("user", JSON.stringify(user));
+        this.setState({user: user});
+       
+    }
 
-    onSubmit = (e) => {
-        e.preventDefault();
-
-        const payload = {
-            email: this.state.email,
-            password: this.state.password
-        }
-
-        Axios.post("api/user/login", payload).then((resp) => {
-            this.setState({response: resp.data});
-        }).catch((err) => {
-            console.error(err);
-        });
-
+    //stores authentication in localStorage
+    setToken = (token) => {
+        window.localStorage.setItem("token",token);
+        this.setState({token: token});
+        console.log("set token: " + window.localStorage.getItem("token"));
     }
 
     componentDidMount() {
@@ -53,63 +50,30 @@ class App extends React.Component {
             <div>
             <Router>
                 <Route path = "/login">
-                    <Login></Login>
+                    <Login setToken = {this.setToken} setUser = {this.setUser}></Login>
                 </Route>
                 <Route path = "/signup">
-                    <Signup></Signup>
+                    <Signup setToken = {this.setToken} setUser = {this.setUser}></Signup>
                 </Route>
-                
+                <Route path = "/upload">
+                    <Upload token = {this.state.token}></Upload>
+                </Route>
+                <div><Link to="/login">Login</Link></div>
+
+                <div><Link to="/signup">Create an account</Link></div>
             </Router>
 
-
-
-            
+        
                 <p>
-                    Hello this is the front end!
+                    Hello this is the front end! 
                 </p>
 
                 <p>
                     {this.state.backend}
                 </p>
-                <Form className="loginForm" onSubmit={this.onSubmit}>
 
-                    <Form.Group as={Col} xs="12" controlId="Email">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            required
-                            type="email"
-                            placeholder="example@example.com"
-                            name="email"
-                            onChange={this.onChange}
-                        />
-                    </Form.Group>
-                    <Form.Group as={Col} xs="12" controlId="Password">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            required
-                            type="password"
-                            placeholder="Enter your Password"
-                            name="password"
-                            onChange={this.onChange}
-                        />
-
-                    </Form.Group>
-                    <div className="row justify-content-center">
-                        <Button
-                            variant="success"
-                            size="lg"
-                            type="submit"
-                            block
-                            style={{ width: "90%", margin: "1.6rem auto" }}
-                        >
-                            Log in
-                        </Button>
-                    </div>
-                </Form>
-                <p>
-                    this.state.response
-                    {JSON.stringify(this.state.response)}
-                </p>
+                
+            
             </div>
             
         );

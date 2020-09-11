@@ -14,4 +14,10 @@ router.get("/", (req, res) => {
   res.send("this is the backend!");
 });
 
+
+
+
+//routes to required routers
+
+
 module.exports = router;

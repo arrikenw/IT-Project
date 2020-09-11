@@ -29,23 +29,19 @@ class Upload extends Component {
 
   }
 
-
   handleChange = e => {
 
     this.setState({[e.target.name]: e.target.value});
-    console.log("changed");
   }
 
 
   onfileAdded = e => {
   
     this.setState({file: e.target.files[0]});
-    console.log("added file: "+ this.state.file);
 
   }
 
   uploadfile = (e) => {
-
 
     e.preventDefault();
 
@@ -54,10 +50,7 @@ class Upload extends Component {
       isPrivate: e.target.isPrivate.value
     }
     
-
-    console.log(e.target.isPrivate);
     const formData = new FormData();
-    console.log("file name:" + this.state.givenFileName);
     formData.append("mediafile", this.state.file);
     formData.append("givenFileName", fileData.givenFileName);
     formData.append("isPrivate", fileData.isPrivate);

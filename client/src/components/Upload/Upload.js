@@ -6,6 +6,8 @@ import Progress from '../Progress/Progress';
 import Dropzone from '../Dropzone/Dropzone';
 import './Upload.css';
 
+import Warning from '../Warning/Warning'
+
 import Axios from 'axios';
 
 class Upload extends Component {
@@ -13,6 +15,7 @@ class Upload extends Component {
 
     constructor(props){
         super(props);
+        this.warningRef = React.createRef();
     this.state = {
       file: null,
       givenFileName: "",
@@ -44,6 +47,7 @@ class Upload extends Component {
   uploadfile = (e) => {
 
     e.preventDefault();
+    this.warningRef.current.setActive(false);
 
     const fileData = {
       givenFileName: e.target.givenFileName.value,
@@ -54,11 +58,36 @@ class Upload extends Component {
     formData.append("mediafile", this.state.file);
     formData.append("givenFileName", fileData.givenFileName);
     formData.append("isPrivate", fileData.isPrivate);
-    
-
+  
      Axios.post("/api/media/add", formData, {headers:{
         ContentType:"multipart/form-data",
-        Authorization: "Bearer " + window.localStorage.getItem("token")}});
+        Authorization: "Bearer " + window.localStorage.getItem("token")}}).then(res => {
+        
+          if (res.status === 200){
+            this.warningRef.current.setColor("green");
+            this.warningRef.current.setMessage("Upload successful");
+            this.warningRef.current.setActive(true);
+          }
+          else{
+            this.warningRef.current.setColor("red");
+            this.warningRef.current.setMessage("Upload failed");
+            this.warningRef.current.setActive(true);
+          }
+        })
+        
+        .catch(err => {
+          if (err.response) {//client received 4xx or 5xx error response
+            console.log(err.response);
+            this.warningRef.current.setColor("red");
+            this.warningRef.current.setMessage("Upload failed");
+            this.warningRef.current.setActive(true);
+
+          } else if (err.request){
+            console.log(err.request);
+          }else{
+            console.log(err);
+          }
+        });
   }
     
     render() {
@@ -85,6 +114,7 @@ class Upload extends Component {
                   <button type="submit"> 
                     Upload! 
                   </button>
+                  <Warning ref={this.warningRef}/>
 
                 </Form>
               </div>

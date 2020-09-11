@@ -62,7 +62,6 @@ class Signup extends Component {
             //post new userData to backend to create a new account
 
             Axios.post("api/user/add", userData).then((res1)=>{
-                console.log(res1.status);
                 if (res1.status === 201){
                     this.warningRef.current.setColor("green");
                     this.warningRef.current.setMessage("Account successfully created");

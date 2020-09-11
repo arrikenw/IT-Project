@@ -78,7 +78,7 @@ class Upload extends Component {
                 <Form className ="uploadForm" onSubmit={this.uploadfile}>
 
                   <div className="mb-3">
-                    <input type = "file" onChange = {this.onfileAdded}/>
+                    <input type = "file" onChange = {this.onfileAdded} required/>
                   </div>
 
                   <Form.Group controlId="givenFileName">
@@ -86,7 +86,7 @@ class Upload extends Component {
                     <Form.Control type = "text" name = "givenFileName" placeholder="example.png" onChange={this.handleChange} value = {this.state.givenFileName} required/>
                   </Form.Group>
                   <Form.Group controlId="private">
-                    <Form.Check type="checkbox" label= "make this file private" name = "isPrivate" onChange={this.handleChange} value = {this.state.isPrivate} required/>
+                    <Form.Check type="checkbox" label= "make this file private" name = "isPrivate" onChange={this.handleChange} value = {this.state.isPrivate}/>
                   </Form.Group>
 
                   <button type="submit"> 

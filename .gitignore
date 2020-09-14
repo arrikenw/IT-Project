@@ -4,5 +4,7 @@ utils/.*
 client/node_modules
 client/.idea
 .env.*
-coverage/.*
+coverage
 .vscode
+coverage/.*
+

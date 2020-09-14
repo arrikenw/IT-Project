@@ -218,7 +218,7 @@ Here is the needed documentation of the APIs used by the frontend to request to 
 ###### Creates a new user in the database and returns the user's ID
 Request to: `/api/user/add` as a `POST` request
 
-Takes a: JSON in the body, requiring the key-value pairs:
+Takes: a JSON in the body, requiring the key-value pairs:
 ```JSON
 {
    "email": "<userEmail>",
@@ -266,7 +266,7 @@ Responses:
 ###### Generates and returns an authentication token for a given valid user
 Request to: `/api/user/login` as a `POST` request
 
-Takes a: JSON in the body, requiring the key-value pairs:
+Takes: a JSON in the body, requiring the key-value pairs:
 ```JSON
 {
     "email": "<userEmail>",
@@ -296,7 +296,7 @@ Responses:
 ###### Returns a user's details from a valid authentication token
 Request to: `/api/user/get` as a `GET` request
 
-Takes a: Authorization header with the format
+Takes: an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
@@ -333,7 +333,7 @@ Responses:
 ###### Returns a list user's public details from a list user IDs
 Request to: `/api/user/getPublic` as a `POST` request
 
-Takes a: JSON in the body, requiring the key-value pairs:
+Takes: a JSON in the body, requiring the key-value pairs:
 ```JSON
 {
     "ids": ["<userIDOne>", "<userIDTwo", "<...>"]
@@ -378,7 +378,7 @@ Responses:
 ###### Updates a user's detail from an update, a password and an authentication token
 Request to: `/api/user/update` as a `POST` request
 
-Takes a: Authorization header with the format
+Takes: an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
@@ -432,7 +432,7 @@ Responses:
 ###### Deletes a user from a password and an authentication token
 Request to: `/api/user/delete` as a `POST` request
 
-Takes a: Authorization header with the format
+Takes: an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
@@ -447,16 +447,32 @@ Requirements:
 - Authentication token must a valid token
 - Password must match the user for the given authentication token
 
-user the command "npm start" in the /client directory to start the front end server
+Responses:
+- On success: 
+  - the response will have status code of "200" and will have the deleted user's id
+  - ```JSON
+    {
+        "id": "<userID>"
+    }
+    ```
+- on unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- on forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Delete user not successful - <reasonForError>"
+    ```
 
 ### Media
 #### Add media 
 ###### Creates a new media document in the database, saves the media blob to a s3 bucket, returns the media document id
 Request to: `/api/media/add` as a `POST` request
 
-Takes:
-
-An Authorization header with the format
+Takes: an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
@@ -503,7 +519,7 @@ Responses:
 ###### Retrieves media
 Request to: `/api/media/` as a `GET` request
 
-Takes: An Authorization header with the format
+Takes: an Authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
 ```

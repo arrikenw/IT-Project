@@ -500,7 +500,7 @@ Responses:
 
 
 #### Get media 
-###### Retrieves
+###### Retrieves media
 Request to: `/api/media/` as a `GET` request
 
 Takes: An Authorization header with the format
@@ -520,12 +520,50 @@ Requirements:
 
 Responses:
 - On success: 
-  - the response will have a status code of "200" and will contain a base64 encoding of the media file
-
+  - the response will have a status code of "200" and will contain base64 encoding of the media file in the following format
+```JSON
+{
+   "b64media": "<base64 encoding of file>"
+}
+```
 - On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Media retrieval failed - <reasonForError>"
+    ```
+
+#### Delete media 
+###### Deletes file from s3 bucket and removes media metadata from database
+Request to: `/api/media/delete` as a `POST` request
+
+Takes: an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+
+and HTML form data containing the following fields:
+```JSON
+{
+   "mediaID": "<mediaDocumentID>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- Provided media ID must be valid
+
+Responses:
+- On success: 
+  - The response will have a status code of "200" and will contain the following message:
+   "Media deletion success - deleted <"deletedMediaID">"
+
+```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Media deletion failed - <reasonForError>"
     ```

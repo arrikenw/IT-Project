@@ -5,3 +5,4 @@ client/node_modules
 client/.idea
 .env.*
 coverage
+.vscode

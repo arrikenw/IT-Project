@@ -14,4 +14,9 @@ router.post("/add", authenticateToken, (req, res) => {
   mediaController.uploadMedia(req, res);
 });
 
+router.post("/delete", authenticateToken, (req, res) => {
+  console.log("deleting");
+  mediaController.deleteMedia(req, res);
+});
+
 module.exports = router;

@@ -19,8 +19,7 @@ const mime = require("mime-types");
 
 // send helper
 const sendHelper = (res, response) => {
-  res.status = response.status;
-  res.send(response.msg);
+  res.status(response.status).send(response.msg);
 };
 //* ****************************************************************************************
 // HELPER FUNCTIONS AND CONTROLLER FOR MEDIA UPLOADS
@@ -141,6 +140,9 @@ const validateFields = (fields) => {
 };
 
 const validateAll = (file, fields) => {
+  if (!file) {
+    return { status: 400, msg: "Media upload failed - File was not attached" };
+  }
   if (!validateMediaSize(file)) {
     return { status: 400, msg: "Media upload failed - File was too large" };
   }
@@ -170,7 +172,7 @@ const uploadMedia = (req, res) => {
       }
       const validationStatus = validateAll(files.mediafile, fields);
       if (validationStatus !== "valid") {
-        console.log("validation failure");
+        console.log(validationStatus.msg);
         sendHelper(res, validationStatus);
         return;
       }
@@ -214,9 +216,9 @@ const serveMedia = (req, res) => {
     .then((doc) => {
       console.log("checking if user has access to media");
       if (
-        doc.creator !== req.user.id &&
+        doc.creator.toString() !== req.user.id.toString() &&
         doc.isPrivate !== false &&
-        doc.canAccess.includes(req.user.id)
+        !doc.canAccess.includes(mongoose.Types.ObjectId(req.user.id))
       ) {
         console.log("user does not have permission to view media");
         sendHelper(res, {
@@ -247,7 +249,7 @@ const serveMedia = (req, res) => {
         // I don't think converting here is necessary as it wastes server time, but I've included it to make it easier to check responses
         // code retrieved from https://stackoverflow.com/questions/23097928/node-js-throws-btoa-is-not-defined-error
         const base64form = Buffer.from(data.Body, "binary").toString("base64");
-        sendHelper(res, { status: 200, msg: base64form });
+        sendHelper(res, { status: 200, msg: { b64media: base64form } });
         console.log("Successfully returned file, request complete.");
       });
     })
@@ -261,6 +263,83 @@ const serveMedia = (req, res) => {
     });
 };
 
+//* ****************************************************************************************
+// CONTROLLER AND HELPER FUNCTIONS FOR DELETING MEDIA
+
+const deleteMongo = (res, id) => {
+  Media.findByIdAndDelete(id, (err, doc) => {
+    console.log(`deleted mongo ${doc}`);
+    if (err) {
+      console.log(err);
+      sendHelper(res, {
+        status: 500,
+        msg: "Media deletion failed - error deleting media",
+      });
+    } else {
+      sendHelper(res, {
+        status: 200,
+        msg: `Media deletion success - deleted ${id}`,
+      });
+    }
+  });
+};
+
+const deleteS3AndMongo = (res, id, extension) => {
+  const filepath = `${id}.${extension}`;
+  const bucketName = "it-project-media";
+  const params = { Bucket: bucketName, Key: filepath };
+  s3.deleteObject(params, (err, data) => {
+    console.log(`deleted s3 ${data}`);
+    if (err) {
+      console.log(err);
+      sendHelper(res, {
+        status: 500,
+        msg: "Media deletion failed - error deleting media from s3 bucket",
+      });
+    } else {
+      console.log("media deletion succeeded");
+      deleteMongo(res, id);
+    }
+  });
+};
+
+const deleteMedia = (req, res) => {
+  if (!req.body.mediaID) {
+    console.log("no media id provided");
+    sendHelper(res, {
+      status: 400,
+      msg: "Media deletion failed - No media id provided",
+    });
+    return;
+  }
+
+  // check if media can be deleted by user
+  console.log("getting media metadata");
+  Media.findById(req.body.mediaID)
+    .lean()
+    .then((doc) => {
+      console.log("checking if user created media");
+      if (doc.creator.toString() !== req.user.id.toString()) {
+        console.log("user does not have permission to delete media");
+        sendHelper(res, {
+          status: 401,
+          msg:
+            "Media deletion failed - user does not have permission to delete media",
+        });
+      } else {
+        deleteS3AndMongo(res, req.body.mediaID, doc.extension);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      sendHelper(res, {
+        status: 503,
+        msg: "Media deletion failed - error deleting media",
+      });
+    });
+};
+
 // exports
 module.exports.uploadMedia = uploadMedia;
 module.exports.serveMedia = serveMedia;
+module.exports.deleteMedia = deleteMedia;

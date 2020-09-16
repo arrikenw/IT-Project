@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Link} from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
+import Header from "./components/Header/Header";
 
 class App extends React.Component {
     constructor (props){
@@ -46,9 +47,12 @@ class App extends React.Component {
     }
     render() {
          return (
-
-            <div>
+            
+            <div >
+                
             <Router>
+            <Header></Header>
+                
                 <Route path = "/login">
                     <Login setToken = {this.setToken} setUser = {this.setUser}></Login>
                 </Route>

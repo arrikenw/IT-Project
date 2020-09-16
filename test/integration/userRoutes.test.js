@@ -25,6 +25,22 @@ describe("test /api/user/add route and the addUser controller", () => {
     // /Sign up successful - account made with id [a-z0-9]{24}/
     done();
   });
+
+  test("addUser with password too short", async (done) => {
+    const payload = {
+      email: "test@email.com",
+      password: "1234",
+      firstName: "firstTest",
+      lastName: "lastTest",
+      userName: "user22Test",
+    };
+    const response = await request(app).post("/api/user/add").send(payload);
+    expect(response.status).toBe(400);
+    expect(response.text).toBe(
+      "Sign up not successful - password must be greater than 8 characters"
+    );
+    done();
+  });
 });
 
 //  loginUser testing

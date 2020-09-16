@@ -6,6 +6,9 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
 import Header from "./components/Header/Header";
+import Home from "./components/Home"
+import Footer from "./components/HeaderFooter/Footer"
+
 
 class App extends React.Component {
     constructor (props){
@@ -21,14 +24,14 @@ class App extends React.Component {
     };
 
     
-    setUser = (user) => {
+    setUser = user => {
         window.localStorage.setItem("user", JSON.stringify(user));
         this.setState({user: user});
        
     }
 
     //stores authentication in localStorage
-    setToken = (token) => {
+    setToken = token => {
         window.localStorage.setItem("token",token);
         this.setState({token: token});
         console.log("set token: " + window.localStorage.getItem("token"));
@@ -47,25 +50,32 @@ class App extends React.Component {
     }
     render() {
          return (
-            
-            <div >
-                
-            <Router>
-            <Header></Header>
-                
-                <Route path = "/login">
-                    <Login setToken = {this.setToken} setUser = {this.setUser}></Login>
-                </Route>
-                <Route path = "/signup">
-                    <Signup setToken = {this.setToken} setUser = {this.setUser}></Signup>
-                </Route>
-                <Route path = "/upload">
-                    <Upload token = {this.state.token}></Upload>
-                </Route>
-            </Router>
-            
+            <div style={{width: "100vw", height: "100vh"}}>
+                <div style={{width: "100vw", height: "10%", backgroundColor: "#daeef0"}}>
+                   <p style={{margin: "0", width: "100%", textOverflow: "wrap"}}>
+                       token is: {this.state.token}
+                   </p>
+                </div>
+                <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
+                    <Router>
+                        <Route path = "/home">
+                            <Home setToken = {this.setToken}/>
+                        </Route>
+                        <Route path = "/login">
+                            <Login setToken = {this.setToken} setUser = {this.setUser}></Login>
+                        </Route>
+                        <Route path = "/signup">
+                            <Signup setToken = {this.setToken} setUser = {this.setUser}></Signup>
+                        </Route>
+                        <Route path = "/upload">
+                            <Upload token = {this.state.token}></Upload>
+                        </Route>
+                    </Router>
+                </div>
+                <div style={{width: "100vw", height: "10%", backgroundColor: "#daeef0"}}>
+                    <Footer/>
+                </div>
             </div>
-            
         );
 }
 

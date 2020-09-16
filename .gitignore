@@ -6,3 +6,5 @@ client/.idea
 .env.*
 coverage/.*
 .vscode
+coverage
+coverage/

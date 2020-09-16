@@ -51,12 +51,14 @@ class App extends React.Component {
     render() {
          return (
             <div style={{width: "100vw", height: "100vh"}}>
+                <Header></Header>
                 <div style={{width: "100vw", height: "10%", backgroundColor: "#daeef0"}}>
                    <p style={{margin: "0", width: "100%", textOverflow: "wrap"}}>
                        token is: {this.state.token}
                    </p>
                 </div>
                 <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
+                    
                     <Router>
                         <Route path = "/home">
                             <Home setToken = {this.setToken}/>

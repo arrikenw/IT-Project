@@ -27,14 +27,18 @@ class App extends React.Component {
     setUser = user => {
         window.localStorage.setItem("user", JSON.stringify(user));
         this.setState({user: user});
-       
     }
 
     //stores authentication in localStorage
     setToken = token => {
         window.localStorage.setItem("token",token);
         this.setState({token: token});
-        console.log("set token: " + window.localStorage.getItem("token"));
+    }
+
+    //logs user out by removing authentication token from local storage
+    logout(){
+        localStorage.removeItem("token");
+        this.setState({token: ""});
     }
 
     componentDidMount() {
@@ -50,16 +54,15 @@ class App extends React.Component {
     }
     render() {
          return (
-            <div style={{width: "100vw", height: "100vh"}}>
-                <Header></Header>
+            <div style={{width: "100vw", height: "100vh"}} >         
                 <div style={{width: "100vw", height: "10%", backgroundColor: "#daeef0"}}>
                    <p style={{margin: "0", width: "100%", textOverflow: "wrap"}}>
                        token is: {this.state.token}
                    </p>
                 </div>
-                <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
-                    
+                <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>                  
                     <Router>
+                        <Header token={this.state.token} logout={this.logout}/>
                         <Route path = "/home">
                             <Home setToken = {this.setToken}/>
                         </Route>

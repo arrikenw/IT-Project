@@ -9,6 +9,8 @@ import Header from "./components/Header/Header";
 import Home from "./components/Home"
 import Footer from "./components/HeaderFooter/Footer"
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 class App extends React.Component {
     constructor (props){
@@ -55,14 +57,12 @@ class App extends React.Component {
     render() {
          return (
             <div style={{width: "100vw", height: "100vh"}} >         
-                <div style={{width: "100vw", height: "10%", backgroundColor: "#daeef0"}}>
-                   <p style={{margin: "0", width: "100%", textOverflow: "wrap"}}>
-                       token is: {this.state.token}
-                   </p>
-                </div>
+                
+                <Header token={this.state.token} logout={this.logout}/>
+               
                 <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>                  
                     <Router>
-                        <Header token={this.state.token} logout={this.logout}/>
+            
                         <Route path = "/home">
                             <Home setToken = {this.setToken}/>
                         </Route>

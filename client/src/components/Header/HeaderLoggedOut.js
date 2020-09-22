@@ -11,15 +11,18 @@ export default class HeaderLoggedOut extends Component {
                         src={require("../../assets/home_icon.svg") }
                         width="30"
                         height="30"
-                        alt="efolio logo"           
+                        alt="efolio logo"   
+                                
                         />
+                        <div style={{color:'white'}}>E-Folio</div>
  
                  </Navbar.Brand>
 
-                <Nav className="justify-content-end">
-                        <Nav.Link href="/signup">Sign Up</Nav.Link>
-                        <Nav.Link href="/login">Log In</Nav.Link>
-                    </Nav>
+                <Nav>
+                    
+                    <Nav.Link href="/login" style={{marginLeft: "85vw", color:'white'}}>Log In</Nav.Link>
+                    <Nav.Link href="/signup" style={{color:'white'}}>Sign Up</Nav.Link>
+                </Nav>
                     
 
 

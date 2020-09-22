@@ -67,8 +67,7 @@ class LoginForm extends Component {
     return (
       <div
         style={{backgroundColor: "#32c8d9",
-          padding: "10px",
-          marginRight: "10vw"}}>
+          padding: "10px"}}>
         <Form className = "loginForm" onSubmit={this.onSubmit}>
           <Form.Group controlId="Email">
             <Form.Label>Email</Form.Label>

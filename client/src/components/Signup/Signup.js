@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-//import {Button} from 'react-bootstrap';
-//import { Form } from "react-bootstrap"
+import {Button} from 'react-bootstrap';
+import { Form } from "react-bootstrap"
 import {Link, withRouter} from "react-router-dom";
 import RequiredSignupForm from "./RequiredSignupForm";
-//import Warning from '../Warning/Warning';
-//import Axios from 'axios';
+import Warning from '../Warning/Warning';
+import Axios from 'axios';
 
 class Signup extends Component {
 

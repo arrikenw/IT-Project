@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Button, Form } from "react-bootstrap";
 import Warning from "../Warning/Warning";
-import { Link } from "react-router-dom";
 import Axios from "axios";
 
 class RequiredSignupForm extends Component {
@@ -149,7 +148,7 @@ class RequiredSignupForm extends Component {
                             type="submit"
                             block
                         >
-                            Signup
+                            Next
                         </Button>
                         <Warning ref={this.warningRef}/>
                     </div>

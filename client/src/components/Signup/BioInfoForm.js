@@ -4,7 +4,7 @@ import Warning from "../Warning/Warning";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 
-class SignupFormSkip extends Component {
+class BioInfoForm extends Component {
     state = {
         organisation: "",
         professionalField: "",
@@ -162,4 +162,4 @@ class SignupFormSkip extends Component {
     }
 }
 
-export default SignupFormSkip;
+export default BioInfoForm;

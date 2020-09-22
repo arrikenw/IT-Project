@@ -4,7 +4,7 @@ import Warning from "../Warning/Warning";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 
-class SignupFormMandatory extends Component {
+class RequiredSignupForm extends Component {
     state = {
         firstName: "",
         lastName: "",
@@ -159,4 +159,4 @@ class SignupFormMandatory extends Component {
     }
 }
 
-export default SignupFormMandatory;
+export default RequiredSignupForm;

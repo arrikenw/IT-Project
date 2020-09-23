@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-import { Button, Form } from "react-bootstrap";
-import Warning from "./Warning/Warning";
-import { Link } from "react-router-dom";
 import LoginForm from "./Login/LoginForm";
 
 class Home extends Component {

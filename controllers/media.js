@@ -23,7 +23,7 @@ const sendHelper = (res, response) => {
 };
 
 // fetch util
-const fetchMediaUtil = require("../utils/fetchMediaUtil.js")
+const fetchMediaUtil = require("../utils/fetchMediaUtil.js");
 
 //* ****************************************************************************************
 // HELPER FUNCTIONS AND CONTROLLER FOR MEDIA UPLOADS
@@ -233,15 +233,25 @@ const serveMedia = async (req, res) => {
         return;
       }
 
-      let mediab64 = await fetchMediaUtil(req.body.mediaID, doc.extension);
-      if (!mediab64 || mediab64 === null){
-        sendHelper(res, {status: 500, msg: "Media retrieval failed - failed to retrieve file from server"});
+      const mediab64 = await fetchMediaUtil(req.body.mediaID, doc.extension);
+      if (!mediab64 || mediab64 === null) {
+        sendHelper(res, {
+          status: 500,
+          msg: "Media retrieval failed - failed to retrieve file from server",
+        });
         console.log("Failed to retrieve media from s3 server");
-      }else{
-        sendHelper(res, { status: 200, msg: { b64media: mediab64, extension: doc.extension, mimeType: doc.mimeType } });
+      } else {
+        sendHelper(res, {
+          status: 200,
+          msg: {
+            b64media: mediab64,
+            extension: doc.extension,
+            mimeType: doc.mimeType,
+          },
+        });
         console.log("Successfully returned file, request complete.");
       }
-      })
+    })
     .catch((err) => {
       console.log(err);
       sendHelper(res, {

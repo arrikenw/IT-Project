@@ -2,10 +2,19 @@
 const bcrypt = require("bcrypt");
 const emailValidator = require("email-validator");
 const mongoose = require("mongoose");
+
+// import utility functions from util
+const fetchMediaUtil = require("../utils/fetchMediaUtil");
 const { generateToken } = require("../utils/jwtTokens");
 
 // import the users model
 const UserModel = mongoose.model("users");
+const MediaModel = mongoose.model("media");
+
+// send helper function
+const sendHelper = (res, response) => {
+  res.status(response.status).send(response.msg);
+};
 
 // get a user's private user information
 // must be authenticated first
@@ -291,6 +300,74 @@ const updateUser = (req, res) => {
     });
 };
 
+// request profile pic from user
+const getProfilePic = async (req, res) => {
+  console.log(`Got request for user ${req.body.id}'s pic`);
+  UserModel.findById(req.body.id)
+    .lean()
+    .then(async (doc) => {
+      console.log(doc.profilePic);
+      await MediaModel.findById(doc.profilePic)
+        .lean()
+        .then(async (media) => {
+          let b64media;
+          try {
+            b64media = await fetchMediaUtil(media._id, media.extension);
+          } catch (e) {
+            console.log(
+              `Retrieval of profile picture was unsuccessful - failed to retrieve image file: ${e}`
+            );
+            sendHelper(res, {
+              status: 500,
+              msg:
+                "Retrieval of profile picture was unsuccessful - failed to retrieve image file",
+            });
+            return;
+          }
+          if (!b64media || b64media == null) {
+            console.log(
+              "Retrieval of profile picture was unsuccessful - failed to retrieve image file"
+            );
+            sendHelper(res, {
+              status: 500,
+              msg:
+                "Retrieval of profile picture was unsuccessful - failed to retrieve image file",
+            });
+          } else {
+            console.log("Sending b64 profile pic");
+            sendHelper(res, {
+              status: 200,
+              msg: {
+                b64media,
+                extension: media.extension,
+                mimeType: media.mimeType,
+              },
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(
+            `Retrieval of profile picture was unsuccessful - failed to retrieve profile picture metadata: ${err}`
+          );
+          sendHelper(res, {
+            status: 500,
+            msg:
+              "Retrieval of profile picture was unsuccessful - failed to retrieve profile picture metadata",
+          });
+        });
+    })
+    .catch((err) => {
+      console.log(
+        `Retrieval of profile picture was unsuccessful - failed to retrieve user data: ${err}`
+      );
+      sendHelper(res, {
+        status: 400,
+        msg:
+          "Retrieval of profile picture was unsuccessful - failed to retrieve user data",
+      });
+    });
+};
+
 // delete a user from the database
 const deleteUser = (req, res) => {
   const { id } = req.user;
@@ -342,6 +419,7 @@ const deleteUser = (req, res) => {
     });
 };
 
+module.exports.getProfilePic = getProfilePic;
 module.exports.getUser = getUser;
 module.exports.getPublicUser = getPublicUser;
 module.exports.addUser = addUser;

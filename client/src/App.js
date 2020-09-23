@@ -10,6 +10,10 @@ import Home from "./components/Home"
 import Footer from "./components/HeaderFooter/Footer"
 
 
+//bootstrap
+import "react-bootstrap/dist/react-bootstrap.min.js";
+
+
 class App extends React.Component {
     constructor (props){
         super(props);
@@ -51,6 +55,12 @@ class App extends React.Component {
     render() {
          return (
             <div style={{width: "100vw", height: "100vh"}}>
+                <link
+                    rel="stylesheet"
+                    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+                    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+                    crossOrigin="anonymous"
+                />
                 <div style={{width: "100vw", height: "10%", backgroundColor: "#daeef0"}}>
                    <p style={{margin: "0", width: "100%", textOverflow: "wrap"}}>
                        token is: {this.state.token}

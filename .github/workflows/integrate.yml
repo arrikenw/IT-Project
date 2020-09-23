@@ -12,9 +12,20 @@ jobs:
   test_pull_request:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: setup Node.js
+        uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: npm ci
-      - run: npm test
+      - name: Install dependancies
+        run: npm ci
+      - name: Run integration tests
+        env :
+          PORT: 8000
+          MONGO_USERNAME: ${{secrets.MONGO_USERNAME}}
+          DB_NAME: testDB
+          SECRET: ${{secrets.SECRET}}
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+        run: npm test

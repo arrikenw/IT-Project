@@ -21,6 +21,10 @@ const mime = require("mime-types");
 const sendHelper = (res, response) => {
   res.status(response.status).send(response.msg);
 };
+
+// fetch util
+const fetchMediaUtil = require("../utils/fetchMediaUtil.js")
+
 //* ****************************************************************************************
 // HELPER FUNCTIONS AND CONTROLLER FOR MEDIA UPLOADS
 
@@ -199,7 +203,7 @@ const uploadMedia = (req, res) => {
 
 //* ****************************************************************************************
 // CONTROLLER FOR SERVING MEDIA
-const serveMedia = (req, res) => {
+const serveMedia = async (req, res) => {
   if (!req.body.mediaID) {
     console.log("no media id provided");
     sendHelper(res, {
@@ -213,7 +217,7 @@ const serveMedia = (req, res) => {
   console.log("getting media metadata");
   Media.findById(req.body.mediaID)
     .lean()
-    .then((doc) => {
+    .then(async (doc) => {
       console.log("checking if user has access to media");
       if (
         doc.creator.toString() !== req.user.id.toString() &&
@@ -228,31 +232,16 @@ const serveMedia = (req, res) => {
         });
         return;
       }
-      // fetch media from file server
-      console.log("fetching media");
-      const filepath = `${req.body.mediaID}.${doc.extension}`;
-      const bucketName = "it-project-media";
-      const params = { Bucket: bucketName, Key: filepath };
 
-      s3.getObject(params, (err, data) => {
-        if (err) {
-          console.log(err);
-          sendHelper(res, {
-            status: 500,
-            msg:
-              "Media retrieval failed - error retrieving media from s3 bucket",
-          });
-          return;
-        }
-        console.log("serving media");
-        // serve media to user.
-        // I don't think converting here is necessary as it wastes server time, but I've included it to make it easier to check responses
-        // code retrieved from https://stackoverflow.com/questions/23097928/node-js-throws-btoa-is-not-defined-error
-        const base64form = Buffer.from(data.Body, "binary").toString("base64");
-        sendHelper(res, { status: 200, msg: { b64media: base64form } });
+      let mediab64 = await fetchMediaUtil(req.body.mediaID, doc.extension);
+      if (!mediab64 || mediab64 === null){
+        sendHelper(res, {status: 500, msg: "Media retrieval failed - failed to retrieve file from server"});
+        console.log("Failed to retrieve media from s3 server");
+      }else{
+        sendHelper(res, { status: 200, msg: { b64media: mediab64, extension: doc.extension, mimeType: doc.mimeType } });
         console.log("Successfully returned file, request complete.");
-      });
-    })
+      }
+      })
     .catch((err) => {
       console.log(err);
       sendHelper(res, {

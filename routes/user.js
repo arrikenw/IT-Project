@@ -9,6 +9,10 @@ router.get("/get", authenticateToken, (req, res) => {
   userController.getUser(req, res);
 });
 
+router.post("/getProfilePic", (req, res) => {
+  userController.getProfilePic(req, res);
+});
+
 // get a list of user's public details
 router.post("/getPublic", (req, res) => {
   userController.getPublicUser(req, res);

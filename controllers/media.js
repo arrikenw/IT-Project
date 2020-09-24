@@ -263,6 +263,134 @@ const serveMedia = async (req, res) => {
 };
 
 //* ****************************************************************************************
+// CONTROLLER AND HELPER FUNCTIONS FOR UPDATING MEDIA
+
+// ensure update contains relevant fields
+const validateUpdate = (update) => {
+  if (update.isPrivate === true && update.isPrivate === false) {
+    return {
+      status: 400,
+      msg: "Media update failed - privacy status was not a boolean",
+    };
+  }
+
+  if (!Array.isArray(update.canAccess)) {
+    return {
+      status: 400,
+      msg: "Media update failed - canAccess list was not a list",
+    };
+  }
+
+  if (!update.givenFileName) {
+    return {
+      status: 400,
+      msg: "Media update failed - file display name was missing",
+    };
+  }
+
+  return "success";
+};
+
+const performMediaUpdate = (res, id, update, mediaDoc) => {
+  const updatedMediaDoc = {
+    mimeType: mediaDoc.mimeType,
+    contentCategory: mediaDoc.contentCategory,
+    extension: mediaDoc.extension,
+    creator: mediaDoc.creator,
+    isPrivate: update.isPrivate,
+    canAccess: update.canAccess,
+    givenFileName: update.givenFileName,
+  };
+
+  const onUpdateMedia = (err, results) => {
+    if (err) {
+      // TODO - add specific warnings for invalid field data
+      console.log(`Media update failed - error during update: ${err}`);
+      sendHelper(res, {
+        status: 500,
+        msg: "Media update failed - error during update",
+      });
+    } else {
+      console.log(`Media update succeeded: ${results}`);
+      sendHelper(res, { status: 201, msg: updatedMediaDoc });
+    }
+  };
+
+  Media.updateOne({ _id: id }, updatedMediaDoc, onUpdateMedia);
+};
+
+const updateMediaData = (req, res) => {
+  if (!req.body) {
+    sendHelper(res, {
+      status: 400,
+      msg: "Media update failed - no body provided",
+    });
+    return;
+  }
+
+  if (!req.body.id) {
+    sendHelper(res, {
+      status: 400,
+      msg: "Media update failed - request didn't supply media id",
+    });
+    return;
+  }
+
+  if (!req.body.isPrivate) {
+    sendHelper(res, {
+      status: 400,
+      msg: "Media update failed - privacy information was absent",
+    });
+    return;
+  }
+
+  if (!req.body.canAccess) {
+    sendHelper(res, {
+      status: 400,
+      msg: "Media update failed - access information was absent",
+    });
+    return;
+  }
+
+  const update = {
+    isPrivate: req.body.isPrivate,
+    canAccess: req.body.canAccess,
+    givenFileName: req.body.givenFileName,
+  };
+
+  const validationStatus = validateUpdate(update);
+  if (validationStatus !== "success") {
+    console.log("Update validation failed");
+    sendHelper(res, validationStatus);
+    return;
+  }
+  console.log("Update validation succeeded");
+
+  // check if user owns the media they want to update
+  Media.findById(req.body.id)
+    .lean()
+    .then((media) => {
+      if (req.user.id.toString() !== media.creator.toString()) {
+        console.log("Media update failed, requester didn't create the media");
+        sendHelper(res, {
+          status: 400,
+          msg: "Media update failed - requester didn't create the media",
+        });
+      } else {
+        console.log("Attempting to update media");
+        performMediaUpdate(res, req.body.id, update, media);
+      }
+    })
+    .catch((err) => {
+      console.log(`Media update failed - couldn't find media file: ${err}`);
+      sendHelper(res, {
+        status: 400,
+        msg: "Media update failed - couldn't find media file",
+      });
+    });
+};
+
+//* ****************************************************************************************
 // CONTROLLER AND HELPER FUNCTIONS FOR DELETING MEDIA
 
 const deleteMongo = (res, id) => {
@@ -339,6 +467,7 @@ const deleteMedia = (req, res) => {
 };
 
 // exports
+module.exports.updateMediaData = updateMediaData;
 module.exports.uploadMedia = uploadMedia;
 module.exports.serveMedia = serveMedia;
 module.exports.deleteMedia = deleteMedia;

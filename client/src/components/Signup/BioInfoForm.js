@@ -31,8 +31,12 @@ class BioInfoForm extends Component {
         //this.warningRef.current.setActive(false);
 
         const payload = {
-            email: this.state.email,
-            password: this.state.password
+            organisation: this.organisation,
+            professionalField: this.professionalField,
+            phoneNumber: this.phoneNumber,
+            gender: this.gender,
+            dob: this.dob,
+            privacyLevel: this.privacyLevel
         }
         //CHECK THISSSSSS!!!!!!!
 
@@ -75,7 +79,7 @@ class BioInfoForm extends Component {
                 style={{backgroundColor: "#32c8d9",
                     padding: "10px",
                     marginRight: "10vw"}}>
-                <Form className = "signupForm" onSubmit={this.onSubmit}>
+                <Form className = "bioInfoForm" onSubmit={this.onSubmit}>
                     <Form.Group controlId="Organisation">
                         <Form.Label>Organisation</Form.Label>
                         <br/>

@@ -29,6 +29,9 @@ class RequiredSignupForm extends Component {
         //this.warningRef.current.setActive(false);
 
         const payload = {
+            firstName: this.firstName,
+            lastName: this.lastName,
+            userName: this.userName,
             email: this.state.email,
             password: this.state.password
         }
@@ -71,9 +74,8 @@ class RequiredSignupForm extends Component {
         return (
             <div
                 style={{backgroundColor: "#32c8d9",
-                    padding: "10px",
-                    marginRight: "10vw"}}>
-                <Form className = "signupForm" onSubmit={this.onSubmit}>
+                    padding: "5px"}}>
+                <Form className = "requiredSignupForm" onSubmit={this.onSubmit}>
                     <Form.Group controlId="First Name">
                         <Form.Label>FirstName</Form.Label>
                         <br/>

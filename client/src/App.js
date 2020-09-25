@@ -6,10 +6,11 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
 import Header from "./components/Header/Header";
-import Home from "./components/Home"
-import Footer from "./components/HeaderFooter/Footer"
+import Home from "./components/Home";
+import Footer from "./components/HeaderFooter/Footer";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ProfileDetails from './components/ProfileDetails/ProfileDetails';
 
 
 class App extends React.Component {
@@ -29,6 +30,7 @@ class App extends React.Component {
     setUser = user => {
         window.localStorage.setItem("user", JSON.stringify(user));
         this.setState({user: user});
+        console.log("setuser:", this.state.user);
     }
 
     //stores authentication in localStorage
@@ -62,7 +64,9 @@ class App extends React.Component {
                
                 <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>                  
                     <Router>
-            
+                        <Route path = "/">
+                            <ProfileDetails token={this.state.token}></ProfileDetails>
+                        </Route>
                         <Route path = "/home">
                             <Home setToken = {this.setToken}/>
                         </Route>

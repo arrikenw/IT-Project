@@ -1,17 +1,17 @@
  import React, { Component } from 'react'
- import {Navbar, Nav, Row, Form} from 'react-bootstrap';
+ import {Navbar, Nav, Row, FormControl, InputGroup} from 'react-bootstrap';
  
 
  export default class HeaderLoggedIn extends Component {
      render() {
          return (
              
-            <Navbar style={{backgroundColor: "#094183"}} >
-                <Navbar.Brand href="/" style={{paddingTop: "0px"}}>
+            <Navbar style={{backgroundColor: "#094183", height:"4rem"}} >
+                <Navbar.Brand href="/home" style={{paddingTop: "0px"}}>
                     <img
                         src={require("../../assets/home_icon.svg") }
-                        width="30"
-                        height="30"
+                        width="40rem"
+                        height="40rem"
                         alt="efolio logo"
                        
                         />
@@ -20,15 +20,12 @@
                 
 
                 
-                <Form className="form-center">
-                    <Form.Group style={{paddingTop:'15px'}}controlID="searchBar">
-                        <Form.Control style={{ marginLeft:'25vw'}}type="search" placeholder="Search...">
-
-                        </Form.Control>
-
-
-                    </Form.Group>
-                </Form>
+                 <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                    <InputGroup.Text id="inputGroup-sizing-sm">Small</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+                </InputGroup>
                 
 
 
@@ -40,11 +37,11 @@
                         
                     <Row style={{marginLeft: "0px"}}>
                         Account
-                        <div style={{height: "30px", width: "30px", paddingLeft: "9px", paddingTop: "0px"}}>
+                        <div style={{height: "1rem", width: "3rem", paddingLeft: "9px", paddingTop: "0px"}}>
                             <img
                             src={require("../../assets/default_profile_icon.svg") }
-                            width="30"
-                            height="30"
+                            width="30rem"
+                            height="30rem"
                             alt="efolio logo"   
                             />
                         </div>

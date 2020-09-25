@@ -6,7 +6,7 @@ export default class HeaderLoggedOut extends Component {
         return (
            
             <Navbar style={{backgroundColor: "#094183"}}>
-                <Navbar.Brand href="/" style={{paddingTop: "0px"}}>
+                <Navbar.Brand href="/home" style={{paddingTop: "0px"}}>
                     <img
                         src={require("../../assets/home_icon.svg") }
                         width="30"

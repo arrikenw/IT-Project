@@ -10,12 +10,17 @@ router.get("/", authenticateToken, (req, res) => {
 });
 
 router.post("/add", authenticateToken, (req, res) => {
-  console.log("posting");
+  console.log("posting media");
   mediaController.uploadMedia(req, res);
 });
 
+router.post("/update", authenticateToken, (req, res) => {
+  console.log("updating media");
+  mediaController.updateMediaData(req, res);
+});
+
 router.post("/delete", authenticateToken, (req, res) => {
-  console.log("deleting");
+  console.log("deleting media");
   mediaController.deleteMedia(req, res);
 });
 

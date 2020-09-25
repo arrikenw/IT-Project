@@ -13,6 +13,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ProfileDetails from './components/ProfileDetails/ProfileDetails';
 
 
+//bootstrap
+import "react-bootstrap/dist/react-bootstrap.min.js";
+
+
 class App extends React.Component {
     constructor (props){
         super(props);
@@ -58,11 +62,20 @@ class App extends React.Component {
     }
     render() {
          return (
-            <div style={{width: "100vw", height: "100vh"}} >         
-                
+            <div style={{width: "100vw", height: "100vh"}}>
                 <Header token={this.state.token} logout={this.logout}/>
-               
-                <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>                  
+                <link
+                    rel="stylesheet"
+                    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+                    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+                    crossOrigin="anonymous"
+                />
+                <div style={{width: "100vw", height: "10%", backgroundColor: "#daeef0"}}>
+                   <p style={{margin: "0", width: "100%", textOverflow: "wrap"}}>
+                       token is: {this.state.token}
+                   </p>
+                </div>
+                <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
                     <Router>
                         <Route path = "/">
                             <ProfileDetails token={this.state.token}></ProfileDetails>

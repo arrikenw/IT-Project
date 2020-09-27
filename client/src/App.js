@@ -6,12 +6,14 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
 import Header from "./components/Header/Header";
+import Posts from "./components/Post/Posts";
 import Home from "./components/Home"
 import Footer from "./components/HeaderFooter/Footer"
 
 
 //bootstrap
 import "react-bootstrap/dist/react-bootstrap.min.js";
+import ProfilePic from "./components/ProfilePic/ProfilePic";
 
 
 class App extends React.Component {
@@ -64,6 +66,7 @@ class App extends React.Component {
                 <div style={{width: "100vw", height: "10%", backgroundColor: "#daeef0"}}>
                    <p style={{margin: "0", width: "100%", textOverflow: "wrap"}}>
                        token is: {this.state.token}
+                       <ProfilePic name = "E-folio User" targetUserID = {"5f5b596d77d4db3ac892fe3e"}></ProfilePic>
                    </p>
                 </div>
                 <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
@@ -76,6 +79,9 @@ class App extends React.Component {
                         </Route>
                         <Route path = "/signup">
                             <Signup setToken = {this.setToken} setUser = {this.setUser}></Signup>
+                        </Route>
+                        <Route path = "/posts">
+                            <Posts setToken = {this.setToken} setUser = {this.setUser}></Posts>
                         </Route>
                         <Route path = "/upload">
                             <Upload token = {this.state.token}></Upload>

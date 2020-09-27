@@ -8,13 +8,16 @@ const noimage = require("../../assets/nopic.jpg");
 //pass down targetUserID and name in props
 class ProfilePic extends React.Component
 {
-    constructor (props)
-    {
+    constructor (props) {
         super(props);
+
         this.state = {
-            pic : noimage,
+            pic: noimage,
             name: this.props.name
         };
+    }
+
+    componentDidMount() {
         let controllerUrl = '/api/user/getProfilePic'
         const payload = {
             id: this.props.targetUserID
@@ -34,7 +37,7 @@ class ProfilePic extends React.Component
     render(){
         return (
         <div className={this.props.targetUserID+"-profilepic-container"} style={{width: "100px", height:"100px"}}>
-                <Image src= {this.state.pic} style={{maxWidth:100, height: "100px", borderStyle:"solid", borderColor: "grey", borderWidth:"2px"}} roundedCircle />
+                <Image src= {this.state.pic} style={{maxWidth:100, height: "100px"}} roundedCircle />
                 <div className={this.props.targetUserID+"-displayname"} style={{fontSize: "12px", textAlign: "center"}}>
                     {this.state.name}
                 </div>

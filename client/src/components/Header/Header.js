@@ -8,7 +8,7 @@ class Header extends Component {
             
         if (window.localStorage.getItem("token")){
             //console.log("currently logged in, token:", window.localStorage.getItem("token"));
-            return <HeaderLoggedIn logout={this.props.logout}></HeaderLoggedIn>   
+            return <HeaderLoggedIn token = {this.props.token} logout={this.props.logout}></HeaderLoggedIn>   
         }else{
             return <HeaderLoggedOut></HeaderLoggedOut>
         }

@@ -37,7 +37,7 @@ class RequiredSignupForm extends Component {
         }
         //CHECK THISSSSSS!!!!!!!
 
-        Axios.post("api/user/login", payload)
+        Axios.post("api/user/add", payload)
             .then(resp => {
                 console.log("status: " + resp.status);
 
@@ -49,7 +49,7 @@ class RequiredSignupForm extends Component {
                     //this.warningRef.current.setActive(true);
 
                     // in future redirect to home page
-                    // this.props.history.push("/upload");
+                     this.props.history.push("/upload");
                 }
                 else{
 
@@ -136,7 +136,7 @@ class RequiredSignupForm extends Component {
                         <br/>
                         <Form.Control
                             required
-                            type="confirmPassword"
+                            type="password"
                             placeholder="Confirm your password"
                             name="confirmPassword"
                             onChange={this.onChange}

@@ -34,7 +34,6 @@ class App extends React.Component {
     setUser = user => {
         window.localStorage.setItem("user", JSON.stringify(user));
         this.setState({user: user});
-        console.log("setuser:", this.state.user);
     }
 
     //stores authentication in localStorage
@@ -62,6 +61,7 @@ class App extends React.Component {
     }
     render() {
          return (
+             
             <div style={{width: "100vw", height: "100vh"}}>
                 <Header token={this.state.token} logout={this.logout}/>
                 <link
@@ -70,11 +70,6 @@ class App extends React.Component {
                     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
                     crossOrigin="anonymous"
                 />
-                <div style={{width: "100vw", height: "10%", backgroundColor: "#daeef0"}}>
-                   <p style={{margin: "0", width: "100%", textOverflow: "wrap"}}>
-                       token is: {this.state.token}
-                   </p>
-                </div>
                 <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
                     <Router>
                         <Route path = "/">

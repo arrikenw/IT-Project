@@ -3,9 +3,10 @@ import Card from 'react-bootstrap/Card'
 import ResponsiveEmbed from 'react-bootstrap/ResponsiveEmbed'
 import Spinner from 'react-bootstrap/Spinner'
 import Axios from 'axios';
+import {withRouter} from "react-router-dom";
 
-//takes media id and post title and text via props
-class MediaContent extends React.Component {
+//takes media id via props
+class MediaEmbed extends React.Component {
     constructor (props){
         super(props);
     }
@@ -44,24 +45,18 @@ class MediaContent extends React.Component {
     //TODO improve styling
     render(){
         return(
-            <Card style={{width:"30vw", height:"20vw"}}>
-                {this.state.contentStr && (
-                    <ResponsiveEmbed aspectRatio="16by9">
-                        <object type={this.state.mimeType} data={this.state.contentStr}/>
-                    </ResponsiveEmbed>)}
-                <Card.Body>
-                    <Card.Title>{this.props.title}</Card.Title>
-                    <Card.Text>
-                        {this.props.desc}
-                    </Card.Text>
+            <div>
                     {!this.state.contentStr && (
                         <div className="d-flex justify-content-center">
                             <Spinner animation="border"/>
                         </div>
                     )}
-                </Card.Body>
-            </Card>
+                    {this.state.contentStr && (
+                        <ResponsiveEmbed aspectRatio="16by9">
+                            <object type={this.state.mimeType} data={this.state.contentStr}/>
+                        </ResponsiveEmbed>)}
+            </div>
         )
     }
 }
-export default MediaContent;
+export default withRouter(MediaEmbed);

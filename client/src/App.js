@@ -6,10 +6,10 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
 import Header from "./components/Header/Header";
-import Posts from "./components/Post/Posts";
+import Posts from "./components/Post/Posts.js";
 import Home from "./components/Home"
 import Footer from "./components/HeaderFooter/Footer"
-
+import FullPost from "./components/Post/FullPost"
 
 //bootstrap
 import "react-bootstrap/dist/react-bootstrap.min.js";
@@ -85,6 +85,9 @@ class App extends React.Component {
                         </Route>
                         <Route path = "/upload">
                             <Upload token = {this.state.token}></Upload>
+                        </Route>
+                        <Route path = "/post">
+                            <FullPost token = {this.state.token}></FullPost>
                         </Route>
                     </Router>
                 </div>

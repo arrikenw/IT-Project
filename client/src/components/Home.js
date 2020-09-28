@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import LoginForm from "./Login/LoginForm";
 
-
 class Home extends Component {
 
   render() {

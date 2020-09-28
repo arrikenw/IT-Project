@@ -10,7 +10,7 @@ const commentSchema = new Schema(
       required: true,
       ref: "users",
     },
-    body: { type: String, maxLength: 2200 },
+    comment: { type: String, maxLength: 2200 },
     likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   },
   { timestamps: true, collection: "Comments" }

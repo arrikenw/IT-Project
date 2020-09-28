@@ -5,7 +5,7 @@ const { authenticateToken } = require("../utils/jwtTokens");
 const postController = require("../controllers/post");
 
 // allows an authorised user to get posts using their authentication token
-router.get("/get", authenticateToken, (req, res) => {
+router.post("/get", authenticateToken, (req, res) => {
   postController.getPost(req, res);
 });
 

@@ -1,49 +1,28 @@
 import React, { Component } from "react";
 import LoginForm from "./Login/LoginForm";
 import ProfilePic from "./ProfilePic/ProfilePic.js";
-import Carousel from 'react-bootstrap/Carousel';
-import Axios from 'axios';
+
 class Home extends Component {
 
   render() {
     return (
-        <Carousel>
-          <Carousel.Item>
-            <img
-                className="FirstSlide"
-                src={require("../assets/black.svg")}
-                alt="First slide"
-            />
-            <Carousel.Caption>
-              <h3>First slide label</h3>
-              <p>This is the first slide hello</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-                className="SecondSlide"
-                src={require("../assets/black.svg")}
-                alt="Second slide"
-            />
+      <div style={{margin: '0, 0, 0, 0', padding: '0, 0, 0, 0'}}>
+        <div style={{flexGrow: "1", paddingTop: "20vh", paddingLeft: "10vw", margin: '0, 0, 0, 0'}}>
+          <h3>
+            Welcome to E-folio!
+          </h3>
+          <div style={{width: "36%", paddingTop: "", float: "left"}}>
 
-            <Carousel.Caption>
-              <h3>Second slide label</h3>
-              <p>This is the second slide hello again</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-                className="ThirdSlide"
-                src={require("../assets/black.svg")}
-                alt="Third slide"
-            />
-
-            <Carousel.Caption>
-              <h3>Third slide label</h3>
-              <p>Welcome to the third slide goodbye now</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-        </Carousel>
+            <p>
+              E-folio helps you showcase your work with the people in your life.
+            </p>
+            <ProfilePic name = "E-folio User" targetUserID = {"5f5b596d77d4db3ac892fe3e"}></ProfilePic>
+          </div>
+          <div style={{width: "36%", float: "right"}}>
+            <LoginForm setToken = {this.props.setToken}/>
+          </div>
+        </div>
+      </div>
     );
   }
 }

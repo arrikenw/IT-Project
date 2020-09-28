@@ -21,6 +21,10 @@ const mime = require("mime-types");
 const sendHelper = (res, response) => {
   res.status(response.status).send(response.msg);
 };
+
+// fetch util
+const fetchMediaUtil = require("../utils/fetchMediaUtil.js");
+
 //* ****************************************************************************************
 // HELPER FUNCTIONS AND CONTROLLER FOR MEDIA UPLOADS
 
@@ -199,7 +203,7 @@ const uploadMedia = (req, res) => {
 
 //* ****************************************************************************************
 // CONTROLLER FOR SERVING MEDIA
-const serveMedia = (req, res) => {
+const serveMedia = async (req, res) => {
   if (!req.body.mediaID) {
     console.log("no media id provided");
     sendHelper(res, {
@@ -213,7 +217,7 @@ const serveMedia = (req, res) => {
   console.log("getting media metadata");
   Media.findById(req.body.mediaID)
     .lean()
-    .then((doc) => {
+    .then(async (doc) => {
       console.log("checking if user has access to media");
       if (
         doc.creator.toString() !== req.user.id.toString() &&
@@ -228,30 +232,25 @@ const serveMedia = (req, res) => {
         });
         return;
       }
-      // fetch media from file server
-      console.log("fetching media");
-      const filepath = `${req.body.mediaID}.${doc.extension}`;
-      const bucketName = "it-project-media";
-      const params = { Bucket: bucketName, Key: filepath };
 
-      s3.getObject(params, (err, data) => {
-        if (err) {
-          console.log(err);
-          sendHelper(res, {
-            status: 500,
-            msg:
-              "Media retrieval failed - error retrieving media from s3 bucket",
-          });
-          return;
-        }
-        console.log("serving media");
-        // serve media to user.
-        // I don't think converting here is necessary as it wastes server time, but I've included it to make it easier to check responses
-        // code retrieved from https://stackoverflow.com/questions/23097928/node-js-throws-btoa-is-not-defined-error
-        const base64form = Buffer.from(data.Body, "binary").toString("base64");
-        sendHelper(res, { status: 200, msg: { b64media: base64form } });
+      const mediab64 = await fetchMediaUtil(req.body.mediaID, doc.extension);
+      if (!mediab64 || mediab64 === null) {
+        sendHelper(res, {
+          status: 500,
+          msg: "Media retrieval failed - failed to retrieve file from server",
+        });
+        console.log("Failed to retrieve media from s3 server");
+      } else {
+        sendHelper(res, {
+          status: 200,
+          msg: {
+            b64media: mediab64,
+            extension: doc.extension,
+            mimeType: doc.mimeType,
+          },
+        });
         console.log("Successfully returned file, request complete.");
-      });
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -259,6 +258,134 @@ const serveMedia = (req, res) => {
         status: 503,
         msg:
           "Media retrieval failed - error retrieving media information from database",
+      });
+    });
+};
+
+//* ****************************************************************************************
+// CONTROLLER AND HELPER FUNCTIONS FOR UPDATING MEDIA
+
+// ensure update contains relevant fields
+const validateUpdate = (update) => {
+  if (update.isPrivate === true && update.isPrivate === false) {
+    return {
+      status: 400,
+      msg: "Media update failed - privacy status was not a boolean",
+    };
+  }
+
+  if (!Array.isArray(update.canAccess)) {
+    return {
+      status: 400,
+      msg: "Media update failed - canAccess list was not a list",
+    };
+  }
+
+  if (!update.givenFileName) {
+    return {
+      status: 400,
+      msg: "Media update failed - file display name was missing",
+    };
+  }
+
+  return "success";
+};
+
+const performMediaUpdate = (res, id, update, mediaDoc) => {
+  const updatedMediaDoc = {
+    mimeType: mediaDoc.mimeType,
+    contentCategory: mediaDoc.contentCategory,
+    extension: mediaDoc.extension,
+    creator: mediaDoc.creator,
+    isPrivate: update.isPrivate,
+    canAccess: update.canAccess,
+    givenFileName: update.givenFileName,
+  };
+
+  const onUpdateMedia = (err, results) => {
+    if (err) {
+      // TODO - add specific warnings for invalid field data
+      console.log(`Media update failed - error during update: ${err}`);
+      sendHelper(res, {
+        status: 500,
+        msg: "Media update failed - error during update",
+      });
+    } else {
+      console.log(`Media update succeeded: ${results}`);
+      sendHelper(res, { status: 201, msg: updatedMediaDoc });
+    }
+  };
+
+  Media.updateOne({ _id: id }, updatedMediaDoc, onUpdateMedia);
+};
+
+const updateMediaData = (req, res) => {
+  if (!req.body) {
+    sendHelper(res, {
+      status: 400,
+      msg: "Media update failed - no body provided",
+    });
+    return;
+  }
+
+  if (!req.body.id) {
+    sendHelper(res, {
+      status: 400,
+      msg: "Media update failed - request didn't supply media id",
+    });
+    return;
+  }
+
+  if (!req.body.isPrivate) {
+    sendHelper(res, {
+      status: 400,
+      msg: "Media update failed - privacy information was absent",
+    });
+    return;
+  }
+
+  if (!req.body.canAccess) {
+    sendHelper(res, {
+      status: 400,
+      msg: "Media update failed - access information was absent",
+    });
+    return;
+  }
+
+  const update = {
+    isPrivate: req.body.isPrivate,
+    canAccess: req.body.canAccess,
+    givenFileName: req.body.givenFileName,
+  };
+
+  const validationStatus = validateUpdate(update);
+  if (validationStatus !== "success") {
+    console.log("Update validation failed");
+    sendHelper(res, validationStatus);
+    return;
+  }
+  console.log("Update validation succeeded");
+
+  // check if user owns the media they want to update
+  Media.findById(req.body.id)
+    .lean()
+    .then((media) => {
+      if (req.user.id.toString() !== media.creator.toString()) {
+        console.log("Media update failed, requester didn't create the media");
+        sendHelper(res, {
+          status: 400,
+          msg: "Media update failed - requester didn't create the media",
+        });
+      } else {
+        console.log("Attempting to update media");
+        performMediaUpdate(res, req.body.id, update, media);
+      }
+    })
+    .catch((err) => {
+      console.log(`Media update failed - couldn't find media file: ${err}`);
+      sendHelper(res, {
+        status: 400,
+        msg: "Media update failed - couldn't find media file",
       });
     });
 };
@@ -340,6 +467,7 @@ const deleteMedia = (req, res) => {
 };
 
 // exports
+module.exports.updateMediaData = updateMediaData;
 module.exports.uploadMedia = uploadMedia;
 module.exports.serveMedia = serveMedia;
 module.exports.deleteMedia = deleteMedia;

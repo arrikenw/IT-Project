@@ -43,14 +43,14 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
   - ```javascript
     const myFunc = (param) => {};
     ```
-- #### Arrow functions with one parameter should not have brackets:
+- #### Arrow functions with one parameter should have brackets:
     - wrong:
     - ```javascript
-      const myFunc = (param) => {};
+      const myFunc = param => {};
       ```
     - right:
     - ```javascript
-      const myFunc = param => {};
+      const myFunc = (param) => {};
       ```
 - #### Use promises over callbacks when possible:
   - may not be possible in all scenarios

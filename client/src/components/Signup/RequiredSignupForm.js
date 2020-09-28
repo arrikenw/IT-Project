@@ -29,12 +29,15 @@ class RequiredSignupForm extends Component {
         //this.warningRef.current.setActive(false);
 
         const payload = {
+            firstName: this.firstName,
+            lastName: this.lastName,
+            userName: this.userName,
             email: this.state.email,
             password: this.state.password
         }
         //CHECK THISSSSSS!!!!!!!
 
-        Axios.post("api/user/login", payload)
+        Axios.post("api/user/add", payload)
             .then(resp => {
                 console.log("status: " + resp.status);
 
@@ -46,7 +49,7 @@ class RequiredSignupForm extends Component {
                     //this.warningRef.current.setActive(true);
 
                     // in future redirect to home page
-                    // this.props.history.push("/upload");
+                     this.props.history.push("/upload");
                 }
                 else{
 
@@ -71,9 +74,8 @@ class RequiredSignupForm extends Component {
         return (
             <div
                 style={{backgroundColor: "#32c8d9",
-                    padding: "10px",
-                    marginRight: "10vw"}}>
-                <Form className = "signupForm" onSubmit={this.onSubmit}>
+                    padding: "5px"}}>
+                <Form className = "requiredSignupForm" onSubmit={this.onSubmit}>
                     <Form.Group controlId="First Name">
                         <Form.Label>FirstName</Form.Label>
                         <br/>
@@ -134,7 +136,7 @@ class RequiredSignupForm extends Component {
                         <br/>
                         <Form.Control
                             required
-                            type="confirmPassword"
+                            type="password"
                             placeholder="Confirm your password"
                             name="confirmPassword"
                             onChange={this.onChange}

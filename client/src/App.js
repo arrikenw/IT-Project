@@ -72,7 +72,7 @@ class App extends React.Component {
                 />
                 <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
                     <Router>
-                        <Route path = "/">
+                        <Route exact path = "/">
                             <ProfileDetails token={this.state.token}></ProfileDetails>
                         </Route>
                         <Route path = "/home">

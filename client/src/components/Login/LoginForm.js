@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Form } from "react-bootstrap";
 import Warning from "../Warning/Warning";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Axios from "axios";
 
 class LoginForm extends Component {
@@ -37,12 +37,13 @@ class LoginForm extends Component {
         if (resp.status === 200){
           //store the token in window.localstorage
           this.props.setToken.call(this, resp.data.token);
+          console.log("login successful, token: ", resp.data.token);
           //this.warningRef.current.setColor("green");
           //this.warningRef.current.setMessage("Login successful... redirecting to upload page");
           //this.warningRef.current.setActive(true);
 
           // in future redirect to home page
-          // this.props.history.push("/upload");
+           this.props.history.push("/upload");
         }
         else{
 
@@ -113,4 +114,4 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+export default withRouter(LoginForm);

@@ -33,7 +33,6 @@ class LoginForm extends Component {
     Axios.post("api/user/login", payload)
       .then(resp => {
         console.log("status: " + resp.status);
-
         if (resp.status === 200){
           //store the token in window.localstorage
           this.props.setToken.call(this, resp.data.token);

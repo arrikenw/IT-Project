@@ -1,6 +1,7 @@
  import React, { Component } from 'react';
  import {Card,ListGroup, ListGroupItem, Dropdown, DropdownButton, Row,Col, Container} from 'react-bootstrap';
  import Axios from 'axios';
+ import {withRouter} from 'react-router-dom';
 
 
 class ProfileDetails extends Component {
@@ -10,18 +11,38 @@ class ProfileDetails extends Component {
         lastName:"",
         Biography:"",
         userName:"",
-        professionalFields:"",
+        professionalFields:[],
         phone: "",
         email:"",
-        ids:"5f6421af83c4953c60567f7f",
+        //hardcoded id for testing
+        ids:"5f6421af83c4953c60567f7f"
     }
 
 
 
-    componentDidMount() {
-
+    componentWillMount() {
+        
+        //const query = new URLSearchParams(this.props.location.search);
+        //const id = query.get('id');
+        //console.log("id=", id);
         //get all the public information of a user
-        Axios.post("api/user/getPublic", this.state.ids);
+
+        
+        
+        console.log("ids:", this.props.ids);
+        Axios.post("api/user/getPublic", {ids:this.state.ids})
+        .then(resp =>{
+            console.log("resp=",resp.data[0]);
+            this.setState({
+                firstName:resp.data[0].firstName,
+                lastName:resp.data[0].lastName,
+                userName:resp.data[0].userName,
+                professionalFields:resp.data[0].professionalFields
+            })
+        })
+        .catch((err)=>{
+            console.error(err);
+        })
 
     }
 
@@ -30,19 +51,19 @@ class ProfileDetails extends Component {
      render() {
          return (
              <div>
-                      <Card  style={{ width: '20rem', backgroundColor: "#afd19f"}}>
-                    <div style={{height: "5rem", width: "8rem", marginLeft:"80px", marginBottom:"50px"}}>
+                      <Card  className="text-center" style={{ width: '20rem', backgroundColor: "#afd19f"}}>
+                    <div style={{marginLeft:"auto",marginRight:"auto", display:"block", width:"50%"}}>
                         <Card.Img variant="top" src={require("../../assets/default_profile_icon.svg")}  />
                     </div>
                     <Card.Body>
-                        <Card.Title style={{marginLeft:"60px"}}>Username</Card.Title>
+                        <Card.Title style={{textlign:'center'}}>{this.state.userName}</Card.Title>
   
                         <ListGroup className="list-group-flush" >
-                            <ListGroupItem style={{backgroundColor:"#afd19f"}}>FirstName LastName</ListGroupItem>
+                            <ListGroupItem style={{backgroundColor:"#afd19f"}}>{this.state.firstName} {this.state.lastName}</ListGroupItem>
                             <ListGroupItem style={{backgroundColor:"#afd19f"}}>Biography</ListGroupItem>
                             <ListGroupItem style={{backgroundColor:"#afd19f"}}>0404123456</ListGroupItem>
                             <ListGroupItem style={{backgroundColor:"#afd19f"}}>example@gmail.com</ListGroupItem>
-                            <ListGroupItem style={{backgroundColor:"#afd19f"}}>Professional Fields</ListGroupItem>
+                            <ListGroupItem style={{backgroundColor:"#afd19f"}}>Professional Fields {this.state.professionalFields}</ListGroupItem>
                       
                             <ListGroupItem style={{backgroundColor:"#afd19f"}}>View</ListGroupItem>
                         </ListGroup>
@@ -79,5 +100,5 @@ class ProfileDetails extends Component {
          )
      }
  }
- export default ProfileDetails;
+ export default withRouter(ProfileDetails);
  

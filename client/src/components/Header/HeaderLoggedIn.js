@@ -11,12 +11,13 @@ import {Navbar, Nav, Row,Col, FormControl, InputGroup} from 'react-bootstrap';
 
     componentDidMount() {
         //get the logged in user's first name to display in the header
-      console.log("header logged in, token: ",window.localStorage.getItem("token"));
        Axios.get("api/user/get", {headers:{
         Authorization: "Bearer " + window.localStorage.getItem("token")}})
         .then(resp =>{
-            console.log("user's name: ", resp.data.firstName);
             this.setState({firstName:  resp.data.firstName});
+        })
+        .catch((err) =>{
+            console.error(err);
         })
         
 

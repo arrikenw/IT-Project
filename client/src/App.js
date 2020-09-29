@@ -27,7 +27,8 @@ class App extends React.Component {
         password: "",
         response: {empty: "fake"},
         user: "",
-        token:""
+        token:"",
+        ids:""
     };
 
     
@@ -47,18 +48,12 @@ class App extends React.Component {
         localStorage.removeItem("token");
         this.setState({token: ""});
     }
-
-    componentDidMount() {
-
-        //get default message from backend
-        Axios.get('api/').then((res)=> {
-            console.log("request success");
-            console.log(res);
-            this.setState({backend: res.data});
-        }).catch((err) => {
-            console.error(err);
-        });
+    
+    //stores the id of the user whose page is being visited
+    setIds = ids => {
+        this.setState({ids:ids});
     }
+   
     render() {
          return (
              
@@ -73,7 +68,7 @@ class App extends React.Component {
                 <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
                     <Router>
                         <Route path = "/">
-                            <ProfileDetails token={this.state.token}></ProfileDetails>
+                            <ProfileDetails token={this.state.token} setIds={this.setIds} ids={this.state.ids}/>
                         </Route>
                         <Route path = "/home">
                             <Home setToken = {this.setToken}/>

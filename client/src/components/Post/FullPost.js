@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 import ResponsiveEmbed from 'react-bootstrap/ResponsiveEmbed'
 import Spinner from 'react-bootstrap/Spinner'
 import Axios from 'axios';
@@ -30,7 +31,7 @@ class FullPost extends React.Component {
 
         let postUrl = '/api/post'
         const postPayload = {
-            //TODO BLOCKED
+
         }
     }
 
@@ -52,19 +53,21 @@ class FullPost extends React.Component {
                 <div style={{height:'0px', paddingLeft:'3vw'}}>
                     <ProfileDetails />
                 </div>
-                <div style={{paddingRight:"5vw"}}>
+                <div style={{paddingRight:"30vw"}}>
                     <div className="d-flex justify-content-end">
-                        <Card style={{width:"70vw", height:"50vw"}}>
+                        <Card style={{width:"auto"}}>
                             <Card.Body>
-                                <MediaEmbed mwidth={"100%"} targetMediaID={"5f7301b09880a10f2468044d"}></MediaEmbed>
-                            <Card.Title>PIZZA TIME</Card.Title>
-                            <Card.Text>
-                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+                                <Card.Title> <h1> PIZZA TIME </h1></Card.Title>
+                            <div className="d-flex justify-content-start">
+                                <MediaEmbed mwidth={"37vw"} targetMediaID={"5f70d166cc1bb4402c3df893"}></MediaEmbed>
+                            </div>
+                            <Card.Text style = {{width:"37vw", paddingTop: "0.5vw"}}>
+                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
                             </Card.Text>
                             <div>
-                                PLACEHOLDER FOR LIKES ETC.
+                                <Button variant="success" >Like</Button>
                             </div>
-                            <div>
+                            <div style={{paddingTop:"0.5vw"}}>
                                 PLACEHOLDER FOR COMMENTS
                             </div>
                             </Card.Body>

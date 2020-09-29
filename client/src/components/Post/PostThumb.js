@@ -18,17 +18,13 @@ class PostThumb extends React.Component {
 
     render(){
         return(
-                <Card style={{width:"30vw", height:"20vw"}}>
-                    <Card.Body>
-                        <div onClick={() => this.props.history.push("/post?post="+this.props.targetMediaID)}>
-                            <Card.Title>{this.props.title}</Card.Title>
-                            <Card.Text>
-                                {this.props.desc}
-                            </Card.Text>
-                        </div>
-                        <MediaEmbed targetMediaID = {this.props.targetMediaID} />
-                    </Card.Body>
-                </Card>
+            <div onClick={() => this.props.history.push("/post?post="+this.props.postID)}>
+                <div> <h1> {this.props.title} </h1></div>
+                <div style={{paddingTop:"0.5vw"}}>
+                    <MediaEmbed mheight = {"10vw"} targetMediaID = {this.props.targetMediaID} />
+                </div>
+                <div style = {{paddingTop:"0.5vw"}}> {this.props.description} </div>
+            </div>
         )
     }
 }

@@ -20,9 +20,6 @@ class ProfileDetails extends Component {
 
     componentDidMount() {
 
-        //get all the public information of a user
-        Axios.post("api/user/getPublic", this.state.ids);
-
     }
 
 

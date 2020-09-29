@@ -57,14 +57,14 @@ class MediaEmbed extends React.Component {
     //TODO improve styling
     render(){
         return(
-            <div className="d-flex justify-content-center">
+            <div style={{padding:"0 0 0 0", margin:"0 0 0 0"}}>
                 {!this.state.contentStr && (
                     <Spinner animation="border"/>
                 )}
                 {(this.state.contentCategory == "video" && this.state.contentStr && (
-                    <video src={this.state.contentStr} type = {this.state.mimeType} style={{width: this.state.mwidth}}controls/>
+                    <video src={this.state.contentStr} type = {this.state.mimeType} style={{maxWidth: this.state.mwidth, maxHeight: this.state.mheight}}controls/>
                 )) || (this.state.contentStr && (
-                    <ResponsiveEmbed className="d-flex justify-content-center" style={{width: this.state.mwidth}}>
+                    <ResponsiveEmbed style={{width: this.state.mwidth, height: this.state.mheight, padding:0, margin:0}}>
                         <object type={this.state.mimeType} data={this.state.contentStr}/>
                     </ResponsiveEmbed>))}
             </div>

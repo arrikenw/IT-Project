@@ -37,7 +37,7 @@ class ProfilePic extends React.Component
     render(){
         return (
         <div className={this.props.targetUserID+"-profilepic-container"} style={{width: "100px", height:"100px"}}>
-                <Image src= {this.state.pic} style={{maxWidth:100, height: "100px"}} roundedCircle />
+                <Image src= {this.state.pic} style={{maxWidth:"100px", height: "100px"}} roundedCircle />
                 <div className={this.props.targetUserID+"-displayname"} style={{fontSize: "12px", textAlign: "center"}}>
                     {this.state.name}
                 </div>

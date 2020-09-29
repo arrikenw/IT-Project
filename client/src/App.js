@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Link} from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
+import ProfilePage from "./components/ProfilePage/ProfilePageBlocking";
 import Header from "./components/Header/Header";
 import Home from "./components/Home"
 import Footer from "./components/HeaderFooter/Footer"
@@ -79,6 +80,9 @@ class App extends React.Component {
                         </Route>
                         <Route path = "/upload">
                             <Upload token = {this.state.token}></Upload>
+                        </Route>
+                        <Route path= "/profilepage">
+                            <ProfilePage token = {this.state.token}></ProfilePage>
                         </Route>
                     </Router>
                 </div>

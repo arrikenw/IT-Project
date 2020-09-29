@@ -26,6 +26,14 @@ class PostForm extends Component {
         return (
             <div>
                 <Card  style={{backgroundColor: "#32c8d9", padding: "10px"}}>
+                    <Container>
+                        <DropdownButton size="sm" id="dropdown-basic-button" title="Edit">
+                            <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
+                            <Dropdown.Item href="#/action-2">Pin</Dropdown.Item>
+                            <Dropdown.Item href="#/action-2">Delete</Dropdown.Item>
+                        </DropdownButton>
+                    </Container>
+
                     <Card.Body>
                         <Card.Title style = {{textAlign: "center"}}>Title Title Title</Card.Title>
 
@@ -40,7 +48,7 @@ class PostForm extends Component {
                         <Card.Img variant="top" src={require("../../assets/picture.jpg")} />
                     </div>
 
-                    <Container class = "vertical-center">
+                    <Container>
                         <Row>
                             <Button size = "sm" id = "like-button">
                                 Like

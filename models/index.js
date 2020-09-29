@@ -11,7 +11,6 @@ const MONGO_URL = CONNECTION_STRING.replace(
   process.env.MONGO_USERNAME
 ).replace("<password>", process.env.MONGO_PASSWORD);
 
-// TODO: change dbName to something in .env
 // connect to the mongoDB database
 mongoose.connect(MONGO_URL || "mongodb://localhost/COMP30022", {
   useNewUrlParser: true,
@@ -33,6 +32,7 @@ model.once("open", async () => {
 // import the other collections
 require("./User");
 require("./Media");
+require("./Post");
 
 // function to disconnect from database
 const disconnectDB = () => {

@@ -8,6 +8,7 @@ import Upload from "./components/Upload/Upload";
 import Header from "./components/Header/Header";
 import Home from "./components/Home";
 import Footer from "./components/HeaderFooter/Footer";
+import InfinteScroll from "./components/ProfileDetails/infinteScroll";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProfileDetails from './components/ProfileDetails/ProfileDetails';
@@ -15,11 +16,14 @@ import ProfileDetails from './components/ProfileDetails/ProfileDetails';
 
 //bootstrap
 import "react-bootstrap/dist/react-bootstrap.min.js";
+import Profile from "./components/ProfileDetails/Profile";
+
 
 
 class App extends React.Component {
     constructor (props){
         super(props);
+        this.state.token = window.localStorage.getItem("token");
     }
     state = {
         backend: "did not connect to backend :(",
@@ -57,30 +61,32 @@ class App extends React.Component {
     render() {
          return (
              
-            <div style={{width: "100vw", height: "100vh"}}>
-                <Header token={this.state.token} logout={this.logout}/>
-                <link
-                    rel="stylesheet"
-                    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-                    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-                    crossOrigin="anonymous"
-                />
+            <div style={{width: "100vw", height: "100vh", margin: "0px"}}>
+                <div style={{width: "100vw", height: "10%", backgroundColor: "#daeef0"}}>
+                    <Header token={this.state.token} logout={this.logout}/>
+                </div>
                 <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
                     <Router>
-                        <Route path = "/">
-                            <ProfileDetails token={this.state.token} setIds={this.setIds} ids={this.state.ids}/>
+                        <Route exact path = "/">
+                            <ProfileDetails token={this.state.token}></ProfileDetails>
                         </Route>
                         <Route path = "/home">
                             <Home setToken = {this.setToken}/>
                         </Route>
                         <Route path = "/login">
-                            <Login setToken = {this.setToken} setUser = {this.setUser}></Login>
+                            <Login setToken = {this.setToken} setUser = {this.setUser}/>
                         </Route>
                         <Route path = "/signup">
-                            <Signup setToken = {this.setToken} setUser = {this.setUser}></Signup>
+                            <Signup setToken = {this.setToken} setUser = {this.setUser}/>
                         </Route>
                         <Route path = "/upload">
-                            <Upload token = {this.state.token}></Upload>
+                            <Upload token = {this.state.token}/>
+                        </Route>
+                        <Route path = "/profile">
+                            <Profile token={this.state.token} />
+                        </Route>
+                        <Route path = "/post">
+                            <InfinteScroll token={this.state.token} />
                         </Route>
                     </Router>
                 </div>
@@ -92,5 +98,13 @@ class App extends React.Component {
 }
 
 }
+
+// dont need this
+// <link
+//   rel="stylesheet"
+//   href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+//   integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+//   crossOrigin="anonymous"
+// />
 
 export default App;

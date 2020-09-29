@@ -1,5 +1,8 @@
 // from https://medium.com/@therealchrisrutherford/nodejs-authentication-with-passport-and-jwt-in-express-3820e256054f
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
+
+const UserModel = mongoose.model("users");
 
 const SECRET = process.env.SECRET;
 
@@ -20,8 +23,20 @@ const authenticateToken = (req, res, next) => {
       console.log("Authentication error: invalid authentication token");
       return res.sendStatus(403);
     }
-    req.user = user;
-    return next(); // pass the execution off to whatever request the client intended
+    // eslint-disable-next-line consistent-return
+    return UserModel.findById(user.id)
+      .then((response) => {
+        if (!response) {
+          console.log("Authentication error: user does not exist");
+          return res.sendStatus(403);
+        }
+        req.user = user;
+        return next(); // pass the execution off to whatever request the client intended
+      })
+      .catch((error) => {
+        console.log(`Authentication error: ${error.message}`);
+        return res.sendStatus(403);
+      });
   });
 };
 

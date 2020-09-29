@@ -1,0 +1,78 @@
+import React, { Component } from "react";
+import {Button, Card, Container, Dropdown, DropdownButton, Form, ListGroup, ListGroupItem, Row} from "react-bootstrap";
+import Warning from "../Warning/Warning";
+import { Link, withRouter } from "react-router-dom";
+import Axios from "axios";
+
+class PostForm extends Component {
+    state = {
+        title: "",
+        post: "",
+        picture: "",
+        like: "",
+        comment: "",
+        share: "",
+        postID: ""
+    }
+
+    componentDidMount() {
+
+        //get all the public information of a user
+        Axios.post("api/user/getPublic", this.state.ids);
+
+    }
+
+    render() {
+        return (
+            <div>
+                <Card  style={{backgroundColor: "#32c8d9", padding: "10px"}}>
+                    <Card.Body>
+                        <Card.Title style = {{textAlign: "center"}}>Title Title Title</Card.Title>
+
+                        <ListGroup className="list-group-flush" >
+                            <ListGroupItem style={{backgroundColor:"#afd19f"}}>Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post Post </ListGroupItem>
+
+                        </ListGroup>
+
+                    </Card.Body>
+
+                    <div>
+                        <Card.Img variant="top" src={require("../../assets/picture.jpg")} />
+                    </div>
+
+                    <Container class = "vertical-center">
+                        <Row>
+                            <Button size = "sm" id = "like-button">
+                                Like
+                            </Button>
+
+                            <Button size = "sm" id = "comment-button" >
+                                Comment
+                            </Button>
+
+                            <Button size = "sm" id = "share-button" >
+                                Share
+                            </Button>
+
+                        </Row>
+
+                    </Container>
+
+                    <Card.Body>
+                        <ListGroup className="list-group-flush" >
+                            <ListGroupItem style={{backgroundColor:"#afd19f"}}> Comment </ListGroupItem>
+                        </ListGroup>
+                    </Card.Body>
+
+                    <Card.Body>
+                        <ListGroup className="list-group-flush" >
+                            <ListGroupItem style={{backgroundColor:"#afd19f"}}> Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment </ListGroupItem>
+                        </ListGroup>
+                    </Card.Body>
+                </Card>
+            </div>
+        )
+    }
+}
+
+export default withRouter(PostForm);

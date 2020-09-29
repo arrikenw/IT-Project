@@ -15,6 +15,7 @@ import ProfileDetails from './components/ProfileDetails/ProfileDetails';
 
 //bootstrap
 import "react-bootstrap/dist/react-bootstrap.min.js";
+import PostPage from "./components/PostPage/PostPage";
 
 
 class App extends React.Component {
@@ -72,7 +73,7 @@ class App extends React.Component {
                 />
                 <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
                     <Router>
-                        <Route path = "/">
+                        <Route exact path = "/profile">
                             <ProfileDetails token={this.state.token}></ProfileDetails>
                         </Route>
                         <Route path = "/home">
@@ -86,6 +87,9 @@ class App extends React.Component {
                         </Route>
                         <Route path = "/upload">
                             <Upload token = {this.state.token}></Upload>
+                        </Route>
+                        <Route path = "/post">
+                            <PostPage token = {this.state.token}></PostPage>
                         </Route>
                     </Router>
                 </div>

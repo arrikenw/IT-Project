@@ -6,6 +6,7 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
 import ProfilePage from "./components/ProfilePage/ProfilePageBlocking";
+import Settings from "./components/Settings/Settings";
 import Header from "./components/Header/Header";
 import Home from "./components/Home"
 import Footer from "./components/HeaderFooter/Footer"
@@ -83,6 +84,9 @@ class App extends React.Component {
                         </Route>
                         <Route path= "/profilepage">
                             <ProfilePage token = {this.state.token}></ProfilePage>
+                        </Route>
+                        <Route path= "/settings">
+                            <Settings token = {this.state.token}></Settings>
                         </Route>
                     </Router>
                 </div>

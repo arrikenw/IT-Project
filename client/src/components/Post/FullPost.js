@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import Axios from 'axios';
 import {withRouter} from "react-router-dom";
 import MediaEmbed from "../MediaEmbed/MediaEmbed";
+import ProfileDetails from "../ProfileDetails/ProfileDetails";
 
 //takes media id and post title and text via props
 class FullPost extends React.Component {
@@ -47,15 +48,15 @@ class FullPost extends React.Component {
         }
 
         return(
-            <div>
-                <div className="d-flex justify-content-start">
-                    PLACEHOLDER FOR USERPROFILE INFO
+            <div style={{paddingTop:'2vw'}}>
+                <div style={{height:'0px', paddingLeft:'3vw'}}>
+                    <ProfileDetails />
                 </div>
                 <div style={{paddingRight:"5vw"}}>
                     <div className="d-flex justify-content-end">
                         <Card style={{width:"70vw", height:"50vw"}}>
                             <Card.Body>
-                                <MediaEmbed targetMediaID={"5f70d166cc1bb4402c3df893"}></MediaEmbed>
+                                <MediaEmbed mwidth={"100%"} targetMediaID={"5f7301b09880a10f2468044d"}></MediaEmbed>
                             <Card.Title>PIZZA TIME</Card.Title>
                             <Card.Text>
                                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?

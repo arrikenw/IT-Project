@@ -98,9 +98,6 @@ class App extends React.Component {
                             <Profile token={this.state.token} />
                         </Route>
                         <Route path = "/post">
-                            <InfinteScroll token={this.state.token} />
-                        </Route>
-                        <Route path = "/post">
                             <FullPost token = {this.state.token}></FullPost>
                         </Route>
                     </Router>

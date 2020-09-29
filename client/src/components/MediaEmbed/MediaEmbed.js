@@ -7,13 +7,16 @@ import {withRouter} from "react-router-dom";
 
 //takes media id via props
 class MediaEmbed extends React.Component {
-    constructor (props){
-        super(props);
-    }
     state = {
         mimeType: "",
         contentStr: "",
+        mwidth: "10vw",
     };
+
+    constructor (props){
+        super(props);
+    }
+
 
     componentDidMount() {
         let controllerUrl = '/api/media/'
@@ -24,6 +27,13 @@ class MediaEmbed extends React.Component {
             headers: { 'Authorization': 'Bearer '+ window.localStorage.getItem("token")}
         }
 
+        if (this.props.mwidth){
+            this.setState({mwidth: this.props.mwidth});
+        }
+        if (this.props.mheight) {
+            this.setState({mheight: this.props.mheight});
+        }
+
         console.log("Attempting fetch");
         Axios.post(controllerUrl,  payload, headers).then(res => {
             console.log(res);
@@ -31,7 +41,9 @@ class MediaEmbed extends React.Component {
             if (res.status == 200 || res.status == "success"){
                 const str = "data:"+res.data.mimeType+";base64,"+res.data.b64media;
                 this.setState({contentStr: str});
-                this.setState({mimeType: res.data.mimeType})
+                this.setState({mimeType: res.data.mimeType});
+                this.setState({contentCategory: res.data.contentCategory});
+                console.log(this.state.contentCategory);
             }
         }).catch(err =>{
             console.log(err);
@@ -45,16 +57,16 @@ class MediaEmbed extends React.Component {
     //TODO improve styling
     render(){
         return(
-            <div>
-                    {!this.state.contentStr && (
-                        <div className="d-flex justify-content-center">
-                            <Spinner animation="border"/>
-                        </div>
-                    )}
-                    {this.state.contentStr && (
-                        <ResponsiveEmbed aspectRatio="16by9">
-                            <object type={this.state.mimeType} data={this.state.contentStr}/>
-                        </ResponsiveEmbed>)}
+            <div className="d-flex justify-content-center">
+                {!this.state.contentStr && (
+                    <Spinner animation="border"/>
+                )}
+                {(this.state.contentCategory == "video" && this.state.contentStr && (
+                    <video src={this.state.contentStr} type = {this.state.mimeType} style={{width: this.state.mwidth}}controls/>
+                )) || (this.state.contentStr && (
+                    <ResponsiveEmbed className="d-flex justify-content-center" style={{width: this.state.mwidth}}>
+                        <object type={this.state.mimeType} data={this.state.contentStr}/>
+                    </ResponsiveEmbed>))}
             </div>
         )
     }

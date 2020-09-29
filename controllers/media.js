@@ -248,6 +248,7 @@ const serveMedia = async (req, res) => {
             b64media: mediab64,
             extension: doc.extension,
             mimeType: doc.mimeType,
+            contentCategory: doc.contentCategory
           },
         });
         console.log("Successfully returned file, request complete.");

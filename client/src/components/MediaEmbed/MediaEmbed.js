@@ -11,10 +11,14 @@ class MediaEmbed extends React.Component {
         mimeType: "",
         contentStr: "",
         mwidth: "10vw",
+        mheight: "",
+        fwidth: "",
+        fheight: ""
     };
 
     constructor (props){
         super(props);
+        console.log("passed in - "+this.props.targetMediaID);
     }
 
 
@@ -57,7 +61,7 @@ class MediaEmbed extends React.Component {
     //TODO improve styling
     render(){
         return(
-            <div style={{padding:"0 0 0 0", margin:"0 0 0 0"}}>
+            <div className="d-flex justify-content-center" style={{padding:"0", backgroundColor:"red"}}>
                 {!this.state.contentStr && (
                     <Spinner animation="border"/>
                 )}

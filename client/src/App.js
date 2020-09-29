@@ -53,7 +53,6 @@ class App extends React.Component {
     //logs user out by removing authentication token from local storage
     logout(){
         localStorage.removeItem("token");
-        console.log("ARRIKEN BAD CODER");
         this.setState({token: ""});
     }
 

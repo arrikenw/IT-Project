@@ -75,7 +75,8 @@ import {Navbar, Nav, Row,Col, FormControl, InputGroup} from 'react-bootstrap';
                 </Nav>
 
                 <Nav>
-                    <Nav.Link href="/"style={{marginLeft: "0vw",color:'white'}} onClick={this.props.logout.bind(this)}>Logout</Nav.Link>
+                    {/*<Nav.Link href="/"style={{marginLeft: "0vw",color:'white'}} onClick={this.props.logout.bind(this)}>Logout</Nav.Link>*/}
+                    <Nav.Link href="/"style={{marginLeft: "0vw",color:'white'}} onClick={() => {this.props.logout()}}>Logout</Nav.Link>
                 </Nav>
 
             </Navbar>

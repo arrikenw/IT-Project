@@ -6,10 +6,10 @@ class Profile extends Component {
   render() {
     return (
       <div style={{width: "100%", height: "100%", margin: "0px"}}>
-        <div style={{float: "left", width: "40%"}}>
+        <div style={{float: "left", width: "30%"}}>
           <ProfileDetails token = {this.props.token} />
         </div>
-        <div style={{float: "right", width: "60%", height: "100%"}}>
+        <div style={{float: "right", width: "70%", height: "100%"}}>
           <InfinteScroll token = {this.props.token} />
         </div>
 

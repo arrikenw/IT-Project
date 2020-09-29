@@ -45,25 +45,13 @@ export default function InfinteScroll(props) {
     <div style={{overflowY: "scroll", height: "100%"}}>
 
       <div style={{paddingTop: "2vw", paddingLeft:"2vw"}}>
-        <InputGroup className="mb-3">
-          <InputGroup.Prepend>
-            <InputGroup.Text>Search here</InputGroup.Text>
-          </InputGroup.Prepend>
-        <input type="text" value={search} onChange={handleSearch}/>
-        </InputGroup>
       </div>
-      <Card style={{width: "45vw", margin:"auto"}}>
-
 
       {posts.map((post, index) => {
         if (posts.length === index + 1) {
-          return (<div className="d-flex justify-content-center" style={{height: "20vw", backgroundColor: "#bdeb34", margin: "20px"}} ref={lastPostElementRef} key={post._id}>
-            {(post.mediaID && <PostThumb title={post.title} postID = {post._id} desc = {post.description} targetMediaID={post.mediaID}/>)} {post.description}
-          </div>)
+          return <div style={{margin:"0"}} ref={lastPostElementRef} key={post._id}> <PostThumb post={post} /> </div>
         } else {
-          return <div className="d-flex justify-content-center" style={{height: "20vw", backgroundColor: "#bdeb34", margin: "20px"}} key={post._id}>
-            {(post.mediaID && <PostThumb title={post.title} postID = {post._id} desc = {post.description} targetMediaID={post.mediaID}/>)}
-          </div>
+          return <div style={{margin:"0"}} key={post._id}> <PostThumb post={post} /> </div>
         }
       })}
 
@@ -71,8 +59,6 @@ export default function InfinteScroll(props) {
       <div>{error && "Error (most likely auth error)"}</div>
       <div>{!error && loading && "Loading posts"}</div>
       <div>{!error && !loading && posts.length == 0 && "Couldn't find a post that matched your query"}</div>
-
-      </Card>
     </div>
     );
 }

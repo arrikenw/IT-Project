@@ -47,7 +47,7 @@ describe("test POST /api/media/add route and the addMedia controller", () => {
   });
 });
 
-describe("test GET /api/media/ route and the serveMedia controller", () => {
+describe("test POST /api/media/ route and the serveMedia controller", () => {
   // clear database before each test
   let token;
   beforeAll(async () => {
@@ -82,7 +82,7 @@ describe("test GET /api/media/ route and the serveMedia controller", () => {
       mediaID: response.body._id,
     };
     const retrieveResponse = await request(app)
-      .get("/api/media/")
+      .post("/api/media/")
       .set("Authorization", `Bearer ${token}`)
       .send(payload);
 
@@ -110,7 +110,7 @@ describe("test GET /api/media/ route and the serveMedia controller", () => {
 
     const payload2 = {};
     const retrieveResponse = await request(app)
-      .get("/api/media/")
+      .post("/api/media/")
       .set("Authorization", `Bearer ${token}`)
       .send(payload2);
 

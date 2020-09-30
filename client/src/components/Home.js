@@ -1,50 +1,32 @@
 import React, { Component } from "react";
 import LoginForm from "./Login/LoginForm";
-import ProfilePic from "./ProfilePic/ProfilePic.js";
-import Axios from 'axios';
-import {Row, Carousel} from "react-bootstrap";
-class Home extends Component {
+import ProfilePic from "./ProfilePic/ProfilePic";
 
-  render() {
-    return (
-        <div>
-            <Carousel>
-              <Carousel.Item>
-                  <Row>
-                    <LoginForm setToken = {this.props.setToken}/>
-                    <LoginForm setToken = {this.props.setToken}/>
-                  </Row>
-                <Carousel.Caption>
-                  <h3>First slide label</h3>
-                  <p>This is the first slide hello</p>
-                </Carousel.Caption>
-              </Carousel.Item>
-
-              <Carousel.Item>
-                <img
-                    src={require("../assets/black.svg") }
-                    alt="background carousel"
-                />
-                <Carousel.Caption>
-                  <h3>Second slide label</h3>
-                  <p>This is the second slide hello again</p>
-                </Carousel.Caption>
-              </Carousel.Item>
-
-              <Carousel.Item>
-                <img
-                    src={require("../assets/black.svg") }
-                    alt="background carousel"
-                />
-                <Carousel.Caption>
-                  <h3>Third slide label</h3>
-                  <p>Welcome to the third slide goodbye now</p>
-                </Carousel.Caption>
-              </Carousel.Item>
-            </Carousel>
+export default function Home({ token, setToken }) {
+  return (
+    <div style={{ margin: "0, 0, 0, 0", padding: "0, 0, 0, 0" }}>
+      <div
+        style={{
+          flexGrow: "1",
+          paddingTop: "20vh",
+          paddingLeft: "10vw",
+          margin: "0, 0, 0, 0",
+        }}
+      >
+        <h3>Welcome to E-folio!</h3>
+        <div style={{ width: "36%", paddingTop: "", float: "left" }}>
+          <p>
+            E-folio helps you showcase your work with the people in your life.
+          </p>
+          <ProfilePic
+            name="E-folio User"
+            targetUserID="5f5b596d77d4db3ac892fe3e"
+          />
         </div>
-    );
-  }
+        <div style={{ width: "36%", float: "right" }}>
+          <LoginForm setToken={setToken} />
+        </div>
+      </div>
+    </div>
+  );
 }
-
-export default Home;

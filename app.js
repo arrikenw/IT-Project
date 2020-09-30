@@ -1,5 +1,4 @@
 // code reused from web information technology project code
-
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -13,6 +12,7 @@ require("./models");
 
 // import index router
 const routes = require("./routes/index");
+
 
 // create express app
 const app = express();

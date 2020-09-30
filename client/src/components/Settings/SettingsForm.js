@@ -35,10 +35,9 @@ class SettingsForm extends Component {
         userNameField: true,
         emailField: true,
         passwordField: true,
-
-
+        confirmPassword: ""
     }
-    //TODO add in funtions that link the form to the back end
+    //TODO add in functions that link the form to the back end
 
     isFormEditable = e =>{
         if(this.state.firstNameField === false){return false;}
@@ -59,33 +58,27 @@ class SettingsForm extends Component {
         //this.warningRef.current.setActive(false);
 
         const payload = {
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            userName: this.state.userName,
-            email: this.state.email,
-            password: this.state.password
-        }
-        //CHECK THISSSSSS!!!!!!!
+            update: {firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                userName: this.state.userName,
+                email: this.state.email,
+                password: this.state.password},
 
-        Axios.post("api/user/login", payload)
+                password: this.state.confirmPassword
+        }
+
+
+        Axios.post("api/user/update", payload, {headers:{
+            Authorization: "Bearer " + window.localStorage.getItem("token")}})  //todo change
             .then(resp => {
                 console.log("status: " + resp.status);
 
                 if (resp.status === 200){
-                    //store the token in window.localstorage
-                    this.props.setToken.call(this, resp.data.token);
-                    //this.warningRef.current.setColor("green");
-                    //this.warningRef.current.setMessage("Login successful... redirecting to upload page");
-                    //this.warningRef.current.setActive(true);
 
-                    // in future redirect to home page
-                    // this.props.history.push("/upload");
+                   //todo add warnings
+
                 }
                 else{
-
-                    // this.warningRef.current.setMessage("Wrong email or password");
-                    // this.warningRef.setColor("red");
-                    // this.warningRef.current.setActive(true);
 
                 }
 
@@ -94,9 +87,7 @@ class SettingsForm extends Component {
             })
             .catch((err) =>{
                 console.error(err);
-                // this.warningRef.current.setColor("red");
-                // this.warningRef.current.setMessage("Wrong email or password");
-                // this.warningRef.current.setActive(true);
+
             });
     }
 
@@ -105,7 +96,7 @@ class SettingsForm extends Component {
     render() {
         return(
             <div style={{borderColor:"#bde0e0", marginLeft:"10vw"}}>
-                <Form className = "SettingsForm" >
+                <Form className = "SettingsForm" onSubmit={this.onSubmit}>
                     <Form.Group as= {Row} controlId="First Name">
                         <Form.Label column lg="3">First Name:</Form.Label>
 
@@ -228,14 +219,14 @@ class SettingsForm extends Component {
                             required
                             type="password"
                             placeholder=""
-                            name="password"
+                            name="confirmPassword"
                             onChange={this.onChange}
-                            value = {this.state.password}
+                            value = {this.state.confirmPassword}
                             disabled = {this.isFormEditable()}
                             style={{width:"30%" }}
                         />
 
-                        <Button>Submit Changes</Button>
+                        <Button type="submit">Submit Changes</Button>
                     </Form.Group>
 
                 </Form>

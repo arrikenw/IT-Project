@@ -10,7 +10,7 @@
             "jsx": true
         }
     },
-    "extends": ["eslint:recommended", "airbnb", "prettier", "plugin:node/recommended", "plugin:react/recommended", "react-app"],
+    "extends": ["eslint:recommended", "airbnb", "prettier", "plugin:react/recommended", "react-app"],
     "plugins": ["prettier", "react"],
     "rules": {
         "prettier/prettier": "error",
@@ -18,11 +18,12 @@
         "no-underscore-dangle": "off",
         "prefer-destructuring": "off",
         "no-process-exit": "off",
-        "global-require": "off"
+        "global-require": "off",
+        "react/jsx-filename-extension": [0]
     },
     "settings": {
         "react" : {
-            "version": "999.999.999"
+            "version": "16.13.1"
         }
     }
 }

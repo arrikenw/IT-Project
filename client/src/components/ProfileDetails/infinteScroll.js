@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback } from "react";
+import React, { Component, useState, useRef, useCallback, useEffect } from "react";
 import usePostSearch from "./usePostSearch";
 import PostThumb from "../Post/PostThumb";
 // https://www.youtube.com/watch?v=NZKUirTtxcg
@@ -8,6 +8,12 @@ export default function InfinteScroll(props) {
   const [pageNumber, setPageNumber] = useState(1);
   const [sortField, setSortField] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState("desc");
+
+
+  useEffect(() => {
+    setSortField(props.sortField);
+    setSortDirection(props.sortDirection);
+  }, [props.sortField, props.sortDirection]);
 
   const { loading, error, posts, hasMore } = usePostSearch(
     search,

@@ -1,13 +1,36 @@
- import React, { Component } from 'react';
+   import React, { Component } from 'react';
  import {Card,ListGroup, ListGroupItem, Dropdown, DropdownButton, Row,Col, Container} from 'react-bootstrap';
- 
+ import Axios from 'axios';
 
 
 class ProfileDetails extends Component {
+
+    state = {
+        firstName:"",
+        lastName:"",
+        Biography:"",
+        userName:"",
+        professionalFields:"",
+        phone: "",
+        email:"",
+        ids:"5f6421af83c4953c60567f7f",
+    }
+
+
+
+    componentDidMount() {
+
+        //get all the public information of a user
+        Axios.post("api/user/getPublic", this.state.ids);
+
+    }
+
+
+
      render() {
          return (
              <div>
-                 <Card  style={{ width: '20rem', backgroundColor: "#afd19f"}}>
+                      <Card  style={{ width: '20rem', backgroundColor: "#afd19f"}}>
                     <div style={{height: "5rem", width: "8rem", marginLeft:"80px", marginBottom:"50px"}}>
                         <Card.Img variant="top" src={require("../../assets/default_profile_icon.svg")}  />
                     </div>
@@ -18,7 +41,7 @@ class ProfileDetails extends Component {
                             <ListGroupItem style={{backgroundColor:"#afd19f"}}>FirstName LastName</ListGroupItem>
                             <ListGroupItem style={{backgroundColor:"#afd19f"}}>Biography</ListGroupItem>
                             <ListGroupItem style={{backgroundColor:"#afd19f"}}>0404123456</ListGroupItem>
-                            <ListGroupItem style={{backgroundColor:"#afd19f"}}>danieljiang2013@gmail.com</ListGroupItem>
+                            <ListGroupItem style={{backgroundColor:"#afd19f"}}>example@gmail.com</ListGroupItem>
                             <ListGroupItem style={{backgroundColor:"#afd19f"}}>Professional Fields</ListGroupItem>
                       
                             <ListGroupItem style={{backgroundColor:"#afd19f"}}>View</ListGroupItem>

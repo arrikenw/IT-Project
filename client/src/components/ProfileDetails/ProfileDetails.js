@@ -5,22 +5,21 @@
 
 class ProfileDetails extends Component {
 
-    state = {
-        firstName:"",
-        lastName:"",
-        biography:"",
-        userName:"",
-        professionalFields:["Business Management","Accounting", "Law and Legal Studies", "Social Work"],
-        phone: "",
-        email:"",
-        ids:"",
-        sortValue:"",
-        filterTags:["resume", "code", "video", "pdf"],
-        filterValues:[]
-
-    }
-    constructor(props){
-        super(props);
+    constructor(){
+        super();
+        this.state = {
+            firstName:"",
+            lastName:"",
+            biography:"",
+            userName:"",
+            professionalFields:["Business Management","Accounting", "Law and Legal Studies", "Social Work"],
+            phone: "",
+            email:"",
+            ids:"",
+            sortValue:"",
+            filterTags:["resume", "code", "video", "pdf"],
+            filterValues:[]
+        }
         this.handleSortSelect = this.handleSortSelect.bind(this);
         this.handleFilterSelect = this.handleFilterSelect.bind(this);
         this.onFilterSubmit = this.onFilterSubmit.bind(this);

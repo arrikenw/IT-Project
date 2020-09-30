@@ -4,9 +4,11 @@ import {Navbar, Nav, Row, FormControl, InputGroup} from 'react-bootstrap';
  
 
  export default class HeaderLoggedIn extends Component {
-
-    state = {
-        firstName:""
+    constructor(){
+        super();
+        this.state = {
+            firstName:""
+        }
     }
 
     componentDidMount() {
@@ -22,9 +24,7 @@ import {Navbar, Nav, Row, FormControl, InputGroup} from 'react-bootstrap';
 
     }
      render() {
-         
          return (
-             
             <Navbar style={{backgroundColor: "#094183", height:"4rem"}} >
                 <Navbar.Brand href="/home" style={{paddingTop: "0px"}}>
                     <img
@@ -32,7 +32,6 @@ import {Navbar, Nav, Row, FormControl, InputGroup} from 'react-bootstrap';
                         width="40rem"
                         height="40rem"
                         alt="efolio logo"
-                       
                         />
                     <div style={{color:'white'}}>E-Folio</div>
                     

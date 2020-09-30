@@ -1,23 +1,21 @@
 import React, { Component } from "react";
-import {Button} from "react-bootstrap";
-import { Form } from "react-bootstrap";
-import Warning from "../Warning/Warning";
+import { Button, Form } from "react-bootstrap";
+
 import { Link, withRouter } from "react-router-dom";
 import Axios from "axios";
 import Warning from "../Warning/Warning";
 
 class BioInfoForm extends Component {
-  state = {
-    organisation: "",
-    professionalField: "",
-    phoneNumber: "",
-    gender: "",
-    dob: "",
-    privacyLevel: "",
-  };
-
   constructor(props) {
     super(props);
+    this.state = {
+      organisation: "",
+      professionalField: "",
+      phoneNumber: "",
+      gender: "",
+      dob: "",
+      privacyLevel: "",
+    };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }

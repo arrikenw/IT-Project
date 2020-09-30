@@ -19,7 +19,8 @@
         "prefer-destructuring": "off",
         "no-process-exit": "off",
         "global-require": "off",
-        "react/jsx-filename-extension": [0]
+        "react/jsx-filename-extension": [0],
+        "jsx-a11y/media-has-caption": "off"
     },
     "settings": {
         "react" : {

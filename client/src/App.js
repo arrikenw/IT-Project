@@ -7,7 +7,7 @@ import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
 import Header from "./components/Header/Header";
 import Posts from "./components/Post/Posts.js";
-import FullPost from "./components/Post/FullPost"
+import FullPost from "./components/Post/FullPost";
 import Home from "./components/Home";
 import Footer from "./components/HeaderFooter/Footer";
 
@@ -17,6 +17,7 @@ import ProfileDetails from "./components/ProfileDetails/ProfileDetails";
 // bootstrap
 import "react-bootstrap/dist/react-bootstrap.min";
 import Profile from "./components/ProfileDetails/Profile";
+import AddPost from "./components/waitingforjoelsfolder/addPost";
 
 class App extends React.Component {
   constructor(props) {
@@ -72,6 +73,9 @@ class App extends React.Component {
             </Route>
             <Route path="/post">
               <FullPost token={this.state.token} />
+            </Route>
+            <Route path="/addpost">
+              <AddPost token={this.state.token} />
             </Route>
           </Router>
         </div>

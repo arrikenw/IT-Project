@@ -13,7 +13,6 @@ class Signup extends Component {
             marginRight: "20vw",
           }}
         >
-          >
           <RequiredSignupForm setToken={this.props.setToken} />
         </div>
       </div>

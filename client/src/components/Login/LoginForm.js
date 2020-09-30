@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { Button, Form } from "react-bootstrap";
-import Warning from "../Warning/Warning";
 import { Link, withRouter } from "react-router-dom";
 import Axios from "axios";
+import Warning from "../Warning/Warning";
 
 class LoginForm extends Component {
   state = {
     email: "",
-    password: ""
-  }
+    password: "",
+  };
 
   constructor(props) {
     super(props);
@@ -16,63 +16,56 @@ class LoginForm extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  onSubmit = e => {
-
+  onSubmit = (e) => {
     e.preventDefault();
-    //this.warningRef.current.setActive(false);
+    // this.warningRef.current.setActive(false);
 
     const payload = {
       email: this.state.email,
-      password: this.state.password
-    }
+      password: this.state.password,
+    };
 
     Axios.post("api/user/login", payload)
-      .then(resp => {
-        console.log("status: " + resp.status);
+      .then((resp) => {
+        console.log(`status: ${resp.status}`);
 
-        if (resp.status === 200){
-          //store the token in window.localstorage
+        if (resp.status === 200) {
+          // store the token in window.localstorage
           this.props.setToken.call(this, resp.data.token);
           console.log("login successful, token: ", resp.data.token);
-          //this.warningRef.current.setColor("green");
-          //this.warningRef.current.setMessage("Login successful... redirecting to upload page");
-          //this.warningRef.current.setActive(true);
+          // this.warningRef.current.setColor("green");
+          // this.warningRef.current.setMessage("Login successful... redirecting to upload page");
+          // this.warningRef.current.setActive(true);
 
           // in future redirect to home page
-           this.props.history.push("/upload");
-        }
-        else{
-
+          this.props.history.push("/upload");
+        } else {
           // this.warningRef.current.setMessage("Wrong email or password");
           // this.warningRef.setColor("red");
           // this.warningRef.current.setActive(true);
-
         }
 
-        //TODO: set user in state
-
+        // TODO: set user in state
       })
-      .catch((err) =>{
+      .catch((err) => {
         console.error(err);
         // this.warningRef.current.setColor("red");
         // this.warningRef.current.setMessage("Wrong email or password");
         // this.warningRef.current.setActive(true);
       });
-  }
+  };
 
   render() {
     return (
-      <div
-        style={{backgroundColor: "#32c8d9",
-          padding: "10px"}}>
-        <Form className = "loginForm" onSubmit={this.onSubmit}>
+      <div style={{ backgroundColor: "#32c8d9", padding: "10px" }}>
+        <Form className="loginForm" onSubmit={this.onSubmit}>
           <Form.Group controlId="Email">
             <Form.Label>Email</Form.Label>
-            <br/>
+            <br />
             <Form.Control
               required
               type="email"
@@ -83,7 +76,7 @@ class LoginForm extends Component {
           </Form.Group>
           <Form.Group controlId="Password">
             <Form.Label>Password</Form.Label>
-            <br/>
+            <br />
             <Form.Control
               required
               type="password"
@@ -94,17 +87,13 @@ class LoginForm extends Component {
           </Form.Group>
 
           <div>
-            <Button
-              variant="success"
-              size="lg"
-              type="submit"
-              block
-            >
+            <Button variant="success" size="lg" type="submit" block>
               Login
             </Button>
-            <Warning ref={this.warningRef}/>
+            <Warning ref={this.warningRef} />
             <div>
-              Don't have an account yet?<br/>
+              Don't have an account yet?
+              <br />
               <Link to="/signup"> Sign up here</Link>
             </div>
           </div>

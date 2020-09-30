@@ -6,7 +6,6 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
 import Header from "./components/Header/Header";
-
 import Posts from "./components/Post/Posts.js";
 import FullPost from "./components/Post/FullPost"
 import Home from "./components/Home";
@@ -72,7 +71,7 @@ class App extends React.Component {
               <Profile token={this.state.token} />
             </Route>
             <Route path="/post">
-              <InfinteScroll token={this.state.token} />
+              <FullPost token={this.state.token} />
             </Route>
           </Router>
         </div>

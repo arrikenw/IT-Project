@@ -1,5 +1,5 @@
 // code reused from web information technology project code
-
+import infinteScroll from "./client/src/components/ProfileDetails/infinteScroll";
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -13,6 +13,7 @@ require("./models");
 
 // import index router
 const routes = require("./routes/index");
+
 
 // create express app
 const app = express();

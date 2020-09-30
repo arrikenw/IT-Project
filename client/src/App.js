@@ -1,7 +1,6 @@
-import React from "react";
-import "./App.css";
-import Axios from "axios";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import React from 'react';
+import './App.css';
+import { BrowserRouter as Router, Route} from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
@@ -53,9 +52,7 @@ class App extends React.Component {
           style={{ width: "100vw", height: "80%", backgroundColor: "white" }}
         >
           <Router>
-            <Route exact path="/">
-              <ProfileDetails token={this.state.token} />
-            </Route>
+            
             <Route path="/home">
               <Home setToken={this.setToken} />
             </Route>

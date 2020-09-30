@@ -1,9 +1,29 @@
- import React, { Component } from 'react';
- import {Card,ListGroup, ListGroupItem, Dropdown, DropdownButton, Row, Form, Container, Button} from 'react-bootstrap';
- import Axios from 'axios';
- import {withRouter} from 'react-router-dom';
-
+import React, { Component } from "react";
+import {
+  Card,
+  ListGroup,
+  ListGroupItem,
+  Dropdown,
+  DropdownButton,
+  Row,
+  Col,
+  Container,
+  Form, 
+  Button
+} from "react-bootstrap";
+import Axios from "axios";
+import {withRouter} from "react-router-dom";
 class ProfileDetails extends Component {
+  state = {
+    firstName: "",
+    lastName: "",
+    Biography: "",
+    userName: "",
+    professionalFields: "",
+    phone: "",
+    email: "",
+    ids: "5f6421af83c4953c60567f7f",
+  };
 
     constructor(){
         super();

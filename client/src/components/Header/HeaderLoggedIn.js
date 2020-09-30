@@ -4,7 +4,6 @@ import {
   Navbar,
   Nav,
   Row,
-  Col,
   FormControl,
   InputGroup,
 } from "react-bootstrap";
@@ -16,16 +15,11 @@ export default class HeaderLoggedIn extends Component {
 
   componentDidMount() {
     // get the logged in user's first name to display in the header
-    console.log(
-      "header logged in, token: ",
-      window.localStorage.getItem("token")
-    );
     Axios.get("api/user/get", {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
       },
     }).then((resp) => {
-      console.log("user's name: ", resp.data.firstName);
       this.setState({ firstName: resp.data.firstName });
     });
   }

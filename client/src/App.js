@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
-import Axios from "axios";
-import { BrowserRouter as Router, Route, Link} from "react-router-dom";
+import { BrowserRouter as Router, Route} from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
@@ -31,8 +30,7 @@ class App extends React.Component {
         password: "",
         response: {empty: "fake"},
         user: "",
-        token:"",
-        ids:""
+        token:""
     };
 
     
@@ -51,11 +49,6 @@ class App extends React.Component {
     logout(){
         localStorage.removeItem("token");
         this.setState({token: ""});
-    }
-    
-    //stores the id of the user whose page is being visited
-    setIds = ids => {
-        this.setState({ids:ids});
     }
    
     render() {

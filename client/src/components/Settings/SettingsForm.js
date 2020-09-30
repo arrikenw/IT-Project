@@ -11,12 +11,16 @@ class SettingsForm extends Component {
         const headers = {headers:{
                 Authorization: "Bearer " +
                     this.props.token}};
-        Axios.post("api/user/get", {},headers).then(
-            (response) => {
-                this.state.firstName = response.data.firstName;
-                this.state.lastName = response.data.lastName;
-            }
-        )
+        Axios.get("api/user/get", {headers:{
+                Authorization: "Bearer " + window.localStorage.getItem("token")}})
+            .then(resp =>{
+                console.log("user's name: ", resp.data.firstName);
+                this.setState({firstName:  resp.data.firstName,
+                                    lastName: resp.data.lastName,
+                                    userName: resp.data.userName,
+                                    email: resp.data.email,
+                                    });
+            })
     }
 
     state = {
@@ -24,11 +28,26 @@ class SettingsForm extends Component {
         lastName: "",
         userName:"",
         email: "",
-        password: "",
+        password: "*********",
         token:"",
+        firstNameField: true,
+        lastNameField: true,
+        userNameField: true,
+        emailField: true,
+        passwordField: true,
+
 
     }
     //TODO add in funtions that link the form to the back end
+
+    isFormEditable = e =>{
+        if(this.state.firstNameField === false){return false;}
+        else if(this.state.lastNameField === false){return false;}
+        else if(this.state.userNameField === false){return false;}
+        else if(this.state.emailField === false){return false;}
+        else if(this.state.passwordField === false){return false;}
+        else {return true;}
+    };
 
     onChange = e => {
         this.setState({ [e.target.name]: e.target.value });
@@ -93,17 +112,19 @@ class SettingsForm extends Component {
                         <Form.Control
                             required
                             type="firstName"
-                            placeholder="Users name"
+                            placeholder="new first name"
                             name="firstName"
                             onChange={this.onChange}
                             value = {this.state.firstName}
-                            disabled = {true}
+                            disabled = {this.state.firstNameField}
                             style={{width:"30%" }}
                         />
 
                         <Button
                             style = {{float: "right", marginRight:"5vw"}}
-                            //onclick = "disabled = false"
+                            onClick = {(e)=> {
+                                e.preventDefault()
+                                this.setState( {firstNameField: false})}}
                             >
                             edit
                         </Button>
@@ -114,14 +135,20 @@ class SettingsForm extends Component {
                         <Form.Control
                             required
                             type="lastName"
-                            placeholder="Users last name"
+                            placeholder="new last name"
                             name="lastName"
                             onChange={this.onChange}
                             value = {this.state.lastName}
-                            disabled = {true}
+                            disabled = {this.state.lastNameField}
                             style={{width:"30%" }}
                         />
-                        <Button style = {{float: "right", marginRight:"5vw"}}>edit </Button>
+                        <Button
+                            style = {{float: "right", marginRight:"5vw"}}
+                            onClick = {(e)=> {
+                                e.preventDefault()
+                                this.setState( {lastNameField: false})}}
+                        >
+                        edit </Button>
                     </Form.Group>
                     <Form.Group as= {Row} controlId="User Name">
                         <Form.Label column lg="3">User Name:</Form.Label>
@@ -129,14 +156,19 @@ class SettingsForm extends Component {
                         <Form.Control
                             required
                             type="userName"
-                            placeholder="Users user name"
+                            placeholder="new user name"
                             name="userName"
                             onChange={this.onChange}
                             value = {this.state.userName}
-                            disabled = {true}
+                            disabled = {this.state.userNameField}
                             style={{width:"30%" }}
                         />
-                        <Button style = {{float: "right", marginRight:"5vw"}}>edit </Button>
+                        <Button
+                            style = {{float: "right", marginRight:"5vw"}}
+                            onClick = {(e)=> {
+                                e.preventDefault()
+                                this.setState( {userNameField: false})}}>
+                            edit </Button>
                     </Form.Group>
                     <Form.Group as= {Row} controlId="email">
                         <Form.Label column lg="3">email:</Form.Label>
@@ -144,14 +176,19 @@ class SettingsForm extends Component {
                         <Form.Control
                             required
                             type="email"
-                            placeholder="Users emil"
+                            placeholder="new emil"
                             name="email"
                             onChange={this.onChange}
-                            //value = {this.state.firstName}
-                            disabled = {true}
+                            value = {this.state.email}
+                            disabled = {this.state.emailField}
                             style={{width:"30%" }}
                         />
-                        <Button style = {{float: "right", marginRight:"5vw"}}>edit </Button>
+                        <Button
+                            style = {{float: "right", marginRight:"5vw"}}
+                            onClick= {(e)=> {
+                                e.preventDefault()
+                                this.setState( {emailField: false})}}>
+                            edit </Button>
                     </Form.Group>
                     <Form.Group as= {Row} controlId="Password">
                         <Form.Label column lg="3">Password:</Form.Label>
@@ -159,28 +196,50 @@ class SettingsForm extends Component {
                         <Form.Control
                             required
                             type="password"
-                            placeholder="*********"
+                            placeholder=""
                             name="password"
                             onChange={this.onChange}
                             value = {this.state.password}
-                            disabled = {true}
+                            disabled = {this.state.passwordField}
                             style={{width:"30%" }}
                         />
-                        <Button style = {{float: "right", marginRight:"5vw"}}>edit </Button>
+                        <Button
+                            style = {{float: "right", marginRight:"5vw"}}
+                            onClick= {(e)=> {
+                                e.preventDefault()
+                                this.setState( {passwordField: false})}}>
+                            edit </Button>
                     </Form.Group>
                     <Form.Group as= {Row} controlId="Privacy">
                         <Form.Label column lg="3">Privacy:</Form.Label>
 
-
+                        {/* TODO - change these so that there is an edit button */}
                         <label >
                                 <input type="radio" name="options" id="option1" autoComplete="off" checked/> Private
                         </label>
                         <label >
                                 <input type="radio" name="options" id="option2" autoComplete="off"/> Public
                         </label>
+
                     </Form.Group>
+                    <Form.Group as= {Row} controlId="Confirm Password">
+                        <Form.Label column lg="3">Confirm Password:</Form.Label>
+                        <Form.Control
+                            required
+                            type="password"
+                            placeholder=""
+                            name="password"
+                            onChange={this.onChange}
+                            value = {this.state.password}
+                            disabled = {this.isFormEditable()}
+                            style={{width:"30%" }}
+                        />
+
+                        <Button>Submit Changes</Button>
+                    </Form.Group>
+
                 </Form>
-                <br></br>
+                <br/>
 
             </div>
         );

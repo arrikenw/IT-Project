@@ -9,6 +9,7 @@ import Header from "./components/Header/Header";
 import Home from "./components/Home";
 import Footer from "./components/HeaderFooter/Footer";
 import InfinteScroll from "./components/ProfileDetails/infinteScroll";
+import Settings from "./components/Settings/Settings";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProfileDetails from './components/ProfileDetails/ProfileDetails';
@@ -92,6 +93,9 @@ class App extends React.Component {
                         </Route>
                         <Route path = "/post">
                             <InfinteScroll token={this.state.token} />
+                        </Route>
+                        <Route path= "/settings">
+                            <Settings token={this.state.token}></Settings>
                         </Route>
                     </Router>
                 </div>

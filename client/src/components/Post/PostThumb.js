@@ -20,7 +20,7 @@ class PostThumb extends React.Component {
                 <div> <h1> {this.props.post.title} </h1></div>
                 <div> <p>{this.props.post.description} </p></div>
                 <div style={{paddingTop:"0.5vw", overflow: "hidden"}}>
-                    <MediaEmbed mheight={"285"} mwidth={"507px"} targetMediaID = {this.thumbHelper()} />
+                    <MediaEmbed mheight={"285"} mwidth={"507px"} targetMediaID = {this.props.post.thumbnailURL} />
                 </div>
             </div>
 

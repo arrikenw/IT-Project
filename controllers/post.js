@@ -3,6 +3,12 @@ const mongoose = require("mongoose");
 const PostModel = mongoose.model("posts");
 const Media = mongoose.model("media");
 
+// send helper
+const sendHelper = (res, response) => {
+  res.status(response.status).send(response.msg);
+};
+
+
 const getPost = (req, res) => {
   const user = req.user.id;
 
@@ -166,6 +172,7 @@ const addPost = (req, res) => {
     console.log(`addPost successful: ${newPost._id}`);
     res.status(201);
     res.send({ id: newPost._id });
+    return;
   };
 
   const setThumbHelper = (req, payload) => {
@@ -214,6 +221,7 @@ const addPost = (req, res) => {
     console.log("addPost not successful: missing post media");
     res.status(400);
     res.send("Add post not successful - missing post media");
+    return;
   }
 
   Media.findById(req.body.mediaID)
@@ -243,7 +251,7 @@ const addPost = (req, res) => {
           console.log("Finished building payload");
           const data = new PostModel(payload);
           data.save(onPostSave);
-
+          return;
         }
       })
       .catch((err) => {

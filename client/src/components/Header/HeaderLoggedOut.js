@@ -5,27 +5,26 @@ export default class HeaderLoggedOut extends Component {
     render() {
         return (
            
-
-            <Navbar collapseOnSelect expand = "md" variant="dark"style={{backgroundColor: "#094183"}}>
-                <Navbar.Brand href="/" style={{padding: "0px"}}>
+            <Navbar style={{backgroundColor: "#094183"}}>
+                <Navbar.Brand href="/home" style={{paddingTop: "0px"}}>
                     <img
-                        //change this to our logo in future                    
                         src={require("../../assets/home_icon.svg") }
-                        width="80"
-                        height="55"
-                        style={{padding: "0px", marginBottom: "0px"}}
-                        alt="e-folio logo"/>
-                </Navbar.Brand>
+                        width="30"
+                        height="30"
+                        alt="efolio logo"   
+                                
+                        />
+                        <div style={{color:'white'}}>E-Folio</div>
+ 
+                 </Navbar.Brand>
 
+                <Nav>
+                    
+                    <Nav.Link href="/login" style={{marginLeft: "85vw", color:'white'}}>Log In</Nav.Link>
+                    <Nav.Link href="/signup" style={{color:'white'}}>Sign Up</Nav.Link>
+                </Nav>
+                    
 
-                <Navbar.Collapse id="responsive-navbar-nav">
-
-                    <Nav className="mr-auto">
-                        <Nav.Link href="/signup">Sign Up</Nav.Link>
-                        <Nav.Link href="/login">Log In</Nav.Link>
-                    </Nav>
-
-                </Navbar.Collapse>
 
 
 

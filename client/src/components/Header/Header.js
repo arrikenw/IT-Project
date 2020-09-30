@@ -6,8 +6,9 @@ import HeaderLoggedOut from "./HeaderLoggedOut";
 class Header extends Component {
      render() {
             
-        if (this.props.user){
-            return <HeaderLoggedIn></HeaderLoggedIn>   
+        if (window.localStorage.getItem("token")){
+            //console.log("currently logged in, token:", window.localStorage.getItem("token"));
+            return <HeaderLoggedIn logout={this.props.logout}></HeaderLoggedIn>   
         }else{
             return <HeaderLoggedOut></HeaderLoggedOut>
         }

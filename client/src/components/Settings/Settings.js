@@ -12,7 +12,8 @@ class Settings extends Component {
             <div>
                 <div style={{marginTop: "5vh", marginLeft: "15vw", marginRight:"15vw" , backgroundColor: "#d3d6d6"}}>
                     <h3 style={{marginTop:"2vh",marginLeft:"2vw"}}>Settings</h3>
-                    <br></br>
+                    <br/>
+
                     <SettingsForm setToken = {this.props.setToken}/>
                     <br></br>
                 </div>

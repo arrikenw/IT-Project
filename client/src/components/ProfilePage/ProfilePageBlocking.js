@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link, withRouter} from 'react-router-dom';
+import ProfileDetails from "../ProfileDetails/ProfileDetails";
 
 
 
@@ -16,11 +17,11 @@ class ProfilePage extends Component {
                 </div>
 
                 <div style={{ width: "100%", marginTop: "5vh", marginLeft: "4vw"}}>
-                    <div style={{ width: "15%", backgroundColor: "#32c8d9", padding:"100px", float:"left"}}>
-                        this is the profile biometrics box
+                    <div >
+                        <ProfileDetails setToken = {this.props.setToken}></ProfileDetails>
                     </div>
 
-                    <div style={{width:"65%", marginLeft: "2vw", marginRight: "16vw",backgroundColor: "#32c8d9", float:"right"}}>
+                    <div style={{width:"55%", marginLeft: "2vw", marginRight: "16vw",backgroundColor: "#32c8d9", float:"right"}}>
                         infinate scroll box
                     </div>
                 </div >

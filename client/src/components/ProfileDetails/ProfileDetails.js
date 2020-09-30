@@ -1,6 +1,5 @@
-   import React, { Component } from 'react';
- import {Card,ListGroup, ListGroupItem, Dropdown, DropdownButton, Row,Col, Container} from 'react-bootstrap';
- import Axios from 'axios';
+import React, { Component } from 'react';
+import {Card,ListGroup, ListGroupItem, Dropdown, DropdownButton, Row, Container} from 'react-bootstrap';
 
 
 class ProfileDetails extends Component {
@@ -15,13 +14,6 @@ class ProfileDetails extends Component {
         email:"",
         ids:"5f6421af83c4953c60567f7f",
     }
-
-
-
-    componentDidMount() {
-
-    }
-
 
 
      render() {

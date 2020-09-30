@@ -1,7 +1,5 @@
 import React from "react";
-import PostThumb from "./PostThumb.js"
 import {withRouter} from "react-router-dom";
-import MediaEmbed from "../MediaEmbed/MediaEmbed";
 import InfiniteScroll from "../ProfileDetails/infinteScroll";
 
 class Posts extends React.Component {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {Button} from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import Warning from "../Warning/Warning";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Axios from "axios";
 
 class BioInfoForm extends Component {

@@ -1,7 +1,5 @@
-import React, { Component, useState, useRef, useCallback } from "react";
+import React, {useState, useRef, useCallback } from "react";
 import usePostSearch from "./usePostSearch";
-import Card from "react-bootstrap/Card"
-import InputGroup from "react-bootstrap/InputGroup"
 import PostThumb from "../Post/PostThumb";
 // https://www.youtube.com/watch?v=NZKUirTtxcg
 

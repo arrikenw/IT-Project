@@ -1,8 +1,4 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card'
-import ResponsiveEmbed from 'react-bootstrap/ResponsiveEmbed'
-import Spinner from 'react-bootstrap/Spinner'
-import Axios from 'axios';
 import {withRouter} from "react-router-dom";
 import MediaEmbed from "../MediaEmbed/MediaEmbed";
 
@@ -30,19 +26,14 @@ class PostThumb extends React.Component {
             switch (this.props.post.contentCategory) {
                 case "video":
                     return videoThumb;
-                    break;
                 case "image":
-                    return videoThumb;
-                    break;
+                    return imageThumb;
                 case "audio":
                     return audioThumb;
-                    break;
                 case "text":
                     return textThumb;
-                    break;
                 case "application":
                     return applicationThumb;
-                    break;
             }
         }else{
             return this.props.post.thumbnailURL

@@ -1,26 +1,24 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
-import ResponsiveEmbed from 'react-bootstrap/ResponsiveEmbed'
-import Spinner from 'react-bootstrap/Spinner'
 import Axios from 'axios';
 import {withRouter} from "react-router-dom";
 import MediaEmbed from "../MediaEmbed/MediaEmbed";
 import Comment from "../Comment/Comment";
 import ProfileDetails from "../ProfileDetails/ProfileDetails";
-import PostThumb from "./PostThumb";
 
 //takes media id and post title and text via props
 class FullPost extends React.Component {
     constructor (props){
         super(props);
+        this.state = {
+            mediaID: "",
+            title: "",
+            desc: "",
+            comments: ""
+        };
     }
-    state = {
-        mediaID: "",
-        title: "",
-        desc: "",
-        comments: ""
-    };
+
 
 
     //IN REALITY, WE NEED TO QUERY POST FOR INFO. THIS ISN'T IMPLEMENTED YET THO

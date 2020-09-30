@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import {Link, withRouter} from 'react-router-dom';
-import {Image, Form} from 'react-bootstrap';
-
-import Progress from '../Progress/Progress';
-import Dropzone from '../Dropzone/Dropzone';
+import {withRouter} from 'react-router-dom';
+import {Form} from 'react-bootstrap';
 import './Upload.css';
 
 import Warning from '../Warning/Warning'

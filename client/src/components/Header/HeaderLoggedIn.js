@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import React, { Component } from 'react'
-import {Navbar, Nav, Row,Col, FormControl, InputGroup} from 'react-bootstrap';
+import {Navbar, Nav, Row, FormControl, InputGroup} from 'react-bootstrap';
  
 
  export default class HeaderLoggedIn extends Component {

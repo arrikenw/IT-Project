@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Axios from "axios";
-import { BrowserRouter as Router, Route, Link} from "react-router-dom";
+import { BrowserRouter as Router, Route} from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
@@ -11,15 +11,12 @@ import Posts from "./components/Post/Posts.js";
 import FullPost from "./components/Post/FullPost"
 import Home from "./components/Home";
 import Footer from "./components/HeaderFooter/Footer";
-import InfinteScroll from "./components/ProfileDetails/infinteScroll";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProfileDetails from './components/ProfileDetails/ProfileDetails';
 
-
 //bootstrap
 import "react-bootstrap/dist/react-bootstrap.min.js";
-import ProfilePic from "./components/ProfilePic/ProfilePic";
 import Profile from "./components/ProfileDetails/Profile";
 
 

@@ -15,7 +15,7 @@ export default function usePostSearch(
 
   useEffect(() => {
     setPosts([]);
-  }, [query]);
+  }, [query, sortField, sortDirection]);
 
   useEffect(() => {
     setLoading(true);

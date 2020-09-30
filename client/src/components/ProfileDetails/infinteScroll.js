@@ -59,8 +59,7 @@ export default function InfinteScroll(props) {
               ref={lastPostElementRef}
               key={post._id}
             >
-              {post.title} <br /> {post.description}
-{" "}
+              {post.title} <br /> {post.description}{" "}
             </div>
           );
         }

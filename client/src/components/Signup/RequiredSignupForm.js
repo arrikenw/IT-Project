@@ -4,17 +4,16 @@ import Axios from "axios";
 import Warning from "../Warning/Warning";
 
 class RequiredSignupForm extends Component {
-  state = {
-    firstName: "",
-    lastName: "",
-    userName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  };
-
   constructor(props) {
     super(props);
+    this.state = {
+      firstName: "",
+      lastName: "",
+      userName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }

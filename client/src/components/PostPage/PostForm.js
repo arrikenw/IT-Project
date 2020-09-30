@@ -87,6 +87,20 @@ class PostForm extends Component {
                             <ListGroupItem style={{backgroundColor:"#afd19f"}}> Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment </ListGroupItem>
                         </ListGroup>
                     </Card.Body>
+
+                    <Form>
+                        <Form.Group controlId="Add comment">
+                            <Form.Label>Add a comment</Form.Label>
+                            <br/>
+                            <Form.Control
+                                required
+                                type="email"
+                                placeholder="example@example.com"
+                                name="email"
+                                onChange={this.onChange}
+                            />
+                        </Form.Group>
+                    </Form>
                 </Card>
             </div>
         )

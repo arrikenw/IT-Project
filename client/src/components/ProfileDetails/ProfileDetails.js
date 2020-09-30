@@ -1,6 +1,6 @@
-   import React, { Component } from 'react';
- import {Card,ListGroup, ListGroupItem, Dropdown, DropdownButton, Row,Col, Container} from 'react-bootstrap';
- import Axios from 'axios';
+import React, { Component } from 'react';
+import {Card,ListGroup, ListGroupItem, Dropdown, DropdownButton, Row,Col, Container} from 'react-bootstrap';
+import Axios from 'axios';
 
 
 class ProfileDetails extends Component {
@@ -30,7 +30,7 @@ class ProfileDetails extends Component {
      render() {
          return (
              <div>
-                      <Card  style={{ width: '20rem', backgroundColor: "#afd19f"}}>
+                 <Card  style={{ width: '20rem', backgroundColor: "#afd19f"}}>
                     <div style={{height: "5rem", width: "8rem", marginLeft:"80px", marginBottom:"50px"}}>
                         <Card.Img variant="top" src={require("../../assets/default_profile_icon.svg")}  />
                     </div>
@@ -74,7 +74,7 @@ class ProfileDetails extends Component {
 
 
 
-                    </Card>
+                 </Card>
              </div>
          )
      }

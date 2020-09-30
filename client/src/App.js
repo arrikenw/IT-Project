@@ -17,6 +17,7 @@ import ProfileDetails from './components/ProfileDetails/ProfileDetails';
 //bootstrap
 import "react-bootstrap/dist/react-bootstrap.min.js";
 import Profile from "./components/ProfileDetails/Profile";
+import PinnedBarCarousel from "./components/HomePage/PinnedBarCarousel";
 
 
 
@@ -73,7 +74,7 @@ class App extends React.Component {
                 <div style={{width: "100vw", height: "80%", backgroundColor: "white"}}>
                     <Router>
                         <Route exact path = "/">
-                            <ProfileDetails token={this.state.token}></ProfileDetails>
+                            <PinnedBarCarousel setToken = {this.setToken}/>
                         </Route>
                         <Route path = "/home">
                             <Home setToken = {this.setToken}/>

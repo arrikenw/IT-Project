@@ -15,7 +15,7 @@ class PostThumb extends React.Component {
 
     render(){
         return(
-            <div style={{width:"800px", marginTop: "25px", height:"500px", backgroundColor: "blue", overflow: "hidden"}}>
+            <div style={{width:"800px", marginTop: "0px", height:"500px", backgroundColor: "blue", overflow: "hidden"}}>
             <div onClick={() => this.props.history.push("/post?post="+this.props.post._id)}>
                 <div> <h1> {this.props.post.title} </h1></div>
                 <div> <p>{this.props.post.description} </p></div>

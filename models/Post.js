@@ -13,7 +13,7 @@ const postSchema = new Schema(
       required: true,
       ref: "users",
     },
-    mediaURL: {
+    mediaID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "media",
     },

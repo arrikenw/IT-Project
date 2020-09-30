@@ -4,7 +4,7 @@ const router = express.Router();
 const { authenticateToken } = require("../utils/jwtTokens");
 const mediaController = require("../controllers/media");
 
-router.get("/", authenticateToken, (req, res) => {
+router.post("/", authenticateToken, (req, res) => {
   console.log("getting media");
   mediaController.serveMedia(req, res);
 });

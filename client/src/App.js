@@ -5,9 +5,10 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
 import Header from "./components/Header/Header";
+import Posts from "./components/Post/Posts.js";
+import FullPost from "./components/Post/FullPost"
 import Home from "./components/Home";
 import Footer from "./components/HeaderFooter/Footer";
-import InfinteScroll from "./components/ProfileDetails/infinteScroll";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProfileDetails from "./components/ProfileDetails/ProfileDetails";
@@ -69,7 +70,7 @@ class App extends React.Component {
               <Profile token={this.state.token} />
             </Route>
             <Route path="/post">
-              <InfinteScroll token={this.state.token} />
+              <FullPost token={this.state.token} />
             </Route>
           </Router>
         </div>

@@ -30,7 +30,7 @@ class App extends React.Component {
         password: "",
         response: {empty: "fake"},
         user: "",
-        token:""
+        token:"",
     };
 
     

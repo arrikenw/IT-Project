@@ -19,7 +19,6 @@ import {Navbar, Nav, Row, FormControl, InputGroup} from 'react-bootstrap';
         .catch((err) =>{
             console.error(err);
         })
-        
 
     }
      render() {
@@ -38,8 +37,6 @@ import {Navbar, Nav, Row, FormControl, InputGroup} from 'react-bootstrap';
                     <div style={{color:'white'}}>E-Folio</div>
                     
                  </Navbar.Brand>
-                
-
 
                  <div >
                     <InputGroup className="mb-3" size="sm" style={{marginLeft:"20vw", paddingTop:"15px"}}>

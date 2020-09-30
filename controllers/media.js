@@ -97,6 +97,7 @@ const saveDBAndBucket = (res, file, fields, fileData, userId) => {
 // validate media type is acceptable
 const validateMediaType = (file) => {
   const type = mime.extension(file.type);
+  console.log(type);
   if (
     type !== "jpg" &&
     type !== "png" &&
@@ -107,7 +108,7 @@ const validateMediaType = (file) => {
     type !== "ppx" &&
     type !== "xls" &&
     type !== "mp4" &&
-    type !== "mp3" &&
+    type !== "mpga" && // code for mp3
     type !== "wav" &&
     type !== "mov" &&
     type !== "txt" &&
@@ -247,6 +248,7 @@ const serveMedia = async (req, res) => {
             b64media: mediab64,
             extension: doc.extension,
             mimeType: doc.mimeType,
+            contentCategory: doc.contentCategory,
           },
         });
         console.log("Successfully returned file, request complete.");

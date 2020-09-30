@@ -14,19 +14,9 @@ import {
 import Axios from "axios";
 import {withRouter} from "react-router-dom";
 class ProfileDetails extends Component {
-  state = {
-    firstName: "",
-    lastName: "",
-    Biography: "",
-    userName: "",
-    professionalFields: "",
-    phone: "",
-    email: "",
-    ids: "5f6421af83c4953c60567f7f",
-  };
-
-    constructor(){
-        super();
+  
+    constructor(props){
+        super(props);
         this.state = {
             firstName:"",
             lastName:"",
@@ -36,7 +26,8 @@ class ProfileDetails extends Component {
             phone: "",
             email:"",
             ids:"",
-            sortValue:"",
+            sortField:"",
+            sortDirection:"",
             filterTags:["resume", "code", "video", "pdf"],
             filterValues:[]
         }
@@ -44,6 +35,7 @@ class ProfileDetails extends Component {
         this.handleFilterSelect = this.handleFilterSelect.bind(this);
         this.onFilterSubmit = this.onFilterSubmit.bind(this);
         this.onSortSubmit = this.onSortSubmit.bind(this);
+
     }
     
     componentDidMount() {
@@ -71,10 +63,7 @@ class ProfileDetails extends Component {
         })
     }
     
-    handleSortSelect = e =>{
-        this.setState({sortValue: e});
-        this.onSortSubmit.call();
-    }   
+    
     
     handleFilterSelect = e =>{
         let newFilter = this.state.filterValues.filter(x=>x!==e.target.name);
@@ -87,14 +76,35 @@ class ProfileDetails extends Component {
         }
     }
 
-    //send state of sortValues to backend
-    onSortSubmit = e =>{
-
-    }
-    //send state of filterValues
-    onFilterSubmit = e =>{
+    //sends state of sortField and sortDirection to Profile Component
+    onSortSubmit = (e) =>{
+        this.props.setSortField(this.state.sortField);
+        this.props.setSortDirection(this.state.sortDirection);
         
     }
+    //send state of filterValues
+    onFilterSubmit = (e) =>{
+        this.props.setFilterValues.call(this,this.state.filterValues);
+    }
+
+    handleSortSelect = (e) =>{
+        console.log(e);
+        if (e === "titleAZ" || e === "titleZA"){
+            this.setState({sortField: "title"});
+        }
+        else{
+            this.setState({sortField:"createdAt"});
+        }
+
+        if(e === "titleAZ"|| e === "dateOldest"){
+            this.setState({sortDirection:"asc"});
+        }
+        else{
+            this.setState({sortDirection:"desc"});
+        }
+        this.onSortSubmit();
+    }   
+
      render() {
          return (
              <div>
@@ -117,8 +127,8 @@ class ProfileDetails extends Component {
                     <Container>
                         <Row>
                             <DropdownButton variant="info" size="sm" id="dropdown-basic-button" title="Sort by" onSelect={this.handleSortSelect}>
-                                <Dropdown.Item eventKey="dateNewest">Date (Newest)</Dropdown.Item>
-                                <Dropdown.Item eventKey="dateOldest">Date (Oldest)</Dropdown.Item>
+                                <Dropdown.Item eventKey="dateNewest">Date (Newest first)</Dropdown.Item>
+                                <Dropdown.Item eventKey="dateOldest">Date (Oldest first)</Dropdown.Item>
                                 <Dropdown.Item eventKey="titleAZ">Title (A-Z)</Dropdown.Item>
                                 <Dropdown.Item eventKey="titleZA">Title (Z-A)</Dropdown.Item>
                             </DropdownButton>

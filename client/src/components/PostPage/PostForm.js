@@ -11,14 +11,24 @@ class PostForm extends Component {
         picture: "",
         like: "",
         comment: "",
-        share: "",
+        getLink: "",
         postID: ""
     }
 
     componentDidMount() {
 
-        //get all the public information of a user
-        Axios.post("api/user/getPublic", this.state.ids);
+        console.log("post, token: ",window.localStorage.getItem("token"));
+        Axios.get("api/user/get", {headers:{
+                Authorization: "Bearer " + window.localStorage.getItem("token")}})
+            .then(resp =>{
+                console.log("Post title: ", resp.data.title);
+                this.setState({title:  resp.data.title,
+                                    post: resp.data.post,
+                                    picture: resp.data.picture,
+                                    like: resp.data.like,
+                                    comment: resp.data.comment,
+                                    getLink: resp.data.getLink});
+            })
 
     }
 

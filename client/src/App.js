@@ -10,6 +10,7 @@ import Posts from "./components/Post/Posts.js";
 import FullPost from "./components/Post/FullPost"
 import Home from "./components/Home";
 import Footer from "./components/HeaderFooter/Footer";
+import PinnedBarCarousel from "./components/PinnedBar/PinnedBarCarousel";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProfileDetails from "./components/ProfileDetails/ProfileDetails";
@@ -53,7 +54,7 @@ class App extends React.Component {
         >
           <Router>
             <Route exact path="/">
-              <ProfileDetails token={this.state.token} />
+              <PinnedBarCarousel token={this.state.token} />
             </Route>
             <Route path="/home">
               <Home setToken={this.setToken} />

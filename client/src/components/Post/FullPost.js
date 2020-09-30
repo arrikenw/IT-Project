@@ -6,7 +6,9 @@ import Spinner from 'react-bootstrap/Spinner'
 import Axios from 'axios';
 import {withRouter} from "react-router-dom";
 import MediaEmbed from "../MediaEmbed/MediaEmbed";
+import Comment from "../Comment/Comment";
 import ProfileDetails from "../ProfileDetails/ProfileDetails";
+import PostThumb from "./PostThumb";
 
 //takes media id and post title and text via props
 class FullPost extends React.Component {
@@ -14,10 +16,12 @@ class FullPost extends React.Component {
         super(props);
     }
     state = {
-        mimeType: "",
-        contentStr: "",
-        postid: ""
+        mediaID: "",
+        title: "",
+        desc: "",
+        comments: ""
     };
+
 
     //IN REALITY, WE NEED TO QUERY POST FOR INFO. THIS ISN'T IMPLEMENTED YET THO
     componentDidMount() {
@@ -29,10 +33,20 @@ class FullPost extends React.Component {
             headers: { 'Authorization': 'Bearer '+ window.localStorage.getItem("token")}
         }
 
-        let postUrl = '/api/post'
+        let postUrl = '/api/post/get'
         const postPayload = {
-
+            filters: {_id: query.get('post')}
         }
+        Axios.post(postUrl, postPayload, headers).then( (res) => {
+           if (res.status == 200 || res.status == "success"){
+               console.log("logging data");
+               console.log(res.data[0]);
+               this.setState({mediaID:res.data[0].mediaID, title:res.data[0].title, desc:res.data[0].description, comments: res.data[0].comments});
+               console.log(this.state.mediaID);
+           }else{
+               console.log("Issue retrieving post");
+           }
+        });
     }
 
 
@@ -57,18 +71,24 @@ class FullPost extends React.Component {
                     <div className="d-flex justify-content-end">
                         <Card style={{width:"auto"}}>
                             <Card.Body>
-                                <Card.Title> <h1> PIZZA TIME </h1></Card.Title>
+                                <Card.Title> <h1> {this.state.title} </h1></Card.Title>
                             <div className="d-flex justify-content-start">
-                                <MediaEmbed mwidth={"37vw"} targetMediaID={"5f70d166cc1bb4402c3df893"}></MediaEmbed>
+                                {this.state.mediaID && <MediaEmbed mwidth={"37vw"} targetMediaID={this.state.mediaID}></MediaEmbed>}
                             </div>
                             <Card.Text style = {{width:"37vw", paddingTop: "0.5vw"}}>
-                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                                {this.state.desc}
                             </Card.Text>
                             <div>
                                 <Button variant="success" >Like</Button>
                             </div>
                             <div style={{paddingTop:"0.5vw"}}>
-                                PLACEHOLDER FOR COMMENTS
+                                {this.state.comments[0] && this.state.comments.map((com, index) => {
+                                    console.log("LOGGING COMMENTS");
+                                    console.log("")
+                                    console.log("LOGGING COM");
+                                    console.log(com);
+                                    return <div style={{margin:"0"}} key={"com_"+index}> <Comment id = {com.userID} comment = {com.comment} timestamps = {com.timestamps}/></div>
+                                })}
                             </div>
                             </Card.Body>
                         </Card>

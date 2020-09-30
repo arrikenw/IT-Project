@@ -326,7 +326,7 @@ const getProfilePic = async (req, res) => {
           }
           if (!b64media || b64media == null) {
             console.log(
-              "Retrieval of profile picture was unsuccessful - failed to retrieve image file"
+              "Retrieval of profile picture was unsuccessful - fetched empty or absent media"
             );
             sendHelper(res, {
               status: 500,

@@ -10,7 +10,7 @@ class MediaEmbed extends React.Component {
     state = {
         mimeType: "",
         contentStr: "",
-        mwidth: "10vw",
+        mwidth: "",
         mheight: "",
         fwidth: "",
         fheight: ""

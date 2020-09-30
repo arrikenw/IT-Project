@@ -7,7 +7,12 @@ class PinnedBarCarousel extends Component {
         return (
             <Carousel>
                 <Carousel.Item style = {{backgroundColor: "#afd19f"}}>
-                    <Row style = {{paddingLeft: "10vw", paddingTop: "1vw"}}>
+                    <Row style = {{paddingLeft: "11vw", paddingTop: "1vw"}}>
+                        <PinnedPost token = {this.props.token}/>
+                    </Row>
+                </Carousel.Item>
+                <Carousel.Item style = {{backgroundColor: "#afd19f"}}>
+                    <Row style = {{paddingLeft: "11vw", paddingTop: "1vw"}}>
                         <PinnedPost token = {this.props.token}/>
                     </Row>
                 </Carousel.Item>

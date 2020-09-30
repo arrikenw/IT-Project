@@ -1,5 +1,4 @@
 // code reused from web information technology project code
-import infinteScroll from "./client/src/components/ProfileDetails/infinteScroll";
 const express = require("express");
 const path = require("path");
 const cors = require("cors");

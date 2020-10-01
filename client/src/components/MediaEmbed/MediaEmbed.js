@@ -38,7 +38,6 @@ class MediaEmbed extends React.Component {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
       },
     };
-
     Axios.post(controllerUrl, payload, headers)
       .then((res) => {
         if (res.status === 200) {
@@ -119,6 +118,7 @@ class MediaEmbed extends React.Component {
       contentCategory,
     } = this.state;
     const { targetMediaID } = this.props;
+
 
     return (
       <div

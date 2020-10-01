@@ -16,6 +16,7 @@ class AddPost extends Component {
       title: "",
       description: "",
       mediaID: "",
+      rawMedia: null,
       file: null,
       mimeType: "",
     };
@@ -26,6 +27,7 @@ class AddPost extends Component {
   }
 
   onChange = (e) => {
+    this.setState({rawMedia: e.target.files[0]})
     const fileReader = new FileReader();
     fileReader.onloadend = (f) => {
       const content = f.target.result;
@@ -42,19 +44,26 @@ class AddPost extends Component {
     fileReader.readAsDataURL(e.target.files[0]);
   }
 
-  onSubmit = async () => {
+  onSubmit = () => {
     console.log("button pressed");
-    // const {file, token, title, description} = this.state;
-    // const media = await add(file, false, token);
-    // const payload = {
-    //     title,
-    //   description,
-    //   private: false
-    // }
-    // Axios.post("/api/post/add", payload, {headers: {Authorization: `Bearer ${token}`}})
-    //   .then( (resp) => {
-    //     console.log("ok ok ok !");
-    // });
+    const {file, token, title, description, rawMedia} = this.state;
+
+    const callback = (res) => {
+      const payload = {
+        title,
+        description,
+        private: false,
+        mediaID: res._id
+      }
+      Axios.post("/api/post/add", payload, {headers: {Authorization: `Bearer ${token}`}})
+        .then( (resp) => {
+          console.log(resp.data);
+        });
+    }
+
+    add(rawMedia, false, token, callback);
+
+
   }
   
   render() {

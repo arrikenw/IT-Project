@@ -1,7 +1,8 @@
 import Axios from "axios";
 
-const add = async (file, isPrivate, token) => {
+const add = async (file, isPrivate, token, callback) => {
   const formData = new FormData();
+   // console.log(file);
   formData.append("mediafile", file);
   formData.append("givenFileName", "blank");
   formData.append("isPrivate", isPrivate);
@@ -13,7 +14,8 @@ const add = async (file, isPrivate, token) => {
     },
   })
     .then((res) => {
-      return res.data;
+      // console.log(res.data);
+      callback(res.data);
     }).catch((err) => {
       console.error(err);
   });

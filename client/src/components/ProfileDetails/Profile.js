@@ -47,7 +47,7 @@ class Profile extends Component {
           </div>
           <div style={{ width: "100%", height: "100%", marginTop: "5vw" }}>
             <div style={{ float: "left", width: "40%" }}>
-              {/* <ProfileDetails setSortField={this.setSortField} setSortDirection={this.setSortDirection} setFilterValues={this.setFilterValues} token={this.props.token} /> */}
+              <ProfileDetails setSortField={this.setSortField} setSortDirection={this.setSortDirection} setFilterValues={this.setFilterValues} token={this.props.token} />
             </div>
             <div style={{ float: "right", width: "60%", height: "100%" }}>
               <InfinteScroll sortField={this.state.sortField} sortDirection={this.state.sortDirection} filterValues={this.state.filterValues} token={this.props.token} />

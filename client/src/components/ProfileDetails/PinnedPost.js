@@ -61,38 +61,42 @@ class PinnedPost extends Component {
         console.log("state: ");
         console.log(this.state);
         if (this.state.ids){
-            return (
-              <div>
-                <Row xs lg={4} md={4} xl={4} sm={3} xs={2}>
-                  <Col style={{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
-                    <div style={{width: '20rem', height: "11rem"}}>
-                      <Row>
-                        {(this.state.i < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+0]} />)}
-                      </Row>
-                    </div>
-                  </Col>
+              if (this.state.ids.length === 0) {
+                return (
+                  <div> nothing </div>)
+              }
+              return (
+                <div>
+                  <Row xs lg={4} md={4} xl={4} sm={3} xs={2}>
+                    <Col style={{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
+                      <div style={{width: '20rem', height: "11rem"}}>
+                        <Row>
+                          {(this.state.i < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+0]} />)}
+                        </Row>
+                      </div>
+                    </Col>
 
-                  <Col style={{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
-                    <div style={{width: '20rem', height: "11rem"}}>
-                      <Row>
-                        {(this.state.i + 1 < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+1]} />)}
-                      </Row>
-                    </div>
-                  </Col>
+                    <Col style={{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
+                      <div style={{width: '20rem', height: "11rem"}}>
+                        <Row>
+                          {(this.state.i + 1 < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+1]} />)}
+                        </Row>
+                      </div>
+                    </Col>
 
-                  <Col style={{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
-                    <div style={{width: '20rem', height: "11rem"}}>
-                      <Row>
-                        {(this.state.i + 2 < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+2]} />)}
-                      </Row>
-                    </div>
-                  </Col>
-                </Row>
-                <div style={{paddingTop: "10vw"}}>
-                  <Button onClick={()=> {this.leftScroll(1);}}> LEFT </Button>
-                  <Button onClick={()=> {this.rightScroll(1);}}> RIGHT </Button>
+                    <Col style={{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
+                      <div style={{width: '20rem', height: "11rem"}}>
+                        <Row>
+                          {(this.state.i + 2 < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+2]} />)}
+                        </Row>
+                      </div>
+                    </Col>
+                  </Row>
+                  <div style={{paddingTop: "10vw"}}>
+                    <Button onClick={()=> {this.leftScroll(1);}}> LEFT </Button>
+                    <Button onClick={()=> {this.rightScroll(1);}}> RIGHT </Button>
+                  </div>
                 </div>
-              </div>
             )
         }
             return <div> Sorry, no posts have been pinned yet.</div>

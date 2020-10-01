@@ -51,16 +51,22 @@ export default function InfinteScroll(props) {
   };
 
   return (
-    <div style={{overflowY: "scroll", height: "100%"}}>
+    <div style={{overflowY: "scroll", margin:"0", paddingTop: "0vw", height: "100%"}}>
 
-      <div style={{paddingTop: "2vw", paddingLeft:"2vw"}}>
+      <div style={{paddingTop: "0vw", margin:"0", paddingLeft:"2vw"}}>
       </div>
 
       {posts.map((post, index) => {
         if (posts.length === index + 1) {
-          return <div style={{margin:"0"}} ref={lastPostElementRef} key={post._id}> <PostThumb post={post} /> </div>
+            if (index === 0){
+                return <div style={{marginTop: "0vw"}} ref={lastPostElementRef} key={post._id}> <PostThumb post={post} /> </div>
+            }
+          return <div style={{marginTop: "20px"}} ref={lastPostElementRef} key={post._id}> <PostThumb post={post} /> </div>
         } else {
-          return <div style={{margin:"0"}} key={post._id}> <PostThumb post={post} /> </div>
+            if (index === 0){
+                return <div style={{marginTop: "0vw"}} key={post._id}> <PostThumb post={post} /> </div>
+            }
+          return <div style={{marginTop: "20px"}} key={post._id}> <PostThumb post={post} /> </div>
         }
         return (
           <div

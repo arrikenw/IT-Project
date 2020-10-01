@@ -4,6 +4,12 @@ const request = require("supertest");
 const app = require("../../app");
 const database = require("../../models");
 
+// send helper
+const sendHelper = (res, response) => {
+  res.status(response.status).send(response.msg);
+};
+
+
 const getUserToken = async () => {
   const payloadAdd = {
     email: "test@email.com",
@@ -25,11 +31,22 @@ const getUserToken = async () => {
 };
 
 const getPostID = async (token) => {
+
+  const mediaResponse = await request(app)
+      .post("/api/media/add")
+      .set("Authorization", token)
+      .set("Content-Type", "multipart/form-data")
+      .field("isPrivate", false)
+      .field("givenFileName", "test txt")
+      .attach("mediafile", "./test/resources/test.txt");
+
   const payload = {
     title: "Test post title",
     description: "test post description",
+    mediaID: mediaResponse.body._id,
     private: true,
   };
+
   const response = await request(app)
     .post("/api/post/add")
     .send(payload)
@@ -45,13 +62,24 @@ describe("test /api/post/add route and the addPost controller", () => {
     token = await getUserToken();
   });
 
+
   test("addPost with valid inputs", async (done) => {
     console.log(token);
+
+    const mediaResponse = await request(app)
+        .post("/api/media/add")
+        .set("Authorization", token)
+        .set("Content-Type", "multipart/form-data")
+        .field("isPrivate", false)
+        .field("givenFileName", "test txt")
+        .attach("mediafile", "./test/resources/test.txt");
     const payload = {
       title: "Test post title",
       description: "test post description",
+      mediaID: mediaResponse.body._id,
       private: true,
     };
+
     const response = await request(app)
       .post("/api/post/add")
       .send(payload)

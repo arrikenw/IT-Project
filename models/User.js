@@ -32,6 +32,7 @@ const userSchema = new Schema(
     profilePic: { type: mongoose.Schema.Types.ObjectId },
     password: { type: String, required: true, minLength: 8, maxLength: 50 },
     organisation: { type: String },
+    tags: [{type: String, maxLength:50}],
     professionalFields: [String],
     DOB: { type: Date },
     phone: { type: String }, // research lengths etc. later - this is just initial setup

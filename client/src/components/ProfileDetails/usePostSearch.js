@@ -37,7 +37,6 @@ export default function usePostSearch(
         });
         setHasMore(res.data.length > 0);
         setLoading(false);
-        console.log(res.data);
       })
       .catch((e) => {
         if (axios.isCancel(e)) return;

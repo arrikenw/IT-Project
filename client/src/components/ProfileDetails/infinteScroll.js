@@ -1,14 +1,13 @@
-import React, { Component, useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import usePostSearch from "./usePostSearch";
 import PostThumb from "../Post/PostThumb";
 // https://www.youtube.com/watch?v=NZKUirTtxcg
 
 export default function InfinteScroll(props) {
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [sortField, setSortField] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState("desc");
-
 
   useEffect(() => {
     setSortField(props.sortField);
@@ -16,7 +15,7 @@ export default function InfinteScroll(props) {
   }, [props.sortField, props.sortDirection]);
 
   const { loading, error, posts, hasMore } = usePostSearch(
-    search,
+    "",
     pageNumber,
     sortField,
     sortDirection,
@@ -45,49 +44,30 @@ export default function InfinteScroll(props) {
     [hasMore, loading]
   );
 
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-    setPageNumber(1);
-  };
+  // const handleSearch = (e) => {
+  //   setSearch(e.target.value);
+  //   setPageNumber(1);
+  // };
 
   return (
-    <div style={{ overflowY: "scroll", height: "100%" }}>
-      <div style={{ paddingTop: "2vw", paddingLeft: "2vw" }} />
+    <div style={{ overflowY: "scroll", height: "100%", width: "100%" }}>
+      <div style={{ paddingTop: "2vw", float: "right", width: "57.14%", marginRight: "42.86%" }} />
 
       {posts.map((post, index) => {
         if (posts.length === index + 1) {
           return (
             <div
-              style={{ margin: "0" }}
+              style={{ margin: "0"}}
               ref={lastPostElementRef}
               key={post._id}
             >
-              {" "}
-              <PostThumb post={post} />{" "}
+              <PostThumb post={post} />
             </div>
           );
         }
         return (
           <div style={{ margin: "0" }} key={post._id}>
-            {" "}
-            <PostThumb post={post} />{" "}
-          </div>
-        );
-
-        return (
-          <div
-            style={{
-              height: "300px",
-              backgroundColor: "#bdeb34",
-              margin: "20px",
-            }}
-            key={post._id}
-          >
-            {post.title} 
-{' '}
-<br /> 
-{' '}
-{post.description}
+            <PostThumb post={post} />
           </div>
         );
       })}
@@ -97,7 +77,7 @@ export default function InfinteScroll(props) {
       <div>
         {!error &&
           !loading &&
-          posts.length == 0 &&
+          posts.length === 0 &&
           "Couldn't find a post that matched your query"}
       </div>
     </div>

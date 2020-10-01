@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "react-bootstrap/Image";
 import Axios from "axios";
-import LoginForm from "../Login/LoginForm";
 
 const noimage = require("../../assets/nopic.jpg");
 

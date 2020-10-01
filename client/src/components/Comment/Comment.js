@@ -17,7 +17,7 @@ class Comment extends React.Component {
       ids: [this.props.id],
     };
     Axios.post(controllerUrl, payload).then((res) => {
-      if (res.status == 200 || res.status == "success") {
+      if (res.status === 200) {
         this.setState({ userName: res.data[0].userName });
       }
     });

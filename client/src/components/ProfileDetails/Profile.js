@@ -29,11 +29,11 @@ class Profile extends Component {
   render() {
     return (
       <div style={{ width: "100%", height: "100%", margin: "0px" }}>
-        <div style={{ float: "left", width: "40%" }}>
+        <div style={{ float: "left", width: "30%" }}>
           <ProfileDetails setSortField={this.setSortField} setSortDirection={this.setSortDirection} setFilterValues={this.setFilterValues} token={this.props.token} />
         </div>
-        <div style={{ float: "right", width: "60%", height: "100%" }}>
-          <InfinteScroll sortField={this.state.sortField} sortDirection={this.state.sortDirection} filterValues={this.state.filterValues}token={this.props.token} />
+        <div style={{ float: "right", width: "70%", height: "100%" }}>
+          <InfinteScroll sortField={this.state.sortField} sortDirection={this.state.sortDirection} filterValues={this.state.filterValues} token={this.props.token} />
         </div>
       </div>
     );

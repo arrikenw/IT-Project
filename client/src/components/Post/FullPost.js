@@ -68,21 +68,23 @@ class FullPost extends React.Component {
         <div style={{ height: "0px", paddingLeft: "3vw" }}>
           <ProfileDetails />
         </div>
-        <div style={{ paddingRight: "30vw" }}>
+        <div style={{ paddingRight: "28.5vw" }}>
           <div className="d-flex justify-content-end">
             <Card style={{ width: "auto" }}>
               <Card.Body>
                 <Card.Title>
                   {" "}
-                  <h1> {this.state.title} </h1>
+                  <h1>
+                    {' '}
+                    {this.state.title}
+                    {' '}
+                  </h1>
                 </Card.Title>
                 <div className="d-flex justify-content-start">
-                  {this.state.mediaID && (
-                    <MediaEmbed
-                      mwidth="37vw"
-                      targetMediaID={this.state.mediaID}
-                    />
-                  )}
+                  <MediaEmbed
+                    mwidth="37vw"
+                    targetMediaID={this.state.mediaID}
+                  />
                 </div>
                 <Card.Text style={{ width: "37vw", paddingTop: "0.5vw" }}>
                   {this.state.desc}

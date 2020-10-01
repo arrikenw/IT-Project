@@ -21,7 +21,7 @@ class PostThumb extends React.Component {
     const imageThumb = "5f736fdd6b93c95300af61e2";
     const textThumb = "5f7370026b93c95300af61e3";
     const applicationThumb = "5f7370156b93c95300af61e4";
-    console.log(`init: ${this.props.post.thumbnailURL}`);
+    // console.log(`init: ${this.props.post.thumbnailURL}`);
     if (!this.props.post.thumbnailURL) {
       switch (this.props.post.contentCategory) {
         case "video":
@@ -34,6 +34,7 @@ class PostThumb extends React.Component {
           return textThumb;
         case "application":
           return applicationThumb;
+        default:
       }
     } else {
       return this.props.post.thumbnailURL;

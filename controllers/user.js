@@ -46,10 +46,12 @@ const getUser = (req, res) => {
 const getPublicUser = (req, res) => {
   if (!req.body.ids) {
     console.log("getPublicUser not successful: missing forum attributes");
+    console.log(req.body);
     res.status(400);
     res.send("Get public user not successful - missing forum attributes");
     return;
   }
+
 
   const processUsers = (err, docs) => {
     if (err) {
@@ -233,6 +235,8 @@ const loginUser = (req, res) => {
   UserModel.find({ email: req.body.email }, validateAccount);
 };
 
+
+//TODO VALIDATE PINNED POSTS ARE IN FACT OWNED BY THE USER
 // update a user's information
 const updateUser = (req, res) => {
   const { id } = req.user;

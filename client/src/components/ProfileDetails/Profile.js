@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ProfileDetails from "./ProfileDetails";
 import InfinteScroll from "./infinteScroll";
+import PinnedPost from "./PinnedPost";
+import {withRouter} from "react-router-dom";
 
 class Profile extends Component {
   constructor(props){
@@ -8,7 +10,8 @@ class Profile extends Component {
     this.state={
       filterValues:"",
       sortField:"",
-      sortDirection:""
+      sortDirection:"",
+      profileID: ""
     }
   }
   
@@ -26,18 +29,37 @@ class Profile extends Component {
   }
 
 
+
+
+
+  componentDidMount() {
+    const query = new URLSearchParams(this.props.location.search);
+    this.setState({profileID: query.get('profile')});
+  }
+
+
   render() {
-    return (
-      <div style={{ width: "100%", height: "100%", margin: "0px" }}>
-        <div style={{ float: "left", width: "30%" }}>
-          <ProfileDetails setSortField={this.setSortField} setSortDirection={this.setSortDirection} setFilterValues={this.setFilterValues} token={this.props.token} />
-        </div>
-        <div style={{ float: "right", width: "70%", height: "100%" }}>
-          <InfinteScroll sortField={this.state.sortField} sortDirection={this.state.sortDirection} filterValues={this.state.filterValues} token={this.props.token} />
-        </div>
-      </div>
-    );
+    if (this.state.profileID){
+      return (
+          <div>
+            <div className={"d-flex justify-content-center"}>
+              <PinnedPost id={this.state.profileID}/>
+            </div>
+            <div style={{ width: "100%", height: "100%", marginTop: "5vw" }}>
+              <div style={{ float: "left", width: "40%" }}>
+                {/*<ProfileDetails setSortField={this.setSortField} setSortDirection={this.setSortDirection} setFilterValues={this.setFilterValues} token={this.props.token} />*/}
+              </div>
+              <div style={{ float: "right", width: "60%", height: "100%" }}>
+                <InfinteScroll sortField={this.state.sortField} sortDirection={this.state.sortDirection} filterValues={this.state.filterValues}token={this.props.token} />
+              </div>
+            </div>
+          </div>
+      );
+    }else{
+      return <div> Sorry, we couldn't find that user. </div>
+    }
+
   }
 }
 
-export default Profile;
+export default withRouter(Profile);

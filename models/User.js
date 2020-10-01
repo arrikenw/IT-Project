@@ -30,6 +30,7 @@ const userSchema = new Schema(
       required: true,
     },
     profilePic: { type: mongoose.Schema.Types.ObjectId },
+    pinnedPosts: [{type: mongoose.Schema.Types.ObjectID, ref: "Posts"}], //idk if should be "posts" or "Posts"
     password: { type: String, required: true, minLength: 8, maxLength: 50 },
     organisation: { type: String },
     tags: [{type: String, maxLength:50}],

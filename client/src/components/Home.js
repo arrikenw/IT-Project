@@ -25,7 +25,7 @@ export default function Home({ token, setToken, user, setUser }) {
           />
         </div>
         <div style={{ width: '36%', float: 'right', marginRight: '10%' }}>
-          <LoginForm setToken={setToken} setUser={setUser} user={user} />
+          {!token && <LoginForm setToken={setToken} setUser={setUser} user={user} />}
         </div>
       </div>
     </div>

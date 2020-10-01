@@ -72,7 +72,7 @@ class App extends React.Component {
               <Redirect to="/home" />
             </Route>
             <Route path="/home">
-              <Home setToken={this.setToken} setUser={this.setUser} user={user} />
+              <Home setToken={this.setToken} setUser={this.setUser} user={user} token={token} />
             </Route>
             <Route path="/login">
               <Login setToken={this.setToken} setUser={this.setUser} user={user} />

@@ -42,7 +42,15 @@ class LoginForm extends Component {
           // this.warningRef.current.setActive(true);
 
           // in future redirect to home page
-          this.props.history.push("/upload");
+          Axios.get("api/user/get", {
+            headers: {
+              Authorization: `Bearer ${resp.data.token}`,
+            },
+          }).then((response) => {
+            this.props.setUser.call(this,  response.data);
+            this.props.history.push(`/profile?user=${response.data._id}`);
+          })
+
         } else {
           // this.warningRef.current.setMessage("Wrong email or password");
           // this.warningRef.setColor("red");

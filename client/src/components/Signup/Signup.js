@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import RequiredSignupForm from "./RequiredSignupForm";
 
 class Signup extends Component {
@@ -13,7 +13,6 @@ class Signup extends Component {
             marginRight: "20vw",
           }}
         >
-          >
           <RequiredSignupForm setToken={this.props.setToken} />
         </div>
       </div>

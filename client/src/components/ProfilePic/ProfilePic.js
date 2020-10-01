@@ -1,7 +1,6 @@
-import React from 'react';
-import Image from 'react-bootstrap/Image'
-import Axios from 'axios';
-import LoginForm from "../Login/LoginForm";
+import React from "react";
+import Image from "react-bootstrap/Image";
+import Axios from "axios";
 
 const noimage = require("../../assets/nopic.jpg");
 
@@ -20,7 +19,7 @@ class ProfilePic extends React.Component {
     Axios.post(controllerUrl, payload)
       .then((res) => {
         console.log(res);
-        if (res.status == 200 || res.status == "success") {
+        if (res.status === 200) {
           const str = `data:${res.data.mimeType};base64,${res.data.b64media}`;
           this.setState({ pic: str });
         }

@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {Card,Row,Col,DropdownButton,Dropdown} from "react-bootstrap";
 import Axios from "axios";
+import Button from "react-bootstrap/Button";
 import PostThumb from "../Post/PostThumb";
 import PinnedPostContainer from "./PinnedPostContainer";
-import Button from "react-bootstrap/Button";
 
 class PinnedPost extends Component {
 
@@ -27,10 +27,10 @@ class PinnedPost extends Component {
         this.setState({i: newi});
     }
 
-    //TODO add second request if user is requesting themselves rather than getPublicUser
+    // TODO add second request if user is requesting themselves rather than getPublicUser
     componentDidMount() {
         const controllerUrl = "/api/user/getPublic";
-        let payload = {
+        const payload = {
             ids: [this.props.id]
         }
 
@@ -55,48 +55,48 @@ class PinnedPost extends Component {
             });
     }
 
-    //TODO REWRITE SO THAT THE POSTS ARE STORED AND ONLY REREQUESTED IF REQUIRED
-//return (<PinnedPostContainer id={"5f6e37c58d7cb27140d8f85a"}/>);
+    // TODO REWRITE SO THAT THE POSTS ARE STORED AND ONLY REREQUESTED IF REQUIRED
+// return (<PinnedPostContainer id={"5f6e37c58d7cb27140d8f85a"}/>);
     render(){
         console.log("state: ");
         console.log(this.state);
         if (this.state.ids){
             return (
-                <div>
-                    <Row xs lg = {4} md={4} xl={4} sm={3} xs={2}>
-                        <Col style = {{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
-                            <div style = {{width: '20rem', height: "11rem"}}>
-                                <Row>
-                                    {(this.state.i < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+0]}/>)}
-                                </Row>
-                            </div>
-                        </Col>
-
-                        <Col style = {{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
-                            <div style = {{width: '20rem', height: "11rem"}}>
-                                <Row>
-                                    {(this.state.i + 1 < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+1]}/>)}
-                                </Row>
-                            </div>
-                        </Col>
-
-                        <Col style = {{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
-                            <div style = {{width: '20rem', height: "11rem"}}>
-                                <Row>
-                                    {(this.state.i + 2 < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+2]}/>)}
-                                </Row>
-                            </div>
-                        </Col>
-                    </Row>
-                    <div style={{paddingTop: "10vw"}}>
-                        <Button onClick={()=> {this.leftScroll(1);}}> LEFT </Button>
-                        <Button onClick={()=> {this.rightScroll(1);}}> RIGHT </Button>
+              <div>
+                <Row xs lg={4} md={4} xl={4} sm={3} xs={2}>
+                  <Col style={{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
+                    <div style={{width: '20rem', height: "11rem"}}>
+                      <Row>
+                        {(this.state.i < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+0]} />)}
+                      </Row>
                     </div>
+                  </Col>
+
+                  <Col style={{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
+                    <div style={{width: '20rem', height: "11rem"}}>
+                      <Row>
+                        {(this.state.i + 1 < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+1]} />)}
+                      </Row>
+                    </div>
+                  </Col>
+
+                  <Col style={{width: '25rem', height: "15rem", marginRight: "1vw", marginLeft: "1vw"}}>
+                    <div style={{width: '20rem', height: "11rem"}}>
+                      <Row>
+                        {(this.state.i + 2 < this.state.ids.length) && (<PinnedPostContainer id={this.state.ids[this.state.i+2]} />)}
+                      </Row>
+                    </div>
+                  </Col>
+                </Row>
+                <div style={{paddingTop: "10vw"}}>
+                  <Button onClick={()=> {this.leftScroll(1);}}> LEFT </Button>
+                  <Button onClick={()=> {this.rightScroll(1);}}> RIGHT </Button>
                 </div>
+              </div>
             )
-        }else{
-            return <div> Sorry, no posts have been pinned yet.</div>
         }
+            return <div> Sorry, no posts have been pinned yet.</div>
+        
     }
 }
 

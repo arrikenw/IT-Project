@@ -18,6 +18,7 @@ import "react-bootstrap/dist/react-bootstrap.min";
 import Profile from "./components/ProfileDetails/Profile";
 import AddPost from "./components/waitingforjoelsfolder/addPost";
 import RedirectHome from "./components/RedirectHome";
+import Settings from "./components/Settings/Settings";
 
 class App extends React.Component {
   constructor(props) {
@@ -91,6 +92,9 @@ class App extends React.Component {
             </Route>
             <Route path="/addpost">
               <AddPost token={token} user={user} />
+            </Route>
+            <Route path="/settings">
+              <Settings token={token} user={user} />
             </Route>
           </div>
           <div

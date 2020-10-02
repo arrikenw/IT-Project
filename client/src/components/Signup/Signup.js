@@ -1,23 +1,66 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
 import RequiredSignupForm from "./RequiredSignupForm";
+import BioInfoForm from "./BioInfoForm";
 
 class Signup extends Component {
+  state = {
+      step: 1,
+      firstName: "",
+      lastName: "",
+      userName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      organisation: "",
+      professionalField: "",
+      phoneNumber: "",
+      gender: "",
+      dob: "",
+      privacyLevel: "",
+  }
+
+  nextStep = () => {
+      const { step } = this.state;
+      this.setState({
+          step: step + 1
+      });
+  };
+
+  prevStep = () => {
+      const { step } = this.state;
+      this.setState({
+          step: step - 1
+      });
+  };
+
+  handleChange = input => e => {
+      this.setState({ [input]: e.target.value });
+  };
+
   render() {
-    return (
-      <div style={{ width: "80%", paddingTop: "10vh", paddingLeft: "42vw" }}>
-        <div
-          style={{
-            backgroundColor: "#32c8d9",
-            padding: "10px",
-            marginRight: "20vw",
-          }}
-        >
-          >
-          <RequiredSignupForm setToken={this.props.setToken} />
-        </div>
-      </div>
-    );
+      const { step } = this.state;
+      const { firstName, lastName, email, occupation, city, bio } = this.state;
+      const values = { firstName, lastName, email, occupation, city, bio };
+      switch (step) {
+          case 1:
+              return(
+                  <RequiredSignupForm
+                    nextStep={this.nextStep}
+                    handleChange={this.handleChange}
+                    values={values}
+                  />
+              );
+          case 2:
+              return(
+                  <BioInfoForm
+                      nextStep={this.nextStep}
+                      handleChange={this.handleChange}
+                      values={values}
+                  />
+              );
+          default:
+              (console.log('This is a multi-step form built with React.'))
+      }
   }
 }
-export default withRouter(Signup);
+export default Signup;

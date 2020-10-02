@@ -11,15 +11,15 @@
         }
     },
     "extends": ["eslint:recommended", "airbnb", "prettier", "plugin:react/recommended", "react-app"],
-    "plugins": ["prettier", "react"],
+    "plugins": [],
     "rules": {
-        "prettier/prettier": "error",
         "no-console": "off",
         "no-underscore-dangle": "off",
         "prefer-destructuring": "off",
         "no-process-exit": "off",
         "global-require": "off",
-        "react/jsx-filename-extension": [0]
+        "react/jsx-filename-extension": [0],
+        "jsx-a11y/media-has-caption": "off"
     },
     "settings": {
         "react" : {

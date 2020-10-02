@@ -1,16 +1,14 @@
-import React from "react";
-import "./App.css";
-import Axios from "axios";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import React from 'react';
+import './App.css';
+import { BrowserRouter as Router, Route, Redirect  } from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Upload from "./components/Upload/Upload";
 import Header from "./components/Header/Header";
-import Posts from "./components/Post/Posts.js";
-import FullPost from "./components/Post/FullPost"
+import Posts from "./components/Post/Posts";
+import FullPost from "./components/Post/FullPost";
 import Home from "./components/Home";
 import Footer from "./components/HeaderFooter/Footer";
-import PinnedBarCarousel from "./components/PinnedBar/PinnedBarCarousel";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProfileDetails from "./components/ProfileDetails/ProfileDetails";
@@ -18,14 +16,24 @@ import ProfileDetails from "./components/ProfileDetails/ProfileDetails";
 // bootstrap
 import "react-bootstrap/dist/react-bootstrap.min";
 import Profile from "./components/ProfileDetails/Profile";
+import AddPost from "./components/waitingforjoelsfolder/addPost";
+import RedirectHome from "./components/RedirectHome";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       token: "",
+      user: null
     };
-    this.state.token = window.localStorage.getItem("token");
+    const userStr = window.localStorage.getItem("user");
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      if (user) {
+        this.state.user = user;
+        this.state.token = window.localStorage.getItem("token");
+      }
+    }
   }
 
   // stores authentication in localStorage
@@ -34,57 +42,68 @@ class App extends React.Component {
     this.setState({ token });
   };
 
+  setUser = (user) => {
+    window.localStorage.setItem("user", JSON.stringify(user));
+    this.setState({user});
+  }
+
   // logs user out by removing authentication token from local storage
   logout() {
+    localStorage.removeItem("user");
     localStorage.removeItem("token");
-    this.setState({ token: "" });
+    this.setState({user: "", token: ""});
   }
 
   render() {
+    const {token, user} = this.state;
+
     return (
       <div style={{ width: "100vw", height: "100vh", margin: "0px" }}>
-        <div
-          style={{ width: "100vw", height: "10%", backgroundColor: "#daeef0" }}
-        >
-          <Header token={this.state.token} logout={this.logout} />
-        </div>
-
-        <div
-          style={{ width: "100vw", height: "80%", backgroundColor: "white" }}
-        >
-          <Router>
+        <Router>
+          <div
+            style={{ width: "100vw", height: "10%", backgroundColor: "#daeef0" }}
+          >
+            <Header token={token} logout={this.logout} setUser={this.setUser} />
+          </div>
+          <div
+            style={{ width: "100vw", height: "80%", backgroundColor: "white" }}
+          >
             <Route exact path="/">
-              <PinnedBarCarousel token={this.state.token} />
+              <Redirect to="/home" />
             </Route>
             <Route path="/home">
-              <Home setToken={this.setToken} />
+              <Home setToken={this.setToken} setUser={this.setUser} user={user} token={token} />
             </Route>
             <Route path="/login">
-              <Login setToken={this.setToken} setUser={this.setUser} />
+              <Login setToken={this.setToken} setUser={this.setUser} user={user} />
             </Route>
             <Route path="/signup">
               <Signup setToken={this.setToken} setUser={this.setUser} />
             </Route>
             <Route path="/upload">
-              <Upload token={this.state.token} />
+              <Upload token={token} />
             </Route>
             <Route path="/profile">
-              <Profile token={this.state.token} />
+              <Profile token={token} />
             </Route>
             <Route path="/post">
-              <FullPost token={this.state.token} />
+              <FullPost token={token} />
             </Route>
-          </Router>
-        </div>
-        <div
-          style={{
-            width: "100vw",
-            height: "10%",
-            backgroundColor: "#daeef0",
-          }}
-        >
-          <Footer />
-        </div>
+            <Route path="/addpost">
+              <AddPost token={token} user={user} />
+            </Route>
+          </div>
+          <div
+            style={{
+                width: "100vw",
+                height: "10%",
+                backgroundColor: "#daeef0",
+              }}
+          >
+            <Footer />
+          </div>
+        </Router>
+
       </div>
     );
   }

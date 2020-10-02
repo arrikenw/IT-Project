@@ -1,18 +1,25 @@
 import React, { Component } from "react";
+import propTypes from "prop-types";
 import HeaderLoggedIn from "./HeaderLoggedIn";
 import HeaderLoggedOut from "./HeaderLoggedOut";
 
 // base header component, will display header based on user's login state
-class Header extends Component {
-  render() {
-    if (window.localStorage.getItem("token")) {
+export default function Header({token, logout, setUser}){
+    if (token !== "") {
       // console.log("currently logged in, token:", window.localStorage.getItem("token"));
       return (
-        <HeaderLoggedIn token={this.props.token} logout={this.props.logout} />
+        <HeaderLoggedIn token={token} logout={logout} setUser={setUser} />
       );
     }
     return <HeaderLoggedOut />;
-  }
 }
 
-export default Header;
+Header.propTypes = {
+  token: propTypes.string,
+  logout: propTypes.func.isRequired,
+  setUser: propTypes.func.isRequired
+}
+
+Header.defaultProps = {
+  token: ""
+}

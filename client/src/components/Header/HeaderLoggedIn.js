@@ -1,30 +1,39 @@
 import Axios from "axios";
 import React, { Component } from "react";
-import {
-  Navbar,
-  Nav,
-  Row,
-  FormControl,
-  InputGroup,
-} from "react-bootstrap";
+import { Navbar, Nav, Row, FormControl, InputGroup } from "react-bootstrap";
+import {  withRouter } from "react-router-dom";
 
-export default class HeaderLoggedIn extends Component {
-  state = {
-    firstName: "",
-  };
+class HeaderLoggedIn extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: null,
+      id: "",
+      firstName: ""
+    };
+
+  }
 
   componentDidMount() {
+    const { token, logout, setUser } = this.props;
     // get the logged in user's first name to display in the header
     Axios.get("api/user/get", {
       headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     }).then((resp) => {
-      this.setState({ firstName: resp.data.firstName });
+      this.setState({ id: resp.data._id, firstName: resp.data.firstName });
+      console.log(resp.data);
+      this.props.setUser.call(this,  resp.data);
+    }).catch((err) => {
+      console.error(err);
+      logout.bind(this);
     });
   }
 
   render() {
+    const { id, firstName } = this.state;
+    const profileLink = `/profile?user=${id}`;
     return (
       <Navbar style={{ backgroundColor: "#094183", height: "4rem" }}>
         <Navbar.Brand href="/home" style={{ paddingTop: "0px" }}>
@@ -61,7 +70,7 @@ export default class HeaderLoggedIn extends Component {
             Upload
           </Nav.Link>
           <Nav.Link
-            href="/account"
+            href={profileLink}
             style={{
               marginLeft: "10vw",
               color: "white",
@@ -70,7 +79,7 @@ export default class HeaderLoggedIn extends Component {
             }}
           >
             <Row style={{ marginLeft: "0px" }}>
-              {this.state.firstName}
+              {firstName}
               <div
                 style={{
                   height: "1rem",
@@ -103,3 +112,5 @@ export default class HeaderLoggedIn extends Component {
     );
   }
 }
+
+export default withRouter(HeaderLoggedIn);

@@ -1,124 +1,114 @@
-import React from 'react';
-import './App.css';
-import { BrowserRouter as Router, Route, Redirect  } from "react-router-dom";
-import Login from "./components/Login/Login";
-import Signup from "./components/Signup/Signup";
-import Upload from "./components/Upload/Upload";
-import Header from "./components/Header/Header";
-import Posts from "./components/Post/Posts";
-import FullPost from "./components/Post/FullPost";
-import Home from "./components/Home";
-import Footer from "./components/HeaderFooter/Footer";
+import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Grid } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import Axios from 'axios'
+import './App.css'
+// eslint-disable-next-line import/extensions
+import Header from './components/headers/Header.jsx'
+import Home from './components/home/Home'
+import LoginPage from './components/login/LoginPage'
+import Profile from './components/profile/Profile'
+import SettingsPage from './components/settings/SettingsPage'
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import ProfileDetails from "./components/ProfileDetails/ProfileDetails";
+// css for containers
+const useStyles = makeStyles({
+  bodyContainer: {
+    display: 'flex',
+    flexFlow: 'column',
+    flexGrow: 1,
+    backgroundColor: '#34d15e',
+    overflowY: 'auto',
+  },
+  mainContainer: {
+    height: '100vh',
+    display: 'flex',
+    flexFlow: 'column',
+  },
+})
 
-// bootstrap
-import "react-bootstrap/dist/react-bootstrap.min";
-import Profile from "./components/ProfileDetails/Profile";
-import AddPost from "./components/waitingforjoelsfolder/addPost";
-import RedirectHome from "./components/RedirectHome";
-import Settings from "./components/Settings/Settings";
+function App() {
+  const [token, setToken] = useState(() => {
+    const storedToken = localStorage.getItem('token')
+    if (storedToken) {
+      return storedToken
+    }
+    return ''
+  })
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user')
+    if (storedUser) {
+      return JSON.parse(storedUser)
+    }
+    return {}
+  })
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      token: "",
-      user: null
-    };
-    const userStr = window.localStorage.getItem("user");
-    if (userStr) {
-      const user = JSON.parse(userStr);
-      if (user) {
-        this.state.user = user;
-        this.state.token = window.localStorage.getItem("token");
-      }
+  // stores a token in state and local storage
+  const setGlobalToken = (newToken) => {
+    localStorage.setItem('token', newToken)
+    setToken(newToken)
+  }
+
+  // logs user out by removing authentication token and user from local storage and state
+  const logout = () => {
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    if (token !== '') {
+      setToken('')
+    }
+    if (JSON.stringify(user) !== JSON.stringify({})) {
+      setUser({})
     }
   }
 
-  // stores authentication in localStorage
-  setToken = (token) => {
-    window.localStorage.setItem("token", token);
-    this.setState({ token });
-  };
+  useEffect(() => {
+    if (token === '') {
+      logout()
+      setUser({})
+    } else {
+      Axios.get('api/user/get', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((resp) => {
+          const userString = JSON.stringify(resp.data)
+          if (userString !== JSON.stringify(localStorage.getItem('user'))) {
+            localStorage.setItem('user', userString)
+            setUser(resp.data)
+          }
+        })
+        .catch(() => {
+          logout()
+        })
+    }
+  }, [token])
 
-  setUser = (user) => {
-    window.localStorage.setItem("user", JSON.stringify(user));
-    this.setState({user});
-  }
+  const classes = useStyles()
 
-  // logs user out by removing authentication token from local storage
-  logout() {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    this.setState({user: "", token: ""});
-  }
-
-  render() {
-    const {token, user} = this.state;
-
-    return (
-      <div style={{ width: "100vw", height: "100vh", margin: "0px" }}>
-        <Router>
-          <div
-            style={{ width: "100vw", height: "10%", backgroundColor: "#daeef0" }}
-          >
-            <Header token={token} logout={this.logout} setUser={this.setUser} />
-          </div>
-          <div
-            style={{ width: "100vw", height: "80%", backgroundColor: "white" }}
-          >
-            <Route exact path="/">
-              <Redirect to="/home" />
-            </Route>
-            <Route path="/home">
-              <Home setToken={this.setToken} setUser={this.setUser} user={user} token={token} />
-            </Route>
-            <Route path="/login">
-              <Login setToken={this.setToken} setUser={this.setUser} user={user} />
-            </Route>
-            <Route path="/signup">
-              <Signup setToken={this.setToken} setUser={this.setUser} />
-            </Route>
-            <Route path="/upload">
-              <Upload token={token} />
-            </Route>
-            <Route path="/profile">
-              <Profile token={token} />
-            </Route>
-            <Route path="/post">
-              <FullPost token={token} />
-            </Route>
-            <Route path="/addpost">
-              <AddPost token={token} user={user} />
-            </Route>
-            <Route path="/settings">
-              <Settings token={token} user={user} />
-            </Route>
-          </div>
-          <div
-            style={{
-                width: "100vw",
-                height: "10%",
-                backgroundColor: "#daeef0",
-              }}
-          >
-            <Footer />
-          </div>
-        </Router>
-
-      </div>
-    );
-  }
+  return (
+    <Grid container className={classes.mainContainer} direction="column">
+      <Router>
+        <Grid item>
+          <Header user={user} token={token} logout={logout} />
+        </Grid>
+        <Grid item className={classes.bodyContainer}>
+          <Route exact path="/">
+            <Home setGlobalToken={setGlobalToken} user={user} />
+          </Route>
+          <Route path="/login">
+            <LoginPage setGlobalToken={setGlobalToken} />
+          </Route>
+          <Route path="/profile">
+            <Profile token={token} user={user} />
+          </Route>
+          <Route path="/settings">
+            <SettingsPage token={token} user={user} />
+          </Route>
+        </Grid>
+      </Router>
+    </Grid>
+  )
 }
 
-// dont need this
-// <link
-//   rel="stylesheet"
-//   href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-//   integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-//   crossOrigin="anonymous"
-// />
-
-export default App;
+export default App

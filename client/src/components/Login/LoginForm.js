@@ -1,114 +1,126 @@
-import React, { Component } from "react";
-import { Button, Form } from "react-bootstrap";
-import { Link, withRouter } from "react-router-dom";
-import Axios from "axios";
-import Warning from "../Warning/Warning";
+import React, { useState } from 'react'
+import { Redirect, withRouter } from 'react-router-dom'
+import Axios from 'axios'
+import { makeStyles } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import {
+  Card,
+  CardContent,
+  Button,
+  Typography,
+  Divider,
+  TextField,
+} from '@material-ui/core'
 
-class LoginForm extends Component {
-  state = {
-    email: "",
-    password: "",
-  };
+// css for containers
+const useStyles = makeStyles({
+  signUp: {
+    height: '60px',
+    backgroundColor: '#33d130',
+    '&:hover': {
+      background: '#26b324',
+    },
+  },
+  login: {
+    height: '60px',
+    backgroundColor: '#34b9ed',
+    '&:hover': {
+      background: '#30a6d1',
+    },
+  },
+  buttonText: {
+    color: 'white',
+  },
+})
 
-  constructor(props) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+function LoginForm({ setGlobalToken }) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const [redirect, setRedirect] = useState(false)
+
+  const changeEmail = (e) => {
+    setEmail(e.target.value)
+  }
+  const changePassword = (e) => {
+    setPassword(e.target.value)
   }
 
-  onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    // this.warningRef.current.setActive(false);
-
+  const login = () => {
     const payload = {
-      email: this.state.email,
-      password: this.state.password,
-    };
+      email,
+      password,
+    }
 
-    Axios.post("api/user/login", payload)
+    Axios.post('api/user/login', payload)
       .then((resp) => {
-        console.log(`status: ${resp.status}`);
-
-        if (resp.status === 200) {
-          // store the token in window.localstorage
-          this.props.setToken.call(this, resp.data.token);
-          console.log("login successful, token: ", resp.data.token);
-          // this.warningRef.current.setColor("green");
-          // this.warningRef.current.setMessage("Login successful... redirecting to upload page");
-          // this.warningRef.current.setActive(true);
-
-          // in future redirect to home page
-          Axios.get("api/user/get", {
-            headers: {
-              Authorization: `Bearer ${resp.data.token}`,
-            },
-          }).then((response) => {
-            this.props.setUser.call(this,  response.data);
-            this.props.history.push(`/profile?user=${response.data._id}`);
-          })
-
-        } else {
-          // this.warningRef.current.setMessage("Wrong email or password");
-          // this.warningRef.setColor("red");
-          // this.warningRef.current.setActive(true);
-        }
-
-        // TODO: set user in state
+        setGlobalToken.call(this, resp.data.token)
+        setRedirect(true)
       })
       .catch((err) => {
-        console.error(err);
-        // this.warningRef.current.setColor("red");
-        // this.warningRef.current.setMessage("Wrong email or password");
-        // this.warningRef.current.setActive(true);
-      });
-  };
-
-  render() {
-    return (
-      <div style={{ backgroundColor: "#32c8d9", padding: "10px" }}>
-        <Form className="loginForm" onSubmit={this.onSubmit}>
-          <Form.Group controlId="Email">
-            <Form.Label>Email</Form.Label>
-            <br />
-            <Form.Control
-              required
-              type="email"
-              placeholder="example@example.com"
-              name="email"
-              onChange={this.onChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="Password">
-            <Form.Label>Password</Form.Label>
-            <br />
-            <Form.Control
-              required
-              type="password"
-              placeholder="Enter your Password"
-              name="password"
-              onChange={this.onChange}
-            />
-          </Form.Group>
-
-          <div>
-            <Button variant="success" size="lg" type="submit" block>
-              Login
-            </Button>
-            <Warning ref={this.warningRef} />
-            <div>
-              Don't have an account yet?
-              <br />
-              <Link to="/signup"> Sign up here</Link>
-            </div>
-          </div>
-        </Form>
-      </div>
-    );
+        console.error(err)
+        window.location.reload(false)
+      })
   }
+
+  const classes = useStyles()
+
+  return (
+    <Card>
+      {redirect && <Redirect to="/profile" />}
+      <CardContent>
+        <Typography variant="h5">Login</Typography>
+        <form>
+          <div style={{ marginTop: '20px' }}>
+            <TextField
+              id="login-email"
+              type="email"
+              label="Email Address"
+              variant="outlined"
+              fullWidth
+              value={email}
+              onChange={changeEmail}
+            />
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <TextField
+              id="login-password"
+              label="password"
+              variant="outlined"
+              type="password"
+              fullWidth
+              value={password}
+              onChange={changePassword}
+            />
+          </div>
+        </form>
+        <div style={{ marginTop: '20px' }}>
+          <Button className={classes.login} onClick={login} fullWidth>
+            <Typography className={classes.buttonText} variant="h6">
+              login
+            </Typography>
+          </Button>
+        </div>
+        <div style={{ marginTop: '20px' }}>
+          <Divider variant="middle" />
+        </div>
+        <div style={{ marginTop: '10px' }}>
+          <Typography color="textSecondary" gutterBottom>
+            Don't have an account?
+          </Typography>
+          <Button className={classes.signUp} fullWidth>
+            <Typography className={classes.buttonText} variant="h6">
+              Sign up
+            </Typography>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
 }
 
-export default withRouter(LoginForm);
+LoginForm.propTypes = {
+  setGlobalToken: PropTypes.func.isRequired,
+}
+
+export default withRouter(LoginForm)

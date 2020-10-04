@@ -1,0 +1,76 @@
+.green {
+  background-color: #34d15e;
+}
+
+.red {
+  background-color: #f24835;
+}
+
+.blue {
+  background-color: #34b9ed;
+}
+
+.purple {
+  background-color: #c153ed;
+}
+
+.pink {
+  background-color: #fa5ce8;
+}
+
+.orange {
+  background-color: #f7ad23;
+}
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-gap: 1em;
+
+;
+  grid-template-areas:
+    "header header header header header header header"
+    "body   body   body   body   body   body   body   "
+    "body   body   body   body   body   body   body   "
+    "body   body   body   body   body   body   body   "
+    "body   body   body   body   body   body   body   "
+    "body   body   body   body   body   body   body   "
+    "body   body   body   body   body   body   body   "
+    "body   body   body   body   body   body   body   "
+    "body   body   body   body   body   body   body   "
+    "body   body   body   body   body   body   body   "
+    "body   body   body   body   body   body   body   "
+    "footer footer footer footer footer footer footer"
+
+;
+}
+
+.header {
+  grid-area: header;
+}
+
+.footer {
+  grid-area: footer;
+}
+
+.body {
+  grid-area: body;
+}
+
+/*// css for containers*/
+/*   const useStyles = makeStyles({*/
+/*bodyContainer: {*/
+/*  height: 'calc(100vh - 60px)',*/
+/*  display: 'flex',*/
+/*  flexFlow: 'column',*/
+/*  flexGrow: 1,*/
+/*  backgroundColor: '#34d15e',*/
+/*  overflowY: 'hidden',*/
+/*},*/
+/*mainContainer: {*/
+/*  height: '100vh',*/
+/*  display: 'flex',*/
+/*  flexFlow: 'column',*/
+/*},*/
+/*})*/

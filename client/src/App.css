@@ -1,8 +1,34 @@
-/* 
-p {
-    font-family: "Comic Sans MS", "Comic Sans", cursive;
+.green {
+    background-color: #34d15e;
 }
 
-div {
-    font-family: "Comic Sans MS", "Comic Sans", cursive;
-} */
+.red {
+    background-color: #f24835;
+}
+
+.blue {
+    background-color: #34b9ed;
+}
+
+.purple {
+    background-color: #c153ed;
+}
+
+.pink {
+    background-color: #fa5ce8;
+}
+
+.orange {
+    background-color: #f7ad23;
+}
+
+.container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-flow: column;
+}
+
+.body {
+    flex-grow: 1;
+}

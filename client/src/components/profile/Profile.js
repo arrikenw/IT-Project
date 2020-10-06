@@ -1,0 +1,64 @@
+import React, { useState } from 'react'
+import { Grid } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { withRouter } from 'react-router-dom'
+import InfinitePostScroll from './InfinitePostScroll'
+import ProfileDetails from './ProfileDetails'
+
+const useStyles = makeStyles({
+  bodyContainer: {
+    height: '100%',
+    width: ' 100%',
+    overflow: 'auto',
+  },
+  mainContainer: {
+    height: '100%',
+    width: '100%',
+    overflowX: 'hidden',
+  },
+})
+
+function Profile({ user, token, history, location }) {
+  const [filterValues, setFilterValues] = useState('')
+  const [sortField, setSortField] = useState('createdAt')
+  const [sortDirection, setSortDirectionn] = useState('desc')
+  // const [profileID, setProfileID] = useState(() => {
+  //   const query = new URLSearchParams(this.props.location.search)
+  //   const userName = query.get('user')
+  // })
+
+  const query = new URLSearchParams(location.search)
+  const userName = query.get('user')
+  if (!userName) {
+    history.push(`/profile?user=${user.userName}`)
+  }
+  const classes = useStyles()
+
+  return (
+    <Grid container className={classes.mainContainer}>
+      <Grid item xs={false} />
+      <Grid item xs={3}>
+        <div
+          style={{
+            marginTop: '50px',
+            marginRight: '50px',
+            marginLeft: '100px',
+          }}
+        >
+          <ProfileDetails user={user} />
+        </div>
+      </Grid>
+      <Grid className={classes.bodyContainer} item xs={6}>
+        <InfinitePostScroll
+          sortField={sortField}
+          sortDirection={sortDirection}
+          filterValues={filterValues}
+          token={token}
+        />
+      </Grid>
+      <Grid item xs={3} />
+    </Grid>
+  )
+}
+
+export default withRouter(Profile)

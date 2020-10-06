@@ -1,240 +1,219 @@
-import React, {Component} from "react";
-import {Link, withRouter} from 'react-router-dom';
-import Col, { Button, Form } from "react-bootstrap";
-import Row from "react-bootstrap/Row";
-import Axios from "axios";
+import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
+import Axios from 'axios'
+import {
+  Card,
+  CardContent,
+  TextField,
+  Typography,
+  Button,
+} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
-class SettingsForm extends Component {
+const useStyles = makeStyles({
+  signUp: {
+    height: '60px',
+    backgroundColor: '#33d130',
+    '&:hover': {
+      background: '#26b324',
+    },
+  },
+  login: {
+    height: '60px',
+    backgroundColor: '#34b9ed',
+    '&:hover': {
+      background: '#30a6d1',
+    },
+  },
+  buttonText: {
+    color: 'white',
+  },
+})
 
-    constructor(props) {
-        super(props);
-        const headers = {headers:{
-                Authorization: "Bearer " +
-                    this.props.token}};
-        Axios.get("api/user/get", {headers:{
-                Authorization: "Bearer " + window.localStorage.getItem("token")}})
-            .then(resp =>{
-                console.log("user's name: ", resp.data.firstName);
-                this.setState({firstName:  resp.data.firstName,
-                                    lastName: resp.data.lastName,
-                                    userName: resp.data.userName,
-                                    email: resp.data.email,
-                                    });
-            })
+function SettingsForm({ user, token }) {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [userName, setUserName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [firstNameEdit, setFirstNameEdit] = useState(false)
+  const [lastNameEdit, setLastEdit] = useState(false)
+  const [userNameEdit, setUserNameEdit] = useState(false)
+  const [emailEdit, setEmailEdit] = useState(false)
+  const [passwordEdit, setPasswordEdit] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState('')
+
+  useEffect(() => {
+    setFirstName(user.firstName)
+    setLastName(user.lastName)
+    setUserName(user.userName)
+    setEmail(user.email)
+  }, [user])
+  const isFormEditable = () =>
+    firstNameEdit || lastNameEdit || userNameEdit || emailEdit || passwordEdit
+
+  const updateUser = () => {
+    const payload = {
+      update: {
+        firstName,
+        lastName,
+        userName,
+        email,
+      },
+      password: currentPassword,
     }
 
-    state = {
-        firstName: "",
-        lastName: "",
-        userName:"",
-        email: "",
-        password: "*********",
-        token:"",
-        firstNameField: true,
-        lastNameField: true,
-        userNameField: true,
-        emailField: true,
-        passwordField: true,
-        confirmPassword: ""
+    if (password !== '') {
+      if (password !== confirmPassword) {
+        return
+      }
+      payload.update.password = password
     }
-    //TODO add in functions that link the form to the back end
+    console.log('meeting here')
+    Axios.post('api/user/update', payload, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((resp) => {
+        console.log(`status: ${resp.status}`)
+        window.location.reload(false)
+      })
+      .catch((err) => {
+        console.error(err)
+        window.location.reload(false)
+      })
+  }
 
-    isFormEditable = e =>{
-        if(this.state.firstNameField === false){return false;}
-        else if(this.state.lastNameField === false){return false;}
-        else if(this.state.userNameField === false){return false;}
-        else if(this.state.emailField === false){return false;}
-        else if(this.state.passwordField === false){return false;}
-        else {return true;}
-    };
+  const classes = useStyles()
 
-    onChange = e => {
-        this.setState({ [e.target.name]: e.target.value });
-    };
-
-    onSubmit = e => {
-
-        e.preventDefault();
-        //this.warningRef.current.setActive(false);
-
-        const payload = {
-            update: {firstName: this.state.firstName,
-                lastName: this.state.lastName,
-                userName: this.state.userName,
-                email: this.state.email,
-                password: this.state.password},
-
-                password: this.state.confirmPassword
-        }
-
-
-        Axios.post("api/user/update", payload, {headers:{
-            Authorization: "Bearer " + window.localStorage.getItem("token")}})  //todo change
-            .then(resp => {
-                console.log("status: " + resp.status);
-
-                if (resp.status === 200){
-
-                   //todo add warnings
-
-                }
-                else{
-
-                }
-
-                //TODO: set user in state
-
-            })
-            .catch((err) =>{
-                console.error(err);
-
-            });
-    }
-
-
-
-    render() {
-        return(
-            <div style={{borderColor:"#bde0e0", marginLeft:"10vw"}}>
-                <Form className = "SettingsForm" onSubmit={this.onSubmit}>
-                    <Form.Group as= {Row} controlId="First Name">
-                        <Form.Label column lg="3">First Name:</Form.Label>
-
-                        <Form.Control
-                            required
-                            type="firstName"
-                            placeholder="new first name"
-                            name="firstName"
-                            onChange={this.onChange}
-                            value = {this.state.firstName}
-                            disabled = {this.state.firstNameField}
-                            style={{width:"30%" }}
-                        />
-
-                        <Button
-                            style = {{float: "right", marginRight:"5vw"}}
-                            onClick = {(e)=> {
-                                e.preventDefault()
-                                this.setState( {firstNameField: false})}}
-                            >
-                            edit
-                        </Button>
-                    </Form.Group>
-                    <Form.Group as= {Row} controlId="Last Name">
-                        <Form.Label column lg="3">Last Name:</Form.Label>
-
-                        <Form.Control
-                            required
-                            type="lastName"
-                            placeholder="new last name"
-                            name="lastName"
-                            onChange={this.onChange}
-                            value = {this.state.lastName}
-                            disabled = {this.state.lastNameField}
-                            style={{width:"30%" }}
-                        />
-                        <Button
-                            style = {{float: "right", marginRight:"5vw"}}
-                            onClick = {(e)=> {
-                                e.preventDefault()
-                                this.setState( {lastNameField: false})}}
-                        >
-                        edit </Button>
-                    </Form.Group>
-                    <Form.Group as= {Row} controlId="User Name">
-                        <Form.Label column lg="3">User Name:</Form.Label>
-
-                        <Form.Control
-                            required
-                            type="userName"
-                            placeholder="new user name"
-                            name="userName"
-                            onChange={this.onChange}
-                            value = {this.state.userName}
-                            disabled = {this.state.userNameField}
-                            style={{width:"30%" }}
-                        />
-                        <Button
-                            style = {{float: "right", marginRight:"5vw"}}
-                            onClick = {(e)=> {
-                                e.preventDefault()
-                                this.setState( {userNameField: false})}}>
-                            edit </Button>
-                    </Form.Group>
-                    <Form.Group as= {Row} controlId="email">
-                        <Form.Label column lg="3">email:</Form.Label>
-
-                        <Form.Control
-                            required
-                            type="email"
-                            placeholder="new emil"
-                            name="email"
-                            onChange={this.onChange}
-                            value = {this.state.email}
-                            disabled = {this.state.emailField}
-                            style={{width:"30%" }}
-                        />
-                        <Button
-                            style = {{float: "right", marginRight:"5vw"}}
-                            onClick= {(e)=> {
-                                e.preventDefault()
-                                this.setState( {emailField: false})}}>
-                            edit </Button>
-                    </Form.Group>
-                    <Form.Group as= {Row} controlId="Password">
-                        <Form.Label column lg="3">Password:</Form.Label>
-
-                        <Form.Control
-                            required
-                            type="password"
-                            placeholder=""
-                            name="password"
-                            onChange={this.onChange}
-                            value = {this.state.password}
-                            disabled = {this.state.passwordField}
-                            style={{width:"30%" }}
-                        />
-                        <Button
-                            style = {{float: "right", marginRight:"5vw"}}
-                            onClick= {(e)=> {
-                                e.preventDefault()
-                                this.setState( {passwordField: false})}}>
-                            edit </Button>
-                    </Form.Group>
-                    <Form.Group as= {Row} controlId="Privacy">
-                        <Form.Label column lg="3">Privacy:</Form.Label>
-
-                        {/* TODO - change these so that there is an edit button */}
-                        <label >
-                                <input type="radio" name="options" id="option1" autoComplete="off" checked/> Private
-                        </label>
-                        <label >
-                                <input type="radio" name="options" id="option2" autoComplete="off"/> Public
-                        </label>
-
-                    </Form.Group>
-                    <Form.Group as= {Row} controlId="Confirm Password">
-                        <Form.Label column lg="3">Confirm Password:</Form.Label>
-                        <Form.Control
-                            required
-                            type="password"
-                            placeholder=""
-                            name="confirmPassword"
-                            onChange={this.onChange}
-                            value = {this.state.confirmPassword}
-                            disabled = {this.isFormEditable()}
-                            style={{width:"30%" }}
-                        />
-
-                        <Button type="submit">Submit Changes</Button>
-                    </Form.Group>
-
-                </Form>
-                <br/>
-
-            </div>
-        );
-    }
+  return (
+    <Card>
+      <CardContent>
+        <Typography variant="h5">{user.firstName}'s details</Typography>
+        <form>
+          <div style={{ marginTop: '20px' }}>
+            <TextField
+              type="text"
+              label="First Name"
+              variant="outlined"
+              fullWidth
+              value={firstName}
+              disabled={!firstNameEdit}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                setFirstNameEdit(!firstNameEdit)
+              }}
+            >
+              Edit
+            </Button>
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <TextField
+              label="Last Name"
+              variant="outlined"
+              type="text"
+              fullWidth
+              value={lastName}
+              disabled={!lastNameEdit}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                setLastEdit(!lastNameEdit)
+              }}
+            >
+              Edit
+            </Button>
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <TextField
+              type="text"
+              label="Username"
+              variant="outlined"
+              fullWidth
+              value={userName}
+              disabled={!userNameEdit}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                setUserNameEdit(!userNameEdit)
+              }}
+            >
+              Edit
+            </Button>
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <TextField
+              type="text"
+              label="Email Address"
+              variant="outlined"
+              fullWidth
+              value={email}
+              disabled={!emailEdit}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                setEmailEdit(!emailEdit)
+              }}
+            >
+              Edit
+            </Button>
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <TextField
+              type="password"
+              label="Password"
+              variant="outlined"
+              fullWidth
+              value={password}
+              disabled={!passwordEdit}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <TextField
+              type="password"
+              label="Confirm password"
+              variant="outlined"
+              fullWidth
+              value={confirmPassword}
+              disabled={!passwordEdit}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                setPasswordEdit(!passwordEdit)
+              }}
+            >
+              Edit
+            </Button>
+          </div>
+          <div style={{ marginTop: '60px' }}>
+            <TextField
+              type="password"
+              label="Re-enter original password"
+              variant="outlined"
+              fullWidth
+              value={currentPassword}
+              disabled={!isFormEditable()}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+          </div>
+        </form>
+        <div style={{ marginTop: '20px' }}>
+          <Button className={classes.login} onClick={updateUser} fullWidth>
+            <Typography className={classes.buttonText} variant="h6">
+              Update
+            </Typography>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
 }
 
-export default SettingsForm;
+export default SettingsForm

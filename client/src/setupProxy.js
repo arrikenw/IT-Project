@@ -1,9 +1,9 @@
 // place in src with index.js no need to import anywhere
-const proxy = require("http-proxy-middleware");
+const proxy = require('http-proxy-middleware')
 
 module.exports = function (app) {
   // add other server routes to path array
   app.use(
-    proxy.createProxyMiddleware(["/api"], { target: "http://localhost:8000" })
-  );
-};
+    proxy.createProxyMiddleware(['/api'], { target: 'http://localhost:8000' }),
+  )
+}

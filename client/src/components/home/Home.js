@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import WelcomeMessage from './WelcomeMessage'
-import LoginForm from '../login/LoginForm'
+import LoginForm from '../utils/LoginForm'
 // import LoginForm from './Login/LoginForm'
 // import ProfilePic from './ProfilePic/ProfilePic'
 

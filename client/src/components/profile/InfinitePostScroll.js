@@ -59,14 +59,12 @@ export default function InfinitePostScroll(props) {
               ref={lastPostElementRef}
               key={post._id}
             >
-              {' '}
               <ProfilePost post={post} />
             </div>
           )
         }
         return (
           <div style={{ marginTop: '0vw' }} key={post._id}>
-            {' '}
             <ProfilePost post={post} />
           </div>
         )

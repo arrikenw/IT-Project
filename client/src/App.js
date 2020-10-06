@@ -7,9 +7,9 @@ import './App.css'
 // eslint-disable-next-line import/extensions
 import Header from './components/headers/Header.jsx'
 import Home from './components/home/Home'
-import LoginPage from './components/login/LoginPage'
+import LoginPage from './components/dog/LoginPage'
 import Profile from './components/profile/Profile'
-import SettingsPage from './components/settings/SettingsPage'
+import SettingsPage from './components/car/SettingsPage'
 
 // css for containers
 const useStyles = makeStyles({

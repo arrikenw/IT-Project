@@ -602,7 +602,7 @@ and a JSON in the body, requiring the key-value pairs:
 JSON can also include the optional key-value pair:
 ```JSON
 {
-   "private": <boolean>
+   "private": "<boolean>"
 }
 ```
 Requirements:
@@ -638,8 +638,8 @@ and an optional JSON body, which can include the optional key-value pair:
 {
    "search": "<searchString>",
    "filters": {
-       filterFieldOne: "<filterValueOne>",
-       filterFieldTwo: "<filterValueTwo>"
+       "filterFieldOne": "<filterValueOne>",
+       "filterFieldTwo": "<filterValueTwo>"
    },
    "limit": "<numberOfPosts>",
    "skip": "<numberOfPostsToSkip>",
@@ -663,22 +663,22 @@ Responses:
     [
         {
             "likedBy": ["<userID>", "<userID2>"],
-            "private: "<trueOrFalse>",
+            "private": "<trueOrFalse>",
             "id_": "<firstPostID>",
-            "title: "<postTitle>",
+            "title": "<postTitle>",
             "userID":  "<createdByUserID>",
             "description": "<postDescription>",
             "comments": [
                 {
                     "likeBy": ["<userID2>"],
-                    "userID": "<createdByUserID">,
+                    "userID": "<createdByUserID>",
                     "comment": "<commentBody>",
-                    "updatedAt: "<lastUpdatedDateTime>",
-                    "createdAt: "<createdAtDateTime>"
+                    "updatedAt": "<lastUpdatedDateTime>",
+                    "createdAt": "<createdAtDateTime>"
                 }
             ],
-            "updatedAt: "<lastUpdatedDateTime>",
-            "createdAt: "<createdAtDateTime>"
+            "updatedAt": "<lastUpdatedDateTime>",
+            "createdAt": "<createdAtDateTime>"
         }
     ]
     ```

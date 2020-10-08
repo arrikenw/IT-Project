@@ -7,6 +7,7 @@ import {
   FormControl,
   InputGroup,
 } from "react-bootstrap";
+import SearchBar from "../SearchBar/SearchBar";
 
 export default class HeaderLoggedIn extends Component {
   state = {
@@ -36,22 +37,7 @@ export default class HeaderLoggedIn extends Component {
           />
           <div style={{ color: "white" }}>E-Folio</div>
         </Navbar.Brand>
-        <div>
-          <InputGroup
-            className="mb-3"
-            size="sm"
-            style={{ marginLeft: "20vw", paddingTop: "15px" }}
-          >
-            <FormControl
-              placeholder="Search..."
-              aria-label="search"
-              aria-describedby="basic-addon2"
-            />
-            <InputGroup.Append>
-              <InputGroup.Text id="basic-addon2">Go</InputGroup.Text>
-            </InputGroup.Append>
-          </InputGroup>
-        </div>
+        <SearchBar/>
 
         <Nav>
           <Nav.Link

@@ -794,7 +794,7 @@ Responses:
 
 #### Update Post 
 ###### Update a post belonging to the logged in user
-Request to: `/api/post/get` as a `POST` request
+Request to: `/api/post/update` as a `POST` request
 Takes : an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
@@ -833,7 +833,7 @@ Responses:
 
 #### Delete Post 
 ###### Delete a post belonging to the logged in user
-Request to: `/api/post/get` as a `POST` request
+Request to: `/api/post/delete` as a `POST` request
 Takes : an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
@@ -841,7 +841,7 @@ Authorization: "Bearer <authenticationToken>"
 and a JSON body, which must include key-value pair:
 ```JSON
 {
-   "postID": "<updatePostID>",
+   "postID": "<deletePostID>",
 }
 ```
 Requirements:
@@ -854,7 +854,7 @@ Responses:
   - the response will have status code of "200" and have the deleted post's ID
   - ```JSON
     {
-        "id": "<updatedPostID>"
+        "id": "<deletedPostID>"
     }
     ```
     ```
@@ -866,7 +866,75 @@ Responses:
     "Delete post not successful - <reasonForError>"
     ```
 
+#### Like Post 
+###### Likes a post for a logged in user
+Request to: `/api/post/like` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pair:
+```JSON
+{
+   "postID": "<likePostID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- must be a valid postID
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and have the liked post's ID
+  - ```JSON
+    {
+        "id": "<likedPostID>"
+    }
+    ```
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Like post not successful - <reasonForError>"
+    ```
 
 
+#### Unlike Post 
+###### Unlikes a post for a logged in user
+Request to: `/api/post/unlike` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pair:
+```JSON
+{
+   "postID": "<unlikePostID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- must be a valid postID
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and have the unliked post's ID
+  - ```JSON
+    {
+        "id": "<unlikedPostID>"
+    }
+    ```
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Like post not successful - <reasonForError>"
+    ```
 
 

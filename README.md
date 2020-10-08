@@ -583,3 +583,115 @@ Responses:
   - ```
     "Media deletion failed - <reasonForError>"
     ```
+
+### Posts
+#### Add Post 
+###### Creates a new post in the database and returns the posts's ID
+Request to: `/api/post/add` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON in the body, requiring the key-value pairs:
+```JSON
+{
+   "title": "<postTitle>",
+   "description": "<postDescription>"
+}
+```
+JSON can also include the optional key-value pair:
+```JSON
+{
+   "private": <boolean>
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- private must be a boolean: true or false
+
+Responses:
+- On success: 
+  - the response will have status code of "201" and will have the new post's id
+  - ```JSON
+    {
+       "id": "<postID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Add post not successful - <reasonForError>"
+    ```
+## Posts
+#### Get Post 
+###### Gets a lists of post from the database and which match the search requirements
+Request to: `/api/post/get` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and an optional JSON body, which can include the optional key-value pair:
+```JSON
+{
+   "search": "<searchString>",
+   "filters": {
+       filterFieldOne: "<filterValueOne>",
+       filterFieldTwo: "<filterValueTwo>"
+   },
+   "limit": "<numberOfPosts>",
+   "skip": "<numberOfPostsToSkip>",
+   "sortField": <"fieldToSortBy">,
+   "sortDirection": "<directionOfSort>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- filters is a JSON of key value pairs that the posts must have
+- limit is the amount of posts which should be returned
+- skip is the amount  of posts which should be skipped 
+- sortField is a valid field from posts to which the result should be sorted by
+- sortDirection is either "asc" or "desc"
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and will have any array of the matching posts
+  - ```JSON
+    [
+        {
+            "likedBy": ["<userID>", "<userID2>"],
+            "private: "<trueOrFalse>",
+            "id_": "<firstPostID>",
+            "title: "<postTitle>",
+            "userID":  "<createdByUserID>",
+            "description": "<postDescription>",
+            "comments": [
+                {
+                    "likeBy": ["<userID2>"],
+                    "userID": "<createdByUserID">,
+                    "comment": "<commentBody>",
+                    "updatedAt: "<lastUpdatedDateTime>",
+                    "createdAt: "<createdAtDateTime>"
+                }
+            ],
+            "updatedAt: "<lastUpdatedDateTime>",
+            "createdAt: "<createdAtDateTime>"
+        }
+    ]
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Get post not successful - <reasonForError>"
+    ```
+
+
+
+
+
+

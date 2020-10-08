@@ -625,6 +625,7 @@ Responses:
   - ```
     "Add post not successful - <reasonForError>"
     ```
+
 ## Posts
 #### Get Post 
 ###### Gets a lists of post from the database and which match the search requirements, must be public posts or belong to the searching user
@@ -732,7 +733,6 @@ Responses:
     "Add post not successful - <reasonForError>"
     ```
 
-## Posts
 #### Get Public Post 
 ###### Gets a lists of post from the database and which match the search requirements, must be public posts
 Request to: `/api/post/getPublic` as a `POST` request
@@ -792,7 +792,6 @@ Responses:
     "Get public post not successful - <reasonForError>"
     ```
 
-## Posts
 #### Update Post 
 ###### Update a post belonging to the logged in user
 Request to: `/api/post/get` as a `POST` request
@@ -832,7 +831,6 @@ Responses:
     "Update post not successful - <reasonForError>"
     ```
 
-## Posts
 #### Delete Post 
 ###### Delete a post belonging to the logged in user
 Request to: `/api/post/get` as a `POST` request

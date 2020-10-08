@@ -7,13 +7,16 @@ import {
     Typography,
     TextField,
 } from '@material-ui/core'
+import Picker from 'react-picker'
+import { DatePicker } from "@material-ui/pickers"
+
 
 function BioInfoForm({ setGlobalToken }) {
     const [organisation, setOrganisation] = useState('')
     const [professionalField, setProfessionalField] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [gender, setGender] = useState('')
-    const [dob, setDOB] = useState('')
+    const [dob, setDOB] = useState(new Date());
     const [privacyLevel, setPrivacyLevel] = useState('')
 
     const changeOrganisation = (e) => {
@@ -91,23 +94,22 @@ function BioInfoForm({ setGlobalToken }) {
                         />
                     </div>
                     <div style={{ marginTop: '20px' }}>
-                        <TextField
-                            id="signup-email"
-                            label="Enter Your Gender"
-                            variant="outlined"
-                            type="gender"
-                            fullWidth
+                        <Picker
+                            ref="genderSelection"
                             value={gender}
+                            options={['Male','Female','Other']}
                             onChange={changeGender}
-                        />
+                            width="600px"
+                        >
+                        </Picker>
                     </div>
                     <div style={{ marginTop: '20px' }}>
-                        <TextField
-                            id="signup-password"
-                            label="Enter Your Date Of Birth"
-                            variant="outlined"
-                            type="dob"
-                            fullWidth
+                        <DatePicker
+                            disableFuture
+                            openTo="year"
+                            format="dd/MM/yyyy"
+                            label="Date of Birth"
+                            views={["year", "month", "date"]}
                             value={dob}
                             onChange={changeDOB}
                         />
@@ -115,7 +117,7 @@ function BioInfoForm({ setGlobalToken }) {
                     <div style={{ marginTop: '20px' }}>
                         <TextField
                             id="signup-email"
-                            label="Re-Enter Your Privacy Level"
+                            label="Enter Your Privacy Level"
                             variant="outlined"
                             type="privacyLevel"
                             fullWidth

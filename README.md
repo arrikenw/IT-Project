@@ -643,7 +643,7 @@ and an optional JSON body, which can include the optional key-value pair:
    },
    "limit": "<numberOfPosts>",
    "skip": "<numberOfPostsToSkip>",
-   "sortField": <"fieldToSortBy">,
+   "sortField": "<fieldToSortBy>",
    "sortDirection": "<directionOfSort>"
 }
 ```
@@ -658,7 +658,7 @@ Requirements:
 
 Responses:
 - On success: 
-  - the response will have status code of "200" and will have any array of the matching posts
+  - the response will have status code of "200" and will have an array of the matching posts
   - ```JSON
     [
         {
@@ -689,6 +689,50 @@ Responses:
   - ```
     "Get post not successful - <reasonForError>"
     ```
+
+#### Add Post 
+###### Creates a new post with the given values for a logged in user
+Request to: `/api/post/add` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body:
+```JSON
+{
+   "title": "<postTitle>",
+   "mediaID": "<postMediaID>"
+}
+```
+JSON can also include the optional key-value pairs:
+```JSON
+{
+   "description": "<postDescription>",
+   "private": "<boolean>",
+   "thumbnailURL": "<thumbNailURLL>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- mediaID and thumbnailURL must be valid IDs from the media database
+Responses:
+- On success: 
+  - the response will have status code of "201" and will have an json of the new post ID
+  - ```JSON
+    {
+        "id": "<newPostID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Add post not successful - <reasonForError>"
+    ```
+
+
 
 
 

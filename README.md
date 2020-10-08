@@ -819,9 +819,8 @@ Responses:
   - the response will have status code of "200" and have the updated post's ID
   - ```JSON
     {
-        "id": "<updatedPostID>"
+        "postID": "<updatedPostID>"
     }
-    ```
     ```
 - On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
@@ -854,9 +853,8 @@ Responses:
   - the response will have status code of "200" and have the deleted post's ID
   - ```JSON
     {
-        "id": "<deletedPostID>"
+        "postID": "<deletedPostID>"
     }
-    ```
     ```
 - On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
@@ -889,9 +887,8 @@ Responses:
   - the response will have status code of "200" and have the liked post's ID
   - ```JSON
     {
-        "id": "<likedPostID>"
+        "postID": "<likedPostID>"
     }
-    ```
     ```
 - On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
@@ -925,9 +922,8 @@ Responses:
   - the response will have status code of "200" and have the unliked post's ID
   - ```JSON
     {
-        "id": "<unlikedPostID>"
+        "postID": "<unlikedPostID>"
     }
-    ```
     ```
 - On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
@@ -937,4 +933,183 @@ Responses:
     "Like post not successful - <reasonForError>"
     ```
 
+## Comments
+#### Add Comment 
+###### Adds a comment to a post for a logged in user
+Request to: `/api/comment/add` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pairs:
+```JSON
+{
+   "postID": "<commentPostID>",
+   "comment": "<commentBody>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- postID must belong to a valid post
+
+Responses:
+- On success: 
+  - the response will have status code of "201" and will have the id of the post the comment was added to
+  - ```JSON
+    {
+        "postID": "<commentedPostID>",
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Add comment not successful - <reasonForError>"
+    ```
+ 
+#### Update Comment 
+###### Updates a comment of a post for a logged in user
+Request to: `/api/comment/update` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pairs:
+```JSON
+{
+   "postID": "<commentPostID>",
+   "commentID": "<updateCommentID>",
+   "comment": "<newCommentBody>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- postID must belong to a valid post
+- commentID must belong to the logged in user
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and will have the id of the updated comment
+  - ```JSON
+    {
+        "commentID": "<UpdatedCommentedID>",
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Update comment not successful - <reasonForError>"
+    ```
+ 
+#### Delete Comment 
+###### Deletes a comment of a post for a logged in user
+Request to: `/api/comment/delete` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pairs:
+```JSON
+{
+   "postID": "<commentPostID>",
+   "commentID": "<deleteCommentID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- postID must belong to a valid post
+- commentID must belong to the logged in user
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and will have the id of the deleted comment
+  - ```JSON
+    {
+        "commentID": "<DeletedCommentedID>",
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Delete comment not successful - <reasonForError>"
+    ```
+
+#### Like Comment 
+###### Likes a comment of a post for a logged in user
+Request to: `/api/comment/like` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pair:
+```JSON
+{
+   "postID": "<commentPostID>",
+   "commentID": "<likeCommentID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- must be a valid postID
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and have the liked comments's ID
+  - ```JSON
+    {
+        "CommentID": "<likedCommentID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Like comment not successful - <reasonForError>"
+    ```
+
+
+#### Unlike Comment 
+###### Unlikes a comment of a post for a logged in user
+Request to: `/api/comment/unlike` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pair:
+```JSON
+{
+   "postID": "<commentPostID>",
+   "commentID": "<likeCommentID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- must be a valid postID
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and have the unliked comments's ID
+  - ```JSON
+    {
+        "CommentID": "<unlikedCommentID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Unlike comment not successful - <reasonForError>"
+    ```
 

@@ -44,26 +44,66 @@ const getUser = (req, res) => {
 
 // gets a list of user's public user information
 const getPublicUser = (req, res) => {
-  if (!req.body.ids) {
-    console.log("getPublicUser not successful: missing forum attributes");
-    console.log(req.body);
-    res.status(400);
-    res.send("Get public user not successful - missing forum attributes");
-    return;
+  const query = {};
+  query.$and = [];
+  // search for public users
+  query.$and.push({ private: false });
+
+  // if request has search term, search their name and username
+  if (req.body.search) {
+    query.$and.push({
+      $or: [
+        { firstName: { $regex: req.body.search } },
+        { lastName: { $regex: req.body.search } },
+        { userName: { $regex: req.body.search } },
+        { organisation: { $regex: req.body.search } },
+        { tags: { $regex: req.body.search } },
+        { professionalFields: { $regex: req.body.search } },
+        { biography: { $regex: req.body.search } },
+        { email: { $regex: req.body.search }, emailPrivate: false },
+        { phoneNumber: { $regex: req.body.search }, phoneNumberPrivate: false },
+      ],
+    });
   }
 
+  // if request searches for specific values for fields, add it to the request
+  if (req.body.filters) {
+    query.$and.push(req.body.filters);
+  }
 
-  const processUsers = (err, docs) => {
-    if (err) {
-      res.status(500);
-      console.log(`getPublicUser not successful: ${err.message}`);
-      res.send(
-        "Get public user not successful - something went wrong, try again"
-      );
-      return;
-    }
+  // if request searches for a list of ids, sea add it to the request
+  if (req.body.IDMatch) {
+    query.$and.push({
+      _id: { $in: req.body.IDMatch },
+    });
+  }
 
-    const payload = JSON.parse(JSON.stringify(docs));
+  // use given limit amount, otherwise use default value
+  let limit = 10;
+  if (req.body.limit) {
+    limit = req.body.limit;
+  }
+
+  // use given skip amount, otherwise use default value
+  let skip = 0;
+  if (req.body.skip) {
+    skip = req.body.skip;
+  }
+
+  // use given sort field, otherwise use default value
+  let sortField = "createdAt";
+  if (req.body.sortField) {
+    sortField = req.body.sortField;
+  }
+
+  // use given sort direction, otherwise use default value
+  let sortDirection = "desc";
+  if (req.body.sortDirection) {
+    sortDirection = req.body.sortDirection;
+  }
+
+  const onResult = (result) => {
+    const payload = JSON.parse(JSON.stringify(result));
 
     for (let i = 0; i < payload.length; i += 1) {
       delete payload[i].email;
@@ -79,7 +119,21 @@ const getPublicUser = (req, res) => {
     res.send(payload);
   };
 
-  UserModel.find().where("_id").in(req.body.ids).exec(processUsers);
+  const onError = (err) => {
+    console.log(`getPublicUser not successful: ${err.message}`);
+    res.status(500);
+    res.send("Get public user not successful- something went wrong, try again");
+  };
+
+  const sort = {};
+  console.log(query);
+  sort[sortField] = sortDirection;
+  UserModel.find(query)
+    .sort(sort)
+    .skip(skip)
+    .limit(limit)
+    .then(onResult)
+    .catch(onError);
 };
 
 // adds a new user to the database
@@ -164,7 +218,8 @@ const addUser = (req, res) => {
       res.send("Sign up not successful - something went wrong, try again");
       return;
     }
-    const item = req.body;
+    const item = JSON.parse(JSON.stringify(req.body));
+    delete item.role;
     item.password = hash;
     const data = new UserModel(item);
     data.save(onUserSave);
@@ -235,8 +290,7 @@ const loginUser = (req, res) => {
   UserModel.find({ email: req.body.email }, validateAccount);
 };
 
-
-//TODO VALIDATE PINNED POSTS ARE IN FACT OWNED BY THE USER
+// TODO VALIDATE PINNED POSTS ARE IN FACT OWNED BY THE USER
 // update a user's information
 const updateUser = (req, res) => {
   const { id } = req.user;

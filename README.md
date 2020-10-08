@@ -233,9 +233,14 @@ JSON can also include the optional key-value pairs:
 {
    "organisation": "<userOrganisation>",
    "professionalFields": ["<fieldOne>", "<fieldTwo>", "<...>"],
-   "DOB": "<userDateOfBirth>",
-   "phone": "<userPhoneNumber>",
-   "bio": "<userBiography>"
+   "dateOfBirth": "<userDateOfBirth>",
+   "phoneNumber": "<userPhoneNumber>",
+   "biography": "<userBiography>",
+   "tags": ["<tagOne>", "<tagTwo>"],
+   "private": "boolean",
+   "phoneNumberPrivate": "boolean",
+   "emailPrivate": "boolean",
+   "profilePic": "<mediaID>"
 }
 ```
 Requirements:
@@ -332,17 +337,34 @@ Responses:
 #### Get Public User
 ###### Returns a list user's public details from a list user IDs
 Request to: `/api/user/getPublic` as a `POST` request
-
-Takes: a JSON in the body, requiring the key-value pairs:
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and an optional JSON body, which can include the optional key-value pair:
 ```JSON
 {
-    "ids": ["<userIDOne>", "<userIDTwo", "<...>"]
+   "search": "<searchString>",
+   "filters": {
+       "filterFieldOne": "<filterValueOne>",
+       "filterFieldTwo": "<filterValueTwo>"
+   },
+   "IDMatch": ["<postIDOne>", "<postIDTwo>"],
+   "limit": "<numberOfPosts>",
+   "skip": "<numberOfPostsToSkip>",
+   "sortField": "<fieldToSortBy>",
+   "sortDirection": "<directionOfSort>"
 }
 ```
 Requirements:
-- No headers required
-- user IDs must belong to valid users in the database
-
+- Authorization header is required
+- Authentication token must be a valid token
+- filters is a JSON of key value pairs that the posts must have
+- IDMatch is a list of IDs that a post much match atleast one of
+- limit is the amount of users which should be returned
+- skip is the amount  of users which should be skipped 
+- sortField is a valid field from posts to which the result should be sorted by
+- sortDirection is either "asc" or "desc"
 Responses:
 - On success: 
   - the response will have status code of "200" and will have a list of the users' public details
@@ -642,6 +664,7 @@ and an optional JSON body, which can include the optional key-value pair:
        "filterFieldOne": "<filterValueOne>",
        "filterFieldTwo": "<filterValueTwo>"
    },
+   "IDMatch": ["<postIDOne>", "<postIDTwo>"],
    "limit": "<numberOfPosts>",
    "skip": "<numberOfPostsToSkip>",
    "sortField": "<fieldToSortBy>",
@@ -652,6 +675,7 @@ Requirements:
 - Authorization header is required
 - Authentication token must be a valid token
 - filters is a JSON of key value pairs that the posts must have
+- IDMatch is a list of IDs that a post much match atleast one of
 - limit is the amount of posts which should be returned
 - skip is the amount  of posts which should be skipped 
 - sortField is a valid field from posts to which the result should be sorted by

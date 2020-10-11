@@ -143,7 +143,9 @@ describe("test /api/user/getPublic route and the getPublicUser controller", () =
   });
 
   test("getPublicUser with valid input", async (done) => {
-    const response = await request(app).post("/api/user/getPublic").send(users);
+    const response = await request(app)
+      .post("/api/user/getPublic")
+      .send({ IDMatch: users.ids, sortDirection: "asc" });
     expect(response.status).toBe(200);
     expect(response.body[0]).toHaveProperty("professionalFields", []);
     expect(response.body[0]).toHaveProperty("firstName", "firstTest");

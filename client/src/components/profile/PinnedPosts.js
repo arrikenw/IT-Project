@@ -1,10 +1,12 @@
 import React, {Component} from "react";
 import Axios from "axios";
-import {Button} from "@material-ui/core";
+import {Button, IconButton} from "@material-ui/core";
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import ProfilePost from "./ProfilePost";
 
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 class PinnedPost extends Component {
 
@@ -27,6 +29,7 @@ class PinnedPost extends Component {
     rightScroll = (magnitude) => {
         const newi = this.state.i + magnitude;
         this.setState({i: newi});
+        this.setState({posts: this.state.posts});
     }
 
     getPinnedPostContent = (postids, exportPosts, errcount) => {
@@ -114,25 +117,31 @@ class PinnedPost extends Component {
                     <Grid container>
                         <Grid item xs={4}>
                             <div>
-                                {(this.state.i < this.state.posts.length) && (<ProfilePost post={this.state.posts[this.state.i+0]} />)}
+                                {(this.state.posts.length > 0) && (<ProfilePost post={this.state.posts[(this.state.i+0) % this.state.posts.length]} isPinned={true}/>)}
                             </div>
                         </Grid>
                         <Grid item xs={4}>
                             <div>
-                                {(this.state.i + 1 < this.state.posts.length) && (<ProfilePost post={this.state.posts[this.state.i+1]} />)}
+                                {(this.state.posts.length > 1) && (<ProfilePost post={this.state.posts[(this.state.i+1) % this.state.posts.length]} isPinned={true}/>)}
                             </div>
                         </Grid>
                         <Grid item xs={4}>
                             <div>
-                                {(this.state.i + 2 < this.state.posts.length) && (<ProfilePost post={this.state.posts[this.state.i+2]} />)}
+                                {(this.state.posts.length > 2) && (<ProfilePost post={this.state.posts[(this.state.i+2) % this.state.posts.length]} isPinned={true}/>)}
                             </div>
                         </Grid>
                     </Grid>
                     <Grid item xs={11}>
-                        <Button style={{float:"left"}}onClick={()=> {this.leftScroll(1);}}> LEFT </Button>
+                        <IconButton variant="contained" size="large" color="primary" style={{float:"left"}} onClick={()=> {this.leftScroll(1);}}>
+                            <ChevronLeftIcon />
+                            LEFT
+                        </IconButton>
                     </Grid>
                     <Grid item xs={1}>
-                        <Button style={{float:"right"}} onClick={()=> {this.rightScroll(1);}}> RIGHT </Button>
+                        <IconButton variant="contained" size="large" color="primary" style={{float:"right"}} onClick={()=> {this.rightScroll(1);}}>
+                            RIGHT
+                            <ChevronRightIcon />
+                        </IconButton>
                     </Grid>
                 </Grid>)
 

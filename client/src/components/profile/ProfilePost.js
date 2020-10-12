@@ -1,5 +1,6 @@
 import Axios from "axios";
 import React, {Component} from "react";
+import { withRouter } from 'react-router-dom'
 import { withStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -14,13 +15,14 @@ import {
 //https://stackoverflow.com/questions/50272814/image-on-material-ui-cardmedia
 const styles = theme => ({
   postCard: {
-    height: '350px',
+    height: '600px',
     marginBottom: '30px',
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9,
-    marginTop:'30'
+    //paddingTop: '56.25%', // 16:9,
+    paddingTop: '40%',
+    marginTop:'0',
   }
 });
 
@@ -38,6 +40,9 @@ class ProfilePost extends Component {
 
 
   componentDidMount() {
+    console.log("POST");
+    console.log(this.props.post);
+    console.log("/POST");
     if (this.props.post.mediaID === "") {
       return;
     }
@@ -72,11 +77,21 @@ class ProfilePost extends Component {
     const classes = this.props.classes;
     console.log("media:")
     console.log(this.state.contentStr);
+    let heightChange = {};
+    let aspectChange = {backgroundColor:"red"};
+    if (this.props.isPinned){
+      heightChange = {height: "350px"};
+      aspectChange = {paddingTop: '56.25%'};
+    }
+    if (this.props.isExpanded){
+      heightChange = {height: "1000px"};
+      aspectChange = {paddingTop: '56.25%'};
+    }
     return (
-        <Card className={classes.postCard}>
-          <CardActionArea>
+        <Card className={classes.postCard} style={heightChange}>
+          <CardActionArea onClick={ () => { this.props.history.push("/post?post="+this.props.post._id); } }>
             <CardContent>
-              <CardMedia square  className={classes.media} src={this.state.contentStr}></CardMedia>
+              <CardMedia square className={classes.media} style={aspectChange} image={this.state.contentStr}></CardMedia>
               <Typography gutterBottom variant="h5" component="h2">
                 {this.props.post.title}
               </Typography>
@@ -97,4 +112,4 @@ class ProfilePost extends Component {
     )
   }
 }
-export default withStyles(styles, { withTheme: true })(ProfilePost)
+export default withRouter(withStyles(styles, { withTheme: true })(ProfilePost))

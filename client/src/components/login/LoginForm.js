@@ -75,7 +75,7 @@ function LoginForm({ setGlobalToken }) {
             <TextField
               id="login-email"
               type="email"
-              label="Email Address"
+              label="Enter Email Address"
               variant="outlined"
               fullWidth
               value={email}
@@ -85,7 +85,7 @@ function LoginForm({ setGlobalToken }) {
           <div style={{ marginTop: '20px' }}>
             <TextField
               id="login-password"
-              label="password"
+              label="Enter Password"
               variant="outlined"
               type="password"
               fullWidth

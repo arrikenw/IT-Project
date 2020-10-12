@@ -40,9 +40,15 @@ class ProfilePost extends Component {
 
 
   componentDidMount() {
-    console.log("POST");
-    console.log(this.props.post);
-    console.log("/POST");
+    //if media is already stored
+    if (this.props.media){
+      console.log("USING STORED MEDIA");
+      this.setState({
+        contentStr: this.props.media.contentStr,
+        mimeType: this.props.media.mimeType,
+        contentCategory: this.props.media.contentCategory})
+      return;
+    }
     if (this.props.post.mediaID === "") {
       return;
     }
@@ -73,10 +79,20 @@ class ProfilePost extends Component {
         });
   }
 
+  componentDidUpdate(props){
+    //if media is already stored
+    if (this.props.media && this.props.media.contentStr != this.state.contentStr){
+      console.log("USING STORED MEDIA");
+      this.setState({
+        contentStr: this.props.media.contentStr,
+        mimeType: this.props.media.mimeType,
+        contentCategory: this.props.media.contentCategory})
+      return;
+    }
+  }
+
   render(){
     const classes = this.props.classes;
-    console.log("media:")
-    console.log(this.state.contentStr);
     let heightChange = {};
     let aspectChange = {backgroundColor:"red"};
     if (this.props.isPinned){

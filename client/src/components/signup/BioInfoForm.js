@@ -5,11 +5,31 @@ import {
     Card,
     CardContent,
     Typography,
-    TextField,
+    TextField, Button,
 } from '@material-ui/core'
 import Picker from 'react-picker'
 import { DatePicker } from "@material-ui/pickers"
+import {makeStyles} from "@material-ui/core/styles"
 
+const useStyles = makeStyles({
+    signUp: {
+        height: '60px',
+        backgroundColor: '#33d130',
+        '&:hover': {
+            background: '#26b324',
+        },
+    },
+    login: {
+        height: '60px',
+        backgroundColor: '#34b9ed',
+        '&:hover': {
+            background: '#30a6d1',
+        },
+    },
+    buttonText: {
+        color: 'white',
+    },
+})
 
 function BioInfoForm({ setGlobalToken }) {
     const [organisation, setOrganisation] = useState('')
@@ -38,22 +58,22 @@ function BioInfoForm({ setGlobalToken }) {
         setPrivacyLevel(e.target.value)
     }
 
-    const biosignup = () => {
+    const bioSignup = () => {
         const payload = {
-            email,
-            password,
         }//NEED TO WORK ON THIS!!!
 
         Axios.post('api/user/signup', payload)
             .then((resp) => {
                 setGlobalToken.call(this, resp.data.token)
-                setRedirect(true)
+                //setRedirect(true)
             })
             .catch((err) => {
                 console.error(err)
                 window.location.reload(false)
             })
     }
+
+    const classes = useStyles()
 
     return (
         <Card>
@@ -62,7 +82,7 @@ function BioInfoForm({ setGlobalToken }) {
                 <form>
                     <div style={{ marginTop: '20px' }}>
                         <TextField
-                            id="signup-firstname"
+                            id="signup-organisation"
                             label="Enter Your Organisation"
                             variant="outlined"
                             type="organisation"
@@ -73,7 +93,7 @@ function BioInfoForm({ setGlobalToken }) {
                     </div>
                     <div style={{ marginTop: '20px' }}>
                         <TextField
-                            id="signup-lastname"
+                            id="signup-professionalField"
                             label="Enter Your Professional Field"
                             variant="outlined"
                             type="professionalField"
@@ -84,7 +104,7 @@ function BioInfoForm({ setGlobalToken }) {
                     </div>
                     <div style={{ marginTop: '20px' }}>
                         <TextField
-                            id="signup-username"
+                            id="signup-phoneNumber"
                             type="phoneNumber"
                             label="Enter Phone Number"
                             variant="outlined"
@@ -116,7 +136,7 @@ function BioInfoForm({ setGlobalToken }) {
                     </div>
                     <div style={{ marginTop: '20px' }}>
                         <TextField
-                            id="signup-email"
+                            id="signup-privacyLevel"
                             label="Enter Your Privacy Level"
                             variant="outlined"
                             type="privacyLevel"
@@ -126,6 +146,13 @@ function BioInfoForm({ setGlobalToken }) {
                         />
                     </div>
                 </form>
+                <div style={{ marginTop: '20px' }}>
+                    <Button className={classes.signUp} onClick={bioSignup} fullWidth>
+                        <Typography className={classes.buttonText} variant="h6">
+                            Next
+                        </Typography>
+                    </Button>
+                </div>
             </CardContent>
         </Card>
     )

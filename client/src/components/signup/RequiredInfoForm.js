@@ -5,8 +5,29 @@ import {
     Card,
     CardContent,
     Typography,
-    TextField,
+    TextField, Button,
 } from '@material-ui/core'
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+    signUp: {
+        height: '60px',
+        backgroundColor: '#33d130',
+        '&:hover': {
+            background: '#26b324',
+        },
+    },
+    login: {
+        height: '60px',
+        backgroundColor: '#34b9ed',
+        '&:hover': {
+            background: '#30a6d1',
+        },
+    },
+    buttonText: {
+        color: 'white',
+    },
+})
 
 function RequiredInfoForm({ setGlobalToken }) {
     const [firstname, setFirstName] = useState('')
@@ -31,7 +52,7 @@ function RequiredInfoForm({ setGlobalToken }) {
         setPassword(e.target.value)
     }
 
-    const requiredsignup = () => {
+    const requiredSignup = () => {
         const payload = {
             email,
             password,
@@ -40,13 +61,15 @@ function RequiredInfoForm({ setGlobalToken }) {
         Axios.post('api/user/signup', payload)
             .then((resp) => {
                 setGlobalToken.call(this, resp.data.token)
-                setRedirect(true)
+                //setRedirect(true)
             })
             .catch((err) => {
                 console.error(err)
                 window.location.reload(false)
             })
     }
+
+    const classes = useStyles()
 
     return (
         <Card>
@@ -120,6 +143,13 @@ function RequiredInfoForm({ setGlobalToken }) {
                         />
                     </div>
                 </form>
+                <div style={{ marginTop: '20px' }}>
+                    <Button className={classes.signUp} onClick={requiredSignup} fullWidth>
+                        <Typography className={classes.buttonText} variant="h6">
+                            Next
+                        </Typography>
+                    </Button>
+                </div>
             </CardContent>
         </Card>
     )

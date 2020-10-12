@@ -8,6 +8,7 @@ import './App.css'
 import Header from './components/headers/Header.jsx'
 import Home from './components/home/Home'
 import LoginPage from './components/login/LoginPage'
+import SignupPage from "./components/signup/SignupPage";
 import Profile from './components/profile/Profile'
 import SettingsPage from './components/settings/SettingsPage'
 
@@ -98,6 +99,9 @@ function App() {
           </Route>
           <Route path="/login">
             <LoginPage setGlobalToken={setGlobalToken} />
+          </Route>
+          <Route path="/signup">
+            <SignupPage setGlobalToken={setGlobalToken} />
           </Route>
           <Route path="/profile">
             <Profile token={token} user={user} />

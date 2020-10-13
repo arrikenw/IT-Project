@@ -8,7 +8,7 @@ import './App.css'
 import Header from './components/headers/Header.jsx'
 import Home from './components/home/Home'
 import LoginPage from './components/login/LoginPage'
-import Profile from './components/profile/Profile'
+import Profile from './components/profile/ProfilePage'
 import SettingsPage from './components/settings/SettingsPage'
 
 // css for containers

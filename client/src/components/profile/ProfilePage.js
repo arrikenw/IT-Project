@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
 })
 
-function Profile({ user, token, history, location }) {
+function ProfilePage({ user, token, history, location }) {
   const [filterValues, setFilterValues] = useState('')
   const [sortField, setSortField] = useState('createdAt')
   const [sortDirection, setSortDirectionn] = useState('desc')
@@ -61,4 +61,4 @@ function Profile({ user, token, history, location }) {
   )
 }
 
-export default withRouter(Profile)
+export default withRouter(ProfilePage)

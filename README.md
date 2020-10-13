@@ -233,9 +233,14 @@ JSON can also include the optional key-value pairs:
 {
    "organisation": "<userOrganisation>",
    "professionalFields": ["<fieldOne>", "<fieldTwo>", "<...>"],
-   "DOB": "<userDateOfBirth>",
-   "phone": "<userPhoneNumber>",
-   "bio": "<userBiography>"
+   "dateOfBirth": "<userDateOfBirth>",
+   "phoneNumber": "<userPhoneNumber>",
+   "biography": "<userBiography>",
+   "tags": ["<tagOne>", "<tagTwo>"],
+   "private": "boolean",
+   "phoneNumberPrivate": "boolean",
+   "emailPrivate": "boolean",
+   "profilePic": "<mediaID>"
 }
 ```
 Requirements:
@@ -332,17 +337,34 @@ Responses:
 #### Get Public User
 ###### Returns a list user's public details from a list user IDs
 Request to: `/api/user/getPublic` as a `POST` request
-
-Takes: a JSON in the body, requiring the key-value pairs:
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and an optional JSON body, which can include the optional key-value pair:
 ```JSON
 {
-    "ids": ["<userIDOne>", "<userIDTwo", "<...>"]
+   "search": "<searchString>",
+   "filters": {
+       "filterFieldOne": "<filterValueOne>",
+       "filterFieldTwo": "<filterValueTwo>"
+   },
+   "IDMatch": ["<postIDOne>", "<postIDTwo>"],
+   "limit": "<numberOfPosts>",
+   "skip": "<numberOfPostsToSkip>",
+   "sortField": "<fieldToSortBy>",
+   "sortDirection": "<directionOfSort>"
 }
 ```
 Requirements:
-- No headers required
-- user IDs must belong to valid users in the database
-
+- Authorization header is required
+- Authentication token must be a valid token
+- filters is a JSON of key value pairs that the posts must have
+- IDMatch is a list of IDs that a post much match atleast one of
+- limit is the amount of users which should be returned
+- skip is the amount  of users which should be skipped 
+- sortField is a valid field from posts to which the result should be sorted by
+- sortDirection is either "asc" or "desc"
 Responses:
 - On success: 
   - the response will have status code of "200" and will have a list of the users' public details
@@ -583,3 +605,535 @@ Responses:
   - ```
     "Media deletion failed - <reasonForError>"
     ```
+
+### Posts
+#### Add Post 
+###### Creates a new post in the database and returns the posts's ID
+Request to: `/api/post/add` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON in the body, requiring the key-value pairs:
+```JSON
+{
+   "title": "<postTitle>",
+   "description": "<postDescription>"
+}
+```
+JSON can also include the optional key-value pair:
+```JSON
+{
+   "private": "<boolean>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- private must be a boolean: true or false
+
+Responses:
+- On success: 
+  - the response will have status code of "201" and will have the new post's id
+  - ```JSON
+    {
+       "id": "<postID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Add post not successful - <reasonForError>"
+    ```
+
+## Posts
+#### Get Post 
+###### Gets a lists of post from the database and which match the search requirements, must be public posts or belong to the searching user
+Request to: `/api/post/get` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and an optional JSON body, which can include the optional key-value pair:
+```JSON
+{
+   "search": "<searchString>",
+   "filters": {
+       "filterFieldOne": "<filterValueOne>",
+       "filterFieldTwo": "<filterValueTwo>"
+   },
+   "IDMatch": ["<postIDOne>", "<postIDTwo>"],
+   "limit": "<numberOfPosts>",
+   "skip": "<numberOfPostsToSkip>",
+   "sortField": "<fieldToSortBy>",
+   "sortDirection": "<directionOfSort>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- filters is a JSON of key value pairs that the posts must have
+- IDMatch is a list of IDs that a post much match atleast one of
+- limit is the amount of posts which should be returned
+- skip is the amount  of posts which should be skipped 
+- sortField is a valid field from posts to which the result should be sorted by
+- sortDirection is either "asc" or "desc"
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and will have an array of the matching posts
+  - ```JSON
+    [
+        {
+            "likedBy": ["<userID>", "<userID2>"],
+            "private": "<trueOrFalse>",
+            "id_": "<firstPostID>",
+            "title": "<postTitle>",
+            "userID":  "<createdByUserID>",
+            "description": "<postDescription>",
+            "comments": [
+                {
+                    "likeBy": ["<userID2>"],
+                    "userID": "<createdByUserID>",
+                    "comment": "<commentBody>",
+                    "updatedAt": "<lastUpdatedDateTime>",
+                    "createdAt": "<createdAtDateTime>"
+                }
+            ],
+            "updatedAt": "<lastUpdatedDateTime>",
+            "createdAt": "<createdAtDateTime>"
+        }
+    ]
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Get post not successful - <reasonForError>"
+    ```
+
+#### Add Post 
+###### Creates a new post with the given values for a logged in user
+Request to: `/api/post/add` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body:
+```JSON
+{
+   "title": "<postTitle>",
+   "mediaID": "<postMediaID>"
+}
+```
+JSON can also include the optional key-value pairs:
+```JSON
+{
+   "description": "<postDescription>",
+   "private": "<boolean>",
+   "thumbnailURL": "<thumbNailURLL>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- mediaID and thumbnailURL must be valid IDs from the media database
+Responses:
+- On success: 
+  - the response will have status code of "201" and will have an json of the new post ID
+  - ```JSON
+    {
+        "id": "<newPostID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Add post not successful - <reasonForError>"
+    ```
+
+#### Get Public Post 
+###### Gets a lists of post from the database and which match the search requirements, must be public posts
+Request to: `/api/post/getPublic` as a `POST` request
+
+Takes: and a JSON body, which can include the optional key-value pair:
+```JSON
+{
+   "search": "<searchString>",
+   "filters": {
+       "filterFieldOne": "<filterValueOne>",
+       "filterFieldTwo": "<filterValueTwo>"
+   },
+   "limit": "<numberOfPosts>",
+   "skip": "<numberOfPostsToSkip>",
+   "sortField": "<fieldToSortBy>",
+   "sortDirection": "<directionOfSort>"
+}
+```
+Requirements:
+- filters is a JSON of key value pairs that the posts must have
+- limit is the amount of posts which should be returned
+- skip is the amount  of posts which should be skipped 
+- sortField is a valid field from posts to which the result should be sorted by
+- sortDirection is either "asc" or "desc"
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and will have an array of the matching posts
+  - ```JSON
+    [
+        {
+            "likedBy": ["<userID>", "<userID2>"],
+            "private": "<trueOrFalse>",
+            "id_": "<firstPostID>",
+            "title": "<postTitle>",
+            "userID":  "<createdByUserID>",
+            "description": "<postDescription>",
+            "comments": [
+                {
+                    "likeBy": ["<userID2>"],
+                    "userID": "<createdByUserID>",
+                    "comment": "<commentBody>",
+                    "updatedAt": "<lastUpdatedDateTime>",
+                    "createdAt": "<createdAtDateTime>"
+                }
+            ],
+            "updatedAt": "<lastUpdatedDateTime>",
+            "createdAt": "<createdAtDateTime>"
+        }
+    ]
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Get public post not successful - <reasonForError>"
+    ```
+
+#### Update Post 
+###### Update a post belonging to the logged in user
+Request to: `/api/post/update` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pairs:
+```JSON
+{
+   "postID": "<updatePostID>",
+   "update": {
+       "postFieldOne": "<updatedPostFieldValue>",
+       "postFieldTwo": "<updatedPostFieldValue>"
+   }
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- the post being updated must belong to the logged in user (authorization token matches postID)
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and have the updated post's ID
+  - ```JSON
+    {
+        "postID": "<updatedPostID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Update post not successful - <reasonForError>"
+    ```
+
+#### Delete Post 
+###### Delete a post belonging to the logged in user
+Request to: `/api/post/delete` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pair:
+```JSON
+{
+   "postID": "<deletePostID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- the post being deleted must belong to the logged in user (authorization token matches postID)
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and have the deleted post's ID
+  - ```JSON
+    {
+        "postID": "<deletedPostID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Delete post not successful - <reasonForError>"
+    ```
+
+#### Like Post 
+###### Likes a post for a logged in user
+Request to: `/api/post/like` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pair:
+```JSON
+{
+   "postID": "<likePostID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- must be a valid postID
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and have the liked post's ID
+  - ```JSON
+    {
+        "postID": "<likedPostID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Like post not successful - <reasonForError>"
+    ```
+
+
+#### Unlike Post 
+###### Unlikes a post for a logged in user
+Request to: `/api/post/unlike` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pair:
+```JSON
+{
+   "postID": "<unlikePostID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- must be a valid postID
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and have the unliked post's ID
+  - ```JSON
+    {
+        "postID": "<unlikedPostID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Like post not successful - <reasonForError>"
+    ```
+
+## Comments
+#### Add Comment 
+###### Adds a comment to a post for a logged in user
+Request to: `/api/comment/add` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pairs:
+```JSON
+{
+   "postID": "<commentPostID>",
+   "comment": "<commentBody>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- postID must belong to a valid post
+
+Responses:
+- On success: 
+  - the response will have status code of "201" and will have the id of the post the comment was added to
+  - ```JSON
+    {
+        "postID": "<commentedPostID>",
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Add comment not successful - <reasonForError>"
+    ```
+ 
+#### Update Comment 
+###### Updates a comment of a post for a logged in user
+Request to: `/api/comment/update` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pairs:
+```JSON
+{
+   "postID": "<commentPostID>",
+   "commentID": "<updateCommentID>",
+   "comment": "<newCommentBody>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- postID must belong to a valid post
+- commentID must belong to the logged in user
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and will have the id of the updated comment
+  - ```JSON
+    {
+        "commentID": "<UpdatedCommentedID>",
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Update comment not successful - <reasonForError>"
+    ```
+ 
+#### Delete Comment 
+###### Deletes a comment of a post for a logged in user
+Request to: `/api/comment/delete` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pairs:
+```JSON
+{
+   "postID": "<commentPostID>",
+   "commentID": "<deleteCommentID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- postID must belong to a valid post
+- commentID must belong to the logged in user
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and will have the id of the deleted comment
+  - ```JSON
+    {
+        "commentID": "<DeletedCommentedID>",
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Delete comment not successful - <reasonForError>"
+    ```
+
+#### Like Comment 
+###### Likes a comment of a post for a logged in user
+Request to: `/api/comment/like` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pair:
+```JSON
+{
+   "postID": "<commentPostID>",
+   "commentID": "<likeCommentID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- must be a valid postID
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and have the liked comments's ID
+  - ```JSON
+    {
+        "CommentID": "<likedCommentID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Like comment not successful - <reasonForError>"
+    ```
+
+
+#### Unlike Comment 
+###### Unlikes a comment of a post for a logged in user
+Request to: `/api/comment/unlike` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON body, which must include key-value pair:
+```JSON
+{
+   "postID": "<commentPostID>",
+   "commentID": "<likeCommentID>",
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- must be a valid postID
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and have the unliked comments's ID
+  - ```JSON
+    {
+        "CommentID": "<unlikedCommentID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Unlike comment not successful - <reasonForError>"
+    ```
+

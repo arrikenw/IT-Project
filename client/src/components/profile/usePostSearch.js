@@ -22,9 +22,13 @@ export default function usePostSearch(
     setError(false)
     let cancel
     const skip = (pageNumber - 1) * 5
+    let url = 'api/post/getPublic';
+    if (token !== '') {
+      url = 'api/post/get';
+    }
     axios
       .post(
-        'api/post/get',
+        url,
         { skip, search: query, limit: 5, sortField, sortDirection },
         {
           headers: { Authorization: `Bearer ${token}` },

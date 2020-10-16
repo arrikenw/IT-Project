@@ -15,7 +15,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
 import SettingsIcon from '@material-ui/icons/Settings'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom'
+
+import someImage from '../../assets/logo512.png'
+import { Redirect, withRouter } from 'react-router-dom'
 import logo from '../../assets/personal-profile.svg'
 import MenuList from '@material-ui/core/MenuList'
 import Menu from '@material-ui/core/Menu'
@@ -25,7 +27,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PostAddIcon from '@material-ui/icons/PostAdd'
 
-function Header({ token, user, logout }) {
+
+function Header({ token, user, logout, history }) {
   const [redirect, setRedirect] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -122,8 +125,8 @@ function Header({ token, user, logout }) {
       <IconButton
         color="inherit"
         onClick={() => {
-          logout.call(this)
-          setRedirect(true)
+          logout()
+          history.push("/")
         }}
       >
         <ExitToAppIcon />
@@ -264,8 +267,10 @@ function Header({ token, user, logout }) {
 }
 
 Header.propTypes = {
+  history: PropTypes.object.isRequired,
   user: PropTypes.object,
   token: PropTypes.string,
+  logout: PropTypes.func.isRequired
 }
 
 Header.defaultProps = {
@@ -273,4 +278,4 @@ Header.defaultProps = {
   token: '',
 }
 
-export default Header
+export default withRouter(Header)

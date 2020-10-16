@@ -10,8 +10,10 @@ import Home from './components/home/Home'
 import LoginPage from './components/login/LoginPage'
 import Profile from './components/profile/Profile'
 import SettingsPage from './components/settings/SettingsPage'
+import ExpandPost from './components/profile/ExpandPost'
 import AddPost from "./components/AddPost/AddPost";
 import SignupPage from './components/signup/SignupPage';
+
 
 // css for containers
 const useStyles = makeStyles({
@@ -103,6 +105,9 @@ function App() {
           </Route>
           <Route path="/profile">
             <Profile token={token} user={user} />
+          </Route>
+          <Route path="/post">
+            <ExpandPost token={token} user={user} />
           </Route>
           <Route path="/settings">
             <SettingsPage token={token} user={user} />

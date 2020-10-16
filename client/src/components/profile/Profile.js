@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
 import InfinitePostScroll from './InfinitePostScroll'
 import ProfileDetails from './ProfileDetails'
+import PinnedPosts from "./PinnedPosts";
 
 const useStyles = makeStyles({
   bodyContainer: {
@@ -51,6 +52,15 @@ function Profile({ user, token, history, location }) {
         </div>
       </Grid>
       <Grid className={classes.bodyContainer} item xs={6}>
+          <div
+              style={{
+                  marginTop: '50px',
+                  marginRight: '50px',
+                  marginLeft: '100px',
+              }}
+          >
+            <PinnedPosts id={"5f7f5c9e16f6ed5044f6a8be"}/>
+          </div>
         <InfinitePostScroll
           sortField={sortField}
           sortDirection={sortDirection}

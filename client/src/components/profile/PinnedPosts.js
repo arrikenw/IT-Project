@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import Axios from "axios";
-import {Button, IconButton} from "@material-ui/core";
-import { Grid } from '@material-ui/core'
+import {Button, IconButton, Typography, Grid} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles'
 import ProfilePost from "./ProfilePost";
 
@@ -144,29 +143,36 @@ class PinnedPost extends Component {
                 <Grid container>
                     <Grid container>
                         <Grid item xs={4}>
-                            <div>
+                            <div style={{marginRight: "10px"}}>
                                 {(this.state.posts.length > 0) && (<ProfilePost post={this.state.posts[(this.state.i+0) % this.state.posts.length]} media={this.state.media[(this.state.i+0) % this.state.posts.length]} isPinned={true}/>)}
                             </div>
                         </Grid>
                         <Grid item xs={4}>
-                            <div>
+                            <div style={{marginRight: "10px"}}>
                                 {(this.state.posts.length > 1) && (<ProfilePost post={this.state.posts[(this.state.i+1) % this.state.posts.length]} media={this.state.media[(this.state.i+1) % this.state.posts.length]} isPinned={true}/>)}
                             </div>
                         </Grid>
                         <Grid item xs={4}>
-                            <div>
+                            <div style={{marginRight: "10px"}}>
                                 {(this.state.posts.length > 2) && (<ProfilePost post={this.state.posts[(this.state.i+2) % this.state.posts.length]} media={this.state.media[(this.state.i+2) % this.state.posts.length]} isPinned={true}/>)}
                             </div>
                         </Grid>
                     </Grid>
-                    <Grid item xs={11}>
+                    <Grid item xs={1}>
                         <IconButton variant="contained" size="large" color="primary" style={{float:"left"}} onClick={()=> {this.leftScroll(1);}}>
                             <ChevronLeftIcon />
                             LEFT
                         </IconButton>
                     </Grid>
+                    <Grid item xs={10}>
+                        <Grid container justify={"center"}>
+                            <Typography >
+                                <h1> The pinned posts! </h1>
+                            </Typography>
+                        </Grid>
+                    </Grid>
                     <Grid item xs={1}>
-                        <IconButton variant="contained" size="large" color="primary" style={{float:"right"}} onClick={()=> {this.rightScroll(1);}}>
+                        <IconButton size="large" color="primary" style={{float:"right"}} onClick={()=> {this.rightScroll(1);}}>
                             RIGHT
                             <ChevronRightIcon />
                         </IconButton>

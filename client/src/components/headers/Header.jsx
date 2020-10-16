@@ -16,9 +16,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import SettingsIcon from '@material-ui/icons/Settings'
 import PropTypes from 'prop-types'
 
-import someImage from '../../assets/logo512.png'
 import { Redirect, withRouter } from 'react-router-dom'
-import logo from '../../assets/personal-profile.svg'
 import MenuList from '@material-ui/core/MenuList'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -26,6 +24,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PostAddIcon from '@material-ui/icons/PostAdd'
+import logo from '../../assets/personal-profile.svg'
+import someImage from '../../assets/logo512.png'
 
 
 function Header({ token, user, logout, history }) {
@@ -137,7 +137,7 @@ function Header({ token, user, logout, history }) {
 
   const renderAvatar = () => {
     const profilePic = user.profilePic
-    console.log('profilePicID=', profilePic)
+    // console.log('profilePicID=', profilePic)
 
     return <Avatar href="`/profile?user=${user.userName}`" />
   }
@@ -149,7 +149,7 @@ function Header({ token, user, logout, history }) {
           <SearchIcon />
         </div>
         <InputBase
-          fullWidth="true"
+          fullWidth
           placeholder="Search…"
           classes={{
             root: classes.inputRoot,
@@ -231,6 +231,7 @@ function Header({ token, user, logout, history }) {
 
             <section className={classes.rightToolbar}>
               <Grid
+                item
                 style={{ minWidth: '40vh' }}
                 container
                 direction="row"
@@ -240,7 +241,8 @@ function Header({ token, user, logout, history }) {
                 <Grid item xs={4}>
                   <div style={{ marginTop: 2, display: 'flex' }}>
                     {renderAddPost()}
-                  </div>{' '}
+                  </div>
+                  {' '}
                 </Grid>
                 <Grid item xs={8}>
                   <div style={{ marginLeft: 25, display: 'flex' }}>

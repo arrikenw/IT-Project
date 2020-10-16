@@ -14,7 +14,8 @@ import {
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ShareIcon from "@material-ui/icons/Share";
 
-//https://stackoverflow.com/questions/50272814/image-on-material-ui-cardmedia
+
+// https://stackoverflow.com/questions/50272814/image-on-material-ui-cardmedia
 const styles = theme => ({
   postCard: {
     height: '600px',
@@ -22,7 +23,7 @@ const styles = theme => ({
   },
   media: {
     height: 0,
-    //paddingTop: '56.25%', // 16:9,
+    // paddingTop: '56.25%', // 16:9,
     paddingTop: '40%',
     marginTop:'0',
   }
@@ -42,7 +43,7 @@ class ProfilePost extends Component {
 
 
   componentDidMount() {
-    //if media is already stored
+    // if media is already stored
     if (this.props.media){
       console.log("USING STORED MEDIA");
       this.setState({
@@ -57,7 +58,8 @@ class ProfilePost extends Component {
 
     const controllerUrl = "/api/media/";
     const payload = {
-      mediaID: this.props.post.mediaID,
+      // TODO make thumbnail fetching work properly
+      mediaID: this.props.post.thumbnailURL,
     };
     const headers = {
       headers: {
@@ -82,14 +84,14 @@ class ProfilePost extends Component {
   }
 
   componentDidUpdate(props){
-    //if media is already stored
+    // if media is already stored
     if (this.props.media && this.props.media.contentStr != this.state.contentStr){
       console.log("USING STORED MEDIA");
       this.setState({
         contentStr: this.props.media.contentStr,
         mimeType: this.props.media.mimeType,
         contentCategory: this.props.media.contentCategory})
-      return;
+      
     }
   }
 
@@ -108,37 +110,37 @@ class ProfilePost extends Component {
       aspectChange = {paddingTop: '56.25%'};
     }
     return (
-        <Card className={classes.postCard} style={heightChange}>
-          <CardActionArea onClick={ () => { this.props.history.push("/post?post="+this.props.post._id); } }>
-            <CardContent style={{paddingBottom: "0px"}}>
-              <CardMedia square className={classes.media} style={aspectChange} image={this.state.contentStr}></CardMedia>
-              <div style={textLimit}>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {this.props.post.title}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  {this.props.post.description}
-                </Typography>
-              </div>
-            </CardContent>
-          </CardActionArea>
-          <CardActions style={{paddingBottom: "0px"}}>
-            <div style={{float:"left"}}>
-              <IconButton size="large" color="primary">
-                <ThumbUpIcon />
-                Like
-              </IconButton>
-              9 trillion likes
+      <Card className={classes.postCard} style={heightChange}>
+        <CardActionArea onClick={() => { this.props.history.push(`/post?post=${this.props.post._id}`); }}>
+          <CardContent style={{paddingBottom: "0px"}}>
+            <CardMedia className={classes.media} style={aspectChange} image={this.state.contentStr} />
+            <div style={textLimit}>
+              <Typography gutterBottom variant="h5" component="h2">
+                {this.props.post.title}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                {this.props.post.description}
+              </Typography>
             </div>
-            <div style={{float:"right"}}>
-              <IconButton size="large" color="primary">
-                <ShareIcon />
-                Share
-              </IconButton>
-            </div>
+          </CardContent>
+        </CardActionArea>
+        <CardActions style={{paddingBottom: "0px"}}>
+          <div style={{float:"left"}}>
+            <IconButton size="medium" color="primary">
+              <ThumbUpIcon />
+              Like
+            </IconButton>
+            9 trillion likes
+          </div>
+          <div style={{float:"right"}}>
+            <IconButton size="medium" color="primary">
+              <ShareIcon />
+              Share
+            </IconButton>
+          </div>
 
-          </CardActions>
-        </Card>
+        </CardActions>
+      </Card>
     )
   }
 }

@@ -2,10 +2,10 @@ import React, {Component} from "react";
 import Axios from "axios";
 import {Button, IconButton, Typography, Grid} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles'
-import ProfilePost from "./ProfilePost";
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ProfilePost from "./ProfilePost";
 
 class PinnedPost extends Component {
 
@@ -33,7 +33,7 @@ class PinnedPost extends Component {
     }
 
     getMediaAndNextPost = (mID, postids, exportPosts, exportMedia, errcount) => {
-        console.log("getting media for id: "+mID);
+        // console.log(`getting media for id: ${mID}`);
         const controllerUrl = "/api/media/";
         const payload = {
             mediaID: mID,
@@ -43,7 +43,6 @@ class PinnedPost extends Component {
                 Authorization: `Bearer ${window.localStorage.getItem("token")}`,
             },
         };
-        console.log("posting");
         Axios.post(controllerUrl, payload, headers)
             .then((res) => {
                 if (res.status === 200) {
@@ -54,10 +53,10 @@ class PinnedPost extends Component {
                         contentCategory: res.data.contentCategory,
                     };
                     exportMedia.push(newmedia);
-                    console.log("exportmedia len:" + exportMedia.length);
+                    // console.log(`exportmedia len:${  exportMedia.length}`);
                     this.getPinnedPostContent(postids, exportPosts, exportMedia, errcount);
                 }else{
-                    console.log(res.status);
+                     console.log(res.status);
                     if (errcount < 3){
                         this.getMediaAndNextPost(mID, postids, exportPosts, exportMedia, errcount + 1);
                     }
@@ -74,39 +73,39 @@ class PinnedPost extends Component {
 
     getPinnedPostContent = (postids, exportPosts, exportMedia, errcount) => {
         if (postids.length <= 0){
-            //return once we have processed all posts
+            // return once we have processed all posts
             this.setState({posts: exportPosts});
             this.setState({media: exportMedia});
             this.setState({okToRender: true});
             return;
         }
-        console.log("trying id: "+postids[0]);
+        // console.log(`trying id: ${postids[0]}`);
 
-        //recursively fetch first element and shorten array
+        // recursively fetch first element and shorten array
         const headers = {
-            headers: { 'Authorization': 'Bearer '+ window.localStorage.getItem("token")}
+            headers: { 'Authorization': `Bearer ${ window.localStorage.getItem("token")}`}
         }
-        let postUrl = '/api/post/get'
+        const postUrl = '/api/post/get'
         const postPayload = {
             filters: {_id: postids[0]}
         }
 
         Axios.post(postUrl, postPayload, headers).then( async (res) => {
-            postids.shift(); //pop off first element
+            postids.shift(); // pop off first element
             if (res.status == 200 || res.status == "success"){
-                //todo store media here also
+                // todo store media here also
                 exportPosts.push(res.data[0]);
                 this.getMediaAndNextPost(res.data[0].mediaID, postids, exportPosts, exportMedia, errcount);
             }else{
-                //TODO Look into this
-                //idk if we should add an error post or just ignore. continuing recursion for now
+                // TODO Look into this
+                // idk if we should add an error post or just ignore. continuing recursion for now
                 this.getPinnedPostContent(postids, exportPosts, exportMedia, errcount);
             }
         }).catch((err) => {
-            //TODO look into this
-            //idk if we should add an error post or just ignore. continuing recursion for now
+            // TODO look into this
+            // idk if we should add an error post or just ignore. continuing recursion for now
 
-            //stop attempting after 3 failures
+            // stop attempting after 3 failures
             if (errcount < 3) {
                 this.getPinnedPostContent(postids, exportPosts, exportMedia, errcount + 1);
             }
@@ -117,13 +116,13 @@ class PinnedPost extends Component {
     componentDidMount() {
         const controllerUrl = "/api/user/getPublic";
         const payload = {
-            ids: [this.props.id]
+            filters: {_id: this.props.id}
         }
         Axios({url: controllerUrl, method: "post", data: payload})
             .then((res) => {
-                if (res.status == 200 || res.status == "success") {
+                if (res.status === 200 ) {
                     this.setState({ids: res.data[0].pinnedPosts});
-                    console.log("PINNED POST IDS");
+                     console.log("PINNED POST IDS");
                     console.log(res.data[0].pinnedPosts);
                     this.getPinnedPostContent(res.data[0].pinnedPosts, [], [], 0);
                 }
@@ -140,44 +139,45 @@ class PinnedPost extends Component {
     render(){
         if (this.state.ids && this.state.okToRender){
             return (
+              <Grid container>
                 <Grid container>
-                    <Grid container>
-                        <Grid item xs={4}>
-                            <div style={{marginRight: "10px"}}>
-                                {(this.state.posts.length > 0) && (<ProfilePost post={this.state.posts[(this.state.i+0) % this.state.posts.length]} media={this.state.media[(this.state.i+0) % this.state.posts.length]} isPinned={true}/>)}
-                            </div>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <div style={{marginRight: "10px"}}>
-                                {(this.state.posts.length > 1) && (<ProfilePost post={this.state.posts[(this.state.i+1) % this.state.posts.length]} media={this.state.media[(this.state.i+1) % this.state.posts.length]} isPinned={true}/>)}
-                            </div>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <div style={{marginRight: "10px"}}>
-                                {(this.state.posts.length > 2) && (<ProfilePost post={this.state.posts[(this.state.i+2) % this.state.posts.length]} media={this.state.media[(this.state.i+2) % this.state.posts.length]} isPinned={true}/>)}
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <IconButton variant="contained" size="large" color="primary" style={{float:"left"}} onClick={()=> {this.leftScroll(1);}}>
-                            <ChevronLeftIcon />
-                            LEFT
-                        </IconButton>
-                    </Grid>
-                    <Grid item xs={10}>
-                        <Grid container justify={"center"}>
-                            <Typography >
-                                <h1> The pinned posts! </h1>
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <IconButton size="large" color="primary" style={{float:"right"}} onClick={()=> {this.rightScroll(1);}}>
-                            RIGHT
-                            <ChevronRightIcon />
-                        </IconButton>
-                    </Grid>
-                </Grid>)
+                  <Grid item xs={4}>
+                    <div style={{marginRight: "10px"}}>
+                      {(this.state.posts.length > 0) && (<ProfilePost post={this.state.posts[(this.state.i+0) % this.state.posts.length]} media={this.state.media[(this.state.i+0) % this.state.posts.length]} isPinned />)}
+                    </div>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <div style={{marginRight: "10px"}}>
+                      {(this.state.posts.length > 1) && (<ProfilePost post={this.state.posts[(this.state.i+1) % this.state.posts.length]} media={this.state.media[(this.state.i+1) % this.state.posts.length]} isPinned />)}
+                    </div>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <div style={{marginRight: "10px"}}>
+                      {(this.state.posts.length > 2) && (<ProfilePost post={this.state.posts[(this.state.i+2) % this.state.posts.length]} media={this.state.media[(this.state.i+2) % this.state.posts.length]} isPinned />)}
+                    </div>
+                  </Grid>
+                </Grid>
+                <Grid item xs={1}>
+                  <IconButton variant="contained" size="medium" color="primary" style={{float:"left"}} onClick={()=> {this.leftScroll(1);}}>
+                    <ChevronLeftIcon />
+                    LEFT
+                  </IconButton>
+                </Grid>
+                <Grid item xs={10}>
+                  <Grid container justify="center">
+                    <Typography variant="h4">
+                      The pinned posts!
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid item xs={1}>
+                  <IconButton size="medium" color="primary" style={{float:"right"}} onClick={()=> {this.rightScroll(1);}}>
+                    RIGHT
+                    <ChevronRightIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+)
         }
         return <div> Sorry, no posts have been pinned yet.</div>
 

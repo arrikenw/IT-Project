@@ -52,15 +52,15 @@ function Profile({ user, token, history, location }) {
         </div>
       </Grid>
       <Grid className={classes.bodyContainer} item xs={6}>
-          <div
-              style={{
+        <div
+          style={{
                   marginTop: '50px',
                   marginRight: '50px',
                   marginLeft: '100px',
               }}
-          >
-            <PinnedPosts id={"5f7f5c9e16f6ed5044f6a8be"}/>
-          </div>
+        >
+          <PinnedPosts id="5f7f5c9e16f6ed5044f6a8be" /> 
+        </div>
         <InfinitePostScroll
           sortField={sortField}
           sortDirection={sortDirection}

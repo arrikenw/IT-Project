@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { AppBar, Button, Toolbar, Typography, Hidden } from '@material-ui/core'
 import PropTypes from 'prop-types'
 
-import { Redirect } from 'react-router-dom'
+import { Redirect, withRouter } from "react-router-dom";
 import someImage from '../../assets/logo512.png'
 
-function Header({ token, user, logout }) {
+function Header({ token, user, logout, history }) {
   const [redirect, setRedirect] = useState(false)
 
   const renderUser = () => {
@@ -48,8 +48,8 @@ function Header({ token, user, logout }) {
         <Button
           color="inherit"
           onClick={() => {
-            logout.call(this)
-            setRedirect(true)
+            logout()
+            history.push("/")
           }}
         >
           <Typography variant="h6">Logout</Typography>
@@ -86,8 +86,10 @@ function Header({ token, user, logout }) {
 }
 
 Header.propTypes = {
+  history: PropTypes.object.isRequired,
   user: PropTypes.object,
   token: PropTypes.string,
+  logout: PropTypes.func.isRequired
 }
 
 Header.defaultProps = {
@@ -95,4 +97,4 @@ Header.defaultProps = {
   token: '',
 }
 
-export default Header
+export default withRouter(Header)

@@ -106,7 +106,15 @@ const getPublicUser = (req, res) => {
     const payload = JSON.parse(JSON.stringify(result));
 
     for (let i = 0; i < payload.length; i += 1) {
-      delete payload[i].email;
+      if (payload[i].phoneNumberPrivate) {
+        delete payload[i].phoneNumber;
+      }
+      if (payload[i].emailPrivate) {
+        delete payload[i].email;
+      }
+      delete payload[i].emailPrivate;
+      delete payload[i].phoneNumberPrivate;
+      delete payload[i].private;
       delete payload[i].password;
       delete payload[i].createdAt;
       delete payload[i].updatedAt;

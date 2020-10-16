@@ -1,138 +1,134 @@
-import React, { useState } from 'react'
-import Axios from 'axios'
-import PropTypes from 'prop-types'
+import React, { useState } from "react";
+import { TextField, FormControlLabel, Checkbox } from '@material-ui/core'
+import DateFnsUtils from '@date-io/date-fns';
 import {
-    Card,
-    CardContent,
-    Typography,
-    TextField,
-} from '@material-ui/core'
-import Picker from 'react-picker'
-import { DatePicker } from "@material-ui/pickers"
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import PropTypes from 'prop-types'
+
+function BioInfoForm({ dateOfBirth, setDateOfBirth, organisation, setOrganisation,
+                       phoneNumberPrivate, setPhoneNumberPrivate,
+                       phoneNumber, setPhoneNumber, biography, setBiography,
+                       accountPrivate, setAccountPrivate }) {
 
 
-function BioInfoForm({ setGlobalToken }) {
-    const [organisation, setOrganisation] = useState('')
-    const [professionalField, setProfessionalField] = useState('')
-    const [phoneNumber, setPhoneNumber] = useState('')
-    const [gender, setGender] = useState('')
-    const [dob, setDOB] = useState(new Date());
-    const [privacyLevel, setPrivacyLevel] = useState('')
+  const changeDate = (date) => {
+    setDateOfBirth(date);
+  };
 
-    const changeOrganisation = (e) => {
-        setOrganisation(e.target.value)
-    }
-    const changeProfessionalField = (e) => {
-        setProfessionalField(e.target.value)
-    }
-    const changePhoneNumber = (e) => {
-        setPhoneNumber(e.target.value)
-    }
-    const changeGender = (e) => {
-        setGender(e.target.value)
-    }
-    const changeDOB = (e) => {
-        setDOB(e.target.value)
-    }
-    const changePrivacyLevel = (e) => {
-        setPrivacyLevel(e.target.value)
-    }
+  const changeOrganisation = (e) => {
+    setOrganisation(e.target.value)
+  };
 
-    const biosignup = () => {
-        const payload = {
-            email,
-            password,
-        }//NEED TO WORK ON THIS!!!
+  const changePhoneNumberPrivate = (e) => {
+    setPhoneNumberPrivate(prev => !prev)
+  };
 
-        Axios.post('api/user/signup', payload)
-            .then((resp) => {
-                setGlobalToken.call(this, resp.data.token)
-                setRedirect(true)
-            })
-            .catch((err) => {
-                console.error(err)
-                window.location.reload(false)
-            })
-    }
+  const changePhoneNumber = (e) => {
+    setPhoneNumber(e.target.value)
+  }
 
-    return (
-        <Card>
-            <CardContent>
-                <Typography variant="h5">Signup</Typography>
-                <form>
-                    <div style={{ marginTop: '20px' }}>
-                        <TextField
-                            id="signup-firstname"
-                            label="Enter Your Organisation"
-                            variant="outlined"
-                            type="organisation"
-                            fullWidth
-                            value={organisation}
-                            onChange={changeOrganisation}
-                        />
-                    </div>
-                    <div style={{ marginTop: '20px' }}>
-                        <TextField
-                            id="signup-lastname"
-                            label="Enter Your Professional Field"
-                            variant="outlined"
-                            type="professionalField"
-                            fullWidth
-                            value={professionalField}
-                            onChange={changeProfessionalField}
-                        />
-                    </div>
-                    <div style={{ marginTop: '20px' }}>
-                        <TextField
-                            id="signup-username"
-                            type="phoneNumber"
-                            label="Enter Phone Number"
-                            variant="outlined"
-                            fullWidth
-                            value={phoneNumber}
-                            onChange={changePhoneNumber}
-                        />
-                    </div>
-                    <div style={{ marginTop: '20px' }}>
-                        <Picker
-                            ref="genderSelection"
-                            value={gender}
-                            options={['Male','Female','Other']}
-                            onChange={changeGender}
-                            width="600px"
-                        >
-                        </Picker>
-                    </div>
-                    <div style={{ marginTop: '20px' }}>
-                        <DatePicker
-                            disableFuture
-                            openTo="year"
-                            format="dd/MM/yyyy"
-                            label="Date of Birth"
-                            views={["year", "month", "date"]}
-                            value={dob}
-                            onChange={changeDOB}
-                        />
-                    </div>
-                    <div style={{ marginTop: '20px' }}>
-                        <TextField
-                            id="signup-email"
-                            label="Enter Your Privacy Level"
-                            variant="outlined"
-                            type="privacyLevel"
-                            fullWidth
-                            value={privacyLevel}
-                            onChange={changePrivacyLevel}
-                        />
-                    </div>
-                </form>
-            </CardContent>
-        </Card>
-    )
+  const changeBiography = (e) => {
+    setBiography(e.target.value)
+  };
+
+  const changeAccountPrivate = (e) => {
+    setAccountPrivate(prev => !prev)
+  };
+
+
+  return (
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <div>
+        <form>
+          <div>
+            <KeyboardDatePicker
+              disableToolbar
+              variant="inline"
+              format="dd/MM/yyyy"
+              margin="normal"
+              id="date-picker-inline"
+              label="Date of Birth"
+              value={dateOfBirth}
+              onChange={changeDate}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <TextField
+              id="signup-lastname"
+              label="Enter your organisation"
+              variant="outlined"
+              type="text"
+              fullWidth
+              value={organisation}
+              onChange={changeOrganisation}
+            />
+          </div>
+          <div style={{ marginTop: '5px' }}>
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  checked={phoneNumberPrivate} 
+                  onClick={changePhoneNumberPrivate}
+                  name="phoneNumberPrivate"
+                />
+                )}
+              label="Phone number is private"
+            />
+            <TextField
+              id="signup-lastname"
+              label="Phone Number"
+              variant="outlined"
+              type="text"
+              fullWidth
+              value={phoneNumber}
+              onChange={changePhoneNumber}
+            />
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <TextField
+              id="signup-lastname"
+              label="biography"
+              variant="outlined"
+              type="text"
+              fullWidth
+              multiline
+              rows={6}
+              value={biography}
+              onChange={changeBiography}
+            />
+          </div>
+          <div style={{marginTop: "5px"}}>
+            <FormControlLabel
+              control={<Checkbox name="accountPrivate" checked={accountPrivate} onClick={changeAccountPrivate} />}
+              label="Account profile is private"
+            />
+          </div>
+        </form>
+
+      </div>
+    </MuiPickersUtilsProvider>
+  );
 }
 
 BioInfoForm.propTypes = {
-    setGlobalToken: PropTypes.func.isRequired,
-}
+  dateOfBirth: PropTypes.object.isRequired,
+  setDateOfBirth: PropTypes.func.isRequired,
+  organisation: PropTypes.string.isRequired,
+  setOrganisation: PropTypes.func.isRequired,
+  phoneNumberPrivate: PropTypes.bool.isRequired,
+  setPhoneNumberPrivate: PropTypes.func.isRequired,
+  phoneNumber: PropTypes.string.isRequired,
+  setPhoneNumber: PropTypes.func.isRequired,
+  biography:PropTypes.string.isRequired,
+  setBiography: PropTypes.func.isRequired,
+  accountPrivate: PropTypes.bool.isRequired,
+  setAccountPrivate: PropTypes.func.isRequired,
 
-export default BioInfoForm
+}
+export default BioInfoForm;

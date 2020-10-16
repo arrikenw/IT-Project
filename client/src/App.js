@@ -10,6 +10,7 @@ import Home from './components/home/Home'
 import LoginPage from './components/login/LoginPage'
 import Profile from './components/profile/Profile'
 import SettingsPage from './components/settings/SettingsPage'
+import AddPost from "./components/AddPost/AddPost";
 
 // css for containers
 const useStyles = makeStyles({
@@ -104,6 +105,9 @@ function App() {
           </Route>
           <Route path="/settings">
             <SettingsPage token={token} user={user} />
+          </Route>
+          <Route path="/addpost">
+            <AddPost token={token} />
           </Route>
         </Grid>
       </Router>

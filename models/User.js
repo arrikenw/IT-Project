@@ -30,20 +30,23 @@ const userSchema = new Schema(
       required: true,
     },
     profilePic: { type: mongoose.Schema.Types.ObjectId },
-    pinnedPosts: [{type: mongoose.Schema.Types.ObjectID, ref: "Posts"}], //idk if should be "posts" or "Posts"
+    pinnedPosts: [{ type: mongoose.Schema.Types.ObjectID, ref: "Posts" }], // idk if should be "posts" or "Posts"
     password: { type: String, required: true, minLength: 8, maxLength: 50 },
     organisation: { type: String },
-    tags: [{type: String, maxLength:50}],
+    tags: [{ type: String, maxLength: 50 }],
     professionalFields: [String],
-    DOB: { type: Date },
-    phone: { type: String }, // research lengths etc. later - this is just initial setup
-    bio: { type: String, maxLength: 1000 },
+    dateOfBirth: { type: Date },
+    phoneNumber: { type: String }, // research lengths etc. later - this is just initial setup
+    biography: { type: String, maxLength: 1000 },
     role: {
       type: String,
       enum: ["User", "Admin"],
       default: "User",
       required: true,
     },
+    private: { type: Boolean, required: true, default: false },
+    phoneNumberPrivate: { type: Boolean, required: true, default: true },
+    emailPrivate: { type: Boolean, required: true, default: true },
   },
   { timestamps: true, collection: "Users" }
 );

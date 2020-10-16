@@ -23,7 +23,7 @@ function LoginPage({ setGlobalToken }) {
   )
 }
 
-LoginForm.propTypes = {
+LoginPage.propTypes = {
   setGlobalToken: PropTypes.func.isRequired,
 }
 

@@ -20,9 +20,9 @@ const postSchema = new Schema(
     thumbnailURL: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "media",
-     required: true
+      required: true,
     },
-    contentCategory: {type: String, maxLength:"20", required: true},
+    contentCategory: { type: String, maxLength: "20", required: true },
     comments: [comment],
     likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
     private: { type: Boolean, require: true, default: false },

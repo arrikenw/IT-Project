@@ -31,7 +31,9 @@ function Profile({ user, token, history, location }) {
   const query = new URLSearchParams(location.search)
   const userName = query.get('user')
   if (!userName) {
-    history.push(`/profile?user=${user.userName}`)
+    if (user.userName) {
+      history.push(`/profile?user=${user.userName}`)
+    }
   }
   const classes = useStyles()
 
@@ -46,7 +48,7 @@ function Profile({ user, token, history, location }) {
             marginLeft: '100px',
           }}
         >
-          <ProfileDetails user={user} />
+          <ProfileDetails user={user} userName={userName} />
         </div>
       </Grid>
       <Grid className={classes.bodyContainer} item xs={6}>

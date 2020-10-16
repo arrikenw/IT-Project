@@ -8,7 +8,6 @@ const sendHelper = (res, response) => {
   res.status(response.status).send(response.msg);
 };
 
-
 const getPost = (req, res) => {
   const user = req.user.id;
 
@@ -81,7 +80,7 @@ const getPost = (req, res) => {
 const getPublicPost = (req, res) => {
   const query = {};
   query.$and = [];
-  // search for public posts or posts that belong to the user
+  // search for public posts
   query.$and.push({ private: false });
 
   // if request has search term, search the post titles and descriptions for it
@@ -94,9 +93,16 @@ const getPublicPost = (req, res) => {
     });
   }
 
-  // if request searches for specific post by id, add it to the request
+  // if request searches for specific values for fields, add it to the request
   if (req.body.filters) {
     query.$and.push(req.body.filters);
+  }
+
+  // if request searches for a list of ids, sea add it to the request
+  if (req.body.IDMatch) {
+    query.$and.push({
+      _id: { $in: req.body.IDMatch },
+    });
   }
 
   // use given limit amount, otherwise use default value
@@ -145,20 +151,18 @@ const getPublicPost = (req, res) => {
     .catch(onError);
 };
 
-
-//done and dusted :cool:
+// done and dusted :cool:
 const addPost = (req, res) => {
-
   const onPostSave = (err, newPost) => {
     // catch different errors
     if (err) {
       if (err.message.startsWith("error name")) {
         console.log(
-            "addPost not successful: email address already has an account"
+          "addPost not successful: email address already has an account"
         );
         res.status(400);
         res.send(
-            "Add Post not successful - email address already has an account"
+          "Add Post not successful - email address already has an account"
         );
         return;
       }
@@ -172,16 +176,15 @@ const addPost = (req, res) => {
     console.log(`addPost successful: ${newPost._id}`);
     res.status(201);
     res.send({ id: newPost._id });
-    return;
   };
 
   const setThumbHelper = (req, payload) => {
-    if (!req.body.thumbnailURL){
-      let videoThumb = "5f736f876b93c95300af61e0";
-      let audioThumb = "5f736fae6b93c95300af61e1";
-      let imageThumb = "5f736fdd6b93c95300af61e2";
-      let textThumb = "5f7370026b93c95300af61e3";
-      let applicationThumb = "5f7370156b93c95300af61e4";
+    if (!req.body.thumbnailURL) {
+      const videoThumb = "5f736f876b93c95300af61e0";
+      const audioThumb = "5f736fae6b93c95300af61e1";
+      const imageThumb = "5f736fdd6b93c95300af61e2";
+      const textThumb = "5f7370026b93c95300af61e3";
+      const applicationThumb = "5f7370156b93c95300af61e4";
       switch (payload.contentCategory) {
         case "video":
           payload.thumbnailURL = videoThumb;
@@ -199,25 +202,20 @@ const addPost = (req, res) => {
           payload.thumbnailURL = applicationThumb;
           break;
       }
-    }
-    else{
+    } else {
       payload.thumbnailURL = req.body.thumbnailURL;
     }
 
-    if (req.body.private) {
-      payload.private = req.body.private;
-    }
-
     return payload;
-  }
+  };
 
-  if (!req.body.title){
+  if (!req.body.title) {
     console.log("addPost not successful: missing post title");
     res.status(400);
     res.send("Add post not successful - missing post attributes");
     return;
   }
-  if (!req.body.mediaID){
+  if (!req.body.mediaID) {
     console.log("addPost not successful: missing post media");
     res.status(400);
     res.send("Add post not successful - missing post media");
@@ -225,47 +223,54 @@ const addPost = (req, res) => {
   }
 
   Media.findById(req.body.mediaID)
-      .lean()
-      .then((doc) => {
-        console.log("checking if user has access to media");
-        if (
-            doc.creator.toString() !== req.user.id.toString() &&
-            doc.isPrivate !== false &&
-            !doc.canAccess.includes(mongoose.Types.ObjectId(req.user.id))
-        ) {
-          console.log("Poster does not have access permissions for media in their post\"");
-          sendHelper(res, {
-            status: 401,
-            msg:
-                "Add post was not successful - user does not have access permissions for media in their post",
-          });
-          return;
-        }else{
-          //build payload and set content category
-          const payload = { title: req.body.title, userID: req.user.id, mediaID: req.body.mediaID};
-          if (req.body.description) {
-            payload.description = req.body.description;
-          }
-          payload.contentCategory = doc.contentCategory;
-          setThumbHelper(req, payload);
-          console.log("Finished building payload");
-          const data = new PostModel(payload);
-          data.save(onPostSave);
-          return;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+    .lean()
+    .then((doc) => {
+      console.log("checking if user has access to media");
+      if (
+        doc.creator.toString() !== req.user.id.toString() &&
+        doc.isPrivate !== false &&
+        !doc.canAccess.includes(mongoose.Types.ObjectId(req.user.id))
+      ) {
+        console.log(
+          'Poster does not have access permissions for media in their post"'
+        );
         sendHelper(res, {
-          status: 503,
+          status: 401,
           msg:
-              "Add post was not successful - error checking media information in database",
+            "Add post was not successful - user does not have access permissions for media in their post",
         });
+      } else {
+        // build payload and set content category
+        const payload = {
+          title: req.body.title,
+          userID: req.user.id,
+          mediaID: req.body.mediaID,
+        };
+        if (req.body.description) {
+          payload.description = req.body.description;
+        }
+        if (req.body.private) {
+          payload.private = req.body.private;
+        }
+        payload.contentCategory = doc.contentCategory;
+        setThumbHelper(req, payload);
+        console.log("Finished building payload");
+        const data = new PostModel(payload);
+        data.save(onPostSave);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      sendHelper(res, {
+        status: 503,
+        msg:
+          "Add post was not successful - error checking media information in database",
       });
+    });
 };
 
 const updatePost = (req, res) => {
-  const { userID } = req.user;
+  const { id } = req.user;
   const postID = req.body.postID;
   const update = JSON.parse(JSON.stringify(req.body.update));
 
@@ -287,11 +292,17 @@ const updatePost = (req, res) => {
     res.send(`update not successful - could not find post ${postID}`);
   };
 
-  PostModel.updateOne({ _id: postID, userID }, update, onUpdatePost());
+  if (!req.body.postID) {
+    console.log(`updatePost not successful: missing post ID`);
+    res.status(400);
+    res.send(`update not successful - missing post ID`);
+  }
+
+  PostModel.updateOne({ _id: postID, userID: id }, update, onUpdatePost);
 };
 
 const deletePost = (req, res) => {
-  const { userID } = req.user;
+  const { id } = req.user;
   const postID = req.body.postID;
 
   const onDeletePost = (err, results) => {
@@ -302,7 +313,7 @@ const deletePost = (req, res) => {
       return;
     }
     if (results.n === 1) {
-      console.log(`deletePost successful: updated post ${postID}`);
+      console.log(`deletePost successful: deleted post ${postID}`);
       res.status(200);
       res.send({ postID });
       return;
@@ -312,11 +323,11 @@ const deletePost = (req, res) => {
     res.send(`delete not successful - could not find post ${postID}`);
   };
 
-  PostModel.deleteOne({ _id: postID, userID }, onDeletePost());
+  PostModel.deleteOne({ _id: postID, userID: id }, onDeletePost);
 };
 
 const likePost = (req, res) => {
-  const { userID } = req.user;
+  const { id } = req.user;
   const postID = req.body.postID;
 
   const onLikePost = (err, results) => {
@@ -339,13 +350,13 @@ const likePost = (req, res) => {
 
   PostModel.updateOne(
     { _id: postID },
-    { $addToSet: { likedBy: userID } },
+    { $addToSet: { likedBy: id } },
     onLikePost
   );
 };
 
 const unlikePost = (req, res) => {
-  const { userID } = req.user;
+  const { id } = req.user;
   const postID = req.body.postID;
 
   const onUnlikePost = (err, results) => {
@@ -368,7 +379,7 @@ const unlikePost = (req, res) => {
 
   PostModel.updateOne(
     { _id: postID },
-    { $pull: { likedBy: userID } },
+    { $pull: { likedBy: id } },
     onUnlikePost
   );
 };

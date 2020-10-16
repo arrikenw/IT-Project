@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import Axios from 'axios'
 import {
   Grid,
   Paper,
@@ -26,10 +27,53 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     textAlign: 'center',
   },
+  dividers: {
+    backgroundColor: "black"
+  }
 }))
 
-function ProfileDetails({ user }) {
+function ProfileDetails({ user, userName }) {
+  const [currentUser, setCurrentUser] = useState(() => {
+    if (user.userName === userName) {
+      return user;
+    }
+    return ''
+  });
   const classes = useStyles()
+
+  const getUser = () => {
+    if (currentUser === "" || currentUser.userName !== userName) {
+      const payload = {'filters': {userName}}
+      Axios.post('api/user/getPublic', payload).then((res) => {
+        if (res.data.length > 0) {
+          setCurrentUser(res.data[0])
+
+        }
+      })
+
+    }
+  }
+
+  useEffect(() => {
+    getUser();
+    console.log(currentUser)
+  })
+
+
+  const getProfessionalFields = () => {
+    if (currentUser === '' ) {
+      return ''
+    }
+    let fields = ""
+    currentUser.professionalFields.forEach((field) => {
+      console.log(field)
+      if (fields !== "") {
+        fields += ", "
+      }
+      fields += field
+    })
+    return fields
+  }
 
   return (
     <List className={classes.root} component="nav" aria-label="mailbox folders">
@@ -41,24 +85,44 @@ function ProfileDetails({ user }) {
         />
       </ListItem>
       <ListItem className={classes.center}>
-        <ListItemText>{user.userName}</ListItemText>
+        <ListItemText>{currentUser.userName}</ListItemText>
       </ListItem>
-      <Divider />
-      <ListItem divider>
+      <ListItem>
         <ListItemText>
-          {user.firstName} {user.lastName}
+          {currentUser.firstName}
+          {' '}
+          {currentUser.lastName}
         </ListItemText>
       </ListItem>
+      <Divider variant="middle" />
       <ListItem>
-        <ListItem>
-          <ListItemText>{user.bio}</ListItemText>
-        </ListItem>
+        <ListItemText>
+          Biography:
+          <br />
+          {currentUser.biography}
+        </ListItemText>
       </ListItem>
-      <Divider light />
+      <Divider variant="middle" />
       <ListItem>
-        <ListItem>
-          <ListItemText>{user.organisation}</ListItemText>
-        </ListItem>
+        <ListItemText>
+          Organsiation:
+          <br />
+          {currentUser.organisation}
+        </ListItemText>
+      </ListItem>
+      <Divider variant="middle" />
+      <ListItem>
+        <ListItemText>
+          Professional Fields:
+          <br />
+          {getProfessionalFields()}
+        </ListItemText>
+      </ListItem>
+      <Divider className={classes.dividers} />
+      <ListItem>
+        <ListItemText>
+          View:
+        </ListItemText>
       </ListItem>
     </List>
   )

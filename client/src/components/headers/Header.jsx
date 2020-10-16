@@ -16,6 +16,7 @@ import PostAddIcon from '@material-ui/icons/PostAdd';
 
 function Header({ token, user, logout }) {
   const [redirect, setRedirect] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const useStyles = makeStyles(theme => ({
     leftToolbar:{
@@ -51,10 +52,11 @@ function Header({ token, user, logout }) {
       paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
       width: "100%"
     }
+
   }));
 
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
+ 
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);

@@ -1,39 +1,71 @@
-import React, {Component} from "react";
+import React, {useEffect, useState} from "react";
 import Axios from "axios";
-import {Button, IconButton, Typography, Grid} from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles'
-
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import {
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    CircularProgress,
+    Grid,
+    IconButton,
+    Typography
+} from "@material-ui/core";
+import ProfileDetails from "./ProfileDetails";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ShareIcon from "@material-ui/icons/Share";
+import {withRouter} from "react-router-dom";
+import {makeStyles} from "@material-ui/core/styles";
 import ProfilePost from "./ProfilePost";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
-class PinnedPost extends Component {
 
-    constructor(props){
-        super(props);
-        this.state = {ids: [], i: 0, posts: [], media: [], okToRender: false}
-        this.leftScroll = this.leftScroll.bind(this);
-        this.rightScroll = this.rightScroll.bind(this);
-        this.getPinnedPostContent = this.getPinnedPostContent.bind(this);
-        this.getMediaAndNextPost = this.getMediaAndNextPost.bind(this);
+const useStyles = makeStyles({
+    bodyContainer: {
+        height: '100%',
+        width: ' 100%',
+        overflow: 'auto',
+    },
+    mainContainer: {
+        height: '100%',
+        width: '100%',
+        overflowX: 'hidden',
+    },
+
+
+
+    postCard: {
+        minHeight: '1000px',
+        marginBottom: '30px',
+    },
+    media: {
+        height: "1000px",
+        objectFit: "contain", // other option is cover etc.
+        marginTop:'0',
+    },
+
+    comments: {
+        height: "500px",
+        backgroundColor: "red"
+    }
+})
+
+
+function PinnedPost({ user, token, history, location, id }) {
+
+    const [i, setI] = useState(0);
+    const [name, setName] = useState("LOADING NAME");
+    const [ids, setIds] = useState([]);
+    const [posts, setPosts] = useState([]);
+    const [media, setMedia] = useState([]);
+    const [okToRender, setOkToRender] = useState(false);
+
+    function scroll(magnitude){
+        const newi = i + magnitude;
+        setI(newi);
     }
 
-    leftScroll = (magnitude) => {
-        let newi = this.state.i - magnitude;
-        if (newi < 0){
-            newi = 0;
-        }
-        this.setState({i: newi});
-    }
-
-    rightScroll = (magnitude) => {
-        const newi = this.state.i + magnitude;
-        this.setState({i: newi});
-        this.setState({posts: this.state.posts});
-    }
-
-    getMediaAndNextPost = (mID, postids, exportPosts, exportMedia, errcount) => {
-        // console.log(`getting media for id: ${mID}`);
+    function getMediaAndNextPost(mID, postids, exportPosts, exportMedia, errcount){
         const controllerUrl = "/api/media/";
         const payload = {
             mediaID: mID,
@@ -53,33 +85,31 @@ class PinnedPost extends Component {
                         contentCategory: res.data.contentCategory,
                     };
                     exportMedia.push(newmedia);
-                    // console.log(`exportmedia len:${  exportMedia.length}`);
-                    this.getPinnedPostContent(postids, exportPosts, exportMedia, errcount);
+                    getPinnedPostContent(postids, exportPosts, exportMedia, errcount);
                 }else{
-                     console.log(res.status);
+                    console.log(res.status);
                     if (errcount < 3){
-                        this.getMediaAndNextPost(mID, postids, exportPosts, exportMedia, errcount + 1);
+                        getMediaAndNextPost(mID, postids, exportPosts, exportMedia, errcount + 1);
                     }
                 }
             })
             .catch((err) => {
                 console.log(err);
                 if (errcount < 3){
-                    this.getMediaAndNextPost(mID, postids, exportPosts, exportMedia, errcount + 1);
+                    getMediaAndNextPost(mID, postids, exportPosts, exportMedia, errcount + 1);
                 }
             });
     }
 
 
-    getPinnedPostContent = (postids, exportPosts, exportMedia, errcount) => {
+    function getPinnedPostContent(postids, exportPosts, exportMedia, errcount){
         if (postids.length <= 0){
             // return once we have processed all posts
-            this.setState({posts: exportPosts});
-            this.setState({media: exportMedia});
-            this.setState({okToRender: true});
+            setPosts(exportPosts);
+            setMedia(exportMedia);
+            setOkToRender(true);
             return;
         }
-        // console.log(`trying id: ${postids[0]}`);
 
         // recursively fetch first element and shorten array
         const headers = {
@@ -95,11 +125,11 @@ class PinnedPost extends Component {
             if (res.status == 200 || res.status == "success"){
                 // todo store media here also
                 exportPosts.push(res.data[0]);
-                this.getMediaAndNextPost(res.data[0].mediaID, postids, exportPosts, exportMedia, errcount);
+                getMediaAndNextPost(res.data[0].mediaID, postids, exportPosts, exportMedia, errcount);
             }else{
                 // TODO Look into this
                 // idk if we should add an error post or just ignore. continuing recursion for now
-                this.getPinnedPostContent(postids, exportPosts, exportMedia, errcount);
+                getPinnedPostContent(postids, exportPosts, exportMedia, errcount);
             }
         }).catch((err) => {
             // TODO look into this
@@ -107,24 +137,23 @@ class PinnedPost extends Component {
 
             // stop attempting after 3 failures
             if (errcount < 3) {
-                this.getPinnedPostContent(postids, exportPosts, exportMedia, errcount + 1);
+                getPinnedPostContent(postids, exportPosts, exportMedia, errcount + 1);
             }
         });
     }
 
-    // TODO add second request if user is requesting themselves rather than getPublicUser
-    componentDidMount() {
+
+    useEffect(() => {
         const controllerUrl = "/api/user/getPublic";
         const payload = {
-            filters: {_id: this.props.id}
+            filters: {_id: id}
         }
         Axios({url: controllerUrl, method: "post", data: payload})
             .then((res) => {
                 if (res.status === 200 ) {
-                    this.setState({ids: res.data[0].pinnedPosts});
-                     console.log("PINNED POST IDS");
-                    console.log(res.data[0].pinnedPosts);
-                    this.getPinnedPostContent(res.data[0].pinnedPosts, [], [], 0);
+                    setIds(res.data[0].pinnedPosts);
+                    setName(res.data[0].userName);
+                    getPinnedPostContent(res.data[0].pinnedPosts, [], [], 0);
                 }
             })
             .catch((err) => {
@@ -132,56 +161,63 @@ class PinnedPost extends Component {
                 console.log(err);
                 // todo;
             });
-    }
+    }, []); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 
 
-    // TODO REWRITE SO THAT THE POSTS ARE STORED AND ONLY REREQUESTED IF REQUIRED
-    render(){
-        if (this.state.ids && this.state.okToRender){
-            return (
-              <Grid container>
+    const classes = useStyles();
+
+
+    if (ids && okToRender){
+        return (
+            <Grid container>
+                <Grid item xs={12}>
+                    <Grid container justify="center">
+                        <Typography variant="h5">
+                            Pinned posts
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                    <Grid container justify="center">
+                        <Typography variant="h6">
+                            {name}'s best work, handpicked by them
+                        </Typography>
+                    </Grid>
+                </Grid>
                 <Grid container>
-                  <Grid item xs={4}>
-                    <div style={{marginRight: "10px"}}>
-                      {(this.state.posts.length > 0) && (<ProfilePost post={this.state.posts[(this.state.i+0) % this.state.posts.length]} media={this.state.media[(this.state.i+0) % this.state.posts.length]} isPinned />)}
-                    </div>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <div style={{marginRight: "10px"}}>
-                      {(this.state.posts.length > 1) && (<ProfilePost post={this.state.posts[(this.state.i+1) % this.state.posts.length]} media={this.state.media[(this.state.i+1) % this.state.posts.length]} isPinned />)}
-                    </div>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <div style={{marginRight: "10px"}}>
-                      {(this.state.posts.length > 2) && (<ProfilePost post={this.state.posts[(this.state.i+2) % this.state.posts.length]} media={this.state.media[(this.state.i+2) % this.state.posts.length]} isPinned />)}
-                    </div>
-                  </Grid>
+                    <Grid item xs={4}>
+                        <div style={{marginRight: "10px"}}>
+                            {(posts.length > 0) && (<ProfilePost post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
+                        </div>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <div style={{marginRight: "10px"}}>
+                            {(posts.length > 1) && (<ProfilePost post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
+                        </div>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <div style={{marginRight: "10px"}}>
+                            {(posts.length > 2) && (<ProfilePost post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
+                        </div>
+                    </Grid>
+                </Grid>
+                <Grid item xs={11}>
+                    <IconButton variant="contained" size="medium" color="primary" style={{float:"left"}} onClick={()=> {scroll(-1);}}>
+                        <ChevronLeftIcon />
+                        LEFT
+                    </IconButton>
                 </Grid>
                 <Grid item xs={1}>
-                  <IconButton variant="contained" size="medium" color="primary" style={{float:"left"}} onClick={()=> {this.leftScroll(1);}}>
-                    <ChevronLeftIcon />
-                    LEFT
-                  </IconButton>
+                    <IconButton size="medium" color="primary" style={{float:"right"}} onClick={()=> {scroll(1);}}>
+                        RIGHT
+                        <ChevronRightIcon />
+                    </IconButton>
                 </Grid>
-                <Grid item xs={10}>
-                  <Grid container justify="center">
-                    <Typography variant="h4">
-                      The pinned posts!
-                    </Typography>
-                  </Grid>
-                </Grid>
-                <Grid item xs={1}>
-                  <IconButton size="medium" color="primary" style={{float:"right"}} onClick={()=> {this.rightScroll(1);}}>
-                    RIGHT
-                    <ChevronRightIcon />
-                  </IconButton>
-                </Grid>
-              </Grid>
-)
-        }
-        return <div> Sorry, no posts have been pinned yet.</div>
-
+            </Grid>
+        )
+    }else{
+        return (<div> Sorry, no posts have been pinned yet.</div>);
     }
 }
 
-export default PinnedPost;
+export default withRouter(PinnedPost);

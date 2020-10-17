@@ -314,7 +314,7 @@ const performMediaUpdate = (res, id, update, mediaDoc) => {
       });
     } else {
       console.log(`Media update succeeded: ${results}`);
-      sendHelper(res, { status: 201, msg: updatedMediaDoc });
+      sendHelper(res, { status: 201, msg: 'Media update success - updated ${id}'});
     }
   };
 

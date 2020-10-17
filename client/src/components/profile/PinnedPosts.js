@@ -1,18 +1,10 @@
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
 import {
-    Card,
-    CardActions,
-    CardContent,
-    CardMedia,
-    CircularProgress,
     Grid,
     IconButton,
     Typography
 } from "@material-ui/core";
-import ProfileDetails from "./ProfileDetails";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ShareIcon from "@material-ui/icons/Share";
 import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import ProfilePost from "./ProfilePost";

@@ -606,6 +606,44 @@ Responses:
     "Media deletion failed - <reasonForError>"
     ```
 
+#### Update media 
+###### Updates the privacy and display metadata for a media file
+Request to: `/api/media/update` as a `POST` request
+
+Takes: an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+
+and HTML form data containing the following fields:
+```JSON
+{
+   "isPrivate": "<mediaDocumentID>",
+   "canAccess": "[<userID1>, <userID2>, ... <userIDn>]",
+   "givenFileName": "<fileName>"
+}
+```
+Requirements:
+- Authentication token must be associated with the original creator of the media file
+- Authentication token must be a valid token
+- Provided media ID must be valid
+- isPrivate, canAccess, and givenFileName must be provided 
+
+Responses:
+- On success: 
+  - The response will have a status code of "201" and will contain the following message:
+   "Media update success - updated <updatedMediaId>"
+
+```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Media update failed - <reasonForError>"
+    ```
+
+
 ### Posts
 #### Add Post 
 ###### Creates a new post in the database and returns the posts's ID

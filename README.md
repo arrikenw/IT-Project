@@ -596,8 +596,7 @@ Responses:
 - On success: 
   - The response will have a status code of "200" and will contain the following message:
    "Media deletion success - deleted <"deletedMediaID">"
-
-```
+   
 - On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
@@ -634,7 +633,6 @@ Responses:
   - The response will have a status code of "201" and will contain the following message:
    "Media update success - updated <updatedMediaId>"
 
-```
 - On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error

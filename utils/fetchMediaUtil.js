@@ -1,6 +1,6 @@
 // AWS
 const AWS = require("aws-sdk");
-
+//const fs = require("fs");
 const s3 = new AWS.S3();
 
 // fetch media from file server

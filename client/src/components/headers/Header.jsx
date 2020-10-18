@@ -16,9 +16,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import SettingsIcon from '@material-ui/icons/Settings'
 import PropTypes from 'prop-types'
 
-import someImage from '../../assets/logo512.png'
 import { Redirect, withRouter } from 'react-router-dom'
-import logo from '../../assets/personal-profile.svg'
 import MenuList from '@material-ui/core/MenuList'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -26,7 +24,9 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PostAddIcon from '@material-ui/icons/PostAdd'
-
+import AccountBoxIcon from '@material-ui/icons/AccountBox'
+import logo from '../../assets/personal-profile.svg'
+import someImage from '../../assets/logo512.png'
 
 function Header({ token, user, logout, history }) {
   const [redirect, setRedirect] = useState(false)
@@ -96,10 +96,19 @@ function Header({ token, user, logout, history }) {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
+          <MenuItem onClick={handleClose}>{renderViewProfile()}</MenuItem>
           <MenuItem onClick={handleClose}>{renderSettings()}</MenuItem>
           <MenuItem>{renderLogout()}</MenuItem>
         </Menu>
       </div>
+    )
+  }
+
+  const renderSignup = () => {
+    return (
+      <Button color="inherit" href="/signup">
+        <Typography variant="h6">Sign up</Typography>
+      </Button>
     )
   }
 
@@ -108,6 +117,15 @@ function Header({ token, user, logout, history }) {
       <Button color="inherit" href="/login">
         <Typography variant="h6">Login</Typography>
       </Button>
+    )
+  }
+
+  const renderViewProfile = () => {
+    return (
+      <IconButton color="inherit" aria-label="Profile" href="/profile">
+        <AccountBoxIcon />
+        <Typography variant="h6">Profile</Typography>
+      </IconButton>
     )
   }
 
@@ -126,7 +144,7 @@ function Header({ token, user, logout, history }) {
         color="inherit"
         onClick={() => {
           logout()
-          history.push("/")
+          history.push('/')
         }}
       >
         <ExitToAppIcon />
@@ -137,7 +155,7 @@ function Header({ token, user, logout, history }) {
 
   const renderAvatar = () => {
     const profilePic = user.profilePic
-    console.log('profilePicID=', profilePic)
+    // console.log('profilePicID=', profilePic)
 
     return <Avatar href="`/profile?user=${user.userName}`" />
   }
@@ -149,7 +167,7 @@ function Header({ token, user, logout, history }) {
           <SearchIcon />
         </div>
         <InputBase
-          fullWidth="true"
+          fullWidth
           placeholder="Search…"
           classes={{
             root: classes.inputRoot,
@@ -194,7 +212,10 @@ function Header({ token, user, logout, history }) {
 
             <section className={classes.rightToolbar}>
               <Grid container direction="row">
-                <Grid item xs={4}>
+                <Grid item xs={7}>
+                  {renderSignup()}
+                </Grid>
+                <Grid item xs={5}>
                   {renderLogin()}
                 </Grid>
               </Grid>
@@ -231,6 +252,7 @@ function Header({ token, user, logout, history }) {
 
             <section className={classes.rightToolbar}>
               <Grid
+                item
                 style={{ minWidth: '40vh' }}
                 container
                 direction="row"
@@ -270,7 +292,7 @@ Header.propTypes = {
   history: PropTypes.object.isRequired,
   user: PropTypes.object,
   token: PropTypes.string,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
 }
 
 Header.defaultProps = {

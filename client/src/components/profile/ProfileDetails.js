@@ -56,7 +56,6 @@ function ProfileDetails({ user, userName }) {
 
   useEffect(() => {
     getUser();
-    console.log(currentUser)
   })
 
 
@@ -66,7 +65,6 @@ function ProfileDetails({ user, userName }) {
     }
     let fields = ""
     currentUser.professionalFields.forEach((field) => {
-      console.log(field)
       if (fields !== "") {
         fields += ", "
       }

@@ -13,7 +13,7 @@ import SettingsPage from './components/settings/SettingsPage'
 import ExpandPost from './components/profile/ExpandPost'
 import AddPost from "./components/AddPost/AddPost";
 import SignupPage from './components/signup/SignupPage';
-
+import DocxTest from "./components/profile/DocxTest";
 
 // css for containers
 const useStyles = makeStyles({
@@ -23,6 +23,8 @@ const useStyles = makeStyles({
     flexGrow: 1,
     backgroundColor: '#34d15e',
     overflowY: 'auto',
+    backgroundImage: 'url("https://about.unimelb.edu.au/__data/assets/image/0039/87879/old-quad-arches-bright-cropped.jpg")',
+    backgroundSize: 'cover'
   },
   mainContainer: {
     height: '100vh',
@@ -111,6 +113,9 @@ function App() {
           </Route>
           <Route path="/settings">
             <SettingsPage token={token} user={user} />
+          </Route>
+          <Route path="/a">
+            <DocxTest/>
           </Route>
           {/* <Route path="/addpost"> */}
           {/*  <AddPost token={token} /> */}

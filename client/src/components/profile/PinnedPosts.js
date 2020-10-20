@@ -7,9 +7,9 @@ import {
 } from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
-import ProfilePost from "./ProfilePost";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import PinnedPostElement from "./PinnedPostElement";
 
 
 const useStyles = makeStyles({
@@ -179,29 +179,27 @@ function PinnedPost({ user, token, history, location, id }) {
                 <Grid container>
                     <Grid item xs={4}>
                         <div style={{marginRight: "10px"}}>
-                            {(posts.length > 0) && (<ProfilePost post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
+                            {(posts.length > 0) && (<PinnedPostElement post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
                         </div>
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{marginRight: "10px"}}>
-                            {(posts.length > 1) && (<ProfilePost post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
+                            {(posts.length > 1) && (<PinnedPostElement post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
                         </div>
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{marginRight: "10px"}}>
-                            {(posts.length > 2) && (<ProfilePost post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
+                            {(posts.length > 2) && (<PinnedPostElement post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
                         </div>
                     </Grid>
                 </Grid>
                 <Grid item xs={11}>
                     <IconButton variant="contained" size="medium" color="primary" style={{float:"left"}} onClick={()=> {scroll(-1);}}>
                         <ChevronLeftIcon />
-                        LEFT
                     </IconButton>
                 </Grid>
                 <Grid item xs={1}>
                     <IconButton size="medium" color="primary" style={{float:"right"}} onClick={()=> {scroll(1);}}>
-                        RIGHT
                         <ChevronRightIcon />
                     </IconButton>
                 </Grid>

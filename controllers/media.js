@@ -1,6 +1,9 @@
 // forms
 const formidable = require("formidable");
 
+//file conversion
+const unoconv = require('awesome-unoconv');
+
 // fs
 const fs = require("fs");
 
@@ -68,16 +71,7 @@ const saveBucket = (res, file, fields, fileData, DBEntry) => {
 };
 
 // create metadata in database and save file to bucket
-const saveDBAndBucket = (res, file, fields, fileData, userId) => {
-  const item = {
-    mimeType: file.type,
-    contentCategory: file.type.split("/")[0],
-    extension: mime.extension(file.type),
-    creator: userId,
-    isPrivate: fields.isPrivate,
-    canAccess: [],
-    givenFileName: fields.givenFileName,
-  };
+const saveDBAndBucket = (res, item, fileData, userId) => {
   console.log(item);
   const newMedia = new Media(item);
   newMedia.save().then((media, err) => {
@@ -178,20 +172,51 @@ const uploadMedia = (req, res) => {
       const validationStatus = validateAll(files.mediafile, fields);
       if (validationStatus !== "valid") {
         console.log(validationStatus.msg);
-        sendHelper(res, validationStatus);
+        sendHelper(res, {status: 400, msg: validationStatus});
         return;
       }
       console.log("validation success");
-      fs.readFile(files.mediafile.path, (err2, data) => {
-        if (err2) {
-          sendHelper(res, {
-            status: 400,
-            msg: "Media upload failed - Error reading file",
-          });
-          return;
-        }
-        saveDBAndBucket(res, files.mediafile, fields, data, req.user.id);
-      });
+
+      const split = files.mediafile.name.split(".");
+      if (split.length != 2){
+        sendHelper(res, {status:200, msg: "Media filename did not have exactly 1 period"});
+        return;
+      }
+      if (split[1] != "doc" && split[1] != "pdf" && split[1] != "docx" && split[1] != "xls"){
+        fs.readFile(files.mediafile.path, (err2, data) => {
+          if (err2) {
+            sendHelper(res, {
+              status: 400,
+              msg: "Media upload failed - Error reading file",
+            });
+            return;
+          }
+          const item = {
+            mimeType: files.mediafile.type,
+            contentCategory: files.mediafile.type.split("/")[0],
+            extension: mime.extension(files.mediafile.type),
+            creator: userId,
+            isPrivate: fields.isPrivate,
+            canAccess: [],
+            givenFileName: fields.givenFileName,
+          };
+          saveDBAndBucket(res, item, data, req.user.id);
+        });
+      }else{
+        unoconv.convert(files.mediafile.path, {buffer: true, format: 'pdf'})
+            .then(data => {
+              const item = {
+                mimeType: 'application/pdf',
+                contentCategory: 'application/pdf'.split("/")[0],
+                extension: '.pdf',
+                creator: userId,
+                isPrivate: fields.isPrivate,
+                canAccess: [],
+                givenFileName: fields.givenFileName,
+              };
+              saveDBAndBucket(res, item, data, req.user.id);
+            });
+      }
     })
     .on("error", (err) => {
       console.log(err);

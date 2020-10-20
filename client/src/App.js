@@ -112,9 +112,9 @@ function App() {
           <Route path="/settings">
             <SettingsPage token={token} user={user} />
           </Route>
-          {/* <Route path="/addpost"> */}
-          {/*  <AddPost token={token} /> */}
-          {/* </Route> */}
+          <Route path="/addpost">
+            <AddPost token={token} />
+          </Route>
           <Route path="/signup">
             <SignupPage setGlobalToken={setGlobalToken} />
           </Route>

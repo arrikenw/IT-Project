@@ -28,9 +28,11 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import logo from '../../assets/personal-profile.svg'
 import someImage from '../../assets/logo512.png'
 
+import axios from'axios';
 function Header({ token, user, logout, history }) {
   const [redirect, setRedirect] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
+  const [profilePic, setProfilePic] = useState(false);
 
   const useStyles = makeStyles((theme) => ({
     leftToolbar: {
@@ -153,11 +155,28 @@ function Header({ token, user, logout, history }) {
     )
   }
 
-  const renderAvatar = () => {
-    const profilePic = user.profilePic
-    // console.log('profilePicID=', profilePic)
 
-    return <Avatar href="`/profile?user=${user.userName}`" />
+
+  const getProfilePic = () =>{
+    
+    const authHeader = {
+      headers: {Authorization: `Bearer ${token}` }
+    }
+    const payload = {
+      mediaID: user.profilePic
+    }
+    return axios.post('/api/media', payload,  authHeader)
+      .then(response => {
+      return response.data.b64media;
+    })
+  }
+
+  const renderAvatar = () => {
+    getProfilePic().then(function(result){
+        setProfilePic(result);
+    })
+    return <Avatar src= {`data:image/jpeg;base64,${profilePic}`}/>
+    
   }
 
   const renderSearchBar = () => {

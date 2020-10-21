@@ -38,7 +38,7 @@ import someImage from '../../assets/logo512.png'
 
 import axios from'axios';
 
-function Header({ token, user, logout, history }) {
+function Header({ token, user, logout, history, searchResults, setSearchResults }) {
   const [redirect, setRedirect] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [profilePic, setProfilePic] = useState(false);
@@ -92,21 +92,17 @@ function Header({ token, user, logout, history }) {
   }
   const handleSearchByChange = (e) => {
     setSearchBy(e.target.value);
-    console.log("searchBy=", searchBy);
   }
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
-    console.log("searchInput=", searchInput);
   }
 
   const sendSearchData = () => {
     const payload = {"search":searchInput}
       if(searchBy=="posts"){
-        
-        console.log("searching by posts")
         axios.post("/api/post/getPublic", payload)
         .then((resp) =>{
-          console.log(resp.data);
+          setSearchResults(resp.data);
           history.push('/searchResults');
         })
       }
@@ -114,7 +110,8 @@ function Header({ token, user, logout, history }) {
       if(searchBy=="users"){
         axios.post("/api/user/getPublic", payload)
         .then((resp) =>{
-          console.log(resp.data);
+          setSearchResults(resp.data);
+           
           history.push('/searchResults');
         })
         
@@ -381,11 +378,13 @@ Header.propTypes = {
   user: PropTypes.object,
   token: PropTypes.string,
   logout: PropTypes.func.isRequired,
+  searchResults: PropTypes.array,
 }
 
 Header.defaultProps = {
   user: {},
   token: '',
+  searchResults:[],
 }
 
 export default withRouter(Header)

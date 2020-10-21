@@ -13,6 +13,7 @@ import SettingsPage from './components/settings/SettingsPage'
 import ExpandPost from './components/profile/ExpandPost'
 import AddPost from "./components/AddPost/AddPost";
 import SignupPage from './components/signup/SignupPage';
+import SearchResults from './components/searchResults/SearchResults';
 
 
 // css for containers
@@ -46,6 +47,8 @@ function App() {
     }
     return {}
   })
+
+  const[searchResults, setSearchResults] = useState([]);
 
   // stores a token in state and local storage
   const setGlobalToken = (newToken) => {
@@ -94,7 +97,7 @@ function App() {
     <Grid container className={classes.mainContainer} direction="column">
       <Router>
         <Grid item>
-          <Header user={user} token={token} logout={logout} />
+          <Header user={user} token={token} logout={logout} searchResults={searchResults} setSearchResults={setSearchResults}/>
         </Grid>
         <Grid item className={classes.bodyContainer}>
           <Route exact path="/">
@@ -117,6 +120,9 @@ function App() {
           {/* </Route> */}
           <Route path="/signup">
             <SignupPage setGlobalToken={setGlobalToken} />
+          </Route>
+          <Route path ="/searchResults">
+            <SearchResults token={token} user={user} searchResults={searchResults}/>
           </Route>
         </Grid>
       </Router>

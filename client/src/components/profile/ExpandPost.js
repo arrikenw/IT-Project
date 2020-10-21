@@ -27,11 +27,13 @@ const useStyles = makeStyles({
     postCard: {
         minHeight: '1000px',
         marginBottom: '30px',
+        marginTop: '50px'
     },
     media: {
         height: "1000px",
         objectFit: "contain", // other option is cover etc.
         marginTop:'0',
+        paddingTop:'0'
     },
 
     comments: {
@@ -115,6 +117,12 @@ function ExpandPost({ user, token, history, location }) {
 
     const classes = useStyles()
 
+
+    let splitstrings = null;
+    if (post && post.description){
+        splitstrings = post.description.split(/ (.*)/);
+    }
+
     return (
       <Grid container className={classes.mainContainer}>
         <Grid item xs={false} />
@@ -132,15 +140,16 @@ function ExpandPost({ user, token, history, location }) {
         <Grid className={classes.bodyContainer} item xs={8}>
           <Card className={classes.postCard}>
             <CardContent>
+                <Grid container justify="center" style={{paddingBottom:"20px"}}>
+                    <Typography variant="heading1" component="h1">
+                        {post && post.title}
+                    </Typography>
+                </Grid>
               {media && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
-              {!media && <Grid container justify="center"><CircularProgress> LOADING </CircularProgress></Grid>}
-
-              <Typography gutterBottom variant="h5" component="h2">
-                {post && post.title}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                {post && post.description}
-              </Typography>
+              {!media && <Grid container justify="center"><CircularProgress/> Loading post media </Grid>}
+                <Typography variant="body2" color="textPrimary" component="p">
+                    <strong style={{fontSize:"115%"}}> {splitstrings && splitstrings.length > 0 && splitstrings[0]} </strong> {splitstrings && splitstrings.length > 1 && splitstrings[1]}
+                </Typography>
             </CardContent>
             <CardActions>
               <IconButton variant="contained" size="large" color="primary">

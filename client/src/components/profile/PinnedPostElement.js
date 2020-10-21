@@ -18,11 +18,9 @@ import ShareIcon from "@material-ui/icons/Share";
 // https://stackoverflow.com/questions/50272814/image-on-material-ui-cardmedia
 const styles = theme => ({
     postCard: {
-        maxHeight: '650px',
         marginBottom: '30px',
     },
     media: {
-        height: '0px',
         maxHeight: '600px',
         // paddingTop: '56.25%', // 16:9,
         paddingTop: '56.25%',
@@ -97,16 +95,15 @@ class PinnedPostElement extends Component {
 
     render(){
         const classes = this.props.classes;
-        let heightChange = {maxHeight: "350px"};
-        let textLimit = {maxHeight: "100px", overflow: "hidden"};
+        let textLimit = {height: "60px"};
         let aspectChange = {paddingTop: '56.25%'};
         return (
-            <Card className={classes.postCard} style={heightChange}>
+            <Card className={classes.postCard}>
                 <CardActionArea onClick={() => { this.props.history.push(`/post?post=${this.props.post._id}`); }}>
                     <CardContent style={{paddingBottom: "0px"}}>
                         <CardMedia className={classes.media} style={aspectChange} image={this.state.contentStr} />
                         <div style={textLimit}>
-                            <Typography gutterBottom variant="h5" component="h2">
+                            <Typography gutterBottom variant="h5" component="h2" style={{overflow:"hidden", textOverflow: "ellipsis"}}>
                                 {this.props.post.title}
                             </Typography>
                         </div>

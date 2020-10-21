@@ -18,11 +18,9 @@ import ShareIcon from "@material-ui/icons/Share";
 // https://stackoverflow.com/questions/50272814/image-on-material-ui-cardmedia
 const styles = theme => ({
   postCard: {
-    maxHeight: '800px',
     marginBottom: '30px',
   },
   media: {
-    height: '0px',
     maxHeight: '600px',
     // paddingTop: '56.25%', // 16:9,
     paddingTop: '56.25%',
@@ -98,16 +96,12 @@ class ProfilePost extends Component {
 
   render(){
     const classes = this.props.classes;
-    let heightChange = {};
+    let heightChange = {maxHeight:"800"};
     let textLimit = {maxHeight: "80px", overflow: "hidden"}
     let aspectChange = {backgroundColor:"red"};
     if (this.props.isPinned){
       heightChange = {height: "350px"};
       textLimit = {height: "100px", overflow: "hidden"};
-      aspectChange = {paddingTop: '56.25%'};
-    }
-    if (this.props.isExpanded){
-      heightChange = {height: "1000px"};
       aspectChange = {paddingTop: '56.25%'};
     }
     return (

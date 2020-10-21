@@ -12,6 +12,7 @@
   "dependencies": {
     "@jest/globals": "^26.4.2",
     "@material-ui/pickers": "^3.2.10",
+    "@pdftron/pdfnet-node": "^8.0.0",
     "aws-sdk": "^2.748.0",
     "bcrypt": "^5.0.0",
     "bootstrap": "^4.5.2",

@@ -2,7 +2,7 @@
 const formidable = require("formidable");
 
 //file conversion
-const unoconv = require('awesome-unoconv');
+const { PDFNet } = require("@pdftron/pdfnet-node");
 
 // fs
 const fs = require("fs");
@@ -32,7 +32,7 @@ const fetchMediaUtil = require("../utils/fetchMediaUtil.js");
 // HELPER FUNCTIONS AND CONTROLLER FOR MEDIA UPLOADS
 
 // write file to bucket
-const saveBucket = (res, file, fields, fileData, DBEntry) => {
+const saveBucket = (res, fileData, DBEntry) => {
   // information about bucket and upload
   const bucketName = "it-project-media";
   const keyName = `${DBEntry._id.toString()}.${DBEntry.extension}`;
@@ -71,7 +71,7 @@ const saveBucket = (res, file, fields, fileData, DBEntry) => {
 };
 
 // create metadata in database and save file to bucket
-const saveDBAndBucket = (res, item, fileData, userId) => {
+const saveDBAndBucket = (res, item, fileData) => {
   console.log(item);
   const newMedia = new Media(item);
   newMedia.save().then((media, err) => {
@@ -83,7 +83,7 @@ const saveDBAndBucket = (res, item, fileData, userId) => {
       });
     } else {
       console.log("saving to db succeeded");
-      saveBucket(res, file, fields, fileData, media);
+      saveBucket(res, fileData, media);
     }
   });
 };
@@ -99,8 +99,8 @@ const validateMediaType = (file) => {
     type !== "jpeg" &&
     type !== "docx" &&
     type !== "pdf" &&
-    type !== "ppx" &&
-    type !== "xls" &&
+    type !== "pptx" &&
+    type !== "xlsx" &&
     type !== "mp4" &&
     type !== "mpga" && // code for mp3
     type !== "wav" &&
@@ -155,12 +155,13 @@ const validateAll = (file, fields) => {
   return validateFields(fields);
 };
 
-const uploadMedia = (req, res) => {
+const uploadMedia = async (req, res) => {
+  await PDFNet.initialize(); //allow us to use PDFNet
   console.log(`id is: ${req.user.id}`);
   const form = new formidable.IncomingForm();
   form.maxFileSize = 15 * 1024 * 1024; // 15 meg
   form
-    .parse(req, (err, fields, files) => {
+    .parse(req, async (err, fields, files) => {
       if (err) {
         console.log(err);
         sendHelper(res, {
@@ -182,8 +183,7 @@ const uploadMedia = (req, res) => {
         sendHelper(res, {status:200, msg: "Media filename did not have exactly 1 period"});
         return;
       }
-      if (split[1] != "doc" && split[1] != "pdf" && split[1] != "docx" && split[1] != "xls"){
-        fs.readFile(files.mediafile.path, (err2, data) => {
+        fs.readFile(files.mediafile.path, async (err2, data) => {
           if (err2) {
             sendHelper(res, {
               status: 400,
@@ -191,33 +191,47 @@ const uploadMedia = (req, res) => {
             });
             return;
           }
-          const item = {
-            mimeType: files.mediafile.type,
-            contentCategory: files.mediafile.type.split("/")[0],
-            extension: mime.extension(files.mediafile.type),
-            creator: userId,
-            isPrivate: fields.isPrivate,
-            canAccess: [],
-            givenFileName: fields.givenFileName,
-          };
-          saveDBAndBucket(res, item, data, req.user.id);
+          if (split[1] == "doc" || split[1] == "docx" || split[1] == "xlsx" || split[1] == "pptx"){
+            //const pdfdoc = await PDFNet.PDFDoc.create();
+            //await pdfdoc.initSecurityHandler();
+            let databuffer = null;
+            try {
+              console.log(files.mediafile.path);
+              databuffer = await PDFNet.Convert.office2PDFBuffer(data); //"https://filesamples.com/samples/document/docx/sample1.docx"
+            } catch (e){
+              console.log(e);
+              console.log("Error converting doc to pdf");
+              sendHelper(res, {status: 500, msg: "Error converting doc to pdf"});
+              return;
+            }
+
+            let goodBuffer = Buffer.from(databuffer);
+
+            PDFNet.shutdown()
+            const item = {
+              mimeType: 'application/pdf',
+              contentCategory: 'application/pdf'.split("/")[0],
+              extension: 'pdf',
+              creator: req.user.id,
+              isPrivate: fields.isPrivate,
+              canAccess: [],
+              givenFileName: fields.givenFileName,
+            };
+            saveDBAndBucket(res, item, goodBuffer);
+          }else{
+            const item = {
+              mimeType: files.mediafile.type,
+              contentCategory: files.mediafile.type.split("/")[0],
+              extension: mime.extension(files.mediafile.type),
+              creator: req.user.id,
+              isPrivate: fields.isPrivate,
+              canAccess: [],
+              givenFileName: fields.givenFileName,
+            };
+            saveDBAndBucket(res, item, data);
+          }
         });
-      }else{
-        unoconv.convert(files.mediafile.path, {buffer: true, format: 'pdf'})
-            .then(data => {
-              const item = {
-                mimeType: 'application/pdf',
-                contentCategory: 'application/pdf'.split("/")[0],
-                extension: '.pdf',
-                creator: userId,
-                isPrivate: fields.isPrivate,
-                canAccess: [],
-                givenFileName: fields.givenFileName,
-              };
-              saveDBAndBucket(res, item, data, req.user.id);
-            });
-      }
-    })
+      })
     .on("error", (err) => {
       console.log(err);
       sendHelper(res, {

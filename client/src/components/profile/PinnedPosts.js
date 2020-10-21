@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
 import {
+    Card,
     Grid,
     IconButton,
     Typography
@@ -117,7 +118,7 @@ function PinnedPost({ user, token, history, location, id }) {
             if (res.status == 200 || res.status == "success"){
                 // todo store media here also
                 exportPosts.push(res.data[0]);
-                getMediaAndNextPost(res.data[0].mediaID, postids, exportPosts, exportMedia, errcount);
+                getMediaAndNextPost(res.data[0].thumbnailURL, postids, exportPosts, exportMedia, errcount);
             }else{
                 // TODO Look into this
                 // idk if we should add an error post or just ignore. continuing recursion for now
@@ -176,23 +177,31 @@ function PinnedPost({ user, token, history, location, id }) {
                         </Typography>
                     </Grid>
                 </Grid>
+
                 <Grid container>
-                    <Grid item xs={4}>
-                        <div style={{marginRight: "10px"}}>
-                            {(posts.length > 0) && (<PinnedPostElement post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
-                        </div>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <div style={{marginRight: "10px"}}>
-                            {(posts.length > 1) && (<PinnedPostElement post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
-                        </div>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <div style={{marginRight: "10px"}}>
-                            {(posts.length > 2) && (<PinnedPostElement post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
+                    <Grid item xs={12}>
+                        <div id={"COULD PUT A CARD HERE TBH"}>
+                            <Grid container>
+                                <Grid item xs={4}>
+                                    <div style={{marginRight: "10px"}}>
+                                        {(posts.length > 0) && (<PinnedPostElement post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
+                                    </div>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <div style={{marginRight: "10px"}}>
+                                        {(posts.length > 1) && (<PinnedPostElement post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
+                                    </div>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <div style={{marginRight: "10px"}}>
+                                        {(posts.length > 2) && (<PinnedPostElement post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
+                                    </div>
+                                </Grid>
+                            </Grid>
                         </div>
                     </Grid>
                 </Grid>
+
                 <Grid item xs={11}>
                     <IconButton variant="contained" size="medium" color="primary" style={{float:"left"}} onClick={()=> {scroll(-1);}}>
                         <ChevronLeftIcon />

@@ -14,6 +14,10 @@ import {
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ShareIcon from "@material-ui/icons/Share";
 
+//truncation is not supported for multiline, so using this lib
+import LinesEllipsis from 'react-lines-ellipsis'
+import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC'
+const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
 
 // https://stackoverflow.com/questions/50272814/image-on-material-ui-cardmedia
 const styles = theme => ({
@@ -97,26 +101,22 @@ class ProfilePost extends Component {
   render(){
     const classes = this.props.classes;
     let heightChange = {maxHeight:"800"};
-    let textLimit = {maxHeight: "80px", overflow: "hidden"}
+    let textLimit = {maxHeight: "90px"}
     let aspectChange = {backgroundColor:"red"};
-    if (this.props.isPinned){
-      heightChange = {height: "350px"};
-      textLimit = {height: "100px", overflow: "hidden"};
-      aspectChange = {paddingTop: '56.25%'};
-    }
     return (
       <Card className={classes.postCard} style={heightChange}>
         <CardActionArea onClick={() => { this.props.history.push(`/post?post=${this.props.post._id}`); }}>
           <CardContent style={{paddingBottom: "0px"}}>
-            <CardMedia className={classes.media} style={aspectChange} image={this.state.contentStr} />
+
             <div style={textLimit}>
-              <Typography gutterBottom variant="h5" component="h2">
+              <Typography gutterBottom variant="heading1" color="textPrimary" component="h2">
                 {this.props.post.title}
               </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                {this.props.post.description}
+              <Typography gutterBottom variant="body2" color="textSecondary" component="p">
+                <ResponsiveEllipsis text={this.props.post.description} maxLine={3} ellipsis="..." trimRight basedOn="letters"/>
               </Typography>
             </div>
+            <CardMedia className={classes.media} style={aspectChange} image={this.state.contentStr} />
           </CardContent>
         </CardActionArea>
         <CardActions style={{paddingBottom: "0px"}}>

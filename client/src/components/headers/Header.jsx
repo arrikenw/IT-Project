@@ -14,6 +14,12 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
 import SettingsIcon from '@material-ui/icons/Settings'
+
+import NativeSelect from '@material-ui/core/NativeSelect'
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+
 import PropTypes from 'prop-types'
 
 import { Redirect, withRouter } from 'react-router-dom'
@@ -27,6 +33,7 @@ import PostAddIcon from '@material-ui/icons/PostAdd'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import logo from '../../assets/personal-profile.svg'
 import someImage from '../../assets/logo512.png'
+
 
 import axios from'axios';
 function Header({ token, user, logout, history }) {
@@ -185,15 +192,34 @@ function Header({ token, user, logout, history }) {
         <div className={classes.searchIcon}>
           <SearchIcon />
         </div>
-        <InputBase
-          fullWidth
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-          }}
-        />
+        <form style={{ display: 'flex' }}>
+          <InputBase
+            fullWidth
+            placeholder="Search…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput,
+            }}
+          />
+
+          <FormControl style={{minWidth:100, paddingBottom:10}}>
+            <InputLabel style={{color:'inherit'}} >Search by</InputLabel>
+            <Select  width={1} value="">
+              
+              <MenuItem value={10}>Users</MenuItem>
+              <MenuItem value={20}>Posts</MenuItem>
+  
+            </Select>
+          </FormControl>
+        </form>
+
       </div>
+    )
+  }
+
+  const renderSearchToggle = () => {
+    return (
+      <></>
     )
   }
 

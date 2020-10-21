@@ -2,13 +2,10 @@ import React, {useEffect, useState} from 'react'
 import {IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography,CircularProgress} from '@material-ui/core'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ShareIcon from '@material-ui/icons/Share';
-
 import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
 import Axios from "axios";
 import ProfileDetails from './ProfileDetails'
-
-import ProfilePost from './ProfilePost';
 
 const useStyles = makeStyles({
     bodyContainer: {
@@ -80,6 +77,8 @@ function ExpandPost({ user, token, history, location }) {
                         contentCategory: res.data.contentCategory,
                         componentType: mapCatToComp(res.data.contentCategory)
                     };
+                    console.log("GET MEDIA GET MEDIA GET MEDIA GET MEDIA");
+                    console.log(fetchedMedia);
                     setMedia(fetchedMedia);
                 }
             })
@@ -145,8 +144,9 @@ function ExpandPost({ user, token, history, location }) {
                         {post && post.title}
                     </Typography>
                 </Grid>
-              {media && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
+              {media && media.mimeType != 'application/pdf' && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
               {!media && <Grid container justify="center"><CircularProgress/> Loading post media </Grid>}
+                {media && media.mimeType == 'application/pdf' && <Grid container justify="center"><object data={media.contentStr} type="application/pdf" width="100%" height="500px"/></Grid>}
                 <Typography variant="body2" color="textPrimary" component="p">
                     <strong style={{fontSize:"115%"}}> {splitstrings && splitstrings.length > 0 && splitstrings[0]} </strong> {splitstrings && splitstrings.length > 1 && splitstrings[1]}
                 </Typography>

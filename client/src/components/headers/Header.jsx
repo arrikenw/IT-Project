@@ -35,11 +35,16 @@ import logo from '../../assets/personal-profile.svg'
 import someImage from '../../assets/logo512.png'
 
 
+
 import axios from'axios';
+
 function Header({ token, user, logout, history }) {
   const [redirect, setRedirect] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [profilePic, setProfilePic] = useState(false);
+  const [searchBy, setSearchBy] = useState('posts');
+  const [searchInput, setSearchInput] = useState('');
+
 
   const useStyles = makeStyles((theme) => ({
     leftToolbar: {
@@ -63,6 +68,8 @@ function Header({ token, user, logout, history }) {
       padding: theme.spacing(0, 2),
       height: '100%',
       position: 'absolute',
+      //this allows iconButton to be pressed when positioned absolute
+      zIndex: 1000,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -82,6 +89,42 @@ function Header({ token, user, logout, history }) {
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget)
     e.preventDefault()
+  }
+  const handleSearchByChange = (e) => {
+    setSearchBy(e.target.value);
+    console.log("searchBy=", searchBy);
+  }
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+    console.log("searchInput=", searchInput);
+  }
+
+  const sendSearchData = () => {
+    const payload = {"search":searchInput}
+      if(searchBy=="posts"){
+        
+        console.log("searching by posts")
+        axios.post("/api/post/getPublic", payload)
+        .then((resp) =>{
+          console.log(resp.data);
+          history.push('/searchResults');
+        })
+      }
+
+      if(searchBy=="users"){
+        axios.post("/api/user/getPublic", payload)
+        .then((resp) =>{
+          console.log(resp.data);
+          history.push('/searchResults');
+        })
+        
+      }
+  }
+  const handleKeyPress = (e) => {
+    //if enter key is pressed in search bar, send the search payload to the relevant route
+    if (e.keyCode == 13){
+      sendSearchData();
+    }
   }
 
   const handleClose = () => {
@@ -163,7 +206,6 @@ function Header({ token, user, logout, history }) {
   }
 
 
-
   const getProfilePic = () =>{
     
     const authHeader = {
@@ -189,11 +231,16 @@ function Header({ token, user, logout, history }) {
   const renderSearchBar = () => {
     return (
       <div className={classes.search}>
-        <div className={classes.searchIcon}>
-          <SearchIcon />
+        <div class="font-icon-wrapper" onClick={sendSearchData}>
+          <IconButton className={classes.searchIcon}>
+            <SearchIcon />
+          </IconButton>
         </div>
         <form style={{ display: 'flex' }}>
           <InputBase
+            value = {searchInput}
+            onChange={handleSearchInputChange}
+            onKeyDown={handleKeyPress}
             fullWidth
             placeholder="Search…"
             classes={{
@@ -204,22 +251,18 @@ function Header({ token, user, logout, history }) {
 
           <FormControl style={{minWidth:100, paddingBottom:10}}>
             <InputLabel style={{color:'inherit'}} >Search by</InputLabel>
-            <Select  width={1} value="">
-              
-              <MenuItem value={10}>Users</MenuItem>
-              <MenuItem value={20}>Posts</MenuItem>
+            <Select 
+              value={searchBy}
+              onChange={handleSearchByChange}
+              >
+              <MenuItem value="users">Users</MenuItem>
+              <MenuItem value="posts">Posts</MenuItem>
   
             </Select>
           </FormControl>
         </form>
 
       </div>
-    )
-  }
-
-  const renderSearchToggle = () => {
-    return (
-      <></>
     )
   }
 

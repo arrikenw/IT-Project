@@ -49,6 +49,7 @@ function App() {
   })
 
   const[searchResults, setSearchResults] = useState([]);
+  const[searchBy, setSearchBy] = useState('posts');
 
   // stores a token in state and local storage
   const setGlobalToken = (newToken) => {
@@ -97,7 +98,8 @@ function App() {
     <Grid container className={classes.mainContainer} direction="column">
       <Router>
         <Grid item>
-          <Header user={user} token={token} logout={logout} searchResults={searchResults} setSearchResults={setSearchResults}/>
+          <Header user={user} token={token} logout={logout} searchResults={searchResults} 
+          setSearchResults={setSearchResults} searchBy={searchBy} setSearchBy={setSearchBy}/>
         </Grid>
         <Grid item className={classes.bodyContainer}>
           <Route exact path="/">
@@ -122,7 +124,7 @@ function App() {
             <SignupPage setGlobalToken={setGlobalToken} />
           </Route>
           <Route path ="/searchResults">
-            <SearchResults token={token} user={user} searchResults={searchResults}/>
+            <SearchResults token={token} user={user} searchResults={searchResults} searchBy={searchBy}/>
           </Route>
         </Grid>
       </Router>

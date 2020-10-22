@@ -38,11 +38,11 @@ import someImage from '../../assets/logo512.png'
 
 import axios from'axios';
 
-function Header({ token, user, logout, history, searchResults, setSearchResults }) {
+function Header({ token, user, logout, history, searchResults, setSearchResults, searchBy, setSearchBy }) {
   const [redirect, setRedirect] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [profilePic, setProfilePic] = useState(false);
-  const [searchBy, setSearchBy] = useState('posts');
+  //= const [searchBy, setSearchBy] = useState('posts');
   const [searchInput, setSearchInput] = useState('');
 
 
@@ -379,12 +379,16 @@ Header.propTypes = {
   token: PropTypes.string,
   logout: PropTypes.func.isRequired,
   searchResults: PropTypes.array,
+  setSearchResults: PropTypes.func.isRequired,
+  searchBy: PropTypes.string,
+  setSearchBy: PropTypes.func.isRequired,
 }
 
 Header.defaultProps = {
   user: {},
   token: '',
   searchResults:[],
+  searchBy:'',
 }
 
 export default withRouter(Header)

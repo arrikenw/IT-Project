@@ -15,7 +15,6 @@ import AddPost from "./components/AddPost/AddPost";
 import SignupPage from './components/signup/SignupPage';
 import SearchResults from './components/searchResults/SearchResults';
 
-
 // css for containers
 const useStyles = makeStyles({
   bodyContainer: {
@@ -24,6 +23,8 @@ const useStyles = makeStyles({
     flexGrow: 1,
     backgroundColor: '#34d15e',
     overflowY: 'auto',
+    backgroundImage: 'url("https://about.unimelb.edu.au/__data/assets/image/0039/87879/old-quad-arches-bright-cropped.jpg")',
+    backgroundSize: 'cover'
   },
   mainContainer: {
     height: '100vh',

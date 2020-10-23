@@ -2,13 +2,10 @@ import React, {useEffect, useState} from 'react'
 import {IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography,CircularProgress} from '@material-ui/core'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ShareIcon from '@material-ui/icons/Share';
-
 import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
 import Axios from "axios";
 import ProfileDetails from './ProfileDetails'
-
-import ProfilePost from './ProfilePost';
 
 const useStyles = makeStyles({
     bodyContainer: {
@@ -27,11 +24,13 @@ const useStyles = makeStyles({
     postCard: {
         minHeight: '1000px',
         marginBottom: '30px',
+        marginTop: '50px'
     },
     media: {
         height: "1000px",
         objectFit: "contain", // other option is cover etc.
         marginTop:'0',
+        paddingTop:'0'
     },
 
     comments: {
@@ -78,6 +77,8 @@ function ExpandPost({ user, token, history, location }) {
                         contentCategory: res.data.contentCategory,
                         componentType: mapCatToComp(res.data.contentCategory)
                     };
+                    console.log("GET MEDIA GET MEDIA GET MEDIA GET MEDIA");
+                    console.log(fetchedMedia);
                     setMedia(fetchedMedia);
                 }
             })
@@ -115,6 +116,12 @@ function ExpandPost({ user, token, history, location }) {
 
     const classes = useStyles()
 
+
+    let splitstrings = null;
+    if (post && post.description){
+        splitstrings = post.description.split(/ (.*)/);
+    }
+
     return (
       <Grid container className={classes.mainContainer}>
         <Grid item xs={false} />
@@ -132,15 +139,17 @@ function ExpandPost({ user, token, history, location }) {
         <Grid className={classes.bodyContainer} item xs={8}>
           <Card className={classes.postCard}>
             <CardContent>
-              {media && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
-              {!media && <Grid container justify="center"><CircularProgress> LOADING </CircularProgress></Grid>}
-
-              <Typography gutterBottom variant="h5" component="h2">
-                {post && post.title}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                {post && post.description}
-              </Typography>
+                <Grid container justify="center" style={{paddingBottom:"20px"}}>
+                    <Typography variant="heading1" component="h1">
+                        {post && post.title}
+                    </Typography>
+                </Grid>
+              {media && media.mimeType != 'application/pdf' && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
+              {!media && <Grid container justify="center"><CircularProgress/> Loading post media </Grid>}
+                {media && media.mimeType == 'application/pdf' && <Grid container justify="center"><object data={media.contentStr} type="application/pdf" width="100%" height="500px"/></Grid>}
+                <Typography variant="body2" color="textPrimary" component="p">
+                    <strong style={{fontSize:"115%"}}> {splitstrings && splitstrings.length > 0 && splitstrings[0]} </strong> {splitstrings && splitstrings.length > 1 && splitstrings[1]}
+                </Typography>
             </CardContent>
             <CardActions>
               <IconButton variant="contained" size="large" color="primary">

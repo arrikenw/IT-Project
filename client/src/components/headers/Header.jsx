@@ -14,6 +14,12 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
 import SettingsIcon from '@material-ui/icons/Settings'
+
+import NativeSelect from '@material-ui/core/NativeSelect'
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+
 import PropTypes from 'prop-types'
 
 import { Redirect, withRouter } from 'react-router-dom'
@@ -24,13 +30,21 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PostAddIcon from '@material-ui/icons/PostAdd'
+import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import logo from '../../assets/personal-profile.svg'
 import someImage from '../../assets/logo512.png'
 
 
-function Header({ token, user, logout, history }) {
+
+import axios from'axios';
+
+function Header({ token, user, logout, history, searchResults, setSearchResults, searchBy, setSearchBy }) {
   const [redirect, setRedirect] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
+  const [profilePic, setProfilePic] = useState(false);
+  //= const [searchBy, setSearchBy] = useState('posts');
+  const [searchInput, setSearchInput] = useState('');
+
 
   const useStyles = makeStyles((theme) => ({
     leftToolbar: {
@@ -54,6 +68,8 @@ function Header({ token, user, logout, history }) {
       padding: theme.spacing(0, 2),
       height: '100%',
       position: 'absolute',
+      //this allows iconButton to be pressed when positioned absolute
+      zIndex: 1000,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -73,6 +89,39 @@ function Header({ token, user, logout, history }) {
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget)
     e.preventDefault()
+  }
+  const handleSearchByChange = (e) => {
+    setSearchBy(e.target.value);
+  }
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+  }
+
+  const sendSearchData = () => {
+    const payload = {"search":searchInput}
+      if(searchBy=="posts"){
+        axios.post("/api/post/getPublic", payload)
+        .then((resp) =>{
+          setSearchResults(resp.data);
+          history.push('/searchResults');
+        })
+      }
+
+      if(searchBy=="users"){
+        axios.post("/api/user/getPublic", payload)
+        .then((resp) =>{
+          setSearchResults(resp.data);
+           
+          history.push('/searchResults');
+        })
+        
+      }
+  }
+  const handleKeyPress = (e) => {
+    //if enter key is pressed in search bar, send the search payload to the relevant route
+    if (e.keyCode == 13){
+      sendSearchData();
+    }
   }
 
   const handleClose = () => {
@@ -96,10 +145,19 @@ function Header({ token, user, logout, history }) {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
+          <MenuItem onClick={handleClose}>{renderViewProfile()}</MenuItem>
           <MenuItem onClick={handleClose}>{renderSettings()}</MenuItem>
           <MenuItem>{renderLogout()}</MenuItem>
         </Menu>
       </div>
+    )
+  }
+
+  const renderSignup = () => {
+    return (
+      <Button color="inherit" href="/signup">
+        <Typography variant="h6">Sign up</Typography>
+      </Button>
     )
   }
 
@@ -108,6 +166,15 @@ function Header({ token, user, logout, history }) {
       <Button color="inherit" href="/login">
         <Typography variant="h6">Login</Typography>
       </Button>
+    )
+  }
+
+  const renderViewProfile = () => {
+    return (
+      <IconButton color="inherit" aria-label="Profile" href="/profile">
+        <AccountBoxIcon />
+        <Typography variant="h6">Profile</Typography>
+      </IconButton>
     )
   }
 
@@ -126,7 +193,7 @@ function Header({ token, user, logout, history }) {
         color="inherit"
         onClick={() => {
           logout()
-          history.push("/")
+          history.push('/')
         }}
       >
         <ExitToAppIcon />
@@ -135,27 +202,63 @@ function Header({ token, user, logout, history }) {
     )
   }
 
-  const renderAvatar = () => {
-    const profilePic = user.profilePic
-    // console.log('profilePicID=', profilePic)
 
-    return <Avatar href="`/profile?user=${user.userName}`" />
+  const getProfilePic = () =>{
+    
+    const authHeader = {
+      headers: {Authorization: `Bearer ${token}` }
+    }
+    const payload = {
+      mediaID: user.profilePic
+    }
+    return axios.post('/api/media', payload,  authHeader)
+      .then(response => {
+      return response.data.b64media;
+    })
+  }
+
+  const renderAvatar = () => {
+    getProfilePic().then(function(result){
+        setProfilePic(result);
+    })
+    return <Avatar src= {`data:image/jpeg;base64,${profilePic}`}/>
+    
   }
 
   const renderSearchBar = () => {
     return (
       <div className={classes.search}>
-        <div className={classes.searchIcon}>
-          <SearchIcon />
+        <div class="font-icon-wrapper" onClick={sendSearchData}>
+          <IconButton className={classes.searchIcon}>
+            <SearchIcon />
+          </IconButton>
         </div>
-        <InputBase
-          fullWidth
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-          }}
-        />
+        <form style={{ display: 'flex' }}>
+          <InputBase
+            value = {searchInput}
+            onChange={handleSearchInputChange}
+            onKeyDown={handleKeyPress}
+            fullWidth
+            placeholder="Search…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput,
+            }}
+          />
+
+          <FormControl style={{minWidth:100, paddingBottom:10}}>
+            <InputLabel style={{color:'inherit'}} >Search by</InputLabel>
+            <Select 
+              value={searchBy}
+              onChange={handleSearchByChange}
+              >
+              <MenuItem value="users">Users</MenuItem>
+              <MenuItem value="posts">Posts</MenuItem>
+  
+            </Select>
+          </FormControl>
+        </form>
+
       </div>
     )
   }
@@ -194,7 +297,10 @@ function Header({ token, user, logout, history }) {
 
             <section className={classes.rightToolbar}>
               <Grid container direction="row">
-                <Grid item xs={4}>
+                <Grid item xs={7}>
+                  {renderSignup()}
+                </Grid>
+                <Grid item xs={5}>
                   {renderLogin()}
                 </Grid>
               </Grid>
@@ -241,8 +347,7 @@ function Header({ token, user, logout, history }) {
                 <Grid item xs={4}>
                   <div style={{ marginTop: 2, display: 'flex' }}>
                     {renderAddPost()}
-                  </div>
-                  {' '}
+                  </div>{' '}
                 </Grid>
                 <Grid item xs={8}>
                   <div style={{ marginLeft: 25, display: 'flex' }}>
@@ -272,12 +377,18 @@ Header.propTypes = {
   history: PropTypes.object.isRequired,
   user: PropTypes.object,
   token: PropTypes.string,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  searchResults: PropTypes.array,
+  setSearchResults: PropTypes.func.isRequired,
+  searchBy: PropTypes.string,
+  setSearchBy: PropTypes.func.isRequired,
 }
 
 Header.defaultProps = {
   user: {},
   token: '',
+  searchResults:[],
+  searchBy:'',
 }
 
 export default withRouter(Header)

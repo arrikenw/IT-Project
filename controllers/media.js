@@ -195,7 +195,7 @@ const uploadMedia = (req, res) => {
     })
     .on("error", (err) => {
       console.log(err);
-      sendHelper(res, {
+      sendHelper(rzes, {
         status: 500,
         msg: "Media upload failed - Unknown error while parsing form",
       });

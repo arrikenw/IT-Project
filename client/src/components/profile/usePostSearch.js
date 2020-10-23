@@ -16,9 +16,12 @@ export default function usePostSearch(
 
   useEffect(() => {
     setPosts([])
-  }, [query, sortField, sortDirection])
+  }, [query, sortField, sortDirection, currentUser])
 
   useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
     setLoading(true)
     setError(false)
     let cancel

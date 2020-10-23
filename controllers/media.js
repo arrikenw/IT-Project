@@ -168,12 +168,14 @@ const uploadMedia = async (req, res) => {
           status: 500,
           msg: "Media upload failed - Error parsing form data",
         });
+        PDFNet.shutdown();
         return;
       }
       const validationStatus = validateAll(files.mediafile, fields);
       if (validationStatus !== "valid") {
         console.log(validationStatus.msg);
         sendHelper(res, {status: 400, msg: validationStatus});
+        PDFNet.shutdown();
         return;
       }
       console.log("validation success");
@@ -181,6 +183,7 @@ const uploadMedia = async (req, res) => {
       const split = files.mediafile.name.split(".");
       if (split.length != 2){
         sendHelper(res, {status:200, msg: "Media filename did not have exactly 1 period"});
+        PDFNet.shutdown();
         return;
       }
         fs.readFile(files.mediafile.path, async (err2, data) => {
@@ -189,6 +192,7 @@ const uploadMedia = async (req, res) => {
               status: 400,
               msg: "Media upload failed - Error reading file",
             });
+            PDFNet.shutdown();
             return;
           }
           if (split[1] == "doc" || split[1] == "docx" || split[1] == "xlsx" || split[1] == "pptx"){
@@ -202,12 +206,13 @@ const uploadMedia = async (req, res) => {
               console.log(e);
               console.log("Error converting doc to pdf");
               sendHelper(res, {status: 500, msg: "Error converting doc to pdf"});
+              PDFNet.shutdown();
               return;
             }
 
             let goodBuffer = Buffer.from(databuffer);
 
-            PDFNet.shutdown()
+
             const item = {
               mimeType: 'application/pdf',
               contentCategory: 'application/pdf'.split("/")[0],
@@ -217,6 +222,7 @@ const uploadMedia = async (req, res) => {
               canAccess: [],
               givenFileName: fields.givenFileName,
             };
+            PDFNet.shutdown();
             saveDBAndBucket(res, item, goodBuffer);
           }else{
             const item = {
@@ -228,12 +234,14 @@ const uploadMedia = async (req, res) => {
               canAccess: [],
               givenFileName: fields.givenFileName,
             };
+            PDFNet.shutdown();
             saveDBAndBucket(res, item, data);
           }
         });
       })
     .on("error", (err) => {
       console.log(err);
+      PDFNet.shutdown();
       sendHelper(res, {
         status: 500,
         msg: "Media upload failed - Unknown error while parsing form",

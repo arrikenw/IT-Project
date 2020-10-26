@@ -34,7 +34,7 @@ const fetchMediaUtil = require("../utils/fetchMediaUtil.js");
 // write file to bucket
 const saveBucket = (res, fileData, DBEntry) => {
   // information about bucket and upload
-  const bucketName = "it-project-media";
+  const bucketName = "podoju";
   const keyName = `${DBEntry._id.toString()}.${DBEntry.extension}`;
 
   // writing to bucket

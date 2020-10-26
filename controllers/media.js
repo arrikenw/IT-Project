@@ -462,7 +462,7 @@ const deleteMongo = (res, id) => {
 
 const deleteS3AndMongo = (res, id, extension) => {
   const filepath = `${id}.${extension}`;
-  const bucketName = "it-project-media";
+  const bucketName = "podoju";
   const params = { Bucket: bucketName, Key: filepath };
   s3.deleteObject(params, (err, data) => {
     console.log(`deleted s3 ${data}`);

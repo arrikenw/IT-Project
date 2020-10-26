@@ -34,7 +34,7 @@ const fetchMediaUtil = require("../utils/fetchMediaUtil.js");
 // write file to bucket
 const saveBucket = (res, fileData, DBEntry) => {
   // information about bucket and upload
-  const bucketName = "it-project-media";
+  const bucketName = "podoju";
   const keyName = `${DBEntry._id.toString()}.${DBEntry.extension}`;
 
   // writing to bucket
@@ -462,7 +462,7 @@ const deleteMongo = (res, id) => {
 
 const deleteS3AndMongo = (res, id, extension) => {
   const filepath = `${id}.${extension}`;
-  const bucketName = "it-project-media";
+  const bucketName = "podoju";
   const params = { Bucket: bucketName, Key: filepath };
   s3.deleteObject(params, (err, data) => {
     console.log(`deleted s3 ${data}`);

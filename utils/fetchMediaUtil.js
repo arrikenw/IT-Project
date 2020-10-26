@@ -8,7 +8,7 @@ const fetchMediaUtil = async (mediaID, extension) => {
   console.log("fetching1 media");
   const filepath = `${mediaID}.${extension}`;
   console.log(filepath);
-  const bucketName = "it-project-media";
+  const bucketName = "podoju";
   const params = { Bucket: bucketName, Key: filepath };
   let retVal;
 

@@ -9,6 +9,13 @@ router.post("/", authenticateToken, (req, res) => {
   mediaController.serveMedia(req, res);
 });
 
+
+//does not require token - anyone can attempt to fetch public media
+router.post("/getPublic", (req, res) => {
+  console.log("getting public media");
+  mediaController.serveMediaPublic(req, res);
+});
+
 router.post("/add", authenticateToken, (req, res) => {
   console.log("posting media");
   mediaController.uploadMedia(req, res);

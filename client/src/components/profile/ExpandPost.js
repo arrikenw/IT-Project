@@ -3,9 +3,11 @@ import {IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, G
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
 import Axios from "axios";
-import ProfileDetails from './ProfileDetails'
+import ProfileDetails from './ProfileDetails';
+import Comment from './Comment';
+
 
 const useStyles = makeStyles({
     bodyContainer: {
@@ -167,6 +169,7 @@ function ExpandPost({ user, token, history, location }) {
           </Card>
           <Card className={classes.comments}>
             ARRIKEN COMMENTS GO HERE
+              <Comment></Comment>
           </Card>
         </Grid>
         <Grid item xs={3} />

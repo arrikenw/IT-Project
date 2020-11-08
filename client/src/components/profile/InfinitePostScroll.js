@@ -14,7 +14,10 @@ export default function InfinitePostScroll(props) {
     setSortDirection(props.sortDirection)
   }, [props.sortField, props.sortDirection])
 
+
+  console.log(props.currentUser)
   const { loading, error, posts, hasMore } = usePostSearch(
+    props.currentUser,
     '',
     pageNumber,
     sortField,

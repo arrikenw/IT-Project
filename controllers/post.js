@@ -78,6 +78,7 @@ const getPost = (req, res) => {
 };
 
 const getPublicPost = (req, res) => {
+  console.log("help");
   const query = {};
   query.$and = [];
   // search for public posts
@@ -95,6 +96,8 @@ const getPublicPost = (req, res) => {
 
   // if request searches for specific values for fields, add it to the request
   if (req.body.filters) {
+    console.log("FILTERFITLER");
+    console.log(req.body.filters);
     query.$and.push(req.body.filters);
   }
 
@@ -128,7 +131,7 @@ const getPublicPost = (req, res) => {
   if (req.body.sortDirection) {
     sortDirection = req.body.sortDirection;
   }
-
+  console.log("?");
   const onResult = (result) => {
     console.log(`getPublicPost successful: found ${result.length} posts`);
     res.status(200);
@@ -143,6 +146,7 @@ const getPublicPost = (req, res) => {
 
   const sort = {};
   sort[sortField] = sortDirection;
+  console.log(query);
   PostModel.find(query)
     .sort(sort)
     .skip(skip)

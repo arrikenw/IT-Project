@@ -155,7 +155,7 @@ function Comment({user, comment, postID, token}) {
                             {imageString && <Avatar src= {imageString}/>}
                         </Grid>
                         <Grid item xs={11.5}>
-                            <div style={textLimit}>
+                            <div style={{paddingLeft: "10px"}}>
                                 <Typography gutterBottom variant="heading1" color="textPrimary" component="h2">
                                     {titleString}
                                 </Typography>

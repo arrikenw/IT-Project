@@ -114,7 +114,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       }
   }
   const handleKeyPress = (e) => {
-    //if enter key is pressed in search bar, clear searchresults then send the search payload to the relevant route
+    // if enter key is pressed in search bar, clear searchResults then send the search payload to the relevant route
     if (e.keyCode === 13){
       setSearchResults([]);
       sendSearchData();

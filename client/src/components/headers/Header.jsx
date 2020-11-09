@@ -92,6 +92,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   }
   const handleSearchByChange = (e) => {
     setSearchBy(e.target.value);
+    setSearchResults([]);
   }
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
@@ -118,8 +119,9 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       }
   }
   const handleKeyPress = (e) => {
-    //if enter key is pressed in search bar, send the search payload to the relevant route
+    //if enter key is pressed in search bar, clear searchresults then send the search payload to the relevant route
     if (e.keyCode == 13){
+      setSearchResults([]);
       sendSearchData();
     }
   }
@@ -228,7 +230,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   const renderSearchBar = () => {
     return (
       <div className={classes.search}>
-        <div class="font-icon-wrapper" onClick={sendSearchData}>
+        <div className="font-icon-wrapper" onClick={sendSearchData}>
           <IconButton className={classes.searchIcon}>
             <SearchIcon />
           </IconButton>

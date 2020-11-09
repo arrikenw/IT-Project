@@ -13,7 +13,6 @@ import {
 } from '@material-ui/core'
 import ThumbUpIcon from "@material-ui/icons/ThumbUp"
 import ShareIcon from "@material-ui/icons/Share"
-import Icon from '@material-ui/core/Icon'
 import RoomIcon from '@material-ui/icons/Room'
 
 //truncation is not supported for multiline, so using this lib
@@ -114,6 +113,12 @@ class ProfilePost extends Component {
               <Typography gutterBottom variant="heading1" color="textPrimary" component="h2">
                 {this.props.post.title}
               </Typography>
+              <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.button}
+                  startIcon={<RoomIcon/>}
+              />
               <Typography gutterBottom variant="body2" color="textSecondary" component="p">
                 <ResponsiveEllipsis text={this.props.post.description} maxLine={3} ellipsis="..." trimRight basedOn="letters"/>
               </Typography>

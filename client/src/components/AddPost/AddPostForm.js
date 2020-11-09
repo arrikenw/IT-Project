@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 import Axios from "axios"
 import { DropzoneArea } from 'material-ui-dropzone'
 import PropTypes from 'prop-types'
-import add from "../utils/addMedia"
 import {
     Button,
     Card,
@@ -16,6 +15,7 @@ import {
     Checkbox, FormControlLabel
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import add from "../utils/addMedia"
 
 const useStyles = makeStyles({
     mainContainer: {
@@ -59,8 +59,8 @@ function AddPostForm({ user, token, history }){
     const [rawMedia, setRawMedia] = useState(null)
     const [file, setFile] = useState(null)
     const [mimeType, setMimeType] = useState("")
-    //const query = new URLSearchParams(location.search)
-    //const userName = query.get('user')
+    // const query = new URLSearchParams(location.search)
+    // const userName = query.get('user')
 
     const changeTitle = (e) => {
         setTitle(e.target.value)
@@ -98,7 +98,6 @@ function AddPostForm({ user, token, history }){
 
     const onSubmit = (e) => {
         console.log("button pressed");
-        const {file, token, title, description, rawMedia} = this.state;
 
         const callback = (res) => {
             const payload = {
@@ -120,100 +119,100 @@ function AddPostForm({ user, token, history }){
     const classes = useStyles()
 
     return (
-        <Card>
-            <CardContent>
-                <Typography className={classes.center} variant="h5">Add New Post</Typography>
-                <form>
-                    <div style={{ marginTop: '20px' }}>
-                        <TextField
-                            id="addPost-title"
-                            type="title"
-                            label="Give your post a title"
-                            variant="outlined"
-                            fullWidth
-                            value={title}
-                            onChange={changeTitle}
-                        />
-                    </div>
-                    <div style={{ marginTop: '20px' }}>
-                        <TextField
-                            id="addPost-description"
-                            label="Give your work a description"
-                            variant="outlined"
-                            type="description"
-                            fullWidth
-                            multiline
-                            rows={6}
-                            value={description}
-                            onChange={changeDescription}
-                        />
-                    </div>
-                    <input
-                        style={{display: "none"}}
-                        accept="image/*"
-                        id="contained-button-file"
-                        onChange={onFileChange}
-                        type="file"
-                    />
-                    <div className={classes.center} style={{marginTop: "20px"}}>
-                        <label htmlFor="contained-button-file">
-                            <Button variant="contained" color="primary" component="span">
-                                Choose File
-                            </Button>
-                        </label>
-                    </div>
-                    <div style={{ marginTop: '20px' }}>
-                        <TextField
-                            id="addPost-tag"
-                            label="Add tags to your post"
-                            variant="outlined"
-                            type="tag"
-                            fullWidth
-                            value={tag}
-                            onChange={changeTag}
-                        />
-                    </div>
-                    <div style={{ marginTop: '20px' }}>
-                        <TextField
-                            id="addPost-reflection"
-                            label="Give your reflections of your work"
-                            variant="outlined"
-                            type="reflection"
-                            fullWidth
-                            value={reflection}
-                            onChange={changeReflection}
-                        />
-                    </div>
-                    <FormControlLabel
-                        control={(
-                            <Checkbox
-                                checked={postPrivacy}
-                                onClick={changePostPrivacy}
-                                name="postPrivacy"
-                            />
+      <Card>
+        <CardContent>
+          <Typography className={classes.center} variant="h5">Add New Post</Typography>
+          <form>
+            <div style={{ marginTop: '20px' }}>
+              <TextField
+                id="addPost-title"
+                type="title"
+                label="Give your post a title"
+                variant="outlined"
+                fullWidth
+                value={title}
+                onChange={changeTitle}
+              />
+            </div>
+            <div style={{ marginTop: '20px' }}>
+              <TextField
+                id="addPost-description"
+                label="Give your work a description"
+                variant="outlined"
+                type="description"
+                fullWidth
+                multiline
+                rows={6}
+                value={description}
+                onChange={changeDescription}
+              />
+            </div>
+            <input
+              style={{display: "none"}}
+              accept="image/*"
+              id="contained-button-file"
+              onChange={onFileChange}
+              type="file"
+            />
+            <div className={classes.center} style={{marginTop: "20px"}}>
+              <label htmlFor="contained-button-file">
+                <Button variant="contained" color="primary" component="span">
+                  Choose File
+                </Button>
+              </label>
+            </div>
+            <div style={{ marginTop: '20px' }}>
+              <TextField
+                id="addPost-tag"
+                label="Add tags to your post"
+                variant="outlined"
+                type="tag"
+                fullWidth
+                value={tag}
+                onChange={changeTag}
+              />
+            </div>
+            <div style={{ marginTop: '20px' }}>
+              <TextField
+                id="addPost-reflection"
+                label="Give your reflections of your work"
+                variant="outlined"
+                type="reflection"
+                fullWidth
+                value={reflection}
+                onChange={changeReflection}
+              />
+            </div>
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  checked={postPrivacy}
+                  onClick={changePostPrivacy}
+                  name="postPrivacy"
+                />
                         )}
-                        label="Make post private"
-                    />
-                </form>
-                <div style={{ marginTop: '20px' }}>
-                    <Button className={classes.discard} fullWidth>
-                        <Typography className={classes.buttonText} variant="h6">
-                            Discard
-                        </Typography>
-                    </Button>
-                </div>
-                <div style={{ marginTop: '20px' }}>
-                    <Divider variant="middle" />
-                </div>
-                <div style={{ marginTop: '10px' }}>
-                    <Button className={classes.post} fullWidth>
-                        <Typography className={classes.buttonText} variant="h6">
-                            Post
-                        </Typography>
-                    </Button>
-                </div>
-            </CardContent>
-        </Card>
+              label="Make post private"
+            />
+          </form>
+          <div style={{ marginTop: '20px' }}>
+            <Button className={classes.discard} fullWidth>
+              <Typography className={classes.buttonText} variant="h6">
+                Discard
+              </Typography>
+            </Button>
+          </div>
+          <div style={{ marginTop: '20px' }}>
+            <Divider variant="middle" />
+          </div>
+          <div style={{ marginTop: '10px' }}>
+            <Button className={classes.post} onClick={onSubmit} fullWidth>
+              <Typography className={classes.buttonText} variant="h6">
+                Post
+              </Typography>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     )
 }
 

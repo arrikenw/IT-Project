@@ -12,16 +12,16 @@ export default function CommentList({user, postID, comments, token}) {
         if (comments.length === index + 1) {
           return (
             <div
-              style={{ marginTop: '0vw' }}
+              style={{ marginTop: '20px', minHeight:"100px"}}
               key={comment._id}
             >
-              <Comment comment={comment} token={token} postID={postID}/>
+              <Comment comment={comment} token={token} postID={postID} user={user}/>
             </div>
           )
         }
         return (
-          <div style={{ marginTop: '0vw' }} key={comment._id}>
-            <Comment comment={comment} token={token} postID={postID}/>
+          <div style={{ marginTop: '20px', minHeight:"100px"}} key={comment._id}>
+            <Comment comment={comment} token={token} postID={postID} user={user}/>
           </div>
         )
       })}

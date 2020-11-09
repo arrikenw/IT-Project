@@ -11,7 +11,8 @@ import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ShareIcon from "@material-ui/icons/Share";
-import axios from "axios";
+import PropTypes from "prop-types";
+
 
 
 const useStyles = makeStyles({
@@ -20,7 +21,7 @@ const useStyles = makeStyles({
         backgroundColor:"blue"
     },
     comment: {
-        //height: "500px",
+        // height: "500px",
         backgroundColor:"white",
         paddingBottom:"10px"
     },
@@ -43,21 +44,21 @@ function Comment({user, comment, postID, token}) {
 
     const classes = useStyles();
 
-    //todo, make it toggle to send remove like to backend
+    // todo, make it toggle to send remove like to backend
     function likePost(){
         if (!isLiked){
             setIsLiked(true);
             setFirstLikedNow(1);
             const payload = {
                 commentID: comment._id,
-                postID: postID
+                postID
             }
             console.log(payload);
             const authHeader = {
                 headers: {Authorization: `Bearer ${token}` }
             }
 
-            axios.post('/api/comment/like', payload,  authHeader)
+            Axios.post('/api/comment/like', payload,  authHeader)
                 .then(response => {
                     console.log(response);
                     console.log("liked, idk if we want any confirmation that server actually got the like");
@@ -68,7 +69,7 @@ function Comment({user, comment, postID, token}) {
 
 
     useEffect(() => {
-        //set initial "has liked status"
+        // set initial "has liked status"
         if (comment && user && comment.likedBy.includes(user._id)){
             setIsLiked(true);
         }
@@ -84,13 +85,13 @@ function Comment({user, comment, postID, token}) {
 
         Axios.post(url, payload, headers)
             .then((res) => {
-                if (res.status == 200 || res.status == "success"){
+                if (res.status === 200){
                     setUserName(res.data[0].userName);
                     console.log(res.data[0]);
 
-                    //no profile image, set default and return
+                    // no profile image, set default and return
                     if (!res.data[0].profilePic){
-                        //TODO SET DEFAULT
+                        // TODO SET DEFAULT
                         console.log("no profile pic");
                         return;
                     }
@@ -101,41 +102,37 @@ function Comment({user, comment, postID, token}) {
                     };
 
                     Axios.post(mediaURL, profilePicPayload, headers)
-                        .then((res) => {
-                            if (res.status == 200 || res.status == "success"){
-                                setReturnedMedia(res.data);
+                        .then((newRes) => {
+                            if (newRes.status === 200){
+                                setReturnedMedia(newRes.data);
                                 console.log("returned media:");
-                                console.log(res.data);
+                                console.log(newRes.data);
                             }else{
-                                //TODO
+                                // TODO
                                 console.log("error getting profile pic");
-                                return;
                             }
 
                         })
                         .catch((err) =>{
-                            //TODO
+                            // TODO
                             console.error(err);
-                            return;
                         });
                 }else{
                     // TODO
                     console.log("error getting post creator");
-                    return;
                 }
             }).catch((err) => {
                 // TODO
                 console.error(err);
-                return;
             });
         }, [token]);
 
 
 
-    let textLimit = {maxHeight: "90px"}
+    const textLimit = {maxHeight: "90px"}
     let titleString = ""
     if (userName) {
-        titleString = userName + "'s thoughts";
+        titleString = `${userName  }'s thoughts`;
     }
     let imageString;
     if (returnedMedia){
@@ -147,45 +144,55 @@ function Comment({user, comment, postID, token}) {
         likeMessage = "You've liked this comment"
     }
     return (
-        <div className={classes.commentBorder}>
-            <Card className={classes.comment}>
-                <div style={{height:"85%"}}>
-                    <Grid container style={{backgroundColor: "grey"}}>
-                        <Grid item xs={0.5}>
-                            {imageString && <Avatar src= {imageString}/>}
-                        </Grid>
-                        <Grid item xs={11.5}>
-                            <div style={{paddingLeft: "10px"}}>
-                                <Typography gutterBottom variant="heading1" color="textPrimary" component="h2">
-                                    {titleString}
-                                </Typography>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <div style={{backgroundColor: "lightGrey"}}>
-                        <Typography gutterBottom variant="body2" color="textSecondary" component="p">
-                            {comment.comment}
-                        </Typography>
-                    </div>
+      <div className={classes.commentBorder}>
+        <Card className={classes.comment}>
+          <div style={{height:"85%"}}>
+            <Grid container style={{backgroundColor: "grey"}}>
+              <Grid item xs={0.5}>
+                {imageString && <Avatar src={imageString} />}
+              </Grid>
+              <Grid item xs={11.5}>
+                <div style={{paddingLeft: "10px"}}>
+                  <Typography gutterBottom variant="heading1" color="textPrimary" component="h2">
+                    {titleString}
+                  </Typography>
                 </div>
+              </Grid>
+            </Grid>
+            <div style={{backgroundColor: "lightGrey"}}>
+              <Typography gutterBottom variant="body2" color="textSecondary" component="p">
+                {comment.comment}
+              </Typography>
+            </div>
+          </div>
 
-                <div style={{float:"left", height:"15%"}}>
-                    <IconButton size="medium" color="primary" onClick={likePost}>
-                        <ThumbUpIcon />
-                        {likeMessage}
-                    </IconButton>
-                    {comment.likedBy.length + firstLikedNow} Likes
-                </div>
-                <div style={{float:"right"}}>
-                    <IconButton size="medium" color="primary">
-                        <ShareIcon />
-                        Share
-                    </IconButton>
-                </div>
-            </Card>
-        </div>
+          <div style={{float:"left", height:"15%"}}>
+            <IconButton size="medium" color="primary" onClick={likePost}>
+              <ThumbUpIcon />
+              {likeMessage}
+            </IconButton>
+            {comment.likedBy.length + firstLikedNow}
+            {' '}
+            Likes
+          </div>
+          <div style={{float:"right"}}>
+            <IconButton size="medium" color="primary">
+              <ShareIcon />
+              Share
+            </IconButton>
+          </div>
+        </Card>
+      </div>
 
     );
+}
+
+Comment.propTypes = {
+    user: PropTypes.objectOf(PropTypes.object).isRequired,
+    comment: PropTypes.objectOf(PropTypes.object).isRequired,
+    postID: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
+
 }
 
 export default withRouter(Comment);

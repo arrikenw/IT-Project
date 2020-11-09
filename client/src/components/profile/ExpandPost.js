@@ -136,7 +136,7 @@ function ExpandPost({ user, token, history, location }) {
                         marginLeft: '100px',
                     }}
           >
-              {/*<ProfileDetails user={user} />*/}
+            {/*  <ProfileDetails user={user} /> */}
           </div>
         </Grid>
         <Grid className={classes.bodyContainer} item xs={8}>
@@ -181,11 +181,12 @@ function ExpandPost({ user, token, history, location }) {
               Click to copy a link to this post to your clipboard
             </CardActions>
           </Card>
-            {post && (
-          <Card className={classes.comments}>
-            COMMENTS GO HERE
-              <CommentList user = {user} postID = {post._id} comments={post.comments} token={token}></CommentList>
-          </Card>)}
+          {post && (
+            <Card className={classes.comments}>
+              COMMENTS GO HERE
+              <CommentList user={user} postID={post._id} comments={post.comments} token={token} />
+            </Card>
+)}
         </Grid>
         <Grid item xs={3} />
       </Grid>

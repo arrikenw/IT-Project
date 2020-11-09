@@ -3,11 +3,11 @@ import {IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, G
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
 import Axios from "axios";
-import ProfileDetails from './ProfileDetails'
-import Icon from '@material-ui/core/Icon'
-import RoomIcon from '@material-ui/icons/Room'
+import ProfileDetails from './ProfileDetails';
+import Comment from './Comment';
+import CommentList from "./CommentList";
 
 
 const useStyles = makeStyles({
@@ -21,6 +21,9 @@ const useStyles = makeStyles({
         width: '100%',
         overflowX: 'hidden',
     },
+
+
+
     postCard: {
         minHeight: '1000px',
         marginBottom: '30px',
@@ -32,8 +35,8 @@ const useStyles = makeStyles({
         marginTop:'0',
         paddingTop:'0'
     },
+
     comments: {
-        height: "500px",
         backgroundColor: "red"
     }
 })
@@ -132,7 +135,7 @@ function ExpandPost({ user, token, history, location }) {
                         marginLeft: '100px',
                     }}
           >
-            <ProfileDetails user={user} />
+              {/*<ProfileDetails user={user} />*/}
           </div>
         </Grid>
         <Grid className={classes.bodyContainer} item xs={8}>
@@ -142,12 +145,6 @@ function ExpandPost({ user, token, history, location }) {
                     <Typography variant="heading1" component="h1">
                         {post && post.title}
                     </Typography>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        startIcon={<RoomIcon/>}
-                    />
                 </Grid>
               {media && media.mimeType != 'application/pdf' && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
               {!media && <Grid container justify="center"><CircularProgress/> Loading post media </Grid>}
@@ -170,9 +167,11 @@ function ExpandPost({ user, token, history, location }) {
               Click to copy a link to this post to your clipboard
             </CardActions>
           </Card>
+            {post && (
           <Card className={classes.comments}>
-            ARRIKEN COMMENTS GO HERE
-          </Card>
+            COMMENTS GO HERE
+              <CommentList user = {user} postID = {post._id} comments={post.comments} token={token}></CommentList>
+          </Card>)}
         </Grid>
         <Grid item xs={3} />
       </Grid>

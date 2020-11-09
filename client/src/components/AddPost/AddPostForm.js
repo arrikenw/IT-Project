@@ -109,6 +109,7 @@ function AddPostForm({ user, token, history }){
             Axios.post("/api/post/add", payload, {headers: {Authorization: `Bearer ${token}`}})
                 .then( (resp) => {
                     console.log(resp.data);
+                    history.push("/profile")
                 });
         }
 
@@ -155,6 +156,7 @@ function AddPostForm({ user, token, history }){
               type="file"
             />
             <div className={classes.center} style={{marginTop: "20px"}}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="contained-button-file">
                 <Button variant="contained" color="primary" component="span">
                   Choose File
@@ -219,5 +221,7 @@ function AddPostForm({ user, token, history }){
 export default AddPostForm;
 
 AddPostForm.propTypes = {
-    token: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
+  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  history: PropTypes.objectOf(PropTypes.object).isRequired,
 }

@@ -100,7 +100,7 @@ function Profile({ user, token, history, location }) {
     if (mdLower) {
       return 1200
     }
-    return 800
+    return '60%'
   }
 
   const handleDrawerOpen = () => {
@@ -155,7 +155,7 @@ function Profile({ user, token, history, location }) {
 
 
           <Hidden mdDown>
-            <Box maxWidth={400} style={{flex: "0 0 65%", paddingRight: "70px"}}>
+            <Box maxWidth={400} style={{flex: "0 0 65%", paddingRight: "10%"}}>
               <ProfileDetails currentUser={currentUser} setSearchDirection={setSortDirection} setSearchField={setSortField} setFilterTag={setFilterTag} />
             </Box>
           </Hidden>

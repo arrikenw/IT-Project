@@ -92,7 +92,7 @@ function SettingsForm({ user, token }) {
       <CardContent>
         <Typography variant="h5">
           {user.firstName}
-          &$39;s details
+          &apos;s details
         </Typography>
         <form>
           <div style={{ marginTop: '20px' }}>
@@ -221,7 +221,12 @@ function SettingsForm({ user, token }) {
 }
 
 SettingsForm.propTypes = {
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    email: PropTypes.string,
+    userName: PropTypes.string
+  }).isRequired,
   token: PropTypes.string.isRequired,
 }
 

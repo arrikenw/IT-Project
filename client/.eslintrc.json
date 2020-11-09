@@ -19,7 +19,8 @@
         "no-process-exit": "off",
         "global-require": "off",
         "react/jsx-filename-extension": [0],
-        "jsx-a11y/media-has-caption": "off"
+        "jsx-a11y/media-has-caption": "off",
+        "react/forbid-prop-types": "off"
     },
     "settings": {
         "react" : {

@@ -204,11 +204,11 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
 }
 
 SearchResults.propTypes = {
-  user: PropTypes.objectOf(PropTypes.object),
+  user: PropTypes.shape({}),
   token: PropTypes.string,
-  searchResults: PropTypes.objectOf(PropTypes.array),
+  searchResults: PropTypes.arrayOf(PropTypes.object),
   searchBy: PropTypes.string.isRequired,
-  history: PropTypes.objectOf(PropTypes.array).isRequired,
+  history: PropTypes.shape({push: PropTypes.func}).isRequired,
 }
 
 SearchResults.defaultProps = {

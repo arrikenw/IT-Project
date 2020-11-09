@@ -132,4 +132,5 @@ RequiredInfoForm.propTypes = {
   setConfirmPassword: PropTypes.func.isRequired,
 }
 
+
 export default RequiredInfoForm

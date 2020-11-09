@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   AppBar,
   Button,
@@ -200,27 +200,22 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
     )
   }
 
-
-  const getProfilePic = () =>{
-    
+  useEffect(() => {
     const authHeader = {
       headers: {Authorization: `Bearer ${token}` }
     }
     const payload = {
       mediaID: user.profilePic
     }
-    return axios.post('/api/media', payload,  authHeader)
+     axios.post('/api/media', payload,  authHeader)
       .then(response => {
-      return response.data.b64media;
-    })
-  }
+        setProfilePic(response.data.b64media);
+      })
+  }, [user, token])
+
 
   const renderAvatar = () => {
-    getProfilePic().then((result) => {
-        setProfilePic(result);
-    })
     return <Avatar src={`data:image/jpeg;base64,${profilePic}`} />
-    
   }
 
   const renderSearchBar = () => {
@@ -370,11 +365,11 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 }
 
 Header.propTypes = {
-  history: PropTypes.objectOf(PropTypes.object).isRequired,
-  user: PropTypes.objectOf(PropTypes.object),
+  user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string, profilePic: PropTypes.string}),
+  history: PropTypes.shape({push: PropTypes.func}).isRequired,
   token: PropTypes.string,
   logout: PropTypes.func.isRequired,
-  searchResults: PropTypes.objectOf(PropTypes.array),
+  searchResults: PropTypes.arrayOf(PropTypes.object),
   setSearchResults: PropTypes.func.isRequired,
   searchBy: PropTypes.string,
   setSearchBy: PropTypes.func.isRequired,

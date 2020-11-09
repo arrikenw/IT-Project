@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import Axios from "axios"
+import {withRouter} from "react-router-dom";
 import { DropzoneArea } from 'material-ui-dropzone'
 import PropTypes from 'prop-types'
 import {
@@ -96,6 +97,10 @@ function AddPostForm({ user, token, history }){
         fileReader.readAsDataURL(e.target.files[0]);
     }
 
+    const redirect = () => {
+      history.push("/profile")
+    }
+
     const onSubmit = (e) => {
         console.log("button pressed");
 
@@ -108,8 +113,8 @@ function AddPostForm({ user, token, history }){
             }
             Axios.post("/api/post/add", payload, {headers: {Authorization: `Bearer ${token}`}})
                 .then( (resp) => {
-                    console.log(resp.data);
-                    history.push("/profile")
+                  console.log(resp.data);
+                  redirect();
                 });
         }
 
@@ -218,10 +223,10 @@ function AddPostForm({ user, token, history }){
     )
 }
 
-export default AddPostForm;
+export default withRouter(AddPostForm);
 
 AddPostForm.propTypes = {
   token: PropTypes.string.isRequired,
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
-  history: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({_id: PropTypes.string}).isRequired,
+  history: PropTypes.shape({push: PropTypes.func}).isRequired,
 }

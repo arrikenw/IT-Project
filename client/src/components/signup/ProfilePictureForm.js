@@ -68,6 +68,7 @@ function ProfilePictureForm({ userName, setParentRawMedia, file, setFile }) {
         type="file"
       />
       <div className={classes.center} style={{marginTop: "20px"}}>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label htmlFor="contained-button-file">
           <Button variant="contained" color="primary" component="span">
             Choose File
@@ -81,7 +82,7 @@ function ProfilePictureForm({ userName, setParentRawMedia, file, setFile }) {
 ProfilePictureForm.propTypes = {
   userName: PropTypes.string.isRequired,
   setParentRawMedia: PropTypes.func.isRequired,
-  file: PropTypes.object.isRequired,
+  file: PropTypes.objectOf(PropTypes.object).isRequired,
   setFile: PropTypes.func.isRequired,
 }
 

@@ -9,6 +9,7 @@ import {
   Button,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles({
   signUp: {
@@ -89,7 +90,10 @@ function SettingsForm({ user, token }) {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h5">{user.firstName}'s details</Typography>
+        <Typography variant="h5">
+          {user.firstName}
+          &$39;s details
+        </Typography>
         <form>
           <div style={{ marginTop: '20px' }}>
             <TextField
@@ -214,6 +218,11 @@ function SettingsForm({ user, token }) {
       </CardContent>
     </Card>
   )
+}
+
+SettingsForm.propTypes = {
+  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  token: PropTypes.string.isRequired,
 }
 
 export default SettingsForm

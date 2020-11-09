@@ -4,60 +4,62 @@ import { Grid} from '@material-ui/core'
 
 import { withRouter } from 'react-router-dom'
 
+import PropTypes from 'prop-types'
 import ProfilePost from '../profile/ProfilePost'
 
-import PropTypes from 'prop-types'
 
 function SearchResults({token, user, searchResults, searchBy}) {
 
-    //TODO: Create a state in App.js to track whether searching by posts or users
+    // TODO: Create a state in App.js to track whether searching by posts or users
 
+  // eslint-disable-next-line consistent-return
     const renderSearchResults = () => {
         if (searchBy==="posts") {
-            
             return(
-
-                <div>
-                    There are {searchResults.length} matching posts
-               
+              <div>
+                There are 
+                {' '}
+                {searchResults.length}
+                {' '}
+                matching posts
                 
-                 <Grid spacing={2} container direction="row">
+                <Grid spacing={2} container direction="row">
      
                  
-                 {searchResults.map((result, idx) => (
-                         <Grid item xs={3} key={idx}>
-                             <ProfilePost  post={result} />
-                         </Grid>
+                  {searchResults.map((result, idx) => (
+                    <Grid item xs={3} key={result._id}>
+                      <ProfilePost post={result} />
+                    </Grid>
                      
-     
-                 
+                   
                  ))}
-                 </Grid>
-                 </div>
+                </Grid>
+              </div>
              )
         }
         if (searchBy==="users") {
-            var profileUrl = ''
+            let profileUrl = ''
 
             return(
-                <div>
-                    There are {searchResults.length} matching users
-                    
-                    <Grid spacing={2} container direction="row">
-     
-                 
-                {searchResults.map((result, idx) => (
+              <div>
+                There are 
+                {' '}
+                {searchResults.length}
+                {' '}
+                matching users
 
-                    profileUrl = `/profile?user=${result.userName}`,
-
-                    <Grid item xs={6} key={idx}>
-                        
-                        <a href = {profileUrl} >{result.userName}</a>
-                    </Grid>
-                    
-                ))}
+                <Grid spacing={2} container direction="row">
+                  {searchResults.map((result, idx) => {
+                    profileUrl = `/profile?user=${result.userName}`
+                      return (
+                        <Grid item xs={6} key={result._id}>
+                          <a href={profileUrl}>{result.userName}</a>
+                        </Grid>
+                      )
+                  })}
                 </Grid>
-                </div>
+
+              </div>
 
             )
         }
@@ -65,21 +67,19 @@ function SearchResults({token, user, searchResults, searchBy}) {
 
 
     return (
-        <>
-            <div>
-
-                {renderSearchResults()}
-            </div>
-            
-        </>
+      <>
+        <div>
+          {renderSearchResults()}
+        </div>
+      </>
     )
 }
 
 SearchResults.propTypes = {
-    history: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    token: PropTypes.string,
-    searchResults: PropTypes.array,
+  user: PropTypes.objectOf(PropTypes.object),
+  token: PropTypes.string,
+  searchResults: PropTypes.objectOf(PropTypes.array),
+  searchBy: PropTypes.string.isRequired,
 }
 
 SearchResults.defaultProps = {

@@ -10,6 +10,7 @@ import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import PropTypes from "prop-types";
 import PinnedPostElement from "./PinnedPostElement";
 
 
@@ -54,11 +55,11 @@ function PinnedPost({ user, token, history, location, id }) {
     const [okToRender, setOkToRender] = useState(false);
 
     function scroll(magnitude){
-        const newi = i + magnitude;
-        setI(newi);
+        const newI = i + magnitude;
+        setI(newI);
     }
 
-    function getMediaAndNextPost(mID, postids, exportPosts, exportMedia, errcount){
+    function getMediaAndNextPost(mID, PostIDs, exportPosts, exportMedia, errCount){
         const controllerUrl = "/api/media/";
         const payload = {
             mediaID: mID,
@@ -78,18 +79,18 @@ function PinnedPost({ user, token, history, location, id }) {
                         contentCategory: res.data.contentCategory,
                     };
                     exportMedia.push(newmedia);
-                    getPinnedPostContent(postids, exportPosts, exportMedia, errcount);
+                    getPinnedPostContent(PostIDs, exportPosts, exportMedia, errCount);
                 }else{
                     console.log(res.status);
-                    if (errcount < 3){
-                        getMediaAndNextPost(mID, postids, exportPosts, exportMedia, errcount + 1);
+                    if (errCount < 3){
+                        getMediaAndNextPost(mID, PostIDs, exportPosts, exportMedia, errCount + 1);
                     }
                 }
             })
             .catch((err) => {
                 console.log(err);
-                if (errcount < 3){
-                    getMediaAndNextPost(mID, postids, exportPosts, exportMedia, errcount + 1);
+                if (errCount < 3){
+                    getMediaAndNextPost(mID, PostIDs, exportPosts, exportMedia, errCount + 1);
                 }
             });
     }
@@ -115,7 +116,7 @@ function PinnedPost({ user, token, history, location, id }) {
 
         Axios.post(postUrl, postPayload, headers).then( async (res) => {
             postids.shift(); // pop off first element
-            if (res.status == 200 || res.status == "success"){
+            if (res.status === 200) {
                 // todo store media here also
                 exportPosts.push(res.data[0]);
                 getMediaAndNextPost(res.data[0].thumbnailURL, postids, exportPosts, exportMedia, errcount);
@@ -162,61 +163,70 @@ function PinnedPost({ user, token, history, location, id }) {
 
     if (ids && okToRender){
         return (
-            <Grid container>
-                <Grid item xs={12}>
-                    <Grid container justify="center">
-                        <Typography variant="h5">
-                            Pinned posts
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                    <Grid container justify="center">
-                        <Typography variant="h6">
-                            {name}'s best work, handpicked by them
-                        </Typography>
-                    </Grid>
-                </Grid>
-
-                <Grid container>
-                    <Grid item xs={12}>
-                        <div id={"COULD PUT A CARD HERE TBH"}>
-                            <Grid container>
-                                <Grid item xs={4}>
-                                    <div style={{marginRight: "10px"}}>
-                                        {(posts.length > 0) && (<PinnedPostElement post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
-                                    </div>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <div style={{marginRight: "10px"}}>
-                                        {(posts.length > 1) && (<PinnedPostElement post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
-                                    </div>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <div style={{marginRight: "10px"}}>
-                                        {(posts.length > 2) && (<PinnedPostElement post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
-                                    </div>
-                                </Grid>
-                            </Grid>
-                        </div>
-                    </Grid>
-                </Grid>
-
-                <Grid item xs={11}>
-                    <IconButton variant="contained" size="medium" color="primary" style={{float:"left"}} onClick={()=> {scroll(-1);}}>
-                        <ChevronLeftIcon />
-                    </IconButton>
-                </Grid>
-                <Grid item xs={1}>
-                    <IconButton size="medium" color="primary" style={{float:"right"}} onClick={()=> {scroll(1);}}>
-                        <ChevronRightIcon />
-                    </IconButton>
-                </Grid>
+          <Grid container>
+            <Grid item xs={12}>
+              <Grid container justify="center">
+                <Typography variant="h5">
+                  Pinned posts
+                </Typography>
+              </Grid>
             </Grid>
+            <Grid item xs={12}>
+              <Grid container justify="center">
+                <Typography variant="h6">
+                  {name}
+                  &#39;s best work, handpicked by them
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs={12}>
+                <div id="COULD PUT A CARD HERE TBH">
+                  <Grid container>
+                    <Grid item xs={4}>
+                      <div style={{marginRight: "10px"}}>
+                        {(posts.length > 0) && (<PinnedPostElement post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
+                      </div>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <div style={{marginRight: "10px"}}>
+                        {(posts.length > 1) && (<PinnedPostElement post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
+                      </div>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <div style={{marginRight: "10px"}}>
+                        {(posts.length > 2) && (<PinnedPostElement post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
+                      </div>
+                    </Grid>
+                  </Grid>
+                </div>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={11}>
+              <IconButton variant="contained" size="medium" color="primary" style={{float:"left"}} onClick={()=> {scroll(-1);}}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Grid>
+            <Grid item xs={1}>
+              <IconButton size="medium" color="primary" style={{float:"right"}} onClick={()=> {scroll(1);}}>
+                <ChevronRightIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
         )
-    }else{
-        return (<div> Sorry, no posts have been pinned yet.</div>);
     }
+        return (<div> Sorry, no posts have been pinned yet.</div>);
+    
+}
+
+PinnedPost.propTypes = {
+    token: PropTypes.string.isRequired,
+    user: PropTypes.objectOf(PropTypes.object).isRequired,
+    history: PropTypes.objectOf(PropTypes.object).isRequired,
+    location: PropTypes.objectOf(PropTypes.object).isRequired,
+    id: PropTypes.string.isRequired,
+
 }
 
 export default withRouter(PinnedPost);

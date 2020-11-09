@@ -5,6 +5,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
 import Axios from "axios";
+import PropTypes from "prop-types";
 import ProfileDetails from './ProfileDetails'
 
 const useStyles = makeStyles({
@@ -45,19 +46,19 @@ function ExpandPost({ user, token, history, location }) {
     const [media, setMedia] = useState(null);
 
     function mapCatToComp(type){
-        if (type == "image"){
+        if (type === "image"){
             return "img";
         }
-        if (type == "video"){
+        if (type === "video"){
             return "video";
         }
-        if (type == "audio"){
+        if (type === "audio"){
             return "audio";
         }
         return type; // idk
     }
 
-    function getMedia(post, token){
+    function getMedia(){
         const controllerUrl = "/api/media/";
         const payload = {
             mediaID: post.mediaID,
@@ -92,18 +93,18 @@ function ExpandPost({ user, token, history, location }) {
     useEffect(() => {
         // get id from query string
         const query = new URLSearchParams(location.search)
-        const postid = query.get('post')
+        const posID = query.get('post')
 
         // fetch post outlined by query string
         const postUrl = '/api/post/get'
         const postPayload = {
-            filters: {_id: postid}
+            filters: {_id: posID}
         }
         const headers = {
             headers: { 'Authorization': `Bearer ${ token}`}
         }
         Axios.post(postUrl, postPayload, headers).then((res) => {
-            if (res.status == 200 || res.status == "success"){
+            if (res.status === 200){
                 setPost(res.data[0]);
                 getMedia(res.data[0], token);
             }else{
@@ -117,9 +118,9 @@ function ExpandPost({ user, token, history, location }) {
     const classes = useStyles()
 
 
-    let splitstrings = null;
+    let splitStrings = null;
     if (post && post.description){
-        splitstrings = post.description.split(/ (.*)/);
+        splitStrings = post.description.split(/ (.*)/);
     }
 
     return (
@@ -133,23 +134,36 @@ function ExpandPost({ user, token, history, location }) {
                         marginLeft: '100px',
                     }}
           >
-            <ProfileDetails user={user} />
+            {/* <ProfileDetails user={user} /> */}
           </div>
         </Grid>
         <Grid className={classes.bodyContainer} item xs={8}>
           <Card className={classes.postCard}>
             <CardContent>
-                <Grid container justify="center" style={{paddingBottom:"20px"}}>
-                    <Typography variant="heading1" component="h1">
-                        {post && post.title}
-                    </Typography>
-                </Grid>
-              {media && media.mimeType != 'application/pdf' && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
-              {!media && <Grid container justify="center"><CircularProgress/> Loading post media </Grid>}
-                {media && media.mimeType == 'application/pdf' && <Grid container justify="center"><object data={media.contentStr} type="application/pdf" width="100%" height="500px"/></Grid>}
-                <Typography variant="body2" color="textPrimary" component="p">
-                    <strong style={{fontSize:"115%"}}> {splitstrings && splitstrings.length > 0 && splitstrings[0]} </strong> {splitstrings && splitstrings.length > 1 && splitstrings[1]}
+              <Grid container justify="center" style={{paddingBottom:"20px"}}>
+                <Typography variant="heading1" component="h1">
+                  {post && post.title}
                 </Typography>
+              </Grid>
+              {media && media.mimeType !== 'application/pdf' && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
+              {!media && (
+              <Grid container justify="center">
+                <CircularProgress />
+                {' '}
+                Loading post media
+                {' '}
+              </Grid>
+)}
+              {media && media.mimeType === 'application/pdf' && <Grid container justify="center"><object data={media.contentStr} type="application/pdf" width="100%" height="500px" /></Grid>}
+              <Typography variant="body2" color="textPrimary" component="p">
+                <strong style={{fontSize:"115%"}}> 
+                  {' '}
+                  {splitStrings && splitStrings.length > 0 && splitStrings[0]}
+                  {' '}
+                </strong> 
+                {' '}
+                {splitStrings && splitStrings.length > 1 && splitStrings[1]}
+              </Typography>
             </CardContent>
             <CardActions>
               <IconButton variant="contained" size="large" color="primary">
@@ -172,6 +186,14 @@ function ExpandPost({ user, token, history, location }) {
         <Grid item xs={3} />
       </Grid>
     )
+}
+
+ExpandPost.propTypes = {
+  token: PropTypes.string.isRequired,
+  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  history: PropTypes.objectOf(PropTypes.object).isRequired,
+  location: PropTypes.objectOf(PropTypes.object).isRequired,
+
 }
 
 export default withRouter(ExpandPost)

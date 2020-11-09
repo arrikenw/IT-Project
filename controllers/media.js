@@ -261,6 +261,7 @@ const uploadMedia = async (req, res) => {
 
 //* ****************************************************************************************
 // CONTROLLER FOR SERVING MEDIA
+// REQUIRES AUTH TOKEN
 const serveMedia = async (req, res) => {
   if (!req.body.mediaID) {
     console.log("no media id provided");
@@ -278,9 +279,9 @@ const serveMedia = async (req, res) => {
     .then(async (doc) => {
       console.log("checking if user has access to media");
       if (
-        doc.creator.toString() !== req.user.id.toString() &&
-        doc.isPrivate !== false &&
-        !doc.canAccess.includes(mongoose.Types.ObjectId(req.user.id))
+          !((doc.creator.toString() === req.user.id.toString()) ||
+           doc.isPrivate == false ||
+          (doc.isPrivate == true && doc.canAccess.includes(mongoose.Types.ObjectId(req.user.id))))
       ) {
         console.log("user does not have permission to view media");
         sendHelper(res, {
@@ -320,6 +321,67 @@ const serveMedia = async (req, res) => {
       });
     });
 };
+
+
+//* ****************************************************************************************
+// CONTROLLER FOR SERVING PUBLIC MEDIA WITHOUT VERIFICATION
+// DOES NOT REQUIRE AUTH TOKEN. CAN ONLY FETCH PUBLIC MEDIA
+const serveMediaPublic = async (req, res) => {
+  if (!req.body.mediaID) {
+    console.log("no media id provided");
+    sendHelper(res, {
+      status: 400,
+      msg: "Media retrieval failed - No media id provided",
+    });
+    return;
+  }
+
+  // check if media can be accessed by user
+  console.log("getting media metadata");
+  Media.findById(req.body.mediaID)
+      .lean()
+      .then(async (doc) => {
+        console.log("checking if media is public");
+        if (doc.isPrivate !== false) {
+          console.log("media was not public");
+          sendHelper(res, {
+            status: 401,
+            msg:
+                "Media retrieval failed - media isn't public",
+          });
+          return;
+        }
+
+        const mediab64 = await fetchMediaUtil(req.body.mediaID, doc.extension);
+        if (!mediab64 || mediab64 === null) {
+          sendHelper(res, {
+            status: 500,
+            msg: "Media retrieval failed - failed to retrieve file from server",
+          });
+          console.log("Failed to retrieve media from s3 server");
+        } else {
+          sendHelper(res, {
+            status: 200,
+            msg: {
+              b64media: mediab64,
+              extension: doc.extension,
+              mimeType: doc.mimeType,
+              contentCategory: doc.contentCategory,
+            },
+          });
+          console.log("Successfully returned file, request complete.");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        sendHelper(res, {
+          status: 503,
+          msg:
+              "Media retrieval failed - error retrieving media information from database",
+        });
+      });
+};
+
 
 //* ****************************************************************************************
 // CONTROLLER AND HELPER FUNCTIONS FOR UPDATING MEDIA
@@ -532,4 +594,5 @@ const deleteMedia = (req, res) => {
 module.exports.updateMediaData = updateMediaData;
 module.exports.uploadMedia = uploadMedia;
 module.exports.serveMedia = serveMedia;
+module.exports.serveMediaPublic = serveMediaPublic;
 module.exports.deleteMedia = deleteMedia;

@@ -131,7 +131,7 @@ const likeComment = (req, res) => {
   const { postID, commentID } = req.body;
 
   PostModel.updateOne(
-    { _id: postID, "comments._id": commentID, "comments.userID": id },
+    { _id: postID, "comments._id": commentID},
     { $addToSet: { "comments.$.likedBy": id } }
   )
     .then((response) => {

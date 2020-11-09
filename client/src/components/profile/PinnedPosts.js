@@ -222,9 +222,9 @@ function PinnedPost({ user, token, history, location, id }) {
 
 PinnedPost.propTypes = {
     token: PropTypes.string.isRequired,
-    user: PropTypes.objectOf(PropTypes.object).isRequired,
-    history: PropTypes.objectOf(PropTypes.object).isRequired,
-    location: PropTypes.objectOf(PropTypes.object).isRequired,
+    user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
+    history: PropTypes.shape({push: PropTypes.func}).isRequired,
+    location: PropTypes.shape({search: PropTypes.func}).isRequired,
     id: PropTypes.string.isRequired,
 
 }

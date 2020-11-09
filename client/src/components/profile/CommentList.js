@@ -32,8 +32,8 @@ export default function CommentList({user, postID, comments, token}) {
 }
 
 CommentList.propTypes = {
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
-  comments: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
+  comments: PropTypes.arrayOf(PropTypes.object).isRequired,
   token: PropTypes.string.isRequired,
   postID: PropTypes.string.isRequired,
 

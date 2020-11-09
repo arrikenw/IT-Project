@@ -82,7 +82,7 @@ function ProfilePictureForm({ userName, setParentRawMedia, file, setFile }) {
 ProfilePictureForm.propTypes = {
   userName: PropTypes.string.isRequired,
   setParentRawMedia: PropTypes.func.isRequired,
-  file: PropTypes.objectOf(PropTypes.object).isRequired,
+  file: PropTypes.shape({}).isRequired,
   setFile: PropTypes.func.isRequired,
 }
 

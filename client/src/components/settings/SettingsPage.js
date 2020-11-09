@@ -26,7 +26,7 @@ function SettingsPage({ token, user }) {
 
 SettingsPage.propTypes = {
   token: PropTypes.string.isRequired,
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({}).isRequired,
 }
 
 export default SettingsPage

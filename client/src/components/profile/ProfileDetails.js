@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     backgroundColor: "red",
+    height: "100%"
 
     // zIndex: -1,
   },
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   details: {
     // position: 'fixed',
     backgroundColor: theme.palette.background.paper,
+    height: "100%"
     // zIndex: 200,
   },
 }))
@@ -193,7 +195,15 @@ function ProfileDetails({ currentUser, setSearchField, setSearchDirection, setFi
 }
 
 ProfileDetails.propTypes = {
-  currentUser: PropTypes.objectOf(PropTypes.object).isRequired,
+  currentUser: PropTypes.shape({
+    _id: PropTypes.string,
+    userName: PropTypes.string,
+    professionalFields: PropTypes.arrayOf(PropTypes.string),
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    biography: PropTypes.string,
+    organisation: PropTypes.string
+  }).isRequired,
   setSearchField: PropTypes.func.isRequired,
   setSearchDirection: PropTypes.func.isRequired,
   setFilterTag: PropTypes.func.isRequired,

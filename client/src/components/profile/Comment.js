@@ -188,8 +188,13 @@ function Comment({user, comment, postID, token}) {
 }
 
 Comment.propTypes = {
-    user: PropTypes.objectOf(PropTypes.object).isRequired,
-    comment: PropTypes.objectOf(PropTypes.object).isRequired,
+    user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
+    comment: PropTypes.shape({
+      likedBy: PropTypes.arrayOf(PropTypes.string),
+      comment: PropTypes.string,
+      _id: PropTypes.string,
+      userID: PropTypes.string
+    }).isRequired,
     postID: PropTypes.string.isRequired,
     token: PropTypes.string.isRequired,
 

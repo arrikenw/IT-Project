@@ -100,7 +100,7 @@ function Profile({ user, token, history, location }) {
     if (mdLower) {
       return 1200
     }
-    return '60%'
+    return 800
   }
 
   const handleDrawerOpen = () => {
@@ -190,9 +190,9 @@ function Profile({ user, token, history, location }) {
 
 Profile.propTypes = {
   token: PropTypes.string.isRequired,
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
-  history: PropTypes.objectOf(PropTypes.object).isRequired,
-  location: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
+  history: PropTypes.shape({push: PropTypes.func}).isRequired,
+  location: PropTypes.shape({search: PropTypes.string}).isRequired,
 
 }
 

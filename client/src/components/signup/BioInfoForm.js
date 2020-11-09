@@ -117,7 +117,7 @@ function BioInfoForm({ dateOfBirth, setDateOfBirth, organisation, setOrganisatio
 }
 
 BioInfoForm.propTypes = {
-  dateOfBirth: PropTypes.objectOf(PropTypes.object).isRequired,
+  dateOfBirth: PropTypes.shape({}).isRequired,
   setDateOfBirth: PropTypes.func.isRequired,
   organisation: PropTypes.string.isRequired,
   setOrganisation: PropTypes.func.isRequired,

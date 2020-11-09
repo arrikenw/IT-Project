@@ -118,7 +118,7 @@ class ProfilePost extends Component {
           <CardContent style={{paddingBottom: "0px"}}>
 
             <div style={textLimit}>
-              <Typography gutterBottom variant="heading1" color="textPrimary" component="h2">
+              <Typography gutterBottom variant="h1" color="textPrimary" component="h2">
                 {post.title}
               </Typography>
               <Typography gutterBottom variant="body2" color="textSecondary" component="p">
@@ -150,10 +150,16 @@ class ProfilePost extends Component {
 }
 
 ProfilePost.propTypes = {
-  post: PropTypes.objectOf(PropTypes.object).isRequired,
+  post: PropTypes.shape({
+    title: PropTypes.string,
+    _id: PropTypes.string,
+    thumbnailURL: PropTypes.string,
+    mediaID: PropTypes.string,
+    description: PropTypes.string,
+  }).isRequired,
   classes: PropTypes.objectOf(PropTypes.object).isRequired,
-  history: PropTypes.objectOf(PropTypes.object).isRequired,
-  media: PropTypes.objectOf(PropTypes.object).isRequired,
+  history: PropTypes.shape({push: PropTypes.func}).isRequired,
+  media: PropTypes.shape({contentStr: PropTypes.string}).isRequired,
 
 }
 

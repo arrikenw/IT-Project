@@ -24,9 +24,6 @@ const useStyles = makeStyles({
         backgroundColor:"white",
         paddingBottom:"10px"
     },
-    profilePicBox: {
-        backgroundColor: "red",
-    },
 
     remainingComment: {
         height:"100%",
@@ -153,21 +150,23 @@ function Comment({user, comment, postID, token}) {
         <div className={classes.commentBorder}>
             <Card className={classes.comment}>
                 <div style={{height:"85%"}}>
-                    <Grid container>
-                        <Grid item xs={2} className={classes.profilePicBox} style={{overflow:"hidden",backgroundColor:"white"}}>
-                            {imageString && <img src= {imageString}/>}
+                    <Grid container style={{backgroundColor: "grey"}}>
+                        <Grid item xs={0.5}>
+                            {imageString && <Avatar src= {imageString}/>}
                         </Grid>
-                        <Grid item xs={10} style={{backgroundColor: "purple"}}>
+                        <Grid item xs={11.5}>
                             <div style={textLimit}>
                                 <Typography gutterBottom variant="heading1" color="textPrimary" component="h2">
                                     {titleString}
                                 </Typography>
-                                <Typography gutterBottom variant="body2" color="textSecondary" component="p">
-                                    {comment.comment}
-                                </Typography>
                             </div>
                         </Grid>
                     </Grid>
+                    <div style={{backgroundColor: "lightGrey"}}>
+                        <Typography gutterBottom variant="body2" color="textSecondary" component="p">
+                            {comment.comment}
+                        </Typography>
+                    </div>
                 </div>
 
                 <div style={{float:"left", height:"15%"}}>

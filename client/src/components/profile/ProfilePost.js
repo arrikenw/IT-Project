@@ -1,7 +1,7 @@
-import Axios from "axios";
-import React, {Component} from "react";
+import Axios from "axios"
+import React, {Component} from "react"
 import { withRouter } from 'react-router-dom'
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles"
 import {
   Card,
   CardMedia,
@@ -11,8 +11,10 @@ import {
   Typography,
   CardActions, IconButton,
 } from '@material-ui/core'
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ShareIcon from "@material-ui/icons/Share";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp"
+import ShareIcon from "@material-ui/icons/Share"
+import Icon from '@material-ui/core/Icon'
+import RoomIcon from '@material-ui/icons/Room'
 
 //truncation is not supported for multiline, so using this lib
 import LinesEllipsis from 'react-lines-ellipsis'

@@ -6,6 +6,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
 import Axios from "axios";
 import ProfileDetails from './ProfileDetails'
+import Icon from '@material-ui/core/Icon'
+import RoomIcon from '@material-ui/icons/Room'
+
 
 const useStyles = makeStyles({
     bodyContainer: {
@@ -18,9 +21,6 @@ const useStyles = makeStyles({
         width: '100%',
         overflowX: 'hidden',
     },
-
-
-
     postCard: {
         minHeight: '1000px',
         marginBottom: '30px',
@@ -32,7 +32,6 @@ const useStyles = makeStyles({
         marginTop:'0',
         paddingTop:'0'
     },
-
     comments: {
         height: "500px",
         backgroundColor: "red"
@@ -143,6 +142,12 @@ function ExpandPost({ user, token, history, location }) {
                     <Typography variant="heading1" component="h1">
                         {post && post.title}
                     </Typography>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                        startIcon={<RoomIcon/>}
+                    />
                 </Grid>
               {media && media.mimeType != 'application/pdf' && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
               {!media && <Grid container justify="center"><CircularProgress/> Loading post media </Grid>}

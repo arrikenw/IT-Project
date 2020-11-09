@@ -3,6 +3,7 @@ import Axios from "axios"
 import { DropzoneArea } from 'material-ui-dropzone'
 import PropTypes from 'prop-types'
 import add from "../utils/addMedia"
+import Icon from '@material-ui/core/Icon';
 import {
     Button,
     Card,
@@ -16,6 +17,7 @@ import {
     Checkbox, FormControlLabel
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 const useStyles = makeStyles({
     mainContainer: {
@@ -154,6 +156,7 @@ function AddPostForm({ user, token, history }){
                         id="contained-button-file"
                         onChange={onFileChange}
                         type="file"
+                        startIcon={<AttachFileIcon />}
                     />
                     <div className={classes.center} style={{marginTop: "20px"}}>
                         <label htmlFor="contained-button-file">

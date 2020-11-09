@@ -24,9 +24,6 @@ const useStyles = makeStyles({
         width: '100%',
         overflowX: 'hidden',
     },
-
-
-
     postCard: {
         minHeight: '1000px',
         marginBottom: '30px',
@@ -36,7 +33,6 @@ const useStyles = makeStyles({
         objectFit: "contain", // other option is cover etc.
         marginTop:'0',
     },
-
     comments: {
         height: "500px",
         backgroundColor: "red"

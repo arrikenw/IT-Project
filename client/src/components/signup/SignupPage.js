@@ -4,6 +4,7 @@ import { Grid, Button, Typography, StepLabel, Step, Stepper, Card } from '@mater
 import CardContent from "@material-ui/core/CardContent";
 import { Redirect } from "react-router-dom";
 import Axios from "axios";
+import PropTypes from 'prop-types'
 import add from '../utils/addMedia'
 import RequiredInfoForm from "./RequiredInfoForm";
 import BioInfoForm from "./BioInfoForm";
@@ -89,7 +90,7 @@ function SignupPage({ setGlobalToken }) {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
-            }).then((res) => {
+            }).then((newRes) => {
               setGlobalToken(token)
               setRedirect(true)
             }).catch((err) => {
@@ -251,4 +252,7 @@ function SignupPage({ setGlobalToken }) {
   );
 }
 
+SignupPage.propTypes = {
+  setGlobalToken: PropTypes.func.isRequired,
+}
 export default SignupPage;

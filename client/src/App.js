@@ -5,7 +5,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import Axios from 'axios'
 import './App.css'
 // eslint-disable-next-line import/extensions
-import Header from './components/headers/Header.jsx'
+import zIndex from "@material-ui/core/styles/zIndex";
+import Header from './components/headers/Header'
 import Home from './components/home/Home'
 import LoginPage from './components/login/LoginPage'
 import Profile from './components/profile/Profile'
@@ -14,6 +15,8 @@ import ExpandPost from './components/profile/ExpandPost'
 import AddPost from "./components/AddPost/AddPost";
 import SignupPage from './components/signup/SignupPage';
 import SearchResults from './components/searchResults/SearchResults';
+
+import DrawerTest from './components/profile/DrawerTest'
 
 // css for containers
 const useStyles = makeStyles({
@@ -98,9 +101,18 @@ function App() {
   return (
     <Grid container className={classes.mainContainer} direction="column">
       <Router>
-        <Grid item>
-          <Header user={user} token={token} logout={logout} searchResults={searchResults} 
-          setSearchResults={setSearchResults} searchBy={searchBy} setSearchBy={setSearchBy}/>
+        <Grid item style={{height: "60px"}}>
+          <div style={{position: "relative", zIndex: 1400, boxShadow:  "none"}}>
+            <Header
+              user={user}
+              token={token}
+              logout={logout}
+              searchResults={searchResults}
+              setSearchResults={setSearchResults}
+              searchBy={searchBy}
+              setSearchBy={setSearchBy}
+            />
+          </div>
         </Grid>
         <Grid item className={classes.bodyContainer}>
           <Route exact path="/">
@@ -118,15 +130,18 @@ function App() {
           <Route path="/settings">
             <SettingsPage token={token} user={user} />
           </Route>
-          <Route path="/addpost">
+          <Route path="/addPost">
             <AddPost token={token} />
           </Route>
           <Route path="/signup">
             <SignupPage setGlobalToken={setGlobalToken} />
           </Route>
-          <Route path ="/searchResults">
-            <SearchResults token={token} user={user} searchResults={searchResults} searchBy={searchBy}/>
+          <Route path="/searchResults">
+            <SearchResults token={token} user={user} searchResults={searchResults} searchBy={searchBy} />
           </Route>
+          {/* <Route path="/test">
+            <DrawerTest token={token} user={user} />
+          </Route> */}
         </Grid>
       </Router>
     </Grid>

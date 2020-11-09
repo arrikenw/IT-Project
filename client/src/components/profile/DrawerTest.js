@@ -1,3 +1,4 @@
+/*
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -61,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Profile({ user, token, history, location }) {
+function PersistentDrawerLeft({ user, token, history, location }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -93,14 +94,14 @@ function Profile({ user, token, history, location }) {
   useEffect(() => {
     getUser();
   })
-
+  
   const mdLower = useMediaQuery(theme.breakpoints.down('md'))
 
   const boxSize = () => {
     if (mdLower) {
       return 1200
     }
-    return '60%'
+    return 800
   }
 
   const handleDrawerOpen = () => {
@@ -114,17 +115,17 @@ function Profile({ user, token, history, location }) {
   return (
     <div className={classes.root}>
 
-      {/* drawer itself */}
+      {/!* drawer itself *!/}
       <Drawer
         className={classes.drawer}
         variant="persistent"
         anchor="left"
         open={(open && mdLower)}
         classes={{
-          paper: classes.drawerPaper,
-        }}
+            paper: classes.drawerPaper,
+          }}
       >
-        {/* icon for closing drawer */}
+        {/!* icon for closing drawer *!/}
         <div style={{height: "64px"}} />
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -142,7 +143,7 @@ function Profile({ user, token, history, location }) {
         <div style={{width: "100%", height: "100%", display: 'flex'}}>
 
           <Hidden lgUp>
-            {/* icon for opening drawer */}
+            {/!* icon for opening drawer *!/}
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -155,7 +156,7 @@ function Profile({ user, token, history, location }) {
 
 
           <Hidden mdDown>
-            <Box maxWidth={400} style={{flex: "0 0 65%", paddingRight: "10%"}}>
+            <Box maxWidth={400} style={{flex: "0 0 65%", paddingRight: "70px"}}>
               <ProfileDetails currentUser={currentUser} setSearchDirection={setSortDirection} setSearchField={setSortField} setFilterTag={setFilterTag} />
             </Box>
           </Hidden>
@@ -188,7 +189,7 @@ function Profile({ user, token, history, location }) {
   );
 }
 
-Profile.propTypes = {
+PersistentDrawerLeft.propTypes = {
   token: PropTypes.string.isRequired,
   user: PropTypes.objectOf(PropTypes.object).isRequired,
   history: PropTypes.objectOf(PropTypes.object).isRequired,
@@ -196,4 +197,4 @@ Profile.propTypes = {
 
 }
 
-export default withRouter(Profile)
+export default withRouter(PersistentDrawerLeft) */

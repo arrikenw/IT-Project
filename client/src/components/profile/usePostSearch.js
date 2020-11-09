@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export default function usePostSearch(
   currentUser,
-  query,
+  filterTag,
   pageNumber,
   sortField,
   sortDirection,
@@ -16,7 +16,7 @@ export default function usePostSearch(
 
   useEffect(() => {
     setPosts([])
-  }, [query, sortField, sortDirection, currentUser])
+  }, [filterTag, sortField, sortDirection, currentUser])
 
   useEffect(() => {
     if (!currentUser) {
@@ -32,12 +32,17 @@ export default function usePostSearch(
     }
     console.log("currentUser")
     console.log(currentUser)
+    const filters = { userID: currentUser._id }
+    if (filterTag !== 'none') {
+      filters.tag = filterTag;
+    }
     axios
       .post(
         url,
-        { skip, search: query, limit: 5, sortField, sortDirection, filters: { userID: currentUser._id } },
+        { skip, limit: 5, sortField, sortDirection, filters },
         {
           headers: { Authorization: `Bearer ${token}` },
+          // eslint-disable-next-line no-return-assign
           cancelToken: new axios.CancelToken((c) => (cancel = c)),
         },
       )
@@ -52,7 +57,8 @@ export default function usePostSearch(
         console.log('error?>')
         console.error(e)
       })
+    // eslint-disable-next-line consistent-return
     return () => cancel()
-  }, [currentUser, query, pageNumber, sortField, sortDirection, token])
+  }, [currentUser, filterTag, pageNumber, sortField, sortDirection, token])
   return { loading, error, posts, hasMore }
 }

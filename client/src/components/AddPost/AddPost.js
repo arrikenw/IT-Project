@@ -2,7 +2,6 @@
  import Axios from "axios"
  import { DropzoneArea } from 'material-ui-dropzone'
  import PropTypes from 'prop-types'
- import add from "../utils/addMedia"
  import {
     Button,
     Card,
@@ -15,9 +14,10 @@
     TableRow,
      Checkbox, FormControlLabel
  } from "@material-ui/core";
- import AddPostForm from "./AddPostForm";
  import {makeStyles} from "@material-ui/core/styles";
  import {Redirect} from "react-router-dom";
+ import AddPostForm from "./AddPostForm";
+ import add from "../utils/addMedia"
  import ProfileDetails from "../profile/ProfileDetails";
 
  const useStyles = makeStyles({
@@ -30,8 +30,8 @@
    const classes = useStyles()
 
    return (
-       <Grid container justify="center">
-           {/*           <Grid item xs={false} />
+     <Grid container justify="center">
+       {/*           <Grid item xs={false} />
            <Grid item xs={3}>
                <div
                    style={{
@@ -43,12 +43,14 @@
                    <ProfileDetails user={user} userName={userName} />
                </div>
            </Grid> */}
-           <Grid item xs={12}>
-               <Container className={classes.addPostContainer} maxWidth="sm">
-                   <AddPostForm token={token} /> //CHECK THIS!?!?!?
-               </Container>
-           </Grid>
+       <Grid item xs={12}>
+         <Container className={classes.addPostContainer} maxWidth="sm">
+           <AddPostForm token={token} />
+           {' '}
+           //CHECK THIS!?!?!?
+         </Container>
        </Grid>
+     </Grid>
    )
  }
 
@@ -56,4 +58,7 @@
 
  AddPost.propTypes = {
    token: PropTypes.string.isRequired,
+   user: PropTypes.objectOf(PropTypes.object).isRequired,
+   history: PropTypes.objectOf(PropTypes.object).isRequired,
+
  }

@@ -9,21 +9,18 @@ import {
   Grid,
   IconButton,
   InputBase,
-  TextField,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
 import SettingsIcon from '@material-ui/icons/Settings'
 
-import NativeSelect from '@material-ui/core/NativeSelect'
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 
 import PropTypes from 'prop-types'
 
-import { Redirect, withRouter } from 'react-router-dom'
-import MenuList from '@material-ui/core/MenuList'
+import { withRouter } from 'react-router-dom'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
@@ -31,15 +28,13 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PostAddIcon from '@material-ui/icons/PostAdd'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
-import logo from '../../assets/personal-profile.svg'
-import someImage from '../../assets/logo512.png'
-
-
-
 import axios from'axios';
+import logo from '../../assets/personal-profile.svg'
+
+
+
 
 function Header({ token, user, logout, history, searchResults, setSearchResults, searchBy, setSearchBy }) {
-  const [redirect, setRedirect] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [profilePic, setProfilePic] = useState(false);
   //= const [searchBy, setSearchBy] = useState('posts');
@@ -68,7 +63,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       padding: theme.spacing(0, 2),
       height: '100%',
       position: 'absolute',
-      //this allows iconButton to be pressed when positioned absolute
+      // this allows iconButton to be pressed when positioned absolute
       zIndex: 1000,
       display: 'flex',
       alignItems: 'center',
@@ -100,7 +95,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   const sendSearchData = () => {
     const payload = {"search":searchInput}
-      if(searchBy=="posts"){
+      if(searchBy === "posts"){
         axios.post("/api/post/getPublic", payload)
         .then((resp) =>{
           setSearchResults(resp.data);
@@ -108,7 +103,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
         })
       }
 
-      if(searchBy=="users"){
+      if(searchBy === "users"){
         axios.post("/api/user/getPublic", payload)
         .then((resp) =>{
           setSearchResults(resp.data);
@@ -120,7 +115,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   }
   const handleKeyPress = (e) => {
     //if enter key is pressed in search bar, clear searchresults then send the search payload to the relevant route
-    if (e.keyCode == 13){
+    if (e.keyCode === 13){
       setSearchResults([]);
       sendSearchData();
     }
@@ -146,6 +141,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
           keepMounted
           open={Boolean(anchorEl)}
           onClose={handleClose}
+          style={{zIndex: 1401, marginTop: "43px", marginLeft: "45px"}}
         >
           <MenuItem onClick={handleClose}>{renderViewProfile()}</MenuItem>
           <MenuItem onClick={handleClose}>{renderSettings()}</MenuItem>
@@ -220,24 +216,24 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   }
 
   const renderAvatar = () => {
-    getProfilePic().then(function(result){
+    getProfilePic().then((result) => {
         setProfilePic(result);
     })
-    return <Avatar src= {`data:image/jpeg;base64,${profilePic}`}/>
+    return <Avatar src={`data:image/jpeg;base64,${profilePic}`} />
     
   }
 
   const renderSearchBar = () => {
     return (
       <div className={classes.search}>
-        <div className="font-icon-wrapper" onClick={sendSearchData}>
-          <IconButton className={classes.searchIcon}>
+        <div className="font-icon-wrapper">
+          <IconButton onClick={sendSearchData} className={classes.searchIcon}>
             <SearchIcon />
           </IconButton>
         </div>
         <form style={{ display: 'flex' }}>
           <InputBase
-            value = {searchInput}
+            value={searchInput}
             onChange={handleSearchInputChange}
             onKeyDown={handleKeyPress}
             fullWidth
@@ -248,15 +244,14 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
             }}
           />
 
-          <FormControl style={{minWidth:100, paddingBottom:10}}>
-            <InputLabel style={{color:'inherit'}} >Search by</InputLabel>
+          <FormControl style={{minWidth:100, paddingBottom:10,}}>
+            <InputLabel style={{color:'inherit'}}>Search by</InputLabel>
             <Select 
               value={searchBy}
               onChange={handleSearchByChange}
-              >
-              <MenuItem value="users">Users</MenuItem>
+            >
+              <MenuItem style={{marginTop: "40px"}} value="users">Users</MenuItem>
               <MenuItem value="posts">Posts</MenuItem>
-  
             </Select>
           </FormControl>
         </form>
@@ -275,9 +270,9 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   }
 
   const renderUnauthenticatedHeader = () => {
-    if (token == '') {
+    if (token === '') {
       return (
-        <AppBar position="static" style={{ height: '60px' }}>
+        <AppBar position="static" style={{ height: '60px', boxShadow:  "none" }}>
           <Toolbar disableGutters>
             <section className={classes.leftToolbar}>
               <Button href="/">
@@ -315,9 +310,9 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   }
 
   const renderAuthenticatedHeader = () => {
-    if (token !== '' && user != {}) {
+    if (token !== '' && user !== {}) {
       return (
-        <AppBar position="static" style={{ height: '60px' }}>
+        <AppBar position="static" style={{ height: '60px', boxShadow:  "none" }}>
           <Toolbar disableGutters>
             <section className={classes.leftToolbar}>
               <Button href="/">
@@ -349,7 +344,8 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
                 <Grid item xs={4}>
                   <div style={{ marginTop: 2, display: 'flex' }}>
                     {renderAddPost()}
-                  </div>{' '}
+                  </div>
+                  {' '}
                 </Grid>
                 <Grid item xs={8}>
                   <div style={{ marginLeft: 25, display: 'flex' }}>
@@ -367,8 +363,6 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   return (
     <>
-      {redirect && <Redirect to="/" />}
-
       {renderAuthenticatedHeader()}
       {renderUnauthenticatedHeader()}
     </>
@@ -376,11 +370,11 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 }
 
 Header.propTypes = {
-  history: PropTypes.object.isRequired,
-  user: PropTypes.object,
+  history: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.objectOf(PropTypes.object),
   token: PropTypes.string,
   logout: PropTypes.func.isRequired,
-  searchResults: PropTypes.array,
+  searchResults: PropTypes.objectOf(PropTypes.array),
   setSearchResults: PropTypes.func.isRequired,
   searchBy: PropTypes.string,
   setSearchBy: PropTypes.func.isRequired,

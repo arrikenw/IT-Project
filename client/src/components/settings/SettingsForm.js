@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 })
 
 function SettingsForm({ user, token }) {
-  const [firstName, setFirstName] = useState('')
+  /* const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
@@ -43,7 +43,7 @@ function SettingsForm({ user, token }) {
   const [userNameEdit, setUserNameEdit] = useState(false)
   const [emailEdit, setEmailEdit] = useState(false)
   const [passwordEdit, setPasswordEdit] = useState(false)
-  const [currentPassword, setCurrentPassword] = useState('')
+  const [currentPassword, setCurrentPassword] = useState('') */
 
   useEffect(() => {
     setFirstName(user.firstName)

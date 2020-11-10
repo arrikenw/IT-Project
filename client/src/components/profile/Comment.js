@@ -12,7 +12,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ShareIcon from "@material-ui/icons/Share";
 import axios from "axios";
-
+import * as timeago from 'timeago.js';
 
 const useStyles = makeStyles({
     commentBorder: {
@@ -182,12 +182,17 @@ function Comment({user, comment, postID, token}) {
                         <Grid item xs={0.5}>
                             {imageString && <Avatar src= {imageString}/>}
                         </Grid>
-                        <Grid item xs={11.5}>
+                        <Grid item xs={11}>
                             <div style={{paddingLeft: "10px"}}>
-                                <Typography gutterBottom variant="heading1" color="textPrimary" component="h2">
+                                <Typography gutterBottom variant="heading2" color="textPrimary" component="h2">
                                     {titleString}
                                 </Typography>
                             </div>
+                        </Grid>
+                        <Grid item xs={0.5} style={{float:"right"}}>
+                            <Typography gutterBottom variant="heading6" color="textPrimary" component="h6">
+                                {comment && timeago.format(comment.createdAt, 'en_US')}
+                            </Typography>
                         </Grid>
                     </Grid>
                     <div style={{backgroundColor: "lightGrey"}}>

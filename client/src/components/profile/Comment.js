@@ -36,33 +36,58 @@ const useStyles = makeStyles({
 
 function Comment({user, comment, postID, token}) {
     const [isLiked, setIsLiked] = useState(false);
-    const [firstLikedNow, setFirstLikedNow] = useState(0)
+    const [localLikeChange, setLocalLikeChange] = useState(0)
     const [returnedMedia, setReturnedMedia] = useState(null);
     const [userName, setUserName] = useState("");
-    const [commentBody, setCommentBody] = useState("");
 
     const classes = useStyles();
 
     //todo, make it toggle to send remove like to backend
-    function likePost(){
-        if (!isLiked){
-            setIsLiked(true);
-            setFirstLikedNow(1);
-            const payload = {
-                commentID: comment._id,
-                postID: postID
-            }
-            console.log(payload);
-            const authHeader = {
-                headers: {Authorization: `Bearer ${token}` }
-            }
 
-            axios.post('/api/comment/like', payload,  authHeader)
-                .then(response => {
-                    console.log(response);
-                    console.log("liked, idk if we want any confirmation that server actually got the like");
-                })
-                .catch((err) => {console.error(err);});
+    function likeComment(){
+        setIsLiked(true);
+        setLocalLikeChange(localLikeChange + 1);
+        const payload = {
+            commentID: comment._id,
+            postID: postID
+        }
+        console.log(payload);
+        const authHeader = {
+            headers: {Authorization: `Bearer ${token}` }
+        }
+
+        axios.post('/api/comment/like', payload,  authHeader)
+            .then(response => {
+                console.log(response);
+            })
+            .catch((err) => {console.error(err);});
+    }
+
+    function unlikeComment(){
+        setIsLiked(false);
+        setLocalLikeChange(localLikeChange -1);
+        const payload = {
+            commentID: comment._id,
+            postID: postID
+        }
+        console.log(payload);
+        const authHeader = {
+            headers: {Authorization: `Bearer ${token}` }
+        }
+
+        axios.post('/api/comment/unlike', payload,  authHeader)
+            .then(response => {
+                console.log(response);
+            })
+            .catch((err) => {console.error(err);});
+    }
+
+
+    function onToggleLike(){
+        if (!isLiked){
+            likeComment();
+        }else{
+            unlikeComment();
         }
     }
 
@@ -71,7 +96,10 @@ function Comment({user, comment, postID, token}) {
         //set initial "has liked status"
         if (comment && user && comment.likedBy.includes(user._id)){
             setIsLiked(true);
+        }else{
+            setIsLiked(false);
         }
+        setLocalLikeChange(0);
 
         // fetch user who created comment
         const url = '/api/user/getPublic'
@@ -144,7 +172,7 @@ function Comment({user, comment, postID, token}) {
 
     let likeMessage = "Like";
     if (isLiked){
-        likeMessage = "You've liked this comment"
+        likeMessage = "You've liked this comment. Click again to remove your like."
     }
     return (
         <div className={classes.commentBorder}>
@@ -170,11 +198,11 @@ function Comment({user, comment, postID, token}) {
                 </div>
 
                 <div style={{float:"left", height:"15%"}}>
-                    <IconButton size="medium" color="primary" onClick={likePost}>
+                    <IconButton size="medium" color="primary" onClick={onToggleLike}>
                         <ThumbUpIcon />
                         {likeMessage}
                     </IconButton>
-                    {comment.likedBy.length + firstLikedNow} Likes
+                    {comment.likedBy.length + localLikeChange} Likes
                 </div>
                 <div style={{float:"right"}}>
                     <IconButton size="medium" color="primary">

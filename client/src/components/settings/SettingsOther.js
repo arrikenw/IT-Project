@@ -40,7 +40,6 @@ function SettingsOther({ localUser, setLocalUser, editUser, setEditUser, updateP
       }
       if (value === "" || value === " " || value === ",") return
       const newFields = [...(localUser.professionalFields), value.substring(0, value.length - 1)]
-      console.log(newFields)
       updateProfessionalFields(newFields)
       setCurrentField('')
     } else {
@@ -68,7 +67,6 @@ function SettingsOther({ localUser, setLocalUser, editUser, setEditUser, updateP
       }
       if (value === "" || value === " " || value === ",") return
       const newTags = [...(localUser.tags), value.substring(0, value.length - 1)]
-      console.log(newTags)
       updateTags(newTags)
       setCurrentTag('')
     } else {
@@ -188,7 +186,7 @@ SettingsOther.propTypes = {
   setLocalUser: PropTypes.func.isRequired,
   localUser: PropTypes.shape({
     biography: PropTypes.string.isRequired,
-    dateOfBirth: PropTypes.string.isRequired,
+    dateOfBirth:PropTypes.instanceOf(Date).isRequired,
     email: PropTypes.string.isRequired,
     emailPrivate: PropTypes.bool.isRequired,
     firstName: PropTypes.string.isRequired,

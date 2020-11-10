@@ -111,7 +111,7 @@ SettingsOptional.propTypes = {
   setLocalUser: PropTypes.func.isRequired,
   localUser: PropTypes.shape({
     biography: PropTypes.string.isRequired,
-    dateOfBirth: PropTypes.string.isRequired,
+    dateOfBirth: PropTypes.instanceOf(Date).isRequired,
     email: PropTypes.string.isRequired,
     emailPrivate: PropTypes.bool.isRequired,
     firstName: PropTypes.string.isRequired,

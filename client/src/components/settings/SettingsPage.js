@@ -52,7 +52,7 @@ function SettingsPage({ token, user }) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [localUser, setUser] = useState({
     biography: "",
-    dateOfBirth: '',
+    dateOfBirth: new Date(),
     email: '',
     emailPrivate: false,
     firstName: '',
@@ -250,8 +250,9 @@ function SettingsPage({ token, user }) {
   };
 
   useEffect(() => {
-    setUser({ ...user, password: "", confirmPassword: "" })
-    console.log(localUser)
+    const newUser = { ...user, password: "", confirmPassword: "" }
+    newUser.dateOfBirth = new Date(user.dateOfBirth)
+    setUser(newUser)
   }, [user])
 
   const isFormEditable = () => {

@@ -1,12 +1,19 @@
 import Axios from "axios";
 
-const fetch = async (mediaID, callback, errorCallback, token) => {
+const fetchMediaUtil = async (mediaID, token, callback, errorCallback) => {
+
+    if (!mediaID){
+        console.log("no media id provided for fetch");
+        return;
+    }
 
     //same payload
     const payload = {
         mediaID: mediaID,
     };
 
+    console.log("fetching id: "+mediaID);
+    console.log("with token: "+token);
     //fetch with token
     if (token){
         const controllerUrl = "/api/media/";
@@ -15,6 +22,7 @@ const fetch = async (mediaID, callback, errorCallback, token) => {
                 Authorization: `Bearer ${token}`,
             },
         };
+        console.log(payload);
         Axios.post(controllerUrl, payload, headers)
             .then((res) => {
                 callback(res);
@@ -41,4 +49,4 @@ const fetch = async (mediaID, callback, errorCallback, token) => {
     }
 };
 
-export default fetch;
+export default fetchMediaUtil;

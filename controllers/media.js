@@ -268,7 +268,7 @@ const serveMedia = async (req, res) => {
     .lean()
     .then(async (doc) => {
       if (!doc){
-        console.log("requested media does not exist");
+        console.log("requested media does not exist: " + req.body.mediaID);
         sendHelper(res, {
           status: 400,
           msg: "Media retrieval failed - the requested media does not exist",

@@ -8,6 +8,8 @@ import Axios from "axios";
 import ProfileDetails from './ProfileDetails';
 import Comment from './Comment';
 import CommentList from "./CommentList";
+import fetchMediaUtil from "../utils/fetchMedia";
+
 
 import * as timeago from 'timeago.js';
 
@@ -60,35 +62,20 @@ function ExpandPost({ user, token, history, location }) {
         return type; // idk
     }
 
-    function getMedia(post, token){
-        const controllerUrl = "/api/media/";
-        const payload = {
-            mediaID: post.mediaID,
-        };
-        const headers = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
-        Axios.post(controllerUrl, payload, headers)
-            .then((res) => {
-                if (res.status === 200) {
-                    const str = `data:${res.data.mimeType};base64,${res.data.b64media}`;
-                    const fetchedMedia = {
-                        contentStr: str,
-                        mimeType: res.data.mimeType,
-                        contentCategory: res.data.contentCategory,
-                        componentType: mapCatToComp(res.data.contentCategory)
-                    };
-                    console.log("GET MEDIA GET MEDIA GET MEDIA GET MEDIA");
-                    console.log(fetchedMedia);
-                    setMedia(fetchedMedia);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-                // todo;
-            });
+    function getMediaCallback(res){
+        if (res.status === 200) {
+            const str = `data:${res.data.mimeType};base64,${res.data.b64media}`;
+            const fetchedMedia = {
+                contentStr: str,
+                mimeType: res.data.mimeType,
+                contentCategory: res.data.contentCategory,
+                componentType: mapCatToComp(res.data.contentCategory)
+            };
+            setMedia(fetchedMedia);
+        }else{
+            //TODO
+            console.log("error getting media");
+        }
     }
 
 
@@ -108,12 +95,13 @@ function ExpandPost({ user, token, history, location }) {
         Axios.post(postUrl, postPayload, headers).then((res) => {
             if (res.status == 200 || res.status == "success"){
                 setPost(res.data[0]);
-                getMedia(res.data[0], token);
+                fetchMediaUtil(res.data[0].mediaID, token, getMediaCallback, null);
             }else{
                 // TODO
             }
         }).catch((err) => {
             // TODO
+            console.log(err);
         });
     }, [token]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 

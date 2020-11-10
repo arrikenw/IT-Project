@@ -17,7 +17,7 @@ function SettingsPage({ token, user }) {
     <Grid container justify="center">
       <Grid item xs={12}>
         <Container className={classes.SettingsContainer} maxWidth="sm">
-          <SettingsForm token={token} user={user} />
+          {token && <SettingsForm token={token} user={user} />}
         </Container>
       </Grid>
     </Grid>

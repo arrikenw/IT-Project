@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Button, Typography, StepLabel, Step, Stepper, Card } from '@material-ui/core'
+// import { makeStyles } from '@material-ui/core/styles';
+import { Button, Typography, StepLabel, Step, Stepper, Card, Box, Snackbar, CircularProgress  } from '@material-ui/core'
+import MuiAlert from '@material-ui/lab/Alert';
 import CardContent from "@material-ui/core/CardContent";
 import { Redirect } from "react-router-dom";
 import Axios from "axios";
@@ -10,16 +11,27 @@ import RequiredInfoForm from "./RequiredInfoForm";
 import BioInfoForm from "./BioInfoForm";
 import ProfilePictureForm from "./ProfilePictureForm";
 
+// stepper info for each form
 function getSteps() {
   return ['Set up your basic info', 'Set your optional details', 'Set your profile picture'];
 }
 
+function Alert(props) {
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function SignupPage({ setGlobalToken }) {
+  // for stepper
   const [redirect, setRedirect] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
 
+  // for warnings
+  const [warning, setWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
+
+  // for first form
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
@@ -28,7 +40,7 @@ function SignupPage({ setGlobalToken }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  // may find better initial date value
+  // for second form
   const [dateOfBirth, setDateOfBirth] =useState(new Date("1900-01-01"));
   const [organisation, setOrganisation] = useState('');
   const [phoneNumberPrivate, setPhoneNumberPrivate] = useState(true);
@@ -36,21 +48,123 @@ function SignupPage({ setGlobalToken }) {
   const [biography, setBiography] = useState('');
   const [accountPrivate, setAccountPrivate] = useState(false);
 
+  // for third form
   const [rawMedia, setRawMedia] = useState('');
   const [file, setFile] = useState(null);
+  const [professionalFields, setProfessionalFields] = useState([]);
 
+  // moves to next form and does field validation
   const handleNext = () => {
+    switch (activeStep) {
+      case 0:
+        if (!firstName) {
+          setWarningMessage("Please add a first name")
+          setWarning(true)
+          return
+        }
+        if (!lastName) {
+          setWarningMessage("Please add a last name")
+          setWarning(true)
+          return
+        }
+        if (!userName) {
+          setWarningMessage("Please add a username")
+          setWarning(true)
+          return
+        }
+        if (!email) {
+          setWarningMessage("Please add an email address")
+          setWarning(true)
+          return
+        }
+        if (!password) {
+          setWarningMessage("Please add a password")
+          setWarning(true)
+          return
+        }
+        if (!confirmPassword) {
+          setWarningMessage("Please re-enter your password")
+          setWarning(true)
+          return
+        }
+        if (password !== confirmPassword) {
+          setWarningMessage("Passwords do not match")
+          setWarning(true)
+          return
+        }
+        if (firstName.length > 50) {
+          setWarningMessage("First name must be less than 51 characters")
+          setWarning(true)
+          return
+        }
+        if (lastName.length > 50) {
+          setWarningMessage("Last name must be less than 51 characters")
+          setWarning(true)
+          return
+        }
+        if (userName.length > 50) {
+          setWarningMessage("Username must be less than 21 characters")
+          setWarning(true)
+          return
+        }
+        if (password.length > 50) {
+          setWarningMessage("Password must be less than 51 characters")
+          setWarning(true)
+          return
+        }
+        if (password.length < 8) {
+          setWarningMessage("Password must be at least 8 characters")
+          setWarning(true)
+          return
+        }
+        if (!email.includes("@") || !email.includes(".") || email.length < 3) {
+          setWarningMessage("Invalid email address")
+          setWarning(true)
+          return
+        }
+        break
+      case 1:
+        if (!phoneNumber.match(/^[0-9]*$/)) {
+          setWarningMessage("Invalid phone number")
+          setWarning(true)
+          return
+        }
+        if (biography.length > 1000) {
+          setWarningMessage("Biography must be less than 1001 characters")
+          setWarning(true)
+          return
+        }
+        if (dateOfBirth.valueOf() !== (new Date("1900-01-01")).valueOf() &&
+            dateOfBirth > (new Date())) {
+          setWarningMessage("Invalid date of birth")
+          setWarning(true)
+          return
+        }
+
+        break
+      case 2:
+        if (rawMedia.size/1024/1024 > 10) {
+          setWarningMessage("Profile picture must be smaller than 10mb")
+          setWarning(true)
+          return
+        }
+        break
+      default:
+        break
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
+  // moves to previous form
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
+  /* const handleReset = () => {
     setActiveStep(0);
-  };
+  }; */
 
+  // submit sign up
   useEffect( () => {
     if (activeStep === 3) {
       const payload = {
@@ -62,6 +176,7 @@ function SignupPage({ setGlobalToken }) {
         private: accountPrivate,
         phoneNumberPrivate,
         emailPrivate,
+        professionalFields: professionalFields.map((field) => field.label)
       }
       if (organisation !== "") {
         payload.organisation = organisation;
@@ -115,37 +230,32 @@ function SignupPage({ setGlobalToken }) {
         Axios.post('api/user/login', loginPayload)
           .then(onLogin)
           .catch((err) => {
-            console.error(err)
-            window.location.reload(false)
+            console.error(err.response.data)
+            setWarningMessage(err.response.data)
+            setWarning(true)
+            setActiveStep(2)
           })
       }
 
-      Axios.post('api/user/add', payload)
-        .then(onSignUp)
+
+      Axios({
+        url: 'api/user/add',
+        method: "post",
+        data: payload
+      }).then(onSignUp)
         .catch((err) => {
-          console.error(err)
-          window.location.reload(false)
+          console.error(err.response.data)
+          setWarningMessage(err.response.data)
+          setWarning(true)
+          setActiveStep(2)
         })
+
+      // Axios.post('api/user/add', payload)
 
     }
   }, [activeStep])
-  
-  useEffect(() => {
-    console.log(firstName)
-    console.log(lastName)
-    console.log(userName)
-    console.log(email)
-    console.log(emailPrivate)
-    console.log(password)
-    console.log(confirmPassword)
-    console.log(dateOfBirth)
-    console.log(organisation)
-    console.log(phoneNumber)
-    console.log(phoneNumberPrivate)
-    console.log(biography)
-    console.log(accountPrivate)
-  },[accountPrivate, biography, confirmPassword, dateOfBirth, email, emailPrivate, firstName, lastName, organisation, password, phoneNumber, phoneNumberPrivate, userName])
 
+  // renders correct inner form
   const renderForm = (stepIndex) => {
     switch (stepIndex) {
       case 0:
@@ -191,11 +301,23 @@ function SignupPage({ setGlobalToken }) {
             file={file}
             setFile={setFile}
             setParentRawMedia={setRawMedia}
+            professionalFields={professionalFields}
+            setProfessionalFields={setProfessionalFields}
           />
         )
       case 3:
         return (
-          <div />
+          <div style={{height: '100%', width: "100%"}}>
+            <div style={{height: "48%" , width: "100%"}} />
+            <div style={{justifyContent: 'center',
+              textAlign: 'center',}}
+            >
+              <CircularProgress />
+              <Typography variant="h4">
+                Loading
+              </Typography>
+            </div>
+          </div>
         )
       default:
         return 'Unknown stepIndex';
@@ -204,51 +326,54 @@ function SignupPage({ setGlobalToken }) {
   }
 
   return (
-    <Grid container>
+    <div style={{width: "100%", height: "100%", justifyContent: "center"}}>
       {redirect && <Redirect to="/profile" />}
-      <Grid item xs={4} />
+      <Box maxWidth={800} style={{margin: "auto"}}>
+        <div style={{marginTop: "75px", marginRight: "10px", marginLeft: "10px"}}>
+          <Card>
+            <CardContent>
+              <Typography variant="h4">Signup</Typography>
+              <div style={{height: "500px", marginTop: '20px'}}>
+                {renderForm(activeStep)}
+              </div>
+              <Stepper activeStep={activeStep} alternativeLabel>
+                {steps.map((label) => (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+              <div style={{height: "30px"}}>
+                <Button
+                  style={{float: 'left'}}
+                  color="secondary"
+                  variant="contained"
+                  disabled={(activeStep === 0 || activeStep === 3)}
+                  onClick={handleBack}
+                >
+                  Back
+                </Button>
+                <Button
+                  style={{float: 'right'}}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  disabled={activeStep===3}
+                >
+                  {(activeStep === 2 || activeStep === 3) ? 'Finish' : 'Next'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </Box>
+      <Snackbar open={warning} onClose={() => {setWarning(false)}}>
+        <Alert onClose={() => {setWarning(false)}} severity="error">
+          {warningMessage}
+        </Alert>
+      </Snackbar>
+    </div>
 
-      <Grid item xs={4}>
-        <div style={{marginTop: "75px"}} />
-        <Card>
-          <CardContent>
-            <Typography variant="h4">Signup</Typography>
-            <div style={{height: "500px", marginTop: '20px'}}>
-              {renderForm(activeStep)}
-            </div>
-            <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((label) => (
-                <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
-            <div style={{height: "30px"}}>
-              <Button
-                style={{float: 'left'}}
-                color="secondary"
-                variant="contained"
-                disabled={(activeStep === 0 || activeStep === 3)}
-                onClick={handleBack}
-              >
-                Back
-              </Button>
-              <Button
-                style={{float: 'right'}}
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                disabled={activeStep===3}
-              >
-                {(activeStep === 2 || activeStep === 3) ? 'Finish' : 'Next'}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      <Grid item xs={4} />
-    </Grid>
   );
 }
 

@@ -201,6 +201,9 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   }
 
   useEffect(() => {
+    if (!token) {
+      return
+    }
     const authHeader = {
       headers: {Authorization: `Bearer ${token}` }
     }

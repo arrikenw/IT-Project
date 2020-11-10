@@ -33,8 +33,8 @@ const userSchema = new Schema(
     pinnedPosts: [{ type: mongoose.Schema.Types.ObjectID, ref: "Posts" }], // idk if should be "posts" or "Posts"
     password: { type: String, required: true, minLength: 8, maxLength: 50 },
     organisation: { type: String },
-    tags: [{ type: String, maxLength: 50 }],
-    professionalFields: [String],
+    tags: [{ type: String, maxLength: 5 }],
+    professionalFields: [{ type: String, maxLength: 5 }],
     dateOfBirth: { type: Date },
     phoneNumber: { type: String }, // research lengths etc. later - this is just initial setup
     biography: { type: String, maxLength: 1000 },

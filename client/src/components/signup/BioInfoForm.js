@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { TextField, FormControlLabel, Checkbox } from '@material-ui/core'
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import PropTypes from 'prop-types'
@@ -105,7 +104,13 @@ function BioInfoForm({ dateOfBirth, setDateOfBirth, organisation, setOrganisatio
           </div>
           <div style={{marginTop: "5px"}}>
             <FormControlLabel
-              control={<Checkbox name="accountPrivate" checked={accountPrivate} onClick={changeAccountPrivate} />}
+              control={(
+                <Checkbox
+                  name="accountPrivate"
+                  checked={accountPrivate}
+                  onClick={changeAccountPrivate}
+                />
+                )}
               label="Account profile is private"
             />
           </div>

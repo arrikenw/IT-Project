@@ -6,12 +6,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom';
 import Axios from "axios";
 import PropTypes from "prop-types";
+import * as timeago from 'timeago.js';
 import ProfileDetails from './ProfileDetails';
 import Comment from './Comment';
 import CommentList from "./CommentList";
 import fetchMediaUtil from "../utils/fetchMedia";
 import CommentForm from "./CommentForm";
-import * as timeago from 'timeago.js';
+
 
 const useStyles = makeStyles({
     bodyContainer: {
@@ -74,7 +75,7 @@ function ExpandPost({ user, token, history, location }) {
             };
             setMedia(fetchedMedia);
         }else{
-            //TODO
+            // TODO
             console.log("error getting media");
         }
     }
@@ -145,8 +146,8 @@ function ExpandPost({ user, token, history, location }) {
                 </Typography>
               </Grid>
               <Typography variant="heading6" component="h6">
-                    {post && post.createdAt && "Posted "+ timeago.format(post.createdAt, 'en_US')}
-                </Typography>
+                {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')}`}
+              </Typography>
               {(media && media.mimeType !== 'application/pdf') && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
               {!media && (
               <Grid container justify="center">

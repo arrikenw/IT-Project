@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import PropTypes from 'prop-types'
-import { Avatar, Button, List, ListItem, ListItemText, Typography } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import PropTypes, { objectOf } from "prop-types";
+import { Avatar, Button, TextField, Typography, Chip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import testImage from "../../assets/logo512.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +23,37 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-function ProfilePictureForm({ userName, setParentRawMedia, file, setFile }) {
+function ProfilePictureForm({ userName, setParentRawMedia, file, setFile,
+                              professionalFields, setProfessionalFields }) {
+  // const [professionalFields, setProfessionalFields] = useState([]);
+  const [currentField, setCurrentField] = useState('');
+
+  const updateField = (e) => {
+    const value = e.target.value;
+    if (professionalFields.length >= 5) return
+    if (value.endsWith(" ") || value.endsWith(",")) {
+      for (let i = 0; i < professionalFields.length; i += 1) {
+        if (professionalFields[i].label === value.substring(0, value.length - 1)) {
+          return
+        }
+      }
+      if (value === "" || value === " " || value === ",") return
+      setProfessionalFields((prev) => [...prev,
+        {
+          key: prev.length,
+          label: value.substring(0, value.length - 1),
+        }])
+      setCurrentField('')
+    }
+    else {
+      setCurrentField(value)
+    }
+  }
+
+  const deleteField = (toDelete) => () => {
+    setProfessionalFields((prev) => prev.filter((field) => field.key !== toDelete.key))
+  }
+
 
   const changeFile = (e) => {
     const fileReader = new FileReader();
@@ -37,6 +66,7 @@ function ProfilePictureForm({ userName, setParentRawMedia, file, setFile }) {
       setParentRawMedia('');
       return setFile(null);
     }
+    console.log(e.target.files[0])
     setParentRawMedia(e.target.files[0]);
     return fileReader.readAsDataURL(e.target.files[0]);
   }
@@ -75,6 +105,30 @@ function ProfilePictureForm({ userName, setParentRawMedia, file, setFile }) {
           </Button>
         </label>
       </div>
+      <div style={{ marginTop: '20px' }}>
+        <TextField
+          id="signup-lastname"
+          label="Enter your fields of interest (max 5)"
+          variant="outlined"
+          type="lastname"
+          fullWidth
+          value={currentField}
+          onChange={updateField}
+          disabled={professionalFields.length >= 5}
+        />
+      </div>
+      <div style={{flexWrap: 'wrap',}}>
+        {professionalFields.map((field, index) => {
+          return (
+            <Chip
+              style={{margin: "5px"}}
+              key={field.key}
+              onDelete={deleteField(field)}
+              label={field.label}
+            />
+          )
+        })}
+      </div>
     </div>
   );
 }
@@ -82,8 +136,16 @@ function ProfilePictureForm({ userName, setParentRawMedia, file, setFile }) {
 ProfilePictureForm.propTypes = {
   userName: PropTypes.string.isRequired,
   setParentRawMedia: PropTypes.func.isRequired,
-  file: PropTypes.objectOf(PropTypes.object).isRequired,
+  file: PropTypes.string,
   setFile: PropTypes.func.isRequired,
+  professionalFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setProfessionalFields: PropTypes.func.isRequired,
 }
+
+ProfilePictureForm.defaultProps = {
+  file: '',
+}
+
+
 
 export default ProfilePictureForm;

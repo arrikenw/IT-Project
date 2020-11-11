@@ -60,5 +60,5 @@ export default function Home({ setGlobalToken, user }) {
 
 Home.propTypes = {
   setGlobalToken: PropTypes.func.isRequired,
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({userName: PropTypes.string}).isRequired,
 }

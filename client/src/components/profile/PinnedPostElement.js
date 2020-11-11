@@ -124,10 +124,15 @@ class PinnedPostElement extends Component {
 }
 
 PinnedPostElement.propTypes = {
-    post: PropTypes.objectOf(PropTypes.object).isRequired,
+    post: PropTypes.shape({
+        title: PropTypes.string,
+        _id: PropTypes.string,
+        thumbnailURL: PropTypes.string,
+        mediaID: PropTypes.string,
+    }).isRequired,
     classes: PropTypes.objectOf(PropTypes.object).isRequired,
-    history: PropTypes.objectOf(PropTypes.object).isRequired,
-    media: PropTypes.objectOf(PropTypes.object).isRequired,
+    history: PropTypes.shape({push: PropTypes.func}).isRequired,
+    media: PropTypes.shape({contentStr: PropTypes.string}).isRequired,
 
 }
 

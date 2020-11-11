@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 })
 
 function SettingsForm({ user, token }) {
-  const [firstName, setFirstName] = useState('')
+  /* const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
@@ -43,7 +43,7 @@ function SettingsForm({ user, token }) {
   const [userNameEdit, setUserNameEdit] = useState(false)
   const [emailEdit, setEmailEdit] = useState(false)
   const [passwordEdit, setPasswordEdit] = useState(false)
-  const [currentPassword, setCurrentPassword] = useState('')
+  const [currentPassword, setCurrentPassword] = useState('') */
 
   useEffect(() => {
     setFirstName(user.firstName)
@@ -92,7 +92,7 @@ function SettingsForm({ user, token }) {
       <CardContent>
         <Typography variant="h5">
           {user.firstName}
-          &$39;s details
+          &apos;s details
         </Typography>
         <form>
           <div style={{ marginTop: '20px' }}>
@@ -221,7 +221,12 @@ function SettingsForm({ user, token }) {
 }
 
 SettingsForm.propTypes = {
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    email: PropTypes.string,
+    userName: PropTypes.string
+  }).isRequired,
   token: PropTypes.string.isRequired,
 }
 

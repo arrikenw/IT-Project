@@ -131,7 +131,7 @@ function App() {
             <SettingsPage token={token} user={user} />
           </Route>
           <Route path="/addPost">
-            <AddPost token={token} />
+            <AddPost token={token} user={user} />
           </Route>
           <Route path="/signup">
             <SignupPage setGlobalToken={setGlobalToken} />

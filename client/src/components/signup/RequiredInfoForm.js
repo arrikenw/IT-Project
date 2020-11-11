@@ -74,7 +74,7 @@ function RequiredInfoForm({ firstName, setFirstName, lastName, setLastName,
           </div>
           <div style={{ marginTop: '5px' }}>
             <FormControlLabel
-              control={<Checkbox name="emailPrivate" checked={emailPrivate} onClick={changePrivateEmail} color="default" />}
+              control={<Checkbox name="emailPrivate" checked={emailPrivate} onClick={changePrivateEmail} color="secondary" />}
               label="Email is private"
             />
             <TextField
@@ -131,5 +131,6 @@ RequiredInfoForm.propTypes = {
   confirmPassword: PropTypes.string.isRequired,
   setConfirmPassword: PropTypes.func.isRequired,
 }
+
 
 export default RequiredInfoForm

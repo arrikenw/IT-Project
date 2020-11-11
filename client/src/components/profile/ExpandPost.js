@@ -46,6 +46,7 @@ const useStyles = makeStyles({
 function ExpandPost({ user, token, history, location }) {
     const [post, setPost] = useState(null);
     const [media, setMedia] = useState(null);
+    const [postID, setPostID] = useState("");
 
     function mapCatToComp(type){
         if (type === "image"){
@@ -60,16 +61,17 @@ function ExpandPost({ user, token, history, location }) {
         return type; // idk
     }
 
-    function getMedia(){
+    const getMedia = (post2) => {
         const controllerUrl = "/api/media/";
         const payload = {
-            mediaID: post.mediaID,
+            mediaID: post2.mediaID,
         };
         const headers = {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         };
+      console.log("inside here");
         Axios.post(controllerUrl, payload, headers)
             .then((res) => {
                 if (res.status === 200) {
@@ -91,31 +93,40 @@ function ExpandPost({ user, token, history, location }) {
             });
     }
 
+    const query = new URLSearchParams(location.search);
+    const newPostID = query.get('post');
+    if (newPostID !== postID) {
+      setPostID(newPostID);
+      console.log("dog");
+    }
+
+
 
     useEffect(() => {
         // get id from query string
-        const query = new URLSearchParams(location.search)
-        const posID = query.get('post')
-
+      console.log("dog222");
         // fetch post outlined by query string
         const postUrl = '/api/post/get'
         const postPayload = {
-            filters: {_id: posID}
+            filters: {_id: postID}
         }
         const headers = {
             headers: { 'Authorization': `Bearer ${ token}`}
         }
         Axios.post(postUrl, postPayload, headers).then((res) => {
+          console.log("dog3");
             if (res.status === 200){
-                setPost(res.data[0]);
-                getMedia(res.data[0], token);
+              console.log("dog4");
+              setPost(res.data[0]);
+              getMedia(res.data[0]);
             }else{
+              console.log("dog5");
                 // TODO
             }
         }).catch((err) => {
             // TODO
         });
-    }, [token]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
+    }, [token, postID]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 
     const classes = useStyles()
 
@@ -143,11 +154,11 @@ function ExpandPost({ user, token, history, location }) {
           <Card className={classes.postCard}>
             <CardContent>
               <Grid container justify="center" style={{paddingBottom:"20px"}}>
-                <Typography variant="heading1" component="h1">
+                <Typography variant="h1" component="h1">
                   {post && post.title}
                 </Typography>
               </Grid>
-              {media && media.mimeType !== 'application/pdf' && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
+              {(media && media.mimeType !== 'application/pdf') && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
               {!media && (
               <Grid container justify="center">
                 <CircularProgress />
@@ -168,13 +179,13 @@ function ExpandPost({ user, token, history, location }) {
               </Typography>
             </CardContent>
             <CardActions>
-              <IconButton variant="contained" size="large" color="primary">
+              <IconButton variant="contained" size="medium" color="primary">
                 <ThumbUpIcon />
                 Like
               </IconButton>
               {/* replace with post.likes once implemented */}
               9 trillion likes
-              <IconButton variant="contained" size="large" color="primary">
+              <IconButton variant="contained" size="medium" color="primary">
                 <ShareIcon />
                 Share
               </IconButton>
@@ -193,11 +204,12 @@ function ExpandPost({ user, token, history, location }) {
     )
 }
 
+
 ExpandPost.propTypes = {
   token: PropTypes.string.isRequired,
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
-  history: PropTypes.objectOf(PropTypes.object).isRequired,
-  location: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
+  history: PropTypes.shape({push: PropTypes.func}).isRequired,
+  location: PropTypes.shape({search: PropTypes.string}).isRequired,
 
 }
 

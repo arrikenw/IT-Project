@@ -1,3 +1,4 @@
+/*
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -7,7 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import { Grid, Box, Container } from '@material-ui/core'
+import { Grid, Box } from '@material-ui/core'
 import Axios from "axios";
 import Hidden from "@material-ui/core/Hidden";
 import PropTypes from "prop-types";
@@ -56,10 +57,12 @@ const useStyles = makeStyles((theme) => ({
   mainContainer: {
     height: '100%',
     width: '100%',
+    overflowX: 'hidden',
+
   },
 }));
 
-function Profile({ user, token, history, location }) {
+function PersistentDrawerLeft({ user, token, history, location }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -91,19 +94,14 @@ function Profile({ user, token, history, location }) {
   useEffect(() => {
     getUser();
   })
-
+  
   const mdLower = useMediaQuery(theme.breakpoints.down('md'))
 
   const boxSize = () => {
     if (mdLower) {
-      return 'md'
+      return 1200
     }
-    return 'sm'
-  }
-
-  const renderScroll = () => {
-    // eslint-disable-next-line no-empty
-    if (mdLower) {}
+    return 800
   }
 
   const handleDrawerOpen = () => {
@@ -117,17 +115,17 @@ function Profile({ user, token, history, location }) {
   return (
     <div className={classes.root}>
 
-      {/* drawer itself */}
+      {/!* drawer itself *!/}
       <Drawer
         className={classes.drawer}
         variant="persistent"
         anchor="left"
         open={(open && mdLower)}
         classes={{
-          paper: classes.drawerPaper,
-        }}
+            paper: classes.drawerPaper,
+          }}
       >
-        {/* icon for closing drawer */}
+        {/!* icon for closing drawer *!/}
         <div style={{height: "64px"}} />
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -145,7 +143,7 @@ function Profile({ user, token, history, location }) {
         <div style={{width: "100%", height: "100%", display: 'flex'}}>
 
           <Hidden lgUp>
-            {/* icon for opening drawer */}
+            {/!* icon for opening drawer *!/}
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -158,13 +156,13 @@ function Profile({ user, token, history, location }) {
 
 
           <Hidden mdDown>
-            <Box maxWidth={400} style={{flex: "0 0 65%", paddingRight: "10%"}}>
+            <Box maxWidth={400} style={{flex: "0 0 65%", paddingRight: "70px"}}>
               <ProfileDetails currentUser={currentUser} setSearchDirection={setSortDirection} setSearchField={setSortField} setFilterTag={setFilterTag} />
             </Box>
           </Hidden>
 
-          <div style={{overflowY: "scroll", width: "100%"}}>
-            <Container maxWidth={boxSize()} style={{backgroundColor: "red"}}>
+          <Box style={{flex: '1', overflowY: "scroll"}}>
+            <Box maxWidth={boxSize()}>
               <div
                 style={{
                   marginTop: '50px',
@@ -172,7 +170,7 @@ function Profile({ user, token, history, location }) {
                   marginLeft: '100px',
                 }}
               >
-                <PinnedPosts id={currentUser._id} />
+                <PinnedPosts id="5f7f5c9e16f6ed5044f6a8be" />
               </div>
               <InfinitePostScroll
                 currentUser={currentUser}
@@ -181,8 +179,8 @@ function Profile({ user, token, history, location }) {
                 filterTag={filterTag}
                 token={token}
               />
-            </Container> 
-          </div>
+            </Box>
+          </Box>
 
         </div>
 
@@ -191,12 +189,12 @@ function Profile({ user, token, history, location }) {
   );
 }
 
-Profile.propTypes = {
+PersistentDrawerLeft.propTypes = {
   token: PropTypes.string.isRequired,
-  user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
-  history: PropTypes.shape({push: PropTypes.func}).isRequired,
-  location: PropTypes.shape({search: PropTypes.string}).isRequired,
+  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  history: PropTypes.objectOf(PropTypes.object).isRequired,
+  location: PropTypes.objectOf(PropTypes.object).isRequired,
 
 }
 
-export default withRouter(Profile)
+export default withRouter(PersistentDrawerLeft) */

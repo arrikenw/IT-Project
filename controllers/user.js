@@ -192,20 +192,25 @@ const addUser = (req, res) => {
   const onUserSave = (err, newUser) => {
     // catch different errors
     if (err) {
-      if (
-        err.message.startsWith(
-          "E11000 duplicate key error collection: developmentDB.Users index: email_1"
-        )
-      ) {
-        console.log(
-          "addUser not successful: email address already has an account"
-        );
-        res.status(400);
-        res.send(
-          "Sign up not successful - email address already has an account"
-        );
-        return;
+      if (err.message.startsWith("E11000 duplicate key error collection:")) {
+        if (err.message.includes("index: email_1")) {
+          console.log(
+            "addUser not successful: email address already has an account"
+          );
+          res.status(400);
+          res.send(
+            "Sign up not successful - email address already has an account"
+          );
+          return;
+        }
+        if (err.message.includes("index: userName_1")) {
+          console.log("addUser not successful: username already in use");
+          res.status(400);
+          res.send("Sign up not successful - username already in use");
+          return;
+        }
       }
+
       // TODO Handle different errors
 
       res.status(500);

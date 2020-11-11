@@ -13,6 +13,9 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ShareIcon from "@material-ui/icons/Share";
 import axios from "axios";
 import * as timeago from 'timeago.js';
+import PropTypes from "prop-types";
+
+
 
 const useStyles = makeStyles({
     commentBorder: {
@@ -20,7 +23,7 @@ const useStyles = makeStyles({
         backgroundColor:"blue"
     },
     comment: {
-        //height: "500px",
+        // height: "500px",
         backgroundColor:"white",
         paddingBottom:"10px"
     },
@@ -93,7 +96,7 @@ function Comment({user, comment, postID, token}) {
 
 
     useEffect(() => {
-        //set initial "has liked status"
+        // set initial "has liked status"
         if (comment && user && comment.likedBy.includes(user._id)){
             setIsLiked(true);
         }else{
@@ -112,13 +115,13 @@ function Comment({user, comment, postID, token}) {
 
         Axios.post(url, payload, headers)
             .then((res) => {
-                if (res.status == 200 || res.status == "success"){
+                if (res.status === 200){
                     setUserName(res.data[0].userName);
                     console.log(res.data[0]);
 
-                    //no profile image, set default and return
+                    // no profile image, set default and return
                     if (!res.data[0].profilePic){
-                        //TODO SET DEFAULT
+                        // TODO SET DEFAULT
                         console.log("no profile pic");
                         return;
                     }
@@ -129,41 +132,37 @@ function Comment({user, comment, postID, token}) {
                     };
 
                     Axios.post(mediaURL, profilePicPayload, headers)
-                        .then((res) => {
-                            if (res.status == 200 || res.status == "success"){
-                                setReturnedMedia(res.data);
+                        .then((newRes) => {
+                            if (newRes.status === 200){
+                                setReturnedMedia(newRes.data);
                                 console.log("returned media:");
-                                console.log(res.data);
+                                console.log(newRes.data);
                             }else{
-                                //TODO
+                                // TODO
                                 console.log("error getting profile pic");
-                                return;
                             }
 
                         })
                         .catch((err) =>{
-                            //TODO
+                            // TODO
                             console.error(err);
-                            return;
                         });
                 }else{
                     // TODO
                     console.log("error getting post creator");
-                    return;
                 }
             }).catch((err) => {
                 // TODO
                 console.error(err);
-                return;
             });
         }, [token]);
 
 
 
-    let textLimit = {maxHeight: "90px"}
+    const textLimit = {maxHeight: "90px"}
     let titleString = ""
     if (userName) {
-        titleString = userName + "'s thoughts";
+        titleString = `${userName  }'s thoughts`;
     }
     let imageString;
     if (returnedMedia){
@@ -175,50 +174,65 @@ function Comment({user, comment, postID, token}) {
         likeMessage = "You've liked this comment. Click again to remove your like."
     }
     return (
-        <div className={classes.commentBorder}>
-            <Card className={classes.comment}>
-                <div style={{height:"85%"}}>
-                    <Grid container style={{backgroundColor: "grey"}}>
-                        <Grid item xs={0.5}>
-                            {imageString && <Avatar src= {imageString}/>}
-                        </Grid>
-                        <Grid item xs={11}>
-                            <div style={{paddingLeft: "10px"}}>
-                                <Typography gutterBottom variant="heading2" color="textPrimary" component="h2">
-                                    {titleString}
-                                </Typography>
-                            </div>
-                        </Grid>
-                        <Grid item xs={0.5} style={{float:"right"}}>
+      <div className={classes.commentBorder}>
+        <Card className={classes.comment}>
+          <div style={{height:"85%"}}>
+            <Grid container style={{backgroundColor: "grey"}}>
+              <Grid item xs={0.5}>
+                {imageString && <Avatar src={imageString} />}
+              </Grid>
+              <Grid item xs={11}>
+                <div style={{paddingLeft: "10px"}}>
+                  <Typography gutterBottom variant="heading1" color="textPrimary" component="h2">
+                    {titleString}
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid item xs={0.5} style={{float:"right"}}>
                             <Typography gutterBottom variant="heading6" color="textPrimary" component="h6">
                                 {comment && timeago.format(comment.createdAt, 'en_US')}
                             </Typography>
                         </Grid>
-                    </Grid>
-                    <div style={{backgroundColor: "lightGrey"}}>
-                        <Typography gutterBottom variant="body2" color="textSecondary" component="p">
-                            {comment.comment}
-                        </Typography>
-                    </div>
-                </div>
+            </Grid>
+            <div style={{backgroundColor: "lightGrey"}}>
+              <Typography gutterBottom variant="body2" color="textSecondary" component="p">
+                {comment.comment}
+              </Typography>
+            </div>
+          </div>
 
-                <div style={{float:"left", height:"15%"}}>
-                    <IconButton size="medium" color="primary" onClick={onToggleLike}>
-                        <ThumbUpIcon />
-                        {likeMessage}
-                    </IconButton>
-                    {comment.likedBy.length + localLikeChange} Likes
-                </div>
-                <div style={{float:"right"}}>
-                    <IconButton size="medium" color="primary">
-                        <ShareIcon />
-                        Share
-                    </IconButton>
-                </div>
-            </Card>
-        </div>
+          <div style={{float:"left", height:"15%"}}>
+            <IconButton size="medium" color="primary" onClick={OnToggleLike}>
+              <ThumbUpIcon />
+              {likeMessage}
+            </IconButton>
+            {comment.likedBy.length + firstLikedNow}
+            {' '}
+            Likes
+          </div>
+          <div style={{float:"right"}}>
+            <IconButton size="medium" color="primary">
+              <ShareIcon />
+              Share
+            </IconButton>
+          </div>
+        </Card>
+      </div>
 
     );
+}
+
+Comment.propTypes = {
+    user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
+    comment: PropTypes.shape({
+      likedBy: PropTypes.arrayOf(PropTypes.string),
+      comment: PropTypes.string,
+      _id: PropTypes.string,
+      userID: PropTypes.string
+    }).isRequired,
+    postID: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
+
 }
 
 export default withRouter(Comment);

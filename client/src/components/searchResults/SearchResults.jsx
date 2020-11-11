@@ -12,11 +12,11 @@ import axios from 'axios'
 
 import { withRouter } from 'react-router-dom'
 
-import ProfilePost from '../profile/ProfilePost'
-
 import PropTypes from 'prop-types'
-
 import { makeStyles } from '@material-ui/core/styles'
+import ProfilePost from '../profile/ProfilePost'
+import InfinitePostScroll from '../profile/InfinitePostScroll'
+
 
 
 function SearchResults({history, token, user, searchResults, searchBy}) {
@@ -38,14 +38,18 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
     const [users, setUsers] = useState([]);
     const [load, setLoad] = useState(false);
     const [error, setError] = useState('');
+    const [sortDirection, setSortDirection] = useState('');
+    const [sortField, setSortField] = useState('');
+    const [filterTag, setFilterTag] = useState('');
 
     useEffect(() =>{
 
+      // TODO make this not n^2
         {searchResults.map((result, idx) => {
 
                 getProfilePic(result.profilePic)
-                .then(function(pic){
-                    setUsers(users=>[...users, {userName:result.userName,
+                .then((pic) => {
+                    setUsers((prevUsers) => [...prevUsers, {userName:result.userName,
                                                 firstName:result.firstName,
                                                 lastName:result.lastName, profilePic:pic}])
                 })
@@ -54,6 +58,9 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
                 })
         })}
 
+    // TODO: Create a state in App.js to track whether searching by posts or users
+
+  // eslint-disable-next-line consistent-return
         // clears the users for next search
         setUsers([]);
        
@@ -84,22 +91,24 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
 
     const renderAvatar = (idx) => {
         if (users[idx]){
-            return <ListItemAvatar><Avatar src= {`data:image/jpeg;base64,${users[idx].profilePic}`}/></ListItemAvatar>
+            return <ListItemAvatar><Avatar src={`data:image/jpeg;base64,${users[idx].profilePic}`} /></ListItemAvatar>
         }
+      return <ListItemAvatar><Avatar src="" /></ListItemAvatar>
     }
 
     const renderUserDetails = (idx) => {
         if (users[idx]){
             return (
-                
-                <ListItemText id={idx} primary={users[idx].firstName+" "+users[idx].lastName}/>
-            
+              <ListItemText id={idx} primary={`${users[idx].firstName} ${users[idx].lastName}`} />
             )}
-    }   
+      return (
+        <ListItemText id={idx} primary="Undefined Undefined" />
+      )
+    }
 
     const goToProfile = (idx) => {
         
-        var profileUrl = `/profile?user=${users[idx].userName}`
+        const profileUrl = `/profile?user=${users[idx].userName}`
         console.log(profileUrl);
 
         history.push(profileUrl);
@@ -108,101 +117,105 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
     const renderSearchResults = () => {
        
         if (searchBy==="posts") {
-            
             return(
-                <div>
-                    <Grid container>
-                        <Grid item xs={3}/>
+              <div>
+                <Grid container>
+                  <Grid item xs={3} />
      
-                        <Grid item xs={6} >
+                  <Grid item xs={6}>
                      
-                            <Grid container spacing = {4} className={classes.resultsContainer}>
-                            
-                                {searchResults.map((result, idx) => (
-                                    <Grid item lg={4} md={6}sm={8}xs={12} key={idx}>
-                                        <ProfilePost  post={result} /> 
-                                    </Grid>
-                                ))}
-                            </Grid>
+                    <Grid container spacing={4} className={classes.resultsContainer}>
+
+                      //TODO change this to infinite scroll
+                      {searchResults.map((result, idx) => (
+                        <Grid item lg={4} md={6} sm={8} xs={12} key={result._id}>
+                          <ProfilePost post={result} /> 
                         </Grid>
-                        
-                        <Grid item xs={3}/>
+
+                                ))}
+
+
                     </Grid>
-                </div>
+                  </Grid>
+                        
+                  <Grid item xs={3} />
+                </Grid>
+              </div>
              )
         }
         if (searchBy==="users") {
     
             return(
-                <div>
-                    <Grid container>
-                        <Grid item xs={3}/>
-     
-                        <Grid item xs={6} >
-                            <Grid container spacing = {1} className={classes.resultsContainer}>
+              <div>
+                <Grid container>
+                  <Grid item xs={3} />
+                  <Grid item xs={6}>
+                    <Grid container spacing={1} className={classes.resultsContainer}>
                                 
-                                <List>
-                                {users.map((user, idx) => {
+                      <List>
+                        {users.map((singleUser, idx) => {
                                     return(
-                                        <Grid item xs = {12}>
-                                           <div style={{width: '50vw' }}>
+                                      <Grid item key={singleUser.userName} xs={12}>
+                                        <div style={{width: '50vw' }}>
 
-                                                <Box component="span" 
-                                                    justifyContent="center" 
-                                                    borderRadius="borderRadius" 
-                                                    display="block" p={1} m={1} 
-                                                    bgcolor="#70B877"
-                                                    >
-                                                    <ListItem key={idx} button
-                                                         onClick={()=>goToProfile(idx)}>
+                                          <Box
+                                            component="span" 
+                                            justifyContent="center" 
+                                            borderRadius="borderRadius" 
+                                            display="block"
+                                            p={1}
+                                            m={1} 
+                                            bgcolor="#70B877"
+                                          >
+                                            <ListItem
+                                              key={singleUser.userName}
+                                              button
+                                              onClick={()=>goToProfile(idx)}
+                                            >
 
-                                                        {renderAvatar(idx)}
-                                                        {renderUserDetails(idx)}
+                                              {renderAvatar(idx)}
+                                              {renderUserDetails(idx)}
         
-                                                    </ListItem>
-                                                </Box>
-                                            </div>
-                                        </Grid>
+                                            </ListItem>
+                                          </Box>
+                                        </div>
+                                      </Grid>
 
                                         // <Grid item xs={6} key={idx}>
                                         //     <a href = {profileUrl} >{result.userName}</a>
                                         // </Grid>
                                     )
-                                   
-                                    
-
-
                                     })}
 
-                                </List>
+                      </List>
 
-                            </Grid>
-                        </Grid>
-                        
-                        <Grid item xs={3}/>
                     </Grid>
-                </div>  
+                  </Grid>
+                        
+                  <Grid item xs={3} />
+                </Grid>
+              </div>  
 
             )
         }
+        return <> </>
     }
 
     return (
-        <>
-            <div>
-
-                {renderSearchResults()}
-            </div>
-            
-        </>
+      <>
+        <div>
+          {renderSearchResults()}
+        </div>
+      </>
     )
 }
 
 SearchResults.propTypes = {
-    history: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    token: PropTypes.string,
-    searchResults: PropTypes.array,
+  user: PropTypes.shape({}),
+  token: PropTypes.string,
+  searchResults: PropTypes.arrayOf(PropTypes.object),
+  searchBy: PropTypes.string.isRequired,
+  history: PropTypes.shape({push: PropTypes.func}).isRequired,
 }
 
 SearchResults.defaultProps = {

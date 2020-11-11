@@ -38,6 +38,7 @@ function LoginForm({ setGlobalToken }) {
   const [password, setPassword] = useState('')
 
   const [redirect, setRedirect] = useState(false)
+  const [redirectSignUp, setRedirectSignUp] = useState(false)
 
   const changeEmail = (e) => {
     setEmail(e.target.value)
@@ -63,11 +64,16 @@ function LoginForm({ setGlobalToken }) {
       })
   }
 
+  const signUp = () => {
+    setRedirectSignUp(true);
+  }
+
   const classes = useStyles()
 
   return (
     <Card>
       {redirect && <Redirect to="/profile" />}
+      {redirectSignUp && <Redirect to="/signup" />}
       <CardContent>
         <Typography variant="h5">Login</Typography>
         <form>
@@ -106,9 +112,9 @@ function LoginForm({ setGlobalToken }) {
         </div>
         <div style={{ marginTop: '10px' }}>
           <Typography color="textSecondary" gutterBottom>
-            Don't have an account?
+            Don&#39;t have an account?
           </Typography>
-          <Button className={classes.signUp} fullWidth>
+          <Button className={classes.signUp} onClick={signUp} fullWidth>
             <Typography className={classes.buttonText} variant="h6">
               Sign up
             </Typography>

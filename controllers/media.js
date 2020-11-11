@@ -1,7 +1,7 @@
 // forms
 const formidable = require("formidable");
 
-//file conversion
+// file conversion
 const { PDFNet } = require("@pdftron/pdfnet-node");
 
 // fs
@@ -156,7 +156,7 @@ const validateAll = (file, fields) => {
 };
 
 const uploadMedia = async (req, res) => {
-  await PDFNet.initialize(); //allow us to use PDFNet
+  await PDFNet.initialize(); // allow us to use PDFNet
   console.log(`id is: ${req.user.id}`);
   const form = new formidable.IncomingForm();
   form.maxFileSize = 15 * 1024 * 1024; // 15 meg
@@ -174,71 +174,81 @@ const uploadMedia = async (req, res) => {
       const validationStatus = validateAll(files.mediafile, fields);
       if (validationStatus !== "valid") {
         console.log(validationStatus.msg);
-        sendHelper(res, {status: 400, msg: validationStatus});
+        sendHelper(res, { status: 400, msg: validationStatus });
         PDFNet.shutdown();
         return;
       }
       console.log("validation success");
 
       const split = files.mediafile.name.split(".");
-      if (split.length != 2){
-        sendHelper(res, {status:200, msg: "Media filename did not have exactly 1 period"});
+      if (split.length != 2) {
+        sendHelper(res, {
+          status: 200,
+          msg: "Media filename did not have exactly 1 period",
+        });
         PDFNet.shutdown();
         return;
       }
-        fs.readFile(files.mediafile.path, async (err2, data) => {
-          if (err2) {
+      fs.readFile(files.mediafile.path, async (err2, data) => {
+        if (err2) {
+          sendHelper(res, {
+            status: 400,
+            msg: "Media upload failed - Error reading file",
+          });
+          PDFNet.shutdown();
+          return;
+        }
+        if (
+          split[1] == "doc" ||
+          split[1] == "docx" ||
+          split[1] == "xlsx" ||
+          split[1] == "pptx"
+        ) {
+          // const pdfdoc = await PDFNet.PDFDoc.create();
+          // await pdfdoc.initSecurityHandler();
+          let databuffer = null;
+          try {
+            console.log(files.mediafile.path);
+            databuffer = await PDFNet.Convert.office2PDFBuffer(data); // "https://filesamples.com/samples/document/docx/sample1.docx"
+          } catch (e) {
+            console.log(e);
+            console.log("Error converting doc to pdf");
             sendHelper(res, {
-              status: 400,
-              msg: "Media upload failed - Error reading file",
+              status: 500,
+              msg: "Error converting doc to pdf",
             });
             PDFNet.shutdown();
             return;
           }
-          if (split[1] == "doc" || split[1] == "docx" || split[1] == "xlsx" || split[1] == "pptx"){
-            //const pdfdoc = await PDFNet.PDFDoc.create();
-            //await pdfdoc.initSecurityHandler();
-            let databuffer = null;
-            try {
-              console.log(files.mediafile.path);
-              databuffer = await PDFNet.Convert.office2PDFBuffer(data); //"https://filesamples.com/samples/document/docx/sample1.docx"
-            } catch (e){
-              console.log(e);
-              console.log("Error converting doc to pdf");
-              sendHelper(res, {status: 500, msg: "Error converting doc to pdf"});
-              PDFNet.shutdown();
-              return;
-            }
 
-            let goodBuffer = Buffer.from(databuffer);
+          const goodBuffer = Buffer.from(databuffer);
 
-
-            const item = {
-              mimeType: 'application/pdf',
-              contentCategory: 'application/pdf'.split("/")[0],
-              extension: 'pdf',
-              creator: req.user.id,
-              isPrivate: fields.isPrivate,
-              canAccess: [],
-              givenFileName: fields.givenFileName,
-            };
-            PDFNet.shutdown();
-            saveDBAndBucket(res, item, goodBuffer);
-          }else{
-            const item = {
-              mimeType: files.mediafile.type,
-              contentCategory: files.mediafile.type.split("/")[0],
-              extension: mime.extension(files.mediafile.type),
-              creator: req.user.id,
-              isPrivate: fields.isPrivate,
-              canAccess: [],
-              givenFileName: fields.givenFileName,
-            };
-            PDFNet.shutdown();
-            saveDBAndBucket(res, item, data);
-          }
-        });
-      })
+          const item = {
+            mimeType: "application/pdf",
+            contentCategory: "application/pdf".split("/")[0],
+            extension: "pdf",
+            creator: req.user.id,
+            isPrivate: fields.isPrivate,
+            canAccess: [],
+            givenFileName: fields.givenFileName,
+          };
+          PDFNet.shutdown();
+          saveDBAndBucket(res, item, goodBuffer);
+        } else {
+          const item = {
+            mimeType: files.mediafile.type,
+            contentCategory: files.mediafile.type.split("/")[0],
+            extension: mime.extension(files.mediafile.type),
+            creator: req.user.id,
+            isPrivate: fields.isPrivate,
+            canAccess: [],
+            givenFileName: fields.givenFileName,
+          };
+          PDFNet.shutdown();
+          saveDBAndBucket(res, item, data);
+        }
+      });
+    })
     .on("error", (err) => {
       console.log(err);
       PDFNet.shutdown();
@@ -430,7 +440,10 @@ const performMediaUpdate = (res, id, update, mediaDoc) => {
       });
     } else {
       console.log(`Media update succeeded: ${results}`);
-      sendHelper(res, { status: 201, msg: 'Media update success - updated ${id}'});
+      sendHelper(res, {
+        status: 201,
+        msg: "Media update success - updated ${id}",
+      });
     }
   };
 

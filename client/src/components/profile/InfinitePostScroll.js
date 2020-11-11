@@ -1,28 +1,31 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
+import PropTypes from "prop-types";
 import usePostSearch from './usePostSearch'
 import ProfilePost from './ProfilePost'
 // https://www.youtube.com/watch?v=NZKUirTtxcg
 
-export default function InfinitePostScroll(props) {
-  // const [search, setSearch] = useState("");
-  const [pageNumber, setPageNumber] = useState(1)
-  const [sortField, setSortField] = useState('createdAt')
-  const [sortDirection, setSortDirection] = useState('desc')
+export default function InfinitePostScroll({ sortDirection, sortField, currentUser, token, filterTag }) {
+  const [localFilterTag, setFilterTag] = useState("none")
+  const [localPageNumber, setPageNumber] = useState(1)
+  const [localSortField, setSortField] = useState('createdAt')
+  const [localSortDirection, setSortDirection] = useState('desc')
+
 
   useEffect(() => {
-    setSortField(props.sortField)
-    setSortDirection(props.sortDirection)
-  }, [props.sortField, props.sortDirection])
+    setSortField(sortField)
+    setSortDirection(sortDirection)
+    setFilterTag(filterTag)
+    setPageNumber(1)
+  }, [sortField, sortDirection, filterTag])
 
 
-  console.log(props.currentUser)
   const { loading, error, posts, hasMore } = usePostSearch(
-    props.currentUser,
-    '',
-    pageNumber,
-    sortField,
-    sortDirection,
-    props.token,
+    currentUser,
+    localFilterTag,
+    localPageNumber,
+    localSortField,
+    localSortDirection,
+    token,
   )
 
   const observer = useRef()
@@ -37,7 +40,6 @@ export default function InfinitePostScroll(props) {
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
           setPageNumber((prevPageNumber) => prevPageNumber + 1)
-          console.log('visible')
         }
       })
       if (node) {
@@ -53,7 +55,7 @@ export default function InfinitePostScroll(props) {
   // };
 
   return (
-    <div style={{ padding: '60px', backgroundColor: '#f7ad23' }}>
+    <div style={{padding: '60px', backgroundColor: '#f7ad23', width: "100%", margin: "20px" }}>
       {posts.map((post, index) => {
         if (posts.length === index + 1) {
           return (
@@ -83,4 +85,17 @@ export default function InfinitePostScroll(props) {
       </div>
     </div>
   )
+
+}
+
+InfinitePostScroll.propTypes = {
+  token: PropTypes.string.isRequired,
+  sortField: PropTypes.string.isRequired,
+  sortDirection: PropTypes.string.isRequired,
+  currentUser: PropTypes.string.isRequired,
+  filterTag: PropTypes.string.isRequired,
+
+}
+
+InfinitePostScroll.defaultProps = {
 }

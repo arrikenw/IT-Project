@@ -14,8 +14,7 @@
 
  const useStyles = makeStyles({
      addPostContainer: {
-         paddingTop: '100px',
-       paddingBottom: '100px',
+         paddingTop: '200px',
      },
  })
 
@@ -24,9 +23,23 @@
 
    return (
      <Grid container justify="center">
+       {/*           <Grid item xs={false} />
+           <Grid item xs={3}>
+               <div
+                   style={{
+                       marginTop: '50px',
+                       marginRight: '50px',
+                       marginLeft: '100px',
+                   }}
+               >
+                   <ProfileDetails user={user} userName={userName} />
+               </div>
+           </Grid> */}
        <Grid item xs={12}>
          <Container className={classes.addPostContainer} maxWidth="sm">
-           <AddPostForm token={token} user={user} />
+           <AddPostForm token={token} />
+           {' '}
+           //CHECK THIS!?!?!?
          </Container>
        </Grid>
      </Grid>

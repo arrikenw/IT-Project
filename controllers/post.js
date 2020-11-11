@@ -87,12 +87,8 @@ const getPublicPost = (req, res) => {
   if (req.body.search) {
     query.$and.push({
       $or: [
-        { title: { $regex: new RegExp(req.body.search.toLowerCase(), "i") } },
-        {
-          description: {
-            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
-          },
-        },
+        { title: { $regex: req.body.search } },
+        { description: { $regex: req.body.search } },
       ],
     });
   }

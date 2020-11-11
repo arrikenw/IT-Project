@@ -49,9 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ProfileDetails({ currentUser, setSearchField, setSearchDirection, setFilterTag }) {
   const [sort, setSort] = useState(0);
-  const [tag, setTag] = useState("Untagged")
-
-  console.log(currentUser)
+  const [tag, setTag] = useState(0)
 
   const handleSort = (e) => {
     switch (e.target.value) {
@@ -102,47 +100,6 @@ function ProfileDetails({ currentUser, setSearchField, setSearchDirection, setFi
     return fields
   }
 
-  const changeTag = (e) => {
-    // setFilterTag(e.target.value)
-    setTag(e.target.value)
-  }
-
-  const renderEmail = () => {
-    if (currentUser.email) {
-      return (
-        <>
-          <ListItem>
-            <ListItemText>
-              Email Address:
-              <br />
-              {currentUser.email}
-            </ListItemText>
-          </ListItem>
-          <Divider variant="middle" />
-        </>
-      )
-    }
-    return <> </>
-  }
-
-  const renderPhone = () => {
-    if (currentUser.phoneNumber) {
-      return (
-        <>
-          <ListItem>
-            <ListItemText>
-              Phone Number:
-              <br />
-              {currentUser.phoneNumber}
-            </ListItemText>
-          </ListItem>
-          <Divider variant="middle" />
-        </>
-      )
-    }
-    return <> </>
-  }
-
     const classes = useStyles()
   return (
     <div className={classes.root}>
@@ -176,8 +133,6 @@ function ProfileDetails({ currentUser, setSearchField, setSearchDirection, setFi
             </ListItemText>
           </ListItem>
           <Divider variant="middle" />
-          {renderEmail()}
-          {renderPhone()}
           <ListItem>
             <ListItemText>
               Organisation:
@@ -222,18 +177,13 @@ function ProfileDetails({ currentUser, setSearchField, setSearchDirection, setFi
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={tag}
-              onChange={changeTag}
+              value={sort}
+              onChange={handleSort}
             >
-              <MenuItem value="Untagged"> Untagged</MenuItem>
-              { currentUser.tags && currentUser.tags.map((singleTag) => {
-                return (
-                  <MenuItem value={singleTag} key={singleTag}>
-                    {' '}
-                    {singleTag}
-                  </MenuItem>
-                )
-              })}
+              <MenuItem value={0}>None</MenuItem>
+              <MenuItem value={1}>Oldest First</MenuItem>
+              <MenuItem value={2}>Alphabetically (A-Z)</MenuItem>
+              <MenuItem value={3}>Alphabetically (Z-A)</MenuItem>
             </Select>
           </ListItem>
         </List>
@@ -252,10 +202,7 @@ ProfileDetails.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     biography: PropTypes.string,
-    organisation: PropTypes.string,
-    email: PropTypes.string,
-    phoneNumber: PropTypes.string,
-    tags: PropTypes.arrayOf(PropTypes.string),
+    organisation: PropTypes.string
   }).isRequired,
   setSearchField: PropTypes.func.isRequired,
   setSearchDirection: PropTypes.func.isRequired,

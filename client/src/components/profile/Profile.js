@@ -7,7 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import { Grid, Box, Container } from '@material-ui/core'
+import { Grid, Box } from '@material-ui/core'
 import Axios from "axios";
 import Hidden from "@material-ui/core/Hidden";
 import PropTypes from "prop-types";
@@ -56,6 +56,8 @@ const useStyles = makeStyles((theme) => ({
   mainContainer: {
     height: '100%',
     width: '100%',
+    overflowX: 'hidden',
+
   },
 }));
 
@@ -96,14 +98,9 @@ function Profile({ user, token, history, location }) {
 
   const boxSize = () => {
     if (mdLower) {
-      return 'md'
+      return 1200
     }
-    return 'sm'
-  }
-
-  const renderScroll = () => {
-    // eslint-disable-next-line no-empty
-    if (mdLower) {}
+    return 800
   }
 
   const handleDrawerOpen = () => {
@@ -163,8 +160,8 @@ function Profile({ user, token, history, location }) {
             </Box>
           </Hidden>
 
-          <div style={{overflowY: "scroll", width: "100%"}}>
-            <Container maxWidth={boxSize()} style={{backgroundColor: "red"}}>
+          <Box style={{flex: '1', overflowY: "scroll"}}>
+            <Box maxWidth={boxSize()}>
               <div
                 style={{
                   marginTop: '50px',
@@ -181,8 +178,8 @@ function Profile({ user, token, history, location }) {
                 filterTag={filterTag}
                 token={token}
               />
-            </Container> 
-          </div>
+            </Box>
+          </Box>
 
         </div>
 

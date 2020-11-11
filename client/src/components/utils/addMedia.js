@@ -1,10 +1,10 @@
 import Axios from "axios";
 
-const add = (file, isPrivate, name, token, callback) => {
+const add = async (file, isPrivate, token, callback) => {
   const formData = new FormData();
   // console.log(file);
   formData.append("mediafile", file);
-  formData.append("givenFileName", name);
+  formData.append("givenFileName", "blank");
   formData.append("isPrivate", isPrivate);
 
   Axios.post("/api/media/add", formData, {

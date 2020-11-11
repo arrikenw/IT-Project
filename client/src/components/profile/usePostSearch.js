@@ -30,8 +30,6 @@ export default function usePostSearch(
     if (token === '' || !token) {
       url = 'api/post/getPublic';
     }
-    console.log("currentUser")
-    console.log(currentUser)
     const filters = { userID: currentUser._id }
     if (filterTag !== 'none') {
       filters.tag = filterTag;

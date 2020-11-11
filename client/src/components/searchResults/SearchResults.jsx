@@ -15,7 +15,7 @@ import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import ProfilePost from '../profile/ProfilePost'
-
+import InfinitePostScroll from '../profile/InfinitePostScroll'
 
 
 
@@ -38,6 +38,9 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
     const [users, setUsers] = useState([]);
     const [load, setLoad] = useState(false);
     const [error, setError] = useState('');
+    const [sortDirection, setSortDirection] = useState('');
+    const [sortField, setSortField] = useState('');
+    const [filterTag, setFilterTag] = useState('');
 
     useEffect(() =>{
 
@@ -122,12 +125,16 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
                   <Grid item xs={6}>
                      
                     <Grid container spacing={4} className={classes.resultsContainer}>
-                            
+
+                      //TODO change this to infinite scroll
                       {searchResults.map((result, idx) => (
                         <Grid item lg={4} md={6} sm={8} xs={12} key={result._id}>
                           <ProfilePost post={result} /> 
                         </Grid>
+
                                 ))}
+
+
                     </Grid>
                   </Grid>
                         

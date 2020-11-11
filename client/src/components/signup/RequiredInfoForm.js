@@ -36,11 +36,17 @@ function RequiredInfoForm({ firstName, setFirstName, lastName, setLastName,
     setConfirmPassword(e.target.value)
   }
 
+  const [error, setError] = useState('');
+  const [helperText, setHelperText] = useState('');
+
+
     return (
       <div>
         <form>
           <div>
             <TextField
+              helperText={helperText}
+              error={error}
               id="signup-firstname"
               label="Enter Your First Name"
               variant="outlined"
@@ -62,22 +68,13 @@ function RequiredInfoForm({ firstName, setFirstName, lastName, setLastName,
             />
           </div>
           <div style={{ marginTop: '20px' }}>
-            <TextField
-              id="signup-username"
-              type="username"
-              label="Enter Username"
-              variant="outlined"
-              fullWidth
-              value={userName}
-              onChange={changeUsername}
-            />
-          </div>
-          <div style={{ marginTop: '5px' }}>
+
             <FormControlLabel
               control={<Checkbox name="emailPrivate" checked={emailPrivate} onClick={changePrivateEmail} color="secondary" />}
               label="Email is private"
             />
             <TextField
+              autoComplete="new-password"
               id="signup-email"
               label="Enter Your Email Address"
               variant="outlined"
@@ -87,8 +84,21 @@ function RequiredInfoForm({ firstName, setFirstName, lastName, setLastName,
               onChange={changeEmail}
             />
           </div>
+          <div style={{ marginTop: '5px' }}>
+            <TextField
+              autoComplete="new-password"
+              id="signup-username"
+              type="username"
+              label="Enter Username"
+              variant="outlined"
+              fullWidth
+              value={userName}
+              onChange={changeUsername}
+            />
+          </div>
           <div style={{ marginTop: '20px' }}>
             <TextField
+              autoComplete="new-password"
               id="signup-password"
               label="Enter Your Password"
               variant="outlined"

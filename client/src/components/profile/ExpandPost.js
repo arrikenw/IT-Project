@@ -6,12 +6,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom';
 import Axios from "axios";
 import PropTypes from "prop-types";
+import * as timeago from 'timeago.js';
 import ProfileDetails from './ProfileDetails';
 import Comment from './Comment';
 import CommentList from "./CommentList";
+import fetchMediaUtil from "../utils/fetchMedia";
 import CommentForm from "./CommentForm";
 
-import * as timeago from 'timeago.js';
 
 const useStyles = makeStyles({
     bodyContainer: {
@@ -63,36 +64,20 @@ function ExpandPost({ user, token, history, location }) {
         return type; // idk
     }
 
-    const getMedia = (post2) => {
-        const controllerUrl = "/api/media/";
-        const payload = {
-            mediaID: post2.mediaID,
-        };
-        const headers = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
-      console.log("inside here");
-        Axios.post(controllerUrl, payload, headers)
-            .then((res) => {
-                if (res.status === 200) {
-                    const str = `data:${res.data.mimeType};base64,${res.data.b64media}`;
-                    const fetchedMedia = {
-                        contentStr: str,
-                        mimeType: res.data.mimeType,
-                        contentCategory: res.data.contentCategory,
-                        componentType: mapCatToComp(res.data.contentCategory)
-                    };
-                    console.log("GET MEDIA GET MEDIA GET MEDIA GET MEDIA");
-                    console.log(fetchedMedia);
-                    setMedia(fetchedMedia);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-                // todo;
-            });
+    function getMediaCallback(res){
+        if (res.status === 200) {
+            const str = `data:${res.data.mimeType};base64,${res.data.b64media}`;
+            const fetchedMedia = {
+                contentStr: str,
+                mimeType: res.data.mimeType,
+                contentCategory: res.data.contentCategory,
+                componentType: mapCatToComp(res.data.contentCategory)
+            };
+            setMedia(fetchedMedia);
+        }else{
+            // TODO
+            console.log("error getting media");
+        }
     }
 
     const query = new URLSearchParams(location.search);
@@ -116,17 +101,16 @@ function ExpandPost({ user, token, history, location }) {
             headers: { 'Authorization': `Bearer ${ token}`}
         }
         Axios.post(postUrl, postPayload, headers).then((res) => {
-          console.log("dog3");
-            if (res.status === 200){
-              console.log("dog4");
-              setPost(res.data[0]);
-              getMedia(res.data[0]);
+            if (res.status == 200 || res.status == "success"){
+                setPost(res.data[0]);
+                fetchMediaUtil(res.data[0].mediaID, token, getMediaCallback, null);
             }else{
               console.log("dog5");
                 // TODO
             }
         }).catch((err) => {
             // TODO
+            console.log(err);
         });
     }, [token, postID]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 
@@ -162,8 +146,8 @@ function ExpandPost({ user, token, history, location }) {
                 </Typography>
               </Grid>
               <Typography variant="heading6" component="h6">
-                    {post && post.createdAt && "Posted "+ timeago.format(post.createdAt, 'en_US')}
-                </Typography>
+                {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')}`}
+              </Typography>
               {(media && media.mimeType !== 'application/pdf') && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
               {!media && (
               <Grid container justify="center">

@@ -11,7 +11,6 @@ import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ShareIcon from "@material-ui/icons/Share";
-import axios from "axios";
 import * as timeago from 'timeago.js';
 import PropTypes from "prop-types";
 
@@ -45,21 +44,21 @@ function Comment({user, comment, postID, token}) {
 
     const classes = useStyles();
 
-    //todo, make it toggle to send remove like to backend
+    // todo, make it toggle to send remove like to backend
 
     function likeComment(){
         setIsLiked(true);
         setLocalLikeChange(localLikeChange + 1);
         const payload = {
             commentID: comment._id,
-            postID: postID
+            postID
         }
         console.log(payload);
         const authHeader = {
             headers: {Authorization: `Bearer ${token}` }
         }
 
-        axios.post('/api/comment/like', payload,  authHeader)
+        Axios.post('/api/comment/like', payload,  authHeader)
             .then(response => {
                 console.log(response);
             })
@@ -71,14 +70,14 @@ function Comment({user, comment, postID, token}) {
         setLocalLikeChange(localLikeChange -1);
         const payload = {
             commentID: comment._id,
-            postID: postID
+            postID
         }
         console.log(payload);
         const authHeader = {
             headers: {Authorization: `Bearer ${token}` }
         }
 
-        axios.post('/api/comment/unlike', payload,  authHeader)
+        Axios.post('/api/comment/unlike', payload,  authHeader)
             .then(response => {
                 console.log(response);
             })
@@ -189,10 +188,10 @@ function Comment({user, comment, postID, token}) {
                 </div>
               </Grid>
               <Grid item xs={0.5} style={{float:"right"}}>
-                            <Typography gutterBottom variant="heading6" color="textPrimary" component="h6">
-                                {comment && timeago.format(comment.createdAt, 'en_US')}
-                            </Typography>
-                        </Grid>
+                <Typography gutterBottom variant="heading6" color="textPrimary" component="h6">
+                  {comment && timeago.format(comment.createdAt, 'en_US')}
+                </Typography>
+              </Grid>
             </Grid>
             <div style={{backgroundColor: "lightGrey"}}>
               <Typography gutterBottom variant="body2" color="textSecondary" component="p">
@@ -202,11 +201,11 @@ function Comment({user, comment, postID, token}) {
           </div>
 
           <div style={{float:"left", height:"15%"}}>
-            <IconButton size="medium" color="primary" onClick={OnToggleLike}>
+            <IconButton size="medium" color="primary" onClick={onToggleLike}>
               <ThumbUpIcon />
               {likeMessage}
             </IconButton>
-            {comment.likedBy.length + firstLikedNow}
+            {comment.likedBy.length + localLikeChange}
             {' '}
             Likes
           </div>
@@ -228,7 +227,8 @@ Comment.propTypes = {
       likedBy: PropTypes.arrayOf(PropTypes.string),
       comment: PropTypes.string,
       _id: PropTypes.string,
-      userID: PropTypes.string
+      userID: PropTypes.string,
+        createdAt: PropTypes.string
     }).isRequired,
     postID: PropTypes.string.isRequired,
     token: PropTypes.string.isRequired,

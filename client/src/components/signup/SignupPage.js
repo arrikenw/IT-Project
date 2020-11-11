@@ -215,7 +215,7 @@ function SignupPage({ setGlobalToken }) {
             })
           }
 
-          add(rawMedia, false, token, callback);
+          add(rawMedia, false, file.name, token, callback);
         } else {
           setGlobalToken(token)
           setRedirect(true)

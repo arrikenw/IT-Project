@@ -19,7 +19,6 @@ export default function InfinitePostScroll({ sortDirection, sortField, currentUs
   }, [sortField, sortDirection, filterTag])
 
 
-  console.log(currentUser)
   const { loading, error, posts, hasMore } = usePostSearch(
     currentUser,
     localFilterTag,
@@ -41,7 +40,6 @@ export default function InfinitePostScroll({ sortDirection, sortField, currentUs
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
           setPageNumber((prevPageNumber) => prevPageNumber + 1)
-          console.log('visible')
         }
       })
       if (node) {
@@ -97,4 +95,7 @@ InfinitePostScroll.propTypes = {
   currentUser: PropTypes.string.isRequired,
   filterTag: PropTypes.string.isRequired,
 
+}
+
+InfinitePostScroll.defaultProps = {
 }

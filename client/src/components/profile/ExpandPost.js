@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import ProfileDetails from './ProfileDetails';
 import Comment from './Comment';
 import CommentList from "./CommentList";
+import CommentForm from "./CommentForm";
 
 
 const useStyles = makeStyles({
@@ -193,8 +194,9 @@ function ExpandPost({ user, token, history, location }) {
             </CardActions>
           </Card>
           {post && (
+
             <Card className={classes.comments}>
-              COMMENTS GO HERE
+              <CommentForm user={user} postID={post._id} token={token} />
               <CommentList user={user} postID={post._id} comments={post.comments} token={token} />
             </Card>
 )}

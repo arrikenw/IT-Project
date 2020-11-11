@@ -49,7 +49,6 @@ class AddPost extends Component {
   }
 
   onSubmit = () => {
-    console.log("button pressed");
     const {file, token, title, description, rawMedia} = this.state;
 
     const callback = (res) => {

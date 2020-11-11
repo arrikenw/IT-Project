@@ -168,7 +168,7 @@ const unlikeComment = (req, res) => {
   const { postID, commentID } = req.body;
 
   PostModel.updateOne(
-    { _id: postID, "comments._id": commentID, "comments.userID": id },
+    { _id: postID, "comments._id": commentID},
     { $pull: { "comments.$.likedBy": id } }
   )
     .then((response) => {

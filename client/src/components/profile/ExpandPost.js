@@ -11,6 +11,7 @@ import Comment from './Comment';
 import CommentList from "./CommentList";
 import CommentForm from "./CommentForm";
 
+import * as timeago from 'timeago.js';
 
 const useStyles = makeStyles({
     bodyContainer: {
@@ -137,6 +138,7 @@ function ExpandPost({ user, token, history, location }) {
         splitStrings = post.description.split(/ (.*)/);
     }
 
+
     return (
       <Grid container className={classes.mainContainer}>
         <Grid item xs={false} />
@@ -159,6 +161,9 @@ function ExpandPost({ user, token, history, location }) {
                   {post && post.title}
                 </Typography>
               </Grid>
+              <Typography variant="heading6" component="h6">
+                    {post && post.createdAt && "Posted "+ timeago.format(post.createdAt, 'en_US')}
+                </Typography>
               {(media && media.mimeType !== 'application/pdf') && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
               {!media && (
               <Grid container justify="center">

@@ -26,6 +26,7 @@ const postSchema = new Schema(
     comments: [comment],
     likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
     private: { type: Boolean, require: true, default: false },
+    userIsPrivate: { type: Boolean, require: true, default: false}
   },
   { timestamps: true, collection: "Posts" }
 );

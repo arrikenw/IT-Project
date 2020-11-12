@@ -180,6 +180,7 @@ function Profile({ user, token, history, location }) {
                 sortDirection={sortDirection}
                 filterTag={filterTag}
                 token={token}
+                user={user}
               />
             </Container> 
           </div>

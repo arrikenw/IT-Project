@@ -172,7 +172,7 @@ function Profile({ user, token, history, location }) {
                   marginLeft: '100px',
                 }}
               >
-                <PinnedPosts id={currentUser._id} />
+                <PinnedPosts id={user._id} />
               </div>
               <InfinitePostScroll
                 currentUser={currentUser}

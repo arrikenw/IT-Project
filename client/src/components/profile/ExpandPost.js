@@ -1,7 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import {IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography,CircularProgress} from '@material-ui/core'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ShareIcon from '@material-ui/icons/Share';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom';
 import Axios from "axios";
@@ -50,6 +53,7 @@ function ExpandPost({ user, token, history, location }) {
     const [post, setPost] = useState(null);
     const [media, setMedia] = useState(null);
     const [postID, setPostID] = useState("");
+    const [pinnedRecently, setPinnedRecently] = useState(false);
 
     function mapCatToComp(type){
         if (type === "image"){
@@ -63,6 +67,30 @@ function ExpandPost({ user, token, history, location }) {
         }
         return type; // idk
     }
+
+    function addToPinned(){
+      if (pinnedRecently){
+        return;
+      }
+      setPinnedRecently(true);
+      const payload = {postID: post._id};
+      const targetURL = "/api/user/addToPinnedPosts";
+      const headers = {
+        headers: { 'Authorization': `Bearer ${ token}`}
+      }
+      Axios.post(targetURL, payload, headers)
+        .then((res) => {
+          if (res.status == 201 || res.status == 200){
+            console.log("added to pinned posts");
+            // TODO maybe add some kind of modal pop-up?
+          }
+        })
+        .catch((err) =>{
+          console.error(err);
+          // TODO maybe add some kind of modal pop-up?
+        })
+    }
+
 
     function getMediaCallback(res){
         if (res.status === 200) {
@@ -137,6 +165,7 @@ function ExpandPost({ user, token, history, location }) {
             {/*  <ProfileDetails user={user} /> */}
           </div>
         </Grid>
+
         <Grid className={classes.bodyContainer} item xs={8}>
           <Card className={classes.postCard}>
             <CardContent>
@@ -169,6 +198,38 @@ function ExpandPost({ user, token, history, location }) {
               </Typography>
             </CardContent>
             <CardActions>
+              <IconButton variant="contained" size="medium" color="primary" onClick={() => {history.goBack()}}>
+                BACK
+                <ArrowBackIcon />
+              </IconButton>
+
+              {post && (post.userID == user._id) && !(user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
+                <IconButton variant="contained" size="medium" color="primary" onClick={addToPinned}>
+                  ADD TO YOUR PINNED POSTS
+                  <AddIcon />
+                </IconButton>
+              )}
+
+              {post && (post.userID == user._id) && (user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
+                <IconButton variant="contained" size="medium" color="primary">
+                  Post is currently pinned
+                </IconButton>
+              )}
+
+              {post && (post.userID == user._id) && (
+                <IconButton
+                  variant="contained"
+                  size="medium"
+                  color="primary"
+                  onClick={() => {
+                  history.push(`./edit?post=${postID}`)
+                }}
+                >
+                  EDIT POST
+                  <EditIcon />
+                </IconButton>
+              )}
+
               <IconButton variant="contained" size="medium" color="primary">
                 <ThumbUpIcon />
                 Like
@@ -198,8 +259,8 @@ function ExpandPost({ user, token, history, location }) {
 
 ExpandPost.propTypes = {
   token: PropTypes.string.isRequired,
-  user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
-  history: PropTypes.shape({push: PropTypes.func}).isRequired,
+  user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string, pinnedPosts: PropTypes.array}).isRequired,
+  history: PropTypes.shape({push: PropTypes.func, goBack: PropTypes.func}).isRequired,
   location: PropTypes.shape({search: PropTypes.string}).isRequired,
 
 }

@@ -7,14 +7,14 @@ const fetchMediaUtil = async (mediaID, token, callback, errorCallback) => {
         return;
     }
 
-    //same payload
+    // same payload
     const payload = {
-        mediaID: mediaID,
+        mediaID,
     };
 
-    console.log("fetching id: "+mediaID);
-    console.log("with token: "+token);
-    //fetch with token
+    console.log(`fetching id: ${mediaID}`);
+    console.log(`with token: ${token}`);
+    // fetch with token
     if (token){
         const controllerUrl = "/api/media/";
         const headers = {
@@ -34,7 +34,7 @@ const fetchMediaUtil = async (mediaID, token, callback, errorCallback) => {
                 }
             });
     }else{
-        //fetch public image
+        // fetch public image
         const controllerUrl = "/api/media/getPublic";
         Axios.post(controllerUrl, payload)
             .then((res) => {

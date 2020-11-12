@@ -524,6 +524,44 @@ const deleteUser = (req, res) => {
     });
 };
 
+const addToPinnedPosts = (req, res) => {
+  if (!req.body.postID) {
+    console.log("addToPinnedPosts was not successful: missing post id");
+    res.status(400);
+    res.send("Pinning the post was not successful - missing post id");
+    return;
+  }
+
+  let pinnedposts;
+  UserModel.findById(req.user.id)
+    .lean()
+    .then((doc) => {
+      if (!doc.pinnedPosts) {
+        pinnedposts = [].push(req.body.postID);
+      } else {
+        pinnedposts = doc.pinnedPosts;
+        pinnedposts.push(req.body.postID);
+        const update = { pinnedPosts: pinnedposts };
+        UserModel.updateOne({ _id: req.user.id }, update)
+          .then((doc2) => {
+            console.log("Pinning post was successful");
+            res.status(201);
+            res.send(req.body.postID);
+          })
+          .catch((err) => {
+            console.log(`addToPinnedPosts not successful: ${err.message}`);
+            res.status(500);
+            res.send("Pinning the post was not successful - something went wrong, try again");
+          });
+      }
+    })
+    .catch((err) => {
+      console.log(`addToPinnedPosts not successful: ${err.message}`);
+      res.status(500);
+      res.send("Pinning the post was not successful - something went wrong, try again");
+    });
+};
+
 module.exports.getProfilePic = getProfilePic;
 module.exports.getUser = getUser;
 module.exports.getPublicUser = getPublicUser;
@@ -531,3 +569,4 @@ module.exports.addUser = addUser;
 module.exports.loginUser = loginUser;
 module.exports.updateUser = updateUser;
 module.exports.deleteUser = deleteUser;
+module.exports.addToPinnedPosts = addToPinnedPosts;

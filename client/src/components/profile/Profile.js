@@ -115,8 +115,8 @@ function Profile({ user, token, history, location }) {
   };
 
   return (
-    <div className={classes.root}>
 
+    <div className={classes.root}>
       {/* drawer itself */}
       <Drawer
         className={classes.drawer}
@@ -172,7 +172,8 @@ function Profile({ user, token, history, location }) {
                   marginLeft: '100px',
                 }}
               >
-                <PinnedPosts id={user._id} />
+                {currentUser &&
+                (<PinnedPosts id={currentUser._id} />)}
               </div>
               <InfinitePostScroll
                 currentUser={currentUser}

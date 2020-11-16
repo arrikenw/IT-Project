@@ -38,13 +38,11 @@ const useStyles = makeStyles({
 
 function Comment({user, comment, postID, token}) {
     const [isLiked, setIsLiked] = useState(false);
-    const [localLikeChange, setLocalLikeChange] = useState(0)
+    const [localLikeChange, setLocalLikeChange] = useState(0);
     const [returnedMedia, setReturnedMedia] = useState(null);
     const [userName, setUserName] = useState("");
 
     const classes = useStyles();
-
-    // todo, make it toggle to send remove like to backend
 
     function likeComment(){
         setIsLiked(true);

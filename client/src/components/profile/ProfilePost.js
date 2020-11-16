@@ -18,6 +18,7 @@ import ShareIcon from "@material-ui/icons/Share";
 import LinesEllipsis from 'react-lines-ellipsis'
 import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC'
 import PropTypes from "prop-types";
+import LikeButtons from "./LikeButtons";
 
 const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
 
@@ -107,7 +108,7 @@ class ProfilePost extends Component {
   }
 
   render(){
-    const { classes, history, post } = this.props
+    const { classes, history, post, user, token} = this.props
     const { contentStr } = this.state
     const heightChange = {maxHeight:"800"};
     const textLimit = {maxHeight: "90px"}
@@ -130,11 +131,7 @@ class ProfilePost extends Component {
         </CardActionArea>
         <CardActions style={{paddingBottom: "0px"}}>
           <div style={{float:"left"}}>
-            <IconButton size="medium" color="primary">
-              <ThumbUpIcon />
-              Like
-            </IconButton>
-            9 trillion likes
+            {post && <LikeButtons post={post} user={user} token={token} />}
           </div>
           <div style={{float:"right"}}>
             <IconButton size="medium" color="primary">
@@ -157,6 +154,10 @@ ProfilePost.propTypes = {
     mediaID: PropTypes.string,
     description: PropTypes.string,
   }).isRequired,
+  user: PropTypes.shape({
+    _id: PropTypes.string
+  }).isRequired,
+  token: PropTypes.string.isRequired,
   classes: PropTypes.objectOf(PropTypes.object).isRequired,
   history: PropTypes.shape({push: PropTypes.func}).isRequired,
   media: PropTypes.shape({contentStr: PropTypes.string}).isRequired,

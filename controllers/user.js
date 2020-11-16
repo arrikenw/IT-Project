@@ -10,6 +10,7 @@ const { generateToken } = require("../utils/jwtTokens");
 // import the users model
 const UserModel = mongoose.model("users");
 const MediaModel = mongoose.model("media");
+const PostModel = mongoose.model("posts");
 
 // send helper function
 const sendHelper = (res, response) => {
@@ -303,11 +304,24 @@ const loginUser = (req, res) => {
   UserModel.find({ email: req.body.email }, validateAccount);
 };
 
+
 // TODO VALIDATE PINNED POSTS ARE IN FACT OWNED BY THE USER
 // update a user's information
 const updateUser = (req, res) => {
   const { id } = req.user;
   const update = JSON.parse(JSON.stringify(req.body.update));
+
+  const onUpdatePrivacy = (err, results) => {
+    if (err) {
+      console.log(`updateUser not successful: ${err.message}`);
+      res.status(500);
+      res.send("update not successful - something went wrong, try again");
+      return;
+    }
+    console.log(`updateUser successful: updated user ${id}`);
+    res.status(200);
+    res.send({ id });
+  };
 
   const onUpdateUser = (err, results) => {
     if (err) {
@@ -317,15 +331,35 @@ const updateUser = (req, res) => {
       return;
     }
     if (results.n === 1) {
-      console.log(`updateUser successful: updated user ${id}`);
-      res.status(200);
-      res.send({ id });
+      if (!req.body.private) {
+        console.log(`updateUser successful: updated user ${id}`);
+        res.status(200);
+        res.send({ id });
+        return;
+      }
+
+      // update privacy across all user posts
+      PostModel.updateMany({userID: id}, {userIsPrivate: req.body.private}, onUpdatePrivacy );
+    } else {
+      console.log(`updateUser not successful: could not find user ${id}`);
+      res.status(400);
+      res.send(`update not successful - could not find user ${id}`);
+    }
+  };
+
+  const onChangePostPrivacy = (err, results) => {
+    if (err) {
+      console.log(`updateUser not successful (failure updating post privacy status): ${err.message}`);
+      res.status(500);
+      res.send("update not successful - something went wrong, try again");
       return;
     }
-    console.log(`updateUser not successful: could not find user ${id}`);
-    res.status(400);
-    res.send(`update not successful - could not find user ${id}`);
-  };
+    
+    console.log(`updateUser successful: updated user ${id}`);
+    res.status(200);
+    res.send({ id });
+    return;
+  }
 
   const onHashPassword = (err, hash) => {
     if (err) {
@@ -490,6 +524,44 @@ const deleteUser = (req, res) => {
     });
 };
 
+const addToPinnedPosts = (req, res) => {
+  if (!req.body.postID) {
+    console.log("addToPinnedPosts was not successful: missing post id");
+    res.status(400);
+    res.send("Pinning the post was not successful - missing post id");
+    return;
+  }
+
+  let pinnedposts;
+  UserModel.findById(req.user.id)
+    .lean()
+    .then((doc) => {
+      if (!doc.pinnedPosts) {
+        pinnedposts = [].push(req.body.postID);
+      } else {
+        pinnedposts = doc.pinnedPosts;
+        pinnedposts.push(req.body.postID);
+        const update = { pinnedPosts: pinnedposts };
+        UserModel.updateOne({ _id: req.user.id }, update)
+          .then((doc2) => {
+            console.log("Pinning post was successful");
+            res.status(201);
+            res.send(req.body.postID);
+          })
+          .catch((err) => {
+            console.log(`addToPinnedPosts not successful: ${err.message}`);
+            res.status(500);
+            res.send("Pinning the post was not successful - something went wrong, try again");
+          });
+      }
+    })
+    .catch((err) => {
+      console.log(`addToPinnedPosts not successful: ${err.message}`);
+      res.status(500);
+      res.send("Pinning the post was not successful - something went wrong, try again");
+    });
+};
+
 module.exports.getProfilePic = getProfilePic;
 module.exports.getUser = getUser;
 module.exports.getPublicUser = getPublicUser;
@@ -497,3 +569,4 @@ module.exports.addUser = addUser;
 module.exports.loginUser = loginUser;
 module.exports.updateUser = updateUser;
 module.exports.deleteUser = deleteUser;
+module.exports.addToPinnedPosts = addToPinnedPosts;

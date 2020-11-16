@@ -38,5 +38,8 @@ router.post("/delete", authenticateToken, (req, res) => {
   userController.deleteUser(req, res);
 });
 
+router.post("/addToPinnedPosts", authenticateToken, (req, res) => {
+  userController.addToPinnedPosts(req, res);
+});
 // export router for use index.js
 module.exports = router;

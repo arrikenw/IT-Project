@@ -209,12 +209,12 @@ function SettingsPage({ token, user }) {
   }
 
   const validateSecondTab = () => {
-    if (!localUser.phoneNumber.match(/^[0-9]*$/)) {
+    if (localUser.phoneNumber && !localUser.phoneNumber.match(/^[0-9]*$/)) {
       setWarningMessage("Invalid phone number")
       setWarning(true)
       return 1
     }
-    if (localUser.biography.length > 1000) {
+    if (localUser.biography && localUser.biography.length > 1000) {
       setWarningMessage("Biography must be less than 1001 characters")
       setWarning(true)
       return 1

@@ -1,6 +1,6 @@
 // AWS
 const AWS = require("aws-sdk");
-//const fs = require("fs");
+// const fs = require("fs");
 const s3 = new AWS.S3();
 
 // fetch media from file server
@@ -8,7 +8,7 @@ const fetchMediaUtil = async (mediaID, extension) => {
   console.log("fetching1 media");
   const filepath = `${mediaID}.${extension}`;
   console.log(filepath);
-  const bucketName = "podoju";
+  const bucketName = process.env.AWS_BUCKET_NAME;
   const params = { Bucket: bucketName, Key: filepath };
   let retVal;
 

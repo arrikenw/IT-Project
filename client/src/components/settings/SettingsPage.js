@@ -19,6 +19,8 @@ import SettingsRequired from "./SettingsRequired";
 import SettingsOptional from "./SettingsOptional";
 import SettingsOther from "./SettingsOther";
 
+import fetchMediaUtil from "../utils/fetchMedia";
+
 function Alert(props) {
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -50,6 +52,7 @@ const useStyles = makeStyles({
 
 function SettingsPage({ token, user }) {
   const [currentPassword, setCurrentPassword] = useState("");
+  const [currentProfilePic, setCurrentProfilePic] = useState("");
   const [localUser, setUser] = useState({
     biography: "",
     dateOfBirth: new Date(),
@@ -106,6 +109,24 @@ function SettingsPage({ token, user }) {
     })
   }
 
+  useEffect(() => {
+    const callBack = (res) => {
+      console.log(res);
+      setCurrentProfilePic(res.data)
+    }
+
+    const errorCB = (err) => {
+      console.error(err)
+      console.log(err.message)
+    }
+
+    if (!user.profilePic) return
+
+    console.log(user.profilePic)
+    // fetchMediaUtil(user.profilePic, token, callBack, errorCB)
+
+  }, [user, token])
+
   const updateLocalUser = (e) => {
     if (e.persist) {
       e.persist()
@@ -114,6 +135,7 @@ function SettingsPage({ token, user }) {
       const newUser = {...oldUser}
       if (!e.persist) {
         newUser.dateOfBirth = e;
+        console.log(newUser.dateOfBirth)
         return newUser
       }
       if (e.target.name.endsWith('Private') || e.target.name === 'private') {
@@ -141,6 +163,15 @@ function SettingsPage({ token, user }) {
           newUser[name] = user[name]
           return newUser
         })
+      }
+
+      if (name === "dateOfBirth" && !user.dateOfBirth) {
+        if (oldEdit[name] === true) {
+          updateLocalUser("")
+        }
+        else {
+          updateLocalUser(new Date())
+        }
       }
 
       return newEdit
@@ -251,6 +282,11 @@ function SettingsPage({ token, user }) {
 
   useEffect(() => {
     const newUser = { ...user, password: "", confirmPassword: "" }
+    if (!user.dateOfBirth) {
+      newUser.dateOfBirth = ""
+      setUser(newUser)
+      return
+    }
     newUser.dateOfBirth = new Date(user.dateOfBirth)
     setUser(newUser)
   }, [user])
@@ -402,7 +438,8 @@ SettingsPage.propTypes = {
     emailPrivate: PropTypes.bool.isRequired,
     phoneNumberPrivate: PropTypes.bool.isRequired,
     private: PropTypes.bool.isRequired,
-    dateOfBirth: PropTypes.string.isRequired
+    dateOfBirth: PropTypes.string,
+    profilePic: PropTypes.string
   }).isRequired,
 }
 

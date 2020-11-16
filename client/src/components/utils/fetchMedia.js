@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const fetchMediaUtil = async (mediaID, token, callback, errorCallback) => {
+const fetchMediaUtil = (mediaID, token, callback, errorCallback) => {
 
     if (!mediaID){
         console.log("no media id provided for fetch");

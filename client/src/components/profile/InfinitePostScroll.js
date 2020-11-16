@@ -4,7 +4,7 @@ import usePostSearch from './usePostSearch'
 import ProfilePost from './ProfilePost'
 // https://www.youtube.com/watch?v=NZKUirTtxcg
 
-export default function InfinitePostScroll({ sortDirection, sortField, currentUser, token, filterTag }) {
+export default function InfinitePostScroll({ sortDirection, sortField, currentUser, token, filterTag, user}) {
   const [localFilterTag, setFilterTag] = useState("none")
   const [localPageNumber, setPageNumber] = useState(1)
   const [localSortField, setSortField] = useState('createdAt')
@@ -64,13 +64,13 @@ export default function InfinitePostScroll({ sortDirection, sortField, currentUs
               ref={lastPostElementRef}
               key={post._id}
             >
-              <ProfilePost post={post} />
+              <ProfilePost post={post} token={token} user={user} />
             </div>
           )
         }
         return (
           <div style={{ marginTop: '0vw' }} key={post._id}>
-            <ProfilePost post={post} />
+            <ProfilePost post={post} token={token} user={user} />
           </div>
         )
       })}
@@ -94,7 +94,7 @@ InfinitePostScroll.propTypes = {
   sortDirection: PropTypes.string.isRequired,
   currentUser: PropTypes.string.isRequired,
   filterTag: PropTypes.string.isRequired,
-
+  user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
 }
 
 InfinitePostScroll.defaultProps = {

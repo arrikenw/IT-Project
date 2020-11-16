@@ -172,7 +172,7 @@ function Profile({ user, token, history, location }) {
                   marginLeft: '100px',
                 }}
               >
-                <PinnedPosts id={currentUser._id} />
+                <PinnedPosts id={user._id} />
               </div>
               <InfinitePostScroll
                 currentUser={currentUser}
@@ -180,6 +180,7 @@ function Profile({ user, token, history, location }) {
                 sortDirection={sortDirection}
                 filterTag={filterTag}
                 token={token}
+                user={user}
               />
             </Container> 
           </div>

@@ -263,6 +263,7 @@ const uploadMedia = async (req, res) => {
 // CONTROLLER FOR SERVING MEDIA
 // REQUIRES AUTH TOKEN
 const serveMedia = async (req, res) => {
+
   if (!req.body.mediaID) {
     console.log("no media id provided");
     sendHelper(res, {
@@ -273,11 +274,17 @@ const serveMedia = async (req, res) => {
   }
 
   // check if media can be accessed by user
-  console.log("getting media metadata");
   Media.findById(req.body.mediaID)
     .lean()
     .then(async (doc) => {
-      console.log("checking if user has access to media");
+      if (!doc){
+        console.log("requested media does not exist: " + req.body.mediaID);
+        sendHelper(res, {
+          status: 400,
+          msg: "Media retrieval failed - the requested media does not exist",
+        });
+        return;
+      }
       if (
           !((doc.creator.toString() === req.user.id.toString()) ||
            doc.isPrivate == false ||

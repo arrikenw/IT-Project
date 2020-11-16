@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const PostModel = mongoose.model("posts");
 const Media = mongoose.model("media");
+const User = mongoose.model("users");
 
 // send helper
 const sendHelper = (res, response) => {
@@ -187,37 +188,6 @@ const addPost = (req, res) => {
     res.send({ id: newPost._id });
   };
 
-  const setThumbHelper = (req, payload) => {
-    if (!req.body.thumbnailURL) {
-      const videoThumb = "5f736f876b93c95300af61e0";
-      const audioThumb = "5f736fae6b93c95300af61e1";
-      const imageThumb = "5f736fdd6b93c95300af61e2";
-      const textThumb = "5f7370026b93c95300af61e3";
-      const applicationThumb = "5f7370156b93c95300af61e4";
-      switch (payload.contentCategory) {
-        case "video":
-          payload.thumbnailURL = videoThumb;
-          break;
-        case "image":
-          payload.thumbnailURL = imageThumb;
-          break;
-        case "audio":
-          payload.thumbnailURL = audioThumb;
-          break;
-        case "text":
-          payload.thumbnailURL = textThumb;
-          break;
-        case "application":
-          payload.thumbnailURL = applicationThumb;
-          break;
-      }
-    } else {
-      payload.thumbnailURL = req.body.thumbnailURL;
-    }
-
-    return payload;
-  };
-
   if (!req.body.title) {
     console.log("addPost not successful: missing post title");
     res.status(400);
@@ -258,14 +228,34 @@ const addPost = (req, res) => {
         if (req.body.description) {
           payload.description = req.body.description;
         }
+
+        if (req.body.thumbnailURL) {
+          payload.thumbnailURL = req.body.thumbnailURL;
+        }
+
+        payload.contentCategory = doc.contentCategory;
+
         if (req.body.private) {
           payload.private = req.body.private;
         }
-        payload.contentCategory = doc.contentCategory;
-        setThumbHelper(req, payload);
-        console.log("Finished building payload");
-        const data = new PostModel(payload);
-        data.save(onPostSave);
+
+        User.findById(req.user.id)
+          .lean()
+          .then((userdoc) => {
+            payload.userIsPrivate = userdoc.private;
+
+            console.log("Finished building payload");
+            const data = new PostModel(payload);
+            data.save(onPostSave);
+          })
+          .catch((err) => {
+            console.log(err);
+            sendHelper(res, {
+              status: 503,
+              msg:
+                "Add post was not successful - error creator's privacy settings in database",
+            });
+          });
       }
     })
     .catch((err) => {

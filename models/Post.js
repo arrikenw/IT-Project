@@ -20,12 +20,17 @@ const postSchema = new Schema(
     thumbnailURL: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "media",
-      required: true,
     },
     contentCategory: { type: String, maxLength: "20", required: true },
     comments: [comment],
     likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
     private: { type: Boolean, require: true, default: false },
+    userIsPrivate: { type: Boolean, require: true, default: false },
+    // https://stackoverflow.com/questions/36860342/mongoose-make-array-required
+    tags: {
+      type: [String],
+      validate: (v) => Array.isArray(v) && v.length >= 0,
+    },
   },
   { timestamps: true, collection: "Posts" }
 );

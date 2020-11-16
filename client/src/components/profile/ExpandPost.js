@@ -231,35 +231,10 @@ function ExpandPost({ user, token, history, location }) {
                 </IconButton>
               )}
 
-              <IconButton variant="contained" size="medium" color="primary">
-                <ThumbUpIcon />
-                Like
-              </IconButton>
-
               {post && (post.userID == user._id) && !(user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
                 <IconButton variant="contained" size="medium" color="primary" onClick={addToPinned}>
                   ADD TO YOUR PINNED POSTS
                   <AddIcon />
-                </IconButton>
-              )}
-
-              {post && (post.userID == user._id) && (user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
-                <IconButton variant="contained" size="medium" color="primary">
-                  Post is currently pinned
-                </IconButton>
-              )}
-
-              {post && (post.userID == user._id) && (
-                <IconButton
-                  variant="contained"
-                  size="medium"
-                  color="primary"
-                  onClick={() => {
-                  history.push(`./edit?post=${postID}`)
-                }}
-                >
-                  EDIT POST
-                  <EditIcon />
                 </IconButton>
               )}
 

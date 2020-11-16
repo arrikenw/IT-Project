@@ -34,7 +34,7 @@ const fetchMediaUtil = require("../utils/fetchMediaUtil.js");
 // write file to bucket
 const saveBucket = (res, fileData, DBEntry) => {
   // information about bucket and upload
-  const bucketName = "podoju";
+  const bucketName = process.env.AWS_BUCKET_NAME;
   const keyName = `${DBEntry._id.toString()}.${DBEntry.extension}`;
 
   // writing to bucket
@@ -129,7 +129,7 @@ const validateFields = (fields) => {
       msg: "Media upload failed - fields absent or invalid",
     };
   }
-  if (fields.givenFileName.length > 20) {
+  if (fields.givenFileName.length > 2000) {
     return {
       status: 400,
       msg: "Media upload failed - file display name is too large",
@@ -181,7 +181,7 @@ const uploadMedia = async (req, res) => {
       console.log("validation success");
 
       const split = files.mediafile.name.split(".");
-      if (split.length != 2) {
+      if (split.length !== 2) {
         sendHelper(res, {
           status: 200,
           msg: "Media filename did not have exactly 1 period",
@@ -199,10 +199,10 @@ const uploadMedia = async (req, res) => {
           return;
         }
         if (
-          split[1] == "doc" ||
-          split[1] == "docx" ||
-          split[1] == "xlsx" ||
-          split[1] == "pptx"
+          split[1] === "doc" ||
+          split[1] === "docx" ||
+          split[1] === "xlsx" ||
+          split[1] === "pptx"
         ) {
           // const pdfdoc = await PDFNet.PDFDoc.create();
           // await pdfdoc.initSecurityHandler();
@@ -263,7 +263,6 @@ const uploadMedia = async (req, res) => {
 // CONTROLLER FOR SERVING MEDIA
 // REQUIRES AUTH TOKEN
 const serveMedia = async (req, res) => {
-
   if (!req.body.mediaID) {
     console.log("no media id provided");
     sendHelper(res, {
@@ -277,8 +276,8 @@ const serveMedia = async (req, res) => {
   Media.findById(req.body.mediaID)
     .lean()
     .then(async (doc) => {
-      if (!doc){
-        console.log("requested media does not exist: " + req.body.mediaID);
+      if (!doc) {
+        console.log(`requested media does not exist: ${req.body.mediaID}`);
         sendHelper(res, {
           status: 400,
           msg: "Media retrieval failed - the requested media does not exist",
@@ -286,15 +285,76 @@ const serveMedia = async (req, res) => {
         return;
       }
       if (
-          !((doc.creator.toString() === req.user.id.toString()) ||
-           doc.isPrivate == false ||
-          (doc.isPrivate == true && doc.canAccess.includes(mongoose.Types.ObjectId(req.user.id))))
+        !(
+          doc.creator.toString() === req.user.id.toString() ||
+          doc.isPrivate === false ||
+          (doc.isPrivate === true &&
+            doc.canAccess.includes(mongoose.Types.ObjectId(req.user.id)))
+        )
       ) {
         console.log("user does not have permission to view media");
         sendHelper(res, {
           status: 401,
           msg:
             "Media retrieval failed - user does not have permission to view media",
+        });
+        return;
+      }
+
+      const mediab64 = await fetchMediaUtil(req.body.mediaID, doc.extension);
+      if (!mediab64) {
+        sendHelper(res, {
+          status: 500,
+          msg: "Media retrieval failed - failed to retrieve file from server",
+        });
+        console.log("Failed to retrieve media from s3 server");
+      } else {
+        sendHelper(res, {
+          status: 200,
+          msg: {
+            b64media: mediab64,
+            extension: doc.extension,
+            mimeType: doc.mimeType,
+            contentCategory: doc.contentCategory,
+          },
+        });
+        console.log("Successfully returned file, request complete.");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      sendHelper(res, {
+        status: 503,
+        msg:
+          "Media retrieval failed - error retrieving media information from database",
+      });
+    });
+};
+
+//* ****************************************************************************************
+// CONTROLLER FOR SERVING PUBLIC MEDIA WITHOUT VERIFICATION
+// DOES NOT REQUIRE AUTH TOKEN. CAN ONLY FETCH PUBLIC MEDIA
+const serveMediaPublic = async (req, res) => {
+  if (!req.body.mediaID) {
+    console.log("no media id provided");
+    sendHelper(res, {
+      status: 400,
+      msg: "Media retrieval failed - No media id provided",
+    });
+    return;
+  }
+
+  // check if media can be accessed by user
+  console.log("getting media metadata");
+  Media.findById(req.body.mediaID)
+    .lean()
+    .then(async (doc) => {
+      console.log("checking if media is public");
+      if (doc.isPrivate !== false) {
+        console.log("media was not public");
+        sendHelper(res, {
+          status: 401,
+          msg: "Media retrieval failed - media isn't public",
         });
         return;
       }
@@ -328,67 +388,6 @@ const serveMedia = async (req, res) => {
       });
     });
 };
-
-
-//* ****************************************************************************************
-// CONTROLLER FOR SERVING PUBLIC MEDIA WITHOUT VERIFICATION
-// DOES NOT REQUIRE AUTH TOKEN. CAN ONLY FETCH PUBLIC MEDIA
-const serveMediaPublic = async (req, res) => {
-  if (!req.body.mediaID) {
-    console.log("no media id provided");
-    sendHelper(res, {
-      status: 400,
-      msg: "Media retrieval failed - No media id provided",
-    });
-    return;
-  }
-
-  // check if media can be accessed by user
-  console.log("getting media metadata");
-  Media.findById(req.body.mediaID)
-      .lean()
-      .then(async (doc) => {
-        console.log("checking if media is public");
-        if (doc.isPrivate !== false) {
-          console.log("media was not public");
-          sendHelper(res, {
-            status: 401,
-            msg:
-                "Media retrieval failed - media isn't public",
-          });
-          return;
-        }
-
-        const mediab64 = await fetchMediaUtil(req.body.mediaID, doc.extension);
-        if (!mediab64 || mediab64 === null) {
-          sendHelper(res, {
-            status: 500,
-            msg: "Media retrieval failed - failed to retrieve file from server",
-          });
-          console.log("Failed to retrieve media from s3 server");
-        } else {
-          sendHelper(res, {
-            status: 200,
-            msg: {
-              b64media: mediab64,
-              extension: doc.extension,
-              mimeType: doc.mimeType,
-              contentCategory: doc.contentCategory,
-            },
-          });
-          console.log("Successfully returned file, request complete.");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        sendHelper(res, {
-          status: 503,
-          msg:
-              "Media retrieval failed - error retrieving media information from database",
-        });
-      });
-};
-
 
 //* ****************************************************************************************
 // CONTROLLER AND HELPER FUNCTIONS FOR UPDATING MEDIA
@@ -544,7 +543,7 @@ const deleteMongo = (res, id) => {
 
 const deleteS3AndMongo = (res, id, extension) => {
   const filepath = `${id}.${extension}`;
-  const bucketName = "podoju";
+  const bucketName = process.env.AWS_BUCKET_NAME;
   const params = { Bucket: bucketName, Key: filepath };
   s3.deleteObject(params, (err, data) => {
     console.log(`deleted s3 ${data}`);

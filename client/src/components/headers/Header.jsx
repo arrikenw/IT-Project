@@ -36,7 +36,7 @@ import logo from '../../assets/personal-profile.svg'
 
 function Header({ token, user, logout, history, searchResults, setSearchResults, searchBy, setSearchBy }) {
   const [anchorEl, setAnchorEl] = useState(null)
-  const [profilePic, setProfilePic] = useState(false);
+  const [profilePic, setProfilePic] = useState("");
   //= const [searchBy, setSearchBy] = useState('posts');
   const [searchInput, setSearchInput] = useState('');
 
@@ -201,7 +201,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   }
 
   useEffect(() => {
-    if (!token) {
+    if (!token || !user.profilePic) {
       return
     }
     const authHeader = {
@@ -219,6 +219,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   const renderAvatar = () => {
     return <Avatar src={`data:image/jpeg;base64,${profilePic}`} />
+    /* return <Avatar src={`data:image/jpeg;base64,${profilePic}`} /> */
   }
 
   const renderSearchBar = () => {

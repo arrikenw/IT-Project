@@ -41,7 +41,7 @@ function SignupPage({ setGlobalToken }) {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   // for second form
-  const [dateOfBirth, setDateOfBirth] =useState(new Date("1900-01-01"));
+  const [dateOfBirth, setDateOfBirth] =useState(new Date(0));
   const [organisation, setOrganisation] = useState('');
   const [phoneNumberPrivate, setPhoneNumberPrivate] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState('');

@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
 
 function SettingsOther({ localUser, setLocalUser, editUser, setEditUser, updateProfessionalFields, updateTags }) {
   const [currentField, setCurrentField] = useState('');
-  const [currentTag, setCurrentTag] = useState('');
 
   const updateField = (e) => {
     const value = e.target.value;
@@ -55,6 +54,8 @@ function SettingsOther({ localUser, setLocalUser, editUser, setEditUser, updateP
     }
   }
 
+ /* const [currentTag, setCurrentTag] = useState('');
+
   const updateTag = (e) => {
     const value = e.target.value;
     // cannot add more than 5 tags
@@ -80,7 +81,39 @@ function SettingsOther({ localUser, setLocalUser, editUser, setEditUser, updateP
     if (!editUser.tags) {
       setEditUser("tags")
     }
-  }
+  } */
+
+  /* <div style={{ marginTop: '10px' }}>
+    <TextField
+      id="signup-lastname"
+      label="Post Tags"
+      variant="outlined"
+      type="lastname"
+      fullWidth
+      value={currentTag}
+      onChange={updateTag}
+      disabled={localUser.tags.length >= 5 || !editUser.tags}
+    />
+  </div>
+  <div style={{flexWrap: 'wrap',}}>
+    {localUser.tags.map((tag, index) => {
+      return (
+        <Chip
+          style={{margin: "5px"}}
+          key={tag}
+          onDelete={deleteTag(tag)}
+          label={tag}
+        />
+      )
+    })}
+  </div>
+  <Button
+    onClick={() => {
+      setEditUser("tags")
+    }}
+  >
+    {editUser.tags ? "Reset" : "Edit"}
+  </Button> */
 
   const classes = useStyles()
   return (
@@ -146,37 +179,6 @@ function SettingsOther({ localUser, setLocalUser, editUser, setEditUser, updateP
         }}
       >
         {editUser.professionalFields ? "Reset" : "Edit"}
-      </Button>
-      <div style={{ marginTop: '10px' }}>
-        <TextField
-          id="signup-lastname"
-          label="Post Tags"
-          variant="outlined"
-          type="lastname"
-          fullWidth
-          value={currentTag}
-          onChange={updateTag}
-          disabled={localUser.tags.length >= 5 || !editUser.tags}
-        />
-      </div>
-      <div style={{flexWrap: 'wrap',}}>
-        {localUser.tags.map((tag, index) => {
-          return (
-            <Chip
-              style={{margin: "5px"}}
-              key={tag}
-              onDelete={deleteTag(tag)}
-              label={tag}
-            />
-          )
-        })}
-      </div>
-      <Button
-        onClick={() => {
-          setEditUser("tags")
-        }}
-      >
-        {editUser.tags ? "Reset" : "Edit"}
       </Button>
     </div>
   );

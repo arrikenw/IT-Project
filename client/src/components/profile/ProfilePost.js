@@ -14,12 +14,15 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 
 
-
 // truncation is not supported for multiline, so using this lib
 import LinesEllipsis from 'react-lines-ellipsis'
 import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC'
 import * as timeago from "timeago.js";
 import PropTypes from "prop-types";
+import audioTN from "../../assets/audio.jpg"
+import videoTN from "../../assets/video.jpg"
+import docTN from "../../assets/docs.png"
+import GenericMedia from "../utils/GenericMedia";
 import LikeButtons from "./LikeButtons";
 
 
@@ -45,7 +48,7 @@ class ProfilePost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // mimeType: "",
+      mimeType: "",
       contentStr: "",
       // contentCategory: "",
     };
@@ -55,10 +58,9 @@ class ProfilePost extends Component {
     // if media is already stored
     const { media, post } = this.props;
     if (media){
-      console.log("USING STORED MEDIA");
       this.setState({
         contentStr: media.contentStr,
-        // mimeType: media.mimeType,
+        mimeType: media.mimeType,
         // contentCategory: media.contentCategory
       })
       return;
@@ -72,6 +74,9 @@ class ProfilePost extends Component {
       // TODO make thumbnail fetching work properly
       mediaID: post.thumbnailURL,
     };
+    if (!post.thumbnailURL) {
+      payload.mediaID =  post.mediaID
+    }
     const headers = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -83,7 +88,7 @@ class ProfilePost extends Component {
             const str = `data:${res.data.mimeType};base64,${res.data.b64media}`;
             this.setState({
               contentStr: str,
-              // mimeType: res.data.mimeType,
+              mimeType: res.data.mimeType,
               // contentCategory: res.data.contentCategory,
             });
           }
@@ -99,11 +104,11 @@ class ProfilePost extends Component {
     const { media } = this.props
     const { contentStr } = this.state
     if (media && media.contentStr !== contentStr){
-      console.log("USING STORED MEDIA");
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         contentStr: media.contentStr,
-        // mimeType: this.props.media.mimeType,
+        // eslint-disable-next-line react/destructuring-assignment
+        mimeType: this.props.media.mimeType,
         // contentCategory: this.props.media.contentCategory
       })
       
@@ -111,16 +116,32 @@ class ProfilePost extends Component {
   }
 
 
-
   render(){
     const { classes, history, post, user, token} = this.props
-    const { contentStr } = this.state
+    const { contentStr, mimeType } = this.state
     const heightChange = {maxHeight:"800"};
     const textLimit = {/* maxHeight: "90px" */}
     const aspectChange = {backgroundColor:"red"};
+    const renderMedia = () => {
+      if (mimeType.startsWith('application')) {
+        return (
+          <CardMedia className={classes.media} style={aspectChange} image={docTN} />
+        )
+      }
+      if (mimeType.startsWith('audio')) {
+        return (
+          <CardMedia className={classes.media} style={aspectChange} image={audioTN} />
+        )
+      }
+      if (mimeType.startsWith('video')) {
+        return <CardMedia className={classes.media} type={mimeType} controls style={aspectChange} image={videoTN} />
+      }
+      return <CardMedia className={classes.media} type={mimeType} controls style={aspectChange} image={contentStr} />
+    }
     return (
       <Card className={classes.postCard} style={heightChange}>
-        <CardActionArea onClick={() => { history.push(`/post?post=${post._id}`); }}>
+        {/* eslint-disable-next-line react/no-string-refs */}
+        <CardActionArea onClick={() => {history.push(`/post?post=${post._id}`); }}>
           <CardContent style={{paddingBottom: "0px"}}>
 
             <Typography gutterBottom variant="h1" style={{fontFamily:"Verdana", fontSize:"25px", fontWeight:"bold", textAlign:"center"}} color="textPrimary" component="h1">
@@ -131,7 +152,8 @@ class ProfilePost extends Component {
               <ResponsiveEllipsis text={post.description} maxLine={3} ellipsis="..." trimRight basedOn="letters" />
             </Typography>
 
-            <CardMedia className={classes.media} style={aspectChange} image={contentStr} />
+
+            {renderMedia()}
 
           </CardContent>
         </CardActionArea>
@@ -171,7 +193,7 @@ ProfilePost.propTypes = {
   token: PropTypes.string.isRequired,
   classes: PropTypes.objectOf(PropTypes.object).isRequired,
   history: PropTypes.shape({push: PropTypes.func}).isRequired,
-  media: PropTypes.shape({contentStr: PropTypes.string}).isRequired,
+  media: PropTypes.shape({contentStr: PropTypes.string, mimeType: PropTypes.string}).isRequired,
 
 }
 

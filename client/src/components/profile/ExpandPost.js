@@ -1,5 +1,17 @@
 import React, {useEffect, useState} from 'react'
-import {Button, IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography,CircularProgress} from '@material-ui/core'
+import {
+  Button,
+  IconButton,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+  CircularProgress,
+  Chip
+} from "@material-ui/core";
 import { green} from '@material-ui/core/colors';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -18,6 +30,7 @@ import CommentList from "./CommentList";
 import fetchMediaUtil from "../utils/fetchMedia";
 import CommentForm from "./CommentForm";
 import LikeButtons from "./LikeButtons";
+import GenericMedia from "../utils/GenericMedia";
 
 
 
@@ -77,9 +90,6 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     function addToPinned(){
-      console.log(user.pinnedPosts);
-      console.log(post._id);
-      console.log(user.pinnedPosts.includes(post._id));
       if (pinnedRecently || user.pinnedPosts.includes(post._id)){
         return;
       }
@@ -93,7 +103,6 @@ function ExpandPost({ user, token, history, location }) {
       Axios.post(targetURL, payload, headers)
         .then((res) => {
           if (res.status === 201 || res.status === 200){
-            console.log("added to pinned posts");
             // TODO maybe add some kind of modal pop-up?
             window.location.reload(false);
           }
@@ -117,8 +126,7 @@ function ExpandPost({ user, token, history, location }) {
       }
       Axios.post(targetURL, payload, headers)
         .then((res) => {
-          if (res.status == 201 || res.status == 200){
-            console.log("removed from pinned posts");
+          if (res.status === 201 || res.status === 200){
             // TODO maybe add some kind of modal pop-up?
             window.location.reload(false);
           }
@@ -139,10 +147,9 @@ function ExpandPost({ user, token, history, location }) {
                 contentCategory: res.data.contentCategory,
                 componentType: mapCatToComp(res.data.contentCategory)
             };
-            setMedia(fetchedMedia);
+            setMedia(fetchedMedia)
         }else{
             // TODO
-            console.log("error getting media");
         }
     }
 
@@ -214,6 +221,29 @@ function ExpandPost({ user, token, history, location }) {
         splitStrings = post.description.split(/ (.*)/);
     }
 
+    const renderPin = () => {
+      if (post && (post.userID === user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently)) {
+        return (
+          <Button
+            style={{ marginLeft: "10px" }}
+            variant="contained"
+            size="medium"
+            color="primary"
+            onClick={addToPinned}
+          >
+            Pin post
+            <AddIcon />
+          </Button>
+          )
+      }
+          return (
+            <Button style={{marginLeft: "10px"}} variant="contained" size="medium" color="primary" onClick={removeFromPinned}>
+              Unpin post
+              <RemoveIcon />
+            </Button>
+        )
+    }
+
 
     return (
       <Grid container className={classes.mainContainer}>
@@ -242,10 +272,11 @@ function ExpandPost({ user, token, history, location }) {
                   {post && post.title}
                 </Typography>
               </Grid>
-              <Typography variant="heading6" component="h6" style={{paddingBottom:"25px"}}>
+              <Typography variant="h6" component="h6" style={{paddingBottom:"25px"}}>
                 {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')}`}
               </Typography>
-              {(media && media.mimeType !== 'application/pdf') && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
+              {(media && media.mimeType !== 'application/pdf') &&
+                <GenericMedia thumbnail={false} src={media.contentStr} mimeType={media.mimeType} />}
               {!media && (
               <Grid container justify="center">
                 <CircularProgress />
@@ -253,7 +284,7 @@ function ExpandPost({ user, token, history, location }) {
                 Loading post media
                 {' '}
               </Grid>
-)}
+              )}
               {media && media.mimeType === 'application/pdf' && <Grid container justify="center"><object data={media.contentStr} type="application/pdf" width="100%" height="500px" /></Grid>}
 
               <Typography variant="body2" color="textPrimary" component="p" style={{paddingTop:"40px", fontSize: 20}}>
@@ -263,41 +294,42 @@ function ExpandPost({ user, token, history, location }) {
               </Typography>
             </CardContent>
             <CardActions style={{paddingLeft:"30px"}}>
+              <Grid container>
+                <Grid item xs={12} style={{ width:"100%", height: "50px"}}>
+                  {post &&  <LikeButtons post={post} user={user} token={token} /> }
+                  {renderPin()}
+                  {post && (post.userID === user._id) && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{color:"white", marginLeft: "10px"}}
+                      size="medium"
+                      onClick={() => {
+                        history.push(`./edit?post=${postID}`)
+                      }}
+                    >
+                      <Typography>
+                        Edit
+                      </Typography>
+                      <EditIcon  />
+                    </Button>
+                  )}
+                </Grid>
 
-              {post &&  <LikeButtons post={post} user={user} token={token} /> }
-
-              {post && (post.userID == user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently) && (
-                <Button variant="contained" size="medium" color="primary" onClick={addToPinned}>
-                  Pin post
-                  <AddIcon />
-                </Button>
-              )}
-
-
-              {post && (post.userID == user._id) && ((user.pinnedPosts && user.pinnedPosts.includes(post._id)) || pinnedRecently) && (
-                <Button variant="contained" size="medium" color="primary" onClick={removeFromPinned}>
-                  Unpin post
-                  <RemoveIcon />
-                </Button>
-
-              )}
-
-              {post && (post.userID == user._id) && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{color:"white"}}
-                  size="medium"
-                  onClick={() => {
-                  history.push(`./edit?post=${postID}`)
-                }}
-                >
-                  <Typography>
-                    Edit
-                  </Typography>
-                  <EditIcon  />
-                </Button>
-              )}
+                <Grid item xs={12} style={{ width:"100%", height: "50px"}}>
+                  <div style={{flexWrap: 'wrap', width:"100%", height: "20px"}}>
+                    {post && post.tags && post.tags.map((field, index) => {
+                      return (
+                        <Chip
+                          style={{margin: "5px"}}
+                          key={field}
+                          label={field}
+                        />
+                      )
+                    })}
+                  </div>
+                </Grid>
+              </Grid>
 
             </CardActions>
 

@@ -595,7 +595,7 @@ const addToPinnedPosts = (req, res) => {
 };
 
 const removeFromPinnedPosts = (req, res) => {
-  if (!req.body.postID){
+  if (!req.body.postID) {
     console.log("Unpinning the post was not successful: missing post id");
     res.status(400);
     res.send("Unpinning the post was not successful - missing post id");

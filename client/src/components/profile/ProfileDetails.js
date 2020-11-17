@@ -231,7 +231,7 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
           </ListItem>
           <ListItem>
             <ListItemText>
-              Filter by tag:
+              Filter Posts:
             </ListItemText>
             <TextField
               id="addPost-title"

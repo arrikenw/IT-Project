@@ -52,7 +52,7 @@ const useStyles = makeStyles({
   },
   media: {
     height:" 100%",
-    // paddingTop: '56.25%', // 16:9
+    paddingTop: '56.25%', // 16:9
   }
 
 })
@@ -294,6 +294,7 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
           src={fileTN}
           className={classes.media}
           mimeType={mimeTypeTN}
+          thumbnail={false}
         />
       )
     }
@@ -303,6 +304,7 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
         src={file}
         className={classes.media}
         mimeType={mimeType}
+        thumbnail={false}
       />
     )
   }

@@ -212,7 +212,7 @@ function ExpandPost({ user, token, history, location }) {
 
 
 
-    }, [token, postID]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
+    }, [token, postID, user]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 
     const classes = useStyles()
 

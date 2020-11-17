@@ -70,7 +70,14 @@ class SearchPost extends Component {
       return;
     }
 
-    const controllerUrl = "/api/media/";
+    let  controllerUrl;
+    if (token){
+       controllerUrl = "/api/media/";
+    }
+    else{
+       controllerUrl = "/api/media/getPublic";
+    }
+
     const payload = {
       // TODO make thumbnail fetching work properly
       mediaID: post.thumbnailURL,
@@ -81,6 +88,8 @@ class SearchPost extends Component {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
       },
     };
+
+
     Axios.post(controllerUrl, payload, headers)
       .then((res) => {
         if (res.status === 200) {
@@ -97,14 +106,10 @@ class SearchPost extends Component {
         // todo;
       });
 
-      const newHeader = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+
 
       const UserNamePayload = {filters: {"_id": post.userID}}
-      Axios.post('/api/user/getPublic/', UserNamePayload, newHeader)
+      Axios.post('/api/user/getPublic/', UserNamePayload)
         .then((resp) => {
           console.log("resp=", resp)
             this.setState({postUserName :resp.data[0].userName});

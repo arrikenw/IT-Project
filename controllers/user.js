@@ -54,15 +54,53 @@ const getPublicUser = (req, res) => {
   if (req.body.search) {
     query.$and.push({
       $or: [
-        { firstName: { $regex: req.body.search } },
-        { lastName: { $regex: req.body.search } },
-        { userName: { $regex: req.body.search } },
-        { organisation: { $regex: req.body.search } },
-        { tags: { $regex: req.body.search } },
-        { professionalFields: { $regex: req.body.search } },
-        { biography: { $regex: req.body.search } },
-        { email: { $regex: req.body.search }, emailPrivate: false },
-        { phoneNumber: { $regex: req.body.search }, phoneNumberPrivate: false },
+        {
+          firstName: {
+            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
+          },
+        },
+        {
+          lastName: {
+            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
+          },
+        },
+        {
+          userName: {
+            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
+          },
+        },
+        {
+          organisation: {
+            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
+          },
+        },
+        {
+          tags: {
+            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
+          },
+        },
+        {
+          professionalFields: {
+            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
+          },
+        },
+        {
+          biography: {
+            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
+          },
+        },
+        {
+          email: {
+            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
+          },
+          emailPrivate: false,
+        },
+        {
+          phoneNumber: {
+            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
+          },
+          phoneNumberPrivate: false,
+        },
       ],
     });
   }
@@ -304,7 +342,6 @@ const loginUser = (req, res) => {
   UserModel.find({ email: req.body.email }, validateAccount);
 };
 
-
 // TODO VALIDATE PINNED POSTS ARE IN FACT OWNED BY THE USER
 // update a user's information
 const updateUser = (req, res) => {
@@ -339,7 +376,11 @@ const updateUser = (req, res) => {
       }
 
       // update privacy across all user posts
-      PostModel.updateMany({userID: id}, {userIsPrivate: req.body.private}, onUpdatePrivacy );
+      PostModel.updateMany(
+        { userID: id },
+        { userIsPrivate: req.body.private },
+        onUpdatePrivacy
+      );
     } else {
       console.log(`updateUser not successful: could not find user ${id}`);
       res.status(400);
@@ -349,17 +390,18 @@ const updateUser = (req, res) => {
 
   const onChangePostPrivacy = (err, results) => {
     if (err) {
-      console.log(`updateUser not successful (failure updating post privacy status): ${err.message}`);
+      console.log(
+        `updateUser not successful (failure updating post privacy status): ${err.message}`
+      );
       res.status(500);
       res.send("update not successful - something went wrong, try again");
       return;
     }
-    
+
     console.log(`updateUser successful: updated user ${id}`);
     res.status(200);
     res.send({ id });
-    return;
-  }
+  };
 
   const onHashPassword = (err, hash) => {
     if (err) {
@@ -551,14 +593,18 @@ const addToPinnedPosts = (req, res) => {
           .catch((err) => {
             console.log(`addToPinnedPosts not successful: ${err.message}`);
             res.status(500);
-            res.send("Pinning the post was not successful - something went wrong, try again");
+            res.send(
+              "Pinning the post was not successful - something went wrong, try again"
+            );
           });
       }
     })
     .catch((err) => {
       console.log(`addToPinnedPosts not successful: ${err.message}`);
       res.status(500);
-      res.send("Pinning the post was not successful - something went wrong, try again");
+      res.send(
+        "Pinning the post was not successful - something went wrong, try again"
+      );
     });
 };
 

@@ -31,8 +31,8 @@ export default function usePostSearch(
       url = 'api/post/getPublic';
     }
     const filters = { userID: currentUser._id }
-    if (filterTag !== 'none') {
-      filters.tag = filterTag;
+    if (filterTag !== '') {
+      filters.tags = { $regex: new RegExp(filterTag.toLowerCase(), "i") }
     }
     axios
       .post(

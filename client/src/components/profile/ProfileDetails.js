@@ -10,8 +10,8 @@ import {
   ListItemText,
   Avatar,
   Select,
-  MenuItem
-} from '@material-ui/core'
+  MenuItem, TextField
+} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles'
 import zIndex from "@material-ui/core/styles/zIndex";
 import PropTypes from "prop-types";
@@ -19,6 +19,7 @@ import Container from "@material-ui/core/Container";
 import { Row, Dropdown, DropdownButton } from "react-bootstrap";
 import Button from "@material-ui/core/Button";
 import testImage from '../../assets/logo512.png'
+import fetchMediaUtil from "../utils/fetchMedia";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
     // zIndex: -1,
   },
   avatarSize: {
-    width: '100px',
-    height: '100px',
+    width: '200px',
+    height: '200px',
   },
   center: {
     justifyContent: 'center',
@@ -47,11 +48,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function ProfileDetails({ currentUser, setSearchField, setSearchDirection, setFilterTag }) {
+function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection, setFilterTag }) {
   const [sort, setSort] = useState(0);
-  const [tag, setTag] = useState("Untagged")
+  const [tag, setTag] = useState("")
+  const [profilePic, setProfilePic] = useState("")
 
-  console.log(currentUser)
+  useEffect(() => {
+    const errorCB = (err) => {
+      console.error(err)
+      console.log(err.message)
+    }
+    if (!currentUser) return
+    if (currentUser.profilePic) {
+      const callback = (res) => {
+        setProfilePic(`data:${res.data.mimeType};base64,${res.data.b64media}`)
+      }
+      fetchMediaUtil(currentUser.profilePic, token, callback, errorCB)
+    }
+  }, [currentUser, token])
 
   const handleSort = (e) => {
     switch (e.target.value) {
@@ -103,7 +117,7 @@ function ProfileDetails({ currentUser, setSearchField, setSearchDirection, setFi
   }
 
   const changeTag = (e) => {
-    // setFilterTag(e.target.value)
+    setFilterTag(e.target.value)
     setTag(e.target.value)
   }
 
@@ -154,7 +168,7 @@ function ProfileDetails({ currentUser, setSearchField, setSearchDirection, setFi
             <Avatar
               alt="Remy Sharp"
               className={classes.avatarSize}
-              src={testImage}
+              src={profilePic}
             />
           </ListItem>
           <ListItem className={classes.center}>
@@ -219,22 +233,14 @@ function ProfileDetails({ currentUser, setSearchField, setSearchDirection, setFi
             <ListItemText>
               Filter by tag:
             </ListItemText>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+            <TextField
+              id="addPost-title"
+              type="title"
+              label="Tag"
+              variant="outlined"
               value={tag}
               onChange={changeTag}
-            >
-              <MenuItem value="Untagged"> Untagged</MenuItem>
-              { currentUser.tags && currentUser.tags.map((singleTag) => {
-                return (
-                  <MenuItem value={singleTag} key={singleTag}>
-                    {' '}
-                    {singleTag}
-                  </MenuItem>
-                )
-              })}
-            </Select>
+            />
           </ListItem>
         </List>
       </div>
@@ -255,11 +261,13 @@ ProfileDetails.propTypes = {
     organisation: PropTypes.string,
     email: PropTypes.string,
     phoneNumber: PropTypes.string,
+    profilePic: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   setSearchField: PropTypes.func.isRequired,
   setSearchDirection: PropTypes.func.isRequired,
   setFilterTag: PropTypes.func.isRequired,
+  token: PropTypes.string.isRequired,
 }
 
 export default ProfileDetails

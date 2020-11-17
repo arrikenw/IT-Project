@@ -23,7 +23,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-function SettingsOther({ localUser, setLocalUser, editUser, setEditUser, updateProfessionalFields, updateTags }) {
+function SettingsOther({ localUser, editUser, setEditUser, updateProfessionalFields,
+                         newMimeType, currentProfilePic, newProfilePic, setNewMimeType,
+                         setNewProfilePic, setRawMedia, currentMimeType }) {
   const [currentField, setCurrentField] = useState('');
 
   const updateField = (e) => {
@@ -54,101 +56,73 @@ function SettingsOther({ localUser, setLocalUser, editUser, setEditUser, updateP
     }
   }
 
- /* const [currentTag, setCurrentTag] = useState('');
-
-  const updateTag = (e) => {
-    const value = e.target.value;
-    // cannot add more than 5 tags
-    if (localUser.tags.length >= 5) return
-    if (value.endsWith(" ") || value.endsWith(",")) {
-      for (let i = 0; i < localUser.tags.length; i += 1) {
-        if (localUser.tags[i] === value.substring(0, value.length - 1)) {
-          return
-        }
-      }
-      if (value === "" || value === " " || value === ",") return
-      const newTags = [...(localUser.tags), value.substring(0, value.length - 1)]
-      updateTags(newTags)
-      setCurrentTag('')
-    } else {
-      setCurrentTag(value)
+  // sets media file
+  const onFileChange = (e) => {
+    setRawMedia(e.target.files[0])
+    console.log(e.target.files[0])
+    const fileReader = new FileReader();
+    fileReader.onloadend = (f) => {
+      const content = f.target.result;
+      setNewProfilePic("")
+      setNewProfilePic(content)
     }
+
+    if (!e.target.files[0]) {
+      setNewProfilePic("")
+      setNewMimeType("image/jpg")
+      return;
+    }
+    setNewMimeType(e.target.files[0].type)
+    fileReader.readAsDataURL(e.target.files[0]);
   }
 
-  const deleteTag = (toDelete) => () => {
-    const newTags = (localUser.tags).filter((field) => field !== toDelete)
-    updateTags(newTags)
-    if (!editUser.tags) {
-      setEditUser("tags")
-    }
-  } */
-
-  /* <div style={{ marginTop: '10px' }}>
-    <TextField
-      id="signup-lastname"
-      label="Post Tags"
-      variant="outlined"
-      type="lastname"
-      fullWidth
-      value={currentTag}
-      onChange={updateTag}
-      disabled={localUser.tags.length >= 5 || !editUser.tags}
-    />
-  </div>
-  <div style={{flexWrap: 'wrap',}}>
-    {localUser.tags.map((tag, index) => {
+  const renderProfilePic = () => {
+    if (newProfilePic) {
       return (
-        <Chip
-          style={{margin: "5px"}}
-          key={tag}
-          onDelete={deleteTag(tag)}
-          label={tag}
+        <Avatar
+          className={classes.avatarSize}
+          src={newProfilePic} // TODO change this to a global profile pic stored in app
         />
       )
-    })}
-  </div>
-  <Button
-    onClick={() => {
-      setEditUser("tags")
-    }}
-  >
-    {editUser.tags ? "Reset" : "Edit"}
-  </Button> */
+    }
+    return (
+      <Avatar
+        className={classes.avatarSize}
+        src={`data:${currentMimeType};base64,${currentProfilePic}`} // TODO change this to a global profile pic stored in app
+      />
+    )
+  }
+
 
   const classes = useStyles()
   return (
     <div style={{marginTop: "20px"}}>
       <div className={classes.center}>
         <Typography variant="h5">
-          Select a profile picture
+          Profile Picture
         </Typography>
       </div>
       <div className={classes.center} style={{marginTop: "20px"}}>
-        <Avatar
-          className={classes.avatarSize}
-          src="" // TODO change this to a global profile pic stored in app
-        />
+        {renderProfilePic()}
       </div>
+      <input
+        style={{display: "none"}}
+        accept="image/*"
+        id="contained-button-file"
+        onChange={onFileChange}
+        type="file"
+      />
       <div className={classes.center}>
         <Typography variant="body1">
           {localUser.userName}
         </Typography>
       </div>
-      {/* <input
-        style={{display: "none"}}
-        accept="image/*"
-        id="contained-button-file"
-        onChange={changeFile}
-        type="file"
-      />
-      <div className={classes.center} style={{marginTop: "20px"}}>
-         eslint-disable-next-line jsx-a11y/label-has-associated-control
-        <label htmlFor="contained-button-file">
-          <Button variant="contained" color="primary" component="span">
-            Choose File
-          </Button>
-        </label>
-      </div> */}
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label htmlFor="contained-button-file">
+        <Button variant="contained" color="primary" component="span">
+          Choose File
+        </Button>
+      </label>
       <div style={{ marginTop: '20px' }}>
         <TextField
           id="signup-lastname"
@@ -185,7 +159,6 @@ function SettingsOther({ localUser, setLocalUser, editUser, setEditUser, updateP
 }
 
 SettingsOther.propTypes = {
-  setLocalUser: PropTypes.func.isRequired,
   localUser: PropTypes.shape({
     biography: PropTypes.string.isRequired,
     dateOfBirth:PropTypes.instanceOf(Date).isRequired,
@@ -220,7 +193,14 @@ SettingsOther.propTypes = {
   }).isRequired,
   setEditUser: PropTypes.func.isRequired,
   updateProfessionalFields: PropTypes.func.isRequired,
-  updateTags: PropTypes.func.isRequired,
+  newMimeType: PropTypes.string.isRequired,
+  currentProfilePic: PropTypes.string.isRequired,
+  newProfilePic: PropTypes.string.isRequired,
+  setNewMimeType: PropTypes.func.isRequired,
+  setNewProfilePic: PropTypes.func.isRequired,
+  setRawMedia: PropTypes.func.isRequired,
+  currentMimeType: PropTypes.string.isRequired,
+
 }
 
 export default SettingsOther;

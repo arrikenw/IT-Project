@@ -62,10 +62,14 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function AddPostForm({ user, token, history }){
+function EditPostForm({ user, token, history, post, media, mediaTN }){
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [postPrivacy, setPostPrivacy] = useState(false)
+
+  const [editTitle, setEditTitle] = useState(false)
+  const [editDescription, setEditDescription] = useState(false)
+  const [editTags, setEditTags] = useState(false)
 
   // for media
   const [rawMedia, setRawMedia] = useState(null)
@@ -86,6 +90,68 @@ function AddPostForm({ user, token, history }){
   // for warnings
   const [warning, setWarning] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
+
+  useEffect(() => {
+    if (post) {
+      setTitle(post.title)
+      setDescription(post.description)
+      setPostPrivacy(post.private)
+      setCurrentTags(post.tags)
+    }
+
+    if (media) {
+      setFile(`data:${media.mimeType};base64,${media.b64media}`)
+      setMimeType(media.mimeType)
+    }
+    if (mediaTN) {
+      setMimeTypeTN(mediaTN.mimeType)
+      setFile(`data:${mediaTN.mimeType};base64,${mediaTN.b64media}`)
+    }
+  }, [post, media, mediaTN])
+
+  const validateFields = () => {
+    if (rawMedia && rawMedia.size /1024 / 1024 > 15) {
+      setWarningMessage("File size must be less than 15mb")
+      setWarning(true)
+      return 1
+    }
+    if (rawMediaTN && rawMediaTN.size /1024 / 1024 > 15) {
+      setWarningMessage("Thumbnail size must be less than 15mb")
+      setWarning(true)
+      return 1
+    }
+    if (title.length > 200) {
+      setWarningMessage("Title must be less than 201 characters long")
+      setWarning(true)
+      return 1
+    }
+    if (description.length > 2200) {
+      setWarningMessage("Description must be less than 2200 characters long")
+      setWarning(true)
+      return 1
+    }
+    if (!mimeTypeTN.startsWith("image")) {
+      setWarningMessage("Thumbnail must be an image")
+      setWarning(true)
+      return 1
+    }
+    if (!(
+      (mimeType.startsWith("image")) || (mimeType.startsWith("text")) ||
+      (mimeType.startsWith("text")) || (mimeType.startsWith("video")) ||
+      (mimeType.startsWith("audio")) || (mimeType.startsWith("application/pdf"))||
+      (mimeType.startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) ||
+      (mimeType.startsWith("application/msword")) ||
+      (mimeType.startsWith("application/vnd.ms-powerpoint")) ||
+      (mimeType.startsWith("application/vnd.openxmlformats-officedocument.presentationml.presentation")) ||
+      (mimeType.startsWith("application/vnd.ms-excel")) ||
+      (mimeType.startsWith("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+    )) {
+      setWarningMessage("Invalid file type")
+      setWarning(true)
+      return 1
+    }
+    return 0
+  }
 
   const changeTitle = (e) => {
       setTitle(e.target.value)
@@ -112,9 +178,9 @@ function AddPostForm({ user, token, history }){
     }
 
     if (!e.target.files[0]) {
-      setFile(null)
+      setFile(`data:${media.mimeType};base64,${media.b64media}`)
       setMediaName("")
-      setMimeType("image/jpg")
+      setMimeType(media.mimeType)
       return;
     }
     setMimeType(e.target.files[0].type)
@@ -136,8 +202,8 @@ function AddPostForm({ user, token, history }){
     if (!e.target.files[0]) {
       setFileTN(null)
       setMediaNameTN("")
-      setMimeTypeTN("image/jpg")
-      setRawMediaTN(e.target.files[0])
+      setMimeTypeTN(mediaTN.mimeType)
+      setFile(`data:${mediaTN.mimeType};base64,${mediaTN.b64media}`)
       return;
     }
     if (!e.target.files[0].type.startsWith("image")) {
@@ -156,76 +222,37 @@ function AddPostForm({ user, token, history }){
     history.push("/profile")
   }
 
-  const validateFields = () => {
-    if (rawMedia && rawMedia.size /1024 / 1024 > 15) {
-      setWarningMessage("File size must be less than 15mb")
-      setWarning(true)
-      return 1
-    }
-    if (rawMediaTN && rawMediaTN.size /1024 / 1024 > 15) {
-      setWarningMessage("Thumbnail size must be less than 15mb")
-      setWarning(true)
-      return 1
-    }
-    if (!mimeTypeTN.startsWith("image")) {
-      setWarningMessage("Thumbnail must be an image")
-      setWarning(true)
-      return 1
-    }
-    if (!(
-      (mimeType.startsWith("image")) || (mimeType.startsWith("text")) ||
-      (mimeType.startsWith("text")) || (mimeType.startsWith("video")) ||
-      (mimeType.startsWith("audio")) || (mimeType.startsWith("application/pdf"))||
-      (mimeType.startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) ||
-      (mimeType.startsWith("application/msword")) ||
-      (mimeType.startsWith("application/vnd.ms-powerpoint")) ||
-      (mimeType.startsWith("application/vnd.openxmlformats-officedocument.presentationml.presentation")) ||
-      (mimeType.startsWith("application/vnd.ms-excel")) ||
-      (mimeType.startsWith("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-      )) {
-      setWarningMessage("Invalid file type")
-      setWarning(true)
-      return 1
-    }
-    if (title.length > 200) {
-      setWarningMessage("Title must be less than 201 characters long")
-      setWarning(true)
-      return 1
-    }
-    if (description.length > 2200) {
-      setWarningMessage("Description must be less than 2200 characters long")
-      setWarning(true)
-      return 1
-    }
-    return 0
-  }
-
-  // creates post
+  // updates post
   const onSubmit = (e) => {
+    if (rawMediaTN) {
+      console.log(rawMediaTN.size / 1024 /1204)
+    }
+    if (rawMedia) {
+      console.log(rawMedia.size / 1024 /1204)
+    }
     if (validateFields() === 1) {
       return
     }
-  const firstCallBack = (resOne) => {
+   const firstCallBack = (resOne) => {
       const callback = (resTwo) => {
-        const payload = {
-          title,
-          description,
-          private: postPrivacy,
-          mediaID: resTwo._id,
-          tags: currentTags,
+        const payload = {title, description, private: postPrivacy, tags: currentTags}
+        if (resTwo !== "") {
+          payload.mediaID = resTwo._id
         }
         if (resOne !== "") {
           payload.thumbnailURL = resOne._id
         }
-        Axios.post("/api/post/add", payload, {headers: {Authorization: `Bearer ${token}`}})
+        Axios.post("/api/post/update", {postID: post._id, update: payload}, {headers: {Authorization: `Bearer ${token}`}})
           .then( (resp) => {
-            console.log(resp.data);
             redirect();
           }).catch((err) => {
           console.error(err)
         });
       }
+    if (rawMedia) {
       add(rawMedia, postPrivacy, mediaName, token, callback);
+    }
+    callback("")
     }
 
     if (rawMediaTN) {
@@ -234,6 +261,28 @@ function AddPostForm({ user, token, history }){
     else {
       firstCallBack("")
     }
+  }
+
+  const toggleTitle = () => {
+    if (editTitle) {
+      setTitle(post.title)
+    }
+    setEditTitle((prev) => !prev)
+  }
+
+  const toggleDescription = () => {
+    if (editDescription) {
+      setDescription(post.description)
+    }
+    setEditDescription((prev) => !prev)
+  }
+
+  const toggleTags = () => {
+    if (editTags) {
+      setCurrentTags(post.tags)
+      setTag("")
+    }
+    setEditTags((prev) => !prev)
   }
 
   // renders the correct preview media
@@ -280,6 +329,17 @@ function AddPostForm({ user, token, history }){
   const deleteTag = (toDelete) => () => {
     const newTags = (currentTags).filter((field) => field !== toDelete)
     setCurrentTags(newTags)
+    setEditTags(true)
+  }
+
+  const isEdited = () => {
+    if (!post) return false
+    if (editTitle) return true
+    if (editDescription) return  true
+    if (editTags) return true
+    if (postPrivacy !== post.private) return true
+    if (rawMedia || rawMediaTN) return true
+    return false
   }
 
   const classes = useStyles()
@@ -302,7 +362,13 @@ function AddPostForm({ user, token, history }){
               fullWidth
               value={title}
               onChange={changeTitle}
+              disabled={!editTitle}
             />
+            <Button
+              onClick={toggleTitle}
+            >
+              {editTitle ? "Reset" : "Edit"}
+            </Button>
           </div>
           <div style={{ marginTop: '20px', marginBottom: "20px" }}>
             <TextField
@@ -314,8 +380,14 @@ function AddPostForm({ user, token, history }){
               multiline
               rows={6}
               value={description}
+              disabled={!editDescription}
               onChange={changeDescription}
             />
+            <Button
+              onClick={toggleDescription}
+            >
+              {editDescription ? "Reset" : "Edit"}
+            </Button>
           </div>
           <input
             style={{display: "none"}}
@@ -370,6 +442,7 @@ function AddPostForm({ user, token, history }){
               fullWidth
               value={tag}
               onChange={updateTag}
+              disabled={!editTags}
             />
           </div>
           <div style={{flexWrap: 'wrap',}}>
@@ -384,24 +457,31 @@ function AddPostForm({ user, token, history }){
               )
             })}
           </div>
-          <FormControlLabel
-            control={(
-              <Checkbox
-                checked={postPrivacy}
-                onClick={changePostPrivacy}
-                name="postPrivacy"
-              />
+          <Button
+            onClick={toggleTags}
+          >
+            {editTags ? "Reset" : "Edit"}
+          </Button>
+          <div>
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  checked={postPrivacy}
+                  onClick={changePostPrivacy}
+                  name="postPrivacy"
+                />
               )}
-            label="Make post private"
-          />
+              label="Make post private"
+            />
+          </div>
         </form>
         <div style={{ marginTop: '20px' }}>
           <Divider variant="middle" />
         </div>
         <div style={{ marginTop: '10px' }}>
-          <Button className={classes.post} onClick={onSubmit} fullWidth>
+          <Button className={classes.post} onClick={onSubmit} disabled={!isEdited()} fullWidth>
             <Typography className={classes.buttonText} variant="h6">
-              Post
+              Update
             </Typography>
           </Button>
         </div>
@@ -415,12 +495,22 @@ function AddPostForm({ user, token, history }){
   )
 }
 
-export default withRouter(AddPostForm);
+export default withRouter(EditPostForm);
 
-AddPostForm.propTypes = {
+EditPostForm.propTypes = {
   token: PropTypes.string.isRequired,
   user: PropTypes.shape({tags: PropTypes.arrayOf(PropTypes.string)}).isRequired,
   history: PropTypes.shape({push: PropTypes.func}).isRequired,
+  post: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    mediaID: PropTypes.string,
+    private: PropTypes.bool,
+    tags: PropTypes.arrayOf(PropTypes.string),
+    _id: PropTypes.string,
+  }).isRequired,
+  media:  PropTypes.shape({b64media: PropTypes.string, mimeType: PropTypes.string}).isRequired,
+  mediaTN:  PropTypes.shape({b64media: PropTypes.string, mimeType: PropTypes.string}).isRequired,
 }
 
 /*

@@ -134,7 +134,7 @@ function SignupPage({ setGlobalToken }) {
           setWarning(true)
           return
         }
-        if (dateOfBirth.valueOf() !== (new Date("1900-01-01")).valueOf() &&
+        if (dateOfBirth.valueOf() !== (new Date(0)).valueOf() &&
             dateOfBirth > (new Date())) {
           setWarningMessage("Invalid date of birth")
           setWarning(true)
@@ -143,8 +143,8 @@ function SignupPage({ setGlobalToken }) {
 
         break
       case 2:
-        if (rawMedia.size/1024/1024 > 10) {
-          setWarningMessage("Profile picture must be smaller than 10mb")
+        if (rawMedia.size/1024/1024 > 15) {
+          setWarningMessage("Profile picture must be smaller than 15mb")
           setWarning(true)
           return
         }
@@ -181,7 +181,7 @@ function SignupPage({ setGlobalToken }) {
       if (organisation !== "") {
         payload.organisation = organisation;
       }
-      if (dateOfBirth.valueOf() !== (new Date("1900-01-01")).valueOf()) {
+      if (dateOfBirth.valueOf() !== (new Date(0)).valueOf()) {
         payload.dateOfBirth = dateOfBirth;
       }
       if (biography !== "") {

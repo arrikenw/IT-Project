@@ -159,6 +159,7 @@ function ExpandPost({ user, token, history, location }) {
       Axios.post('/api/user/getPublic/', UserNamePayload)
         .then((resp) => {
           setPostUserName(resp.data[0].userName);
+          console.log("username:", postUserName)
         })
         .catch((err)=>{
           console.log(err);
@@ -333,9 +334,13 @@ function ExpandPost({ user, token, history, location }) {
 
             <Divider variant="middle" style={{marginTop:"30px", marginBottom:"30px"}} />
 
+            {post && token &&(
+              <CommentForm user={user} postID={post._id} token={token} history={history} />
+            )}
+
             {post && (
               <>
-                <CommentForm user={user} postID={post._id} token={token} history={history} />
+
                 <CommentList user={user} postID={post._id} comments={post.comments} token={token} />
               </>
               )}

@@ -4,6 +4,7 @@ import { green} from '@material-ui/core/colors';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom';
@@ -58,6 +59,7 @@ function ExpandPost({ user, token, history, location }) {
     const [media, setMedia] = useState(null);
     const [postID, setPostID] = useState("");
     const [updatedUser, setUpdatedUser] = useState(null);
+    const [postUserName, setPostUserName] = useState("");
     const [pinnedRecently, setPinnedRecently] = useState(false);
     const [unpinnedRecently, setUnpinnedRecently] = useState(false);
 
@@ -144,20 +146,36 @@ function ExpandPost({ user, token, history, location }) {
         }
     }
 
+    const getUserName = (postUserId)=>{
+
+      const UserNamePayload = {filters: {"_id": postUserId}}
+      Axios.post('/api/user/getPublic/', UserNamePayload)
+        .then((resp) => {
+          setPostUserName(resp.data[0].userName);
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+  }
+
+
     const query = new URLSearchParams(location.search);
     const newPostID = query.get('post');
     if (newPostID !== postID) {
       setPostID(newPostID);
-      console.log("dog");
     }
-
-
 
     useEffect(() => {
         // get id from query string
-      console.log("dog222");
         // fetch post outlined by query string
-        const postUrl = '/api/post/get'
+        let postUrl;
+        if (token){
+          postUrl = '/api/post/get'
+        }
+        else{
+          postUrl = '/api/post/getPublic'
+        }
+
         const postPayload = {
             filters: {_id: postID}
         }
@@ -169,14 +187,23 @@ function ExpandPost({ user, token, history, location }) {
                 setPost(res.data[0]);
                 fetchMediaUtil(res.data[0].mediaID, token, getMediaCallback, null);
             }else{
-              console.log("dog5");
                 // TODO
             }
         }).catch((err) => {
             // TODO
-            console.log(err);
+            console.error(err);
 
         });
+
+        // get the userName of the post's owner
+        if (post){
+          getUserName(post.userID);
+          console.log("username:", postUserName)
+        }
+
+
+
+
     }, [token, postID]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 
     const classes = useStyles()
@@ -235,19 +262,24 @@ function ExpandPost({ user, token, history, location }) {
                 {splitStrings && splitStrings.length > 1 && splitStrings[1]}
               </Typography>
             </CardContent>
-            <CardActions>
+            <CardActions style={{paddingLeft:"30px"}}>
 
+              {post &&  <LikeButtons post={post} user={user} token={token} /> }
+              
               {post && (post.userID == user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently) && (
-                <IconButton variant="contained" size="medium" color="primary" onClick={addToPinned}>
-                  ADD TO YOUR PINNED POSTS
+                <Button variant="contained" size="medium" color="primary" onClick={addToPinned}>
+                  Pin post
                   <AddIcon />
-                </IconButton>
+                </Button>
               )}
 
+
               {post && (post.userID == user._id) && ((user.pinnedPosts && user.pinnedPosts.includes(post._id)) || pinnedRecently) && (
-                <IconButton variant="contained" size="medium" color="primary" onClick={removeFromPinned}>
-                  Post is currently pinned. Click to unpin.
-                </IconButton>
+                <Button variant="contained" size="medium" color="primary" onClick={removeFromPinned}>
+                  Unpin post
+                  <RemoveIcon />
+                </Button>
+
               )}
 
               {post && (post.userID == user._id) && (

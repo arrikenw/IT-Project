@@ -58,28 +58,29 @@ function CommentForm({user, postID, token, history}){
   }
 
   return (
-    <Card>
-
-
+    <Card style={{paddingLeft:"20px", paddingRight:"20px"}}>
 
       <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-          Comment as
-          {' '}
-          {user.userName}
-
-        </Typography>
 
         <FormControl fullWidth>
-          <Input
+          <TextField
+            multiline
+            rows={4}
+            variant="outlined"
+            placeholder="What are your thoughts?"
             id="standard-adornment-amount"
             value={comment.commentBody}
             onChange={handleChange('commentBody')}
           />
         </FormControl>
-        <Button onClick={onSubmit} variant="contained" color="primary" component="span">
-          Comment
-        </Button>
+
+        <div style={{float:"right", marginTop:"8px", marginBottom:"10px",}}>
+
+
+          <Button onClick={onSubmit} variant="contained" color="primary" component="span">
+            Comment
+          </Button>
+        </div>
 
       </CardContent>
 

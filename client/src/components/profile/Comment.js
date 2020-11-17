@@ -155,9 +155,14 @@ function Comment({user, comment, postID, token}) {
 
 
     const textLimit = {maxHeight: "90px"}
+    const profileUrl = `/profile?$user=${userName}`
     let titleString = ""
     if (userName) {
-        titleString = `${userName  }`;
+        titleString = (
+          <a href={profileUrl}>
+            {userName}
+          </a>
+        )
     }
     let imageString;
     if (returnedMedia){
@@ -168,6 +173,9 @@ function Comment({user, comment, postID, token}) {
     if (isLiked){
         likeMessage = "You've liked this comment. Click again to remove your like."
     }
+
+
+
     return (
       <Card className={classes.comment}>
         <div style={{height:"85%"}}>

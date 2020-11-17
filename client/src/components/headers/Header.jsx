@@ -30,7 +30,7 @@ import PostAddIcon from '@material-ui/icons/PostAdd'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import axios from'axios';
 import logo from '../../assets/personal-profile.svg'
-
+import HeaderDrawer from './headerDrawer'
 
 
 
@@ -108,13 +108,13 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
         axios.post("/api/user/getPublic", payload)
         .then((resp) =>{
           setSearchResults(resp.data);
-           
+
           history.push('/searchResults');
         })
         .catch((err)=>{
           console.log(err);
         })
-        
+
       }
   }
   const handleKeyPress = (e) => {
@@ -135,7 +135,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       <div>
         <Button onClick={handleClick} color="inherit" href={profileLink}>
           {renderAvatar()}
-          <Typography variant="button">{user.userName}</Typography>
+          <Typography style={{paddingLeft:"5px"}} variant="button">{user.userName}</Typography>
           <ArrowDropDownIcon />
         </Button>
 
@@ -253,7 +253,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
           <FormControl style={{minWidth:100, paddingBottom:10,}}>
             <InputLabel style={{color:'inherit'}}>Search by</InputLabel>
-            <Select 
+            <Select
               value={searchBy}
               onChange={handleSearchByChange}
             >
@@ -319,6 +319,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   const renderAuthenticatedHeader = () => {
     if (token !== '' && user !== {}) {
       return (
+
         <AppBar position="static" style={{ height: '60px', boxShadow:  "none" }}>
           <Toolbar disableGutters>
             <section className={classes.leftToolbar}>

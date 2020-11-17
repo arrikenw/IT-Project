@@ -387,21 +387,7 @@ const updateUser = (req, res) => {
       res.send(`update not successful - could not find user ${id}`);
     }
   };
-
-  const onChangePostPrivacy = (err, results) => {
-    if (err) {
-      console.log(
-        `updateUser not successful (failure updating post privacy status): ${err.message}`
-      );
-      res.status(500);
-      res.send("update not successful - something went wrong, try again");
-      return;
-    }
-
-    console.log(`updateUser successful: updated user ${id}`);
-    res.status(200);
-    res.send({ id });
-  };
+  
 
   const onHashPassword = (err, hash) => {
     if (err) {
@@ -608,6 +594,48 @@ const addToPinnedPosts = (req, res) => {
     });
 };
 
+const removeFromPinnedPosts = (req, res) => {
+  if (!req.body.postID){
+    console.log("Unpinning the post was not successful: missing post id");
+    res.status(400);
+    res.send("Unpinning the post was not successful - missing post id");
+    return;
+  }
+
+  console.log(req.user.id);
+  console.log(req.body.postID);
+
+  const search = [];
+  search.push(req.body.postID);
+
+  UserModel.updateOne(
+    { _id: req.user.id },
+    { $pull: { pinnedPosts: { $in: search } } }
+  )
+    .then((response) => {
+      console.log(response);
+      if (response.n === 1) {
+        console.log(`Unpin post successful: removed  ${req.body.postID}`);
+        res.status(200);
+        res.send(req.body.postID);
+      } else {
+        console.log(
+          `unpin post not successful: post ${req.body.postID} was not pinned`
+        );
+        res.status(400);
+        res.send("unpin post was not successful - post is not pinned by user");
+      }
+    })
+    .catch((err) => {
+      console.log(`unpin post not successful: ${err.message}`);
+      res.status(500);
+      res.send(
+        "unpin post was not successful - something went wrong, try again"
+      );
+    });
+};
+
+module.exports.removeFromPinnedPosts = removeFromPinnedPosts;
 module.exports.getProfilePic = getProfilePic;
 module.exports.getUser = getUser;
 module.exports.getPublicUser = getPublicUser;

@@ -57,7 +57,9 @@ function ExpandPost({ user, token, history, location }) {
     const [post, setPost] = useState(null);
     const [media, setMedia] = useState(null);
     const [postID, setPostID] = useState("");
+    const [updatedUser, setUpdatedUser] = useState(null);
     const [pinnedRecently, setPinnedRecently] = useState(false);
+    const [unpinnedRecently, setUnpinnedRecently] = useState(false);
 
     function mapCatToComp(type){
         if (type === "image"){
@@ -73,10 +75,14 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     function addToPinned(){
-      if (pinnedRecently){
+      console.log(user.pinnedPosts);
+      console.log(post._id);
+      console.log(user.pinnedPosts.includes(post._id));
+      if (pinnedRecently || user.pinnedPosts.includes(post._id)){
         return;
       }
       setPinnedRecently(true);
+      setUnpinnedRecently(false);
       const payload = {postID: post._id};
       const targetURL = "/api/user/addToPinnedPosts";
       const headers = {
@@ -87,6 +93,32 @@ function ExpandPost({ user, token, history, location }) {
           if (res.status === 201 || res.status === 200){
             console.log("added to pinned posts");
             // TODO maybe add some kind of modal pop-up?
+            window.location.reload(false);
+          }
+        })
+        .catch((err) =>{
+          console.error(err);
+          // TODO maybe add some kind of modal pop-up?
+        })
+    }
+
+    function removeFromPinned(){
+      if (unpinnedRecently){
+        return;
+      }
+      setPinnedRecently(false);
+      setUnpinnedRecently(true);
+      const payload = {postID: post._id};
+      const targetURL = "/api/user/removeFromPinnedPosts";
+      const headers = {
+        headers: { 'Authorization': `Bearer ${ token}`}
+      }
+      Axios.post(targetURL, payload, headers)
+        .then((res) => {
+          if (res.status == 201 || res.status == 200){
+            console.log("removed from pinned posts");
+            // TODO maybe add some kind of modal pop-up?
+            window.location.reload(false);
           }
         })
         .catch((err) =>{
@@ -143,6 +175,7 @@ function ExpandPost({ user, token, history, location }) {
         }).catch((err) => {
             // TODO
             console.log(err);
+
         });
     }, [token, postID]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 
@@ -204,19 +237,17 @@ function ExpandPost({ user, token, history, location }) {
             </CardContent>
             <CardActions>
 
-              {post &&  <LikeButtons post={post} user={user} token={token} /> }
-
-              {post && (post.userID == user._id) && (user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
-                <Button variant="contained" size="medium" color="primary">
-                  Post is currently pinned
-                </Button>
+              {post && (post.userID == user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently) && (
+                <IconButton variant="contained" size="medium" color="primary" onClick={addToPinned}>
+                  ADD TO YOUR PINNED POSTS
+                  <AddIcon />
+                </IconButton>
               )}
 
-              {post && (post.userID == user._id) && !(user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
-                <Button variant="contained" size="medium" color="primary" onClick={addToPinned}>
-                  Pin post
-                  <AddIcon />
-                </Button>
+              {post && (post.userID == user._id) && ((user.pinnedPosts && user.pinnedPosts.includes(post._id)) || pinnedRecently) && (
+                <IconButton variant="contained" size="medium" color="primary" onClick={removeFromPinned}>
+                  Post is currently pinned. Click to unpin.
+                </IconButton>
               )}
 
               {post && (post.userID == user._id) && (
@@ -232,7 +263,6 @@ function ExpandPost({ user, token, history, location }) {
                   <Typography>
                     Edit
                   </Typography>
-
                   <EditIcon  />
                 </Button>
               )}

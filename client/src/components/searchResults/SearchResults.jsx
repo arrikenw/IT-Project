@@ -14,7 +14,7 @@ import { withRouter } from 'react-router-dom'
 
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import ProfilePost from '../profile/ProfilePost'
+import SearchPost from '../profile/SearchPost'
 import InfinitePostScroll from '../profile/InfinitePostScroll'
 
 
@@ -27,7 +27,7 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
            // alignItems: 'center',
             paddingTop:"10px",
             height: '100vh',
-            background: '#00205B'
+            background: '#00205B',
           }
         }))
     const classes = useStyles()
@@ -126,10 +126,9 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
                      
                     <Grid container spacing={4} className={classes.resultsContainer}>
 
-
                       {searchResults.map((result, idx) => (
                         <Grid item lg={4} md={6} sm={8} xs={12} key={result._id}>
-                          <ProfilePost post={result} token={token} user={user} />
+                          <SearchPost post={result} token={token} user={user} showDescription={false}  />
                         </Grid>
 
                                 ))}

@@ -30,6 +30,7 @@ const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
 const styles = theme => ({
   postCard: {
     marginBottom: '30px',
+    height: '90%'
   },
   media: {
     maxHeight: '600px',
@@ -40,20 +41,22 @@ const styles = theme => ({
 });
 
 
-class ProfilePost extends Component {
+class SearchPost extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       // mimeType: "",
       contentStr: "",
+      postUserName: "",
       // contentCategory: "",
     };
   }
 
+
   componentDidMount() {
     // if media is already stored
-    const { media, post } = this.props;
+    const { media, post, token, showDescription } = this.props;
     if (media){
       console.log("USING STORED MEDIA");
       this.setState({
@@ -78,20 +81,30 @@ class ProfilePost extends Component {
       },
     };
     Axios.post(controllerUrl, payload, headers)
-        .then((res) => {
-          if (res.status === 200) {
-            const str = `data:${res.data.mimeType};base64,${res.data.b64media}`;
-            this.setState({
-              contentStr: str,
-              // mimeType: res.data.mimeType,
-              // contentCategory: res.data.contentCategory,
-            });
+      .then((res) => {
+        if (res.status === 200) {
+          const str = `data:${res.data.mimeType};base64,${res.data.b64media}`;
+          this.setState({
+            contentStr: str,
+            // mimeType: res.data.mimeType,
+            // contentCategory: res.data.contentCategory,
+          });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        // todo;
+      });
+
+
+      const UserNamePayload = {userID: post.userID}
+      Axios.get('/api/user/get', UserNamePayload, headers)
+        .then((resp) => {
+          console.log("resp=", resp)
+            this.setState({postUserName :resp.userName});
+
           }
-        })
-        .catch((err) => {
-          console.error(err);
-          // todo;
-        });
+        )
   }
 
   componentDidUpdate(props) {
@@ -106,7 +119,7 @@ class ProfilePost extends Component {
         // mimeType: this.props.media.mimeType,
         // contentCategory: this.props.media.contentCategory
       })
-      
+
     }
   }
 
@@ -114,17 +127,19 @@ class ProfilePost extends Component {
 
   render(){
     const { classes, history, post, user, token, showDescription} = this.props
-    const { contentStr } = this.state
-    const heightChange = {maxHeight:"800"};
+    const { contentStr, postUserName } = this.state
+    const heightChange = {maxHeight:"400"};
     const textLimit = {/* maxHeight: "90px" */}
     const aspectChange = {backgroundColor:"red"};
+
+
     return (
       <Card className={classes.postCard} style={heightChange}>
         <CardActionArea onClick={() => { history.push(`/post?post=${post._id}`); }}>
           <CardContent style={{paddingBottom: "0px"}}>
 
-            <Typography gutterBottom variant="h1" style={{fontFamily:"Verdana", fontSize:"25px", fontWeight:"bold", textAlign:"center"}} color="textPrimary" component="h1">
-              <ResponsiveEllipsis text={post.title} maxLine={2} ellipsis="..." trimRight basedOn="letters" />
+            <Typography gutterBottom variant="h1" style={{fontFamily:"Verdana", fontSize:"20px", fontWeight:"bold", textAlign:"center"}} color="textPrimary" component="h1">
+              <ResponsiveEllipsis text={post.title} maxLine={1} ellipsis="..." trimRight basedOn="letters" />
             </Typography>
 
             {showDescription && (
@@ -138,7 +153,7 @@ class ProfilePost extends Component {
           </CardContent>
         </CardActionArea>
 
-        <CardActions style={{paddingBottom: "0px"}}>
+        <CardActions style={{paddingBottom: "0px", display: 'flex'}}>
 
           <div style={{float:"left", paddingBottom:"10px", paddingLeft:"8px"}}>
             {post && <LikeButtons post={post} user={user} token={token} />}
@@ -148,7 +163,7 @@ class ProfilePost extends Component {
         </CardActions>
 
         <Typography variant="heading6" component="h6" style={{paddingBottom:"10px", paddingLeft:"20px"}}>
-          {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')}`}
+          {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')} by ${postUserName}`}
         </Typography>
 
       </Card>
@@ -156,7 +171,7 @@ class ProfilePost extends Component {
   }
 }
 
-ProfilePost.propTypes = {
+SearchPost.propTypes = {
   showDescription: PropTypes.bool.isRequired,
   post: PropTypes.shape({
     title: PropTypes.string,
@@ -178,4 +193,4 @@ ProfilePost.propTypes = {
 
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(ProfilePost))
+export default withRouter(withStyles(styles, { withTheme: true })(SearchPost))

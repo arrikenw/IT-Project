@@ -111,11 +111,11 @@ class SearchPost extends Component {
       const UserNamePayload = {filters: {"_id": post.userID}}
       Axios.post('/api/user/getPublic/', UserNamePayload)
         .then((resp) => {
-          console.log("resp=", resp)
             this.setState({postUserName :resp.data[0].userName});
-
-          }
-        )
+          })
+        .catch((err)=>{
+          console.log(err);
+        })
   }
 
   componentDidUpdate(props) {
@@ -133,8 +133,7 @@ class SearchPost extends Component {
 
     }
   }
-
-
+  
 
   render(){
     const { classes, history, post, user, token, showDescription} = this.props
@@ -142,7 +141,7 @@ class SearchPost extends Component {
     const heightChange = {maxHeight:"400"};
     const textLimit = {/* maxHeight: "90px" */}
     const aspectChange = {backgroundColor:"red"};
-
+    const profileUrl =`profile?user=${postUserName}`
 
     return (
       <Card className={classes.postCard} style={heightChange}>
@@ -174,7 +173,10 @@ class SearchPost extends Component {
         </CardActions>
 
         <Typography variant="heading6" component="h6" style={{paddingBottom:"10px", paddingLeft:"20px"}}>
-          {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')} by ${postUserName}`}
+          {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')} by `}
+          <a href={profileUrl}>
+            {postUserName}
+          </a>
         </Typography>
 
       </Card>

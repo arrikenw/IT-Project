@@ -126,7 +126,6 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
     const goToProfile = (idx) => {
         
         const profileUrl = `/profile?user=${users[idx].userName}`
-        console.log(profileUrl);
 
         history.push(profileUrl);
     }

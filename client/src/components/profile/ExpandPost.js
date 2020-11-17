@@ -91,7 +91,7 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     function addToPinned(){
-      if (pinnedRecently){
+      if (pinnedRecently || user.pinnedPosts.includes(post._id)){
         return;
       }
       setPinnedRecently(true);
@@ -223,7 +223,7 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     const renderPin = () => {
-      if (post && (post.userID === user._id) && (!user.pinnedPosts || !user.pinnedPosts.includes(post._id) || unpinnedRecently)) {
+      if (post && (post.userID === user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently)) {
         return (
           <Button
             style={{ marginLeft: "10px" }}

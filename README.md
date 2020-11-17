@@ -1,7 +1,9 @@
 # Efolio:
 ## Introduction
 This project was created by the Podoju was consists of a backend server using node.js, Express and Mongoose;
- a frontend written using html, css, node.js and react.js; a database using mongoDB, and a file server using AWS S3 Bucket.
+ a frontend written using html, css, node.js and react.js; a database using mongoDB, and a file server using AWS S3 Bucket. 
+ “E-FOLIO” is a web based digital portfolio system. E-FOLIO, allows users to ‘post’ work that they wish to showcase to their
+ profile, share their profile with others.
 
 ## Set Up
 #### Installing Packages

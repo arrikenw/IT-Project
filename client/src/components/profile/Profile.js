@@ -77,6 +77,10 @@ function Profile({ user, token, history, location }) {
   }
 
   const getUser = () => {
+    if (user.userName === userName) {
+      setCurrentUser(user)
+      return
+    }
     if (currentUser === "" || currentUser.userName !== userName) {
       const payload = {'filters': {userName}}
       Axios.post('api/user/getPublic', payload).then((res) => {
@@ -186,7 +190,7 @@ function Profile({ user, token, history, location }) {
         <div style={{overflowY: "scroll", width: "100%"}}>
           <Box maxWidth={boxSize()} style={{backgroundColor: "#094183",  marginTop: 50, padding: "20px"}}>
             {currentUser &&
-                (<PinnedPosts id={currentUser._id} />)}
+                (<PinnedPosts id={currentUser._id} user={user} token={token} />)}
             <InfinitePostScroll
               currentUser={currentUser}
               sortField={sortField}

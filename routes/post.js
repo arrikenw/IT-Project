@@ -39,5 +39,17 @@ router.post("/unlike", authenticateToken, (req, res) => {
   postController.unlikePost(req, res);
 });
 
+// allows a user to remove their like from a post using their authentication token
+router.post("/addTag", authenticateToken, (req, res) => {
+  postController.addTag(req, res);
+});
+
+// allows a user to remove their like from a post using their authentication token
+router.post("/removeTag", authenticateToken, (req, res) => {
+  postController.removeTag(req, res);
+});
+
+
+
 // export router for use index.js
 module.exports = router;

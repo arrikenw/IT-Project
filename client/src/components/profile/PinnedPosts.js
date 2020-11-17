@@ -4,7 +4,9 @@ import {
     Card,
     Grid,
     IconButton,
-    Typography
+    Typography,
+  Button,
+  Paper
 } from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
@@ -169,57 +171,52 @@ function PinnedPost({ user, token, history, location, id }) {
 
     if (ids && okToRender){
         return (
-          <Grid container>
-            <Grid item xs={12}>
-              <Grid container justify="center">
-                <Typography variant="h5">
-                  Pinned posts
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Grid container justify="center">
-                <Typography variant="h6">
-                  {name}
-                  &#39;s best work, handpicked by them
-                </Typography>
-              </Grid>
-            </Grid>
+          <Paper style={{display: "flex", backgroundColor: "white", padding: "10px", margin: "3%"}}>
             <Grid container>
               <Grid item xs={12}>
-                <div id="COULD PUT A CARD HERE TBH">
-                  <Grid container>
-                    <Grid item xs={4}>
-                      <div style={{marginRight: "10px"}}>
-                        {(posts.length > 0) && (<PinnedPostElement post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
-                      </div>
+                <Grid container justify="center">
+                  <Typography variant="h5" style={{color: "white", paddingBottom: "10px"}}>
+                    Pinned posts
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12}>
+                  <div id="COULD PUT A CARD HERE TBH">
+                    <Grid container>
+                      <Grid item xs={4}>
+                        <div style={{marginRight: "10px"}}>
+                          {(posts.length > 0) && (<PinnedPostElement post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
+                        </div>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <div style={{marginRight: "10px"}}>
+                          {(posts.length > 1) && (<PinnedPostElement post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
+                        </div>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <div style={{marginRight: "10px"}}>
+                          {(posts.length > 2) && (<PinnedPostElement post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
+                        </div>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={4}>
-                      <div style={{marginRight: "10px"}}>
-                        {(posts.length > 1) && (<PinnedPostElement post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
-                      </div>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <div style={{marginRight: "10px"}}>
-                        {(posts.length > 2) && (<PinnedPostElement post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
-                      </div>
-                    </Grid>
-                  </Grid>
-                </div>
+                  </div>
+                </Grid>
+              </Grid>
+
+              <Grid item xs={11}>
+                <Button variant="contained" size="medium" color="primary" style={{float:"left", marginLeft: "5px"}} onClick={()=> {scroll(-1);}}>
+                  <ChevronLeftIcon />
+                </Button>
+              </Grid>
+              <Grid item xs={1}>
+                <Button variant="contained" size="medium" color="primary" style={{float:"right", marginRight: "5px"}} onClick={()=> {scroll(1);}}>
+                  <ChevronRightIcon />
+                </Button>
               </Grid>
             </Grid>
+          </Paper>
 
-            <Grid item xs={11}>
-              <IconButton variant="contained" size="medium" color="primary" style={{float:"left"}} onClick={()=> {scroll(-1);}}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </Grid>
-            <Grid item xs={1}>
-              <IconButton size="medium" color="primary" style={{float:"right"}} onClick={()=> {scroll(1);}}>
-                <ChevronRightIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
         )
     }
         return (<div> Sorry, no posts have been pinned yet.</div>);

@@ -34,7 +34,7 @@ export default function usePostSearch(
     axios
       .post(
         url,
-        { skip, limit: 5, sortField, sortDirection, search: filterTag },
+        { skip, limit: 5, sortField, sortDirection, search: filterTag, filters },
         {
           headers: { Authorization: `Bearer ${token}` },
           // eslint-disable-next-line no-return-assign

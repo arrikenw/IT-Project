@@ -39,12 +39,13 @@ const useStyles = makeStyles({
     bodyContainer: {
         height: '100%',
         width: ' 100%',
-        overflow: 'auto',
+
     },
     mainContainer: {
         height: '100%',
         width: '100%',
         overflowX: 'hidden',
+      overflowY: 'scroll',
     },
 
 

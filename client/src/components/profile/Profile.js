@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -18,7 +18,7 @@ import InfinitePostScroll from "./InfinitePostScroll";
 import PinnedPosts from "./PinnedPosts";
 import ProfileDetails from "./ProfileDetails";
 
-const drawerWidth = 'min(80vw, 500px)';
+const drawerWidth = 'min(80vw, 600px)';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,7 +98,7 @@ function Profile({ user, token, history, location }) {
     if (mdLower) {
       return 1000
     }
-    return  800
+    return  900
   }
 
   const renderScroll = () => {
@@ -141,15 +141,14 @@ function Profile({ user, token, history, location }) {
           </Grid>
           <Grid item xs={1}>
             <div style={{height: "46%"}} />
-
-            <IconButton
+            <Button
               color="inherit"
               aria-label="open drawer"
               onClick={handleDrawerOpen}
               edge="start"
             >
               <MenuIcon />
-            </IconButton>
+            </Button>
           </Grid>
         </Grid>
       </Drawer>
@@ -161,14 +160,14 @@ function Profile({ user, token, history, location }) {
       <div style={{width: "100%", height: "100%", display: 'flex'}}>
         <Hidden lgUp>
           {/* icon for opening drawer */}
-          <IconButton
-            color="inherit"
+          <Button
+            color="primary"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
           >
             <MenuIcon />
-          </IconButton>
+          </Button>
         </Hidden>
 
 
@@ -185,7 +184,7 @@ function Profile({ user, token, history, location }) {
         </Hidden>
 
         <div style={{overflowY: "scroll", width: "100%"}}>
-          <Box maxWidth={boxSize()} style={{backgroundColor: "red",  marginTop: 50, padding: "20px"}}>
+          <Box maxWidth={boxSize()} style={{backgroundColor: "#094183",  marginTop: 50, padding: "20px"}}>
             {currentUser &&
                 (<PinnedPosts id={currentUser._id} />)}
             <InfinitePostScroll

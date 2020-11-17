@@ -217,14 +217,12 @@ function AddPostForm({ user, token, history }){
         if (resOne !== "") {
           payload.thumbnailURL = resOne._id
         }
-        console.log(currentTags)
         Axios({
           url: "/api/post/add",
           method: "post",
           data: payload,
           headers: {Authorization: `Bearer ${token}`}
         }).then( (resp) => {
-          console.log(resp.data);
           redirect();
         }).catch((err) => {
           console.error(err)

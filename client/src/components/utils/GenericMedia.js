@@ -119,8 +119,6 @@ function GenericMedia({ style, mimeType, src, className, title, thumbnail }) {
   if (!src || src === "") {
     return <> </>
   }
-  console.log(mimeType)
-  console.log(realType)
 
   if (realType !== "audio") {
     return (

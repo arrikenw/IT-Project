@@ -117,7 +117,7 @@ class ProfilePost extends Component {
 
 
   render(){
-    const { classes, history, post, user, token, showDescription} = this.props
+    const { classes, history, post, user, token} = this.props
     const { contentStr, mimeType } = this.state
     const heightChange = {maxHeight:"800"};
     const textLimit = {/* maxHeight: "90px" */}

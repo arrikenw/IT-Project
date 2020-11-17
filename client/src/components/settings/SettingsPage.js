@@ -18,7 +18,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import SettingsRequired from "./SettingsRequired";
 import SettingsOptional from "./SettingsOptional";
 import SettingsOther from "./SettingsOther";
-
+import add from "../utils/addMedia"
 import fetchMediaUtil from "../utils/fetchMedia";
 
 function Alert(props) {
@@ -52,7 +52,12 @@ const useStyles = makeStyles({
 
 function SettingsPage({ token, user }) {
   const [currentPassword, setCurrentPassword] = useState("");
-  const [currentProfilePic, setCurrentProfilePic] = useState("");
+
+  const [currentProfilePic, setCurrentProfilePic] = useState(null);
+  const [currentMimeType, setCurrentMimeType] = useState("")
+  const [newProfilePic, setNewProfilePic] = useState("")
+  const [rawMedia, setRawMedia] = useState(null)
+  const [newMimeType, setNewMimeType] = useState("image/jpg")
   const [localUser, setUser] = useState({
     biography: "",
     dateOfBirth: new Date(),
@@ -101,6 +106,7 @@ function SettingsPage({ token, user }) {
     })
   }
 
+  // TODO remove tags
   const updateTags = (newTags) => {
     setUser((oldUser) => {
       const newUser = {...oldUser}
@@ -109,10 +115,12 @@ function SettingsPage({ token, user }) {
     })
   }
 
+  // gets profile picture
   useEffect(() => {
     const callBack = (res) => {
       console.log(res);
-      setCurrentProfilePic(res.data)
+      setCurrentProfilePic(res.data.b64media)
+      setCurrentMimeType(res.data.mimeType)
     }
 
     const errorCB = (err) => {
@@ -123,7 +131,7 @@ function SettingsPage({ token, user }) {
     if (!user.profilePic) return
 
     console.log(user.profilePic)
-    // fetchMediaUtil(user.profilePic, token, callBack, errorCB)
+    fetchMediaUtil(user.profilePic, token, callBack, errorCB)
 
   }, [user, token])
 
@@ -260,9 +268,14 @@ function SettingsPage({ token, user }) {
   }
 
   const validateThirdTab = () => {
-    // TODO check file size of new profile pic
+    if (rawMedia && rawMedia.size /1024 / 1024 > 15) {
+      setWarningMessage("Profile picture must be less than 15mb")
+      setWarning(true)
+      return 1
+    }
     return 0
   }
+
   const handleChange = (event, newValue) => {
     switch (tab) {
       case 0:
@@ -280,6 +293,7 @@ function SettingsPage({ token, user }) {
     setTab(newValue);
   };
 
+  // set date of birth
   useEffect(() => {
     const newUser = { ...user, password: "", confirmPassword: "" }
     if (!user.dateOfBirth) {
@@ -305,6 +319,9 @@ function SettingsPage({ token, user }) {
     if (localUser.private !== user.private) {
       return true
     }
+    if (rawMedia) {
+      return true
+    }
     return false
   }
 
@@ -319,6 +336,7 @@ function SettingsPage({ token, user }) {
       emailPrivate: localUser.emailPrivate,
       phoneNumberPrivate: localUser.phoneNumberPrivate
     }
+
     for (let i = 0; i < keys.length; i += 1) {
       if (editUser[keys[i]] === true) {
         update[keys[i]] = localUser[keys[i]]
@@ -330,18 +348,30 @@ function SettingsPage({ token, user }) {
       password: currentPassword
     }
 
-    Axios({
-      url: "api/user/update",
-      method: "post",
-      data: payload,
-      headers: {Authorization: `Bearer ${token}`}
-    }).then((resp) => {
-      window.location.reload(false)
-    }).catch((err) => {
-      console.error(err.response.data)
-      setWarningMessage(err.response.data)
-      setWarning(true)
-    })
+    const callback = (res) => {
+      if (res && res !== "") {
+        payload.update.profilePic = res._id
+      }
+      Axios({
+        url: "api/user/update",
+        method: "post",
+        data: payload,
+        headers: {Authorization: `Bearer ${token}`}
+      }).then((resp) => {
+        window.location.reload(false)
+      }).catch((err) => {
+        console.error(err.response.data)
+        setWarningMessage(err.response.data)
+        setWarning(true)
+      })
+    }
+
+    if (rawMedia) {
+      add(rawMedia, localUser.private, "profilePic", token, callback)
+    }
+    else {
+      callback("")
+    }
   }
 
   const classes = useStyles()
@@ -393,10 +423,15 @@ function SettingsPage({ token, user }) {
                   <SettingsOther
                     localUser={localUser}
                     updateProfessionalFields={updateProfessionalFields}
-                    updateTags={updateTags}
-                    setLocalUser={updateLocalUser}
                     editUser={editUser}
                     setEditUser={updateEdit}
+                    currentProfilePic={currentProfilePic}
+                    newProfilePic={newProfilePic}
+                    newMimeType={newMimeType}
+                    setNewProfilePic={setNewProfilePic}
+                    setNewMimeType={setNewMimeType}
+                    setRawMedia={setRawMedia}
+                    currentMimeType={currentMimeType}
                   />
                 </div>
               )}

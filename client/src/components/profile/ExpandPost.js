@@ -81,7 +81,7 @@ function ExpandPost({ user, token, history, location }) {
       }
       Axios.post(targetURL, payload, headers)
         .then((res) => {
-          if (res.status == 201 || res.status == 200){
+          if (res.status === 201 || res.status === 200){
             console.log("added to pinned posts");
             // TODO maybe add some kind of modal pop-up?
           }
@@ -130,7 +130,7 @@ function ExpandPost({ user, token, history, location }) {
             headers: { 'Authorization': `Bearer ${ token}`}
         }
         Axios.post(postUrl, postPayload, headers).then((res) => {
-            if (res.status == 200 || res.status == "success"){
+            if (res.status === 200){
                 setPost(res.data[0]);
                 fetchMediaUtil(res.data[0].mediaID, token, getMediaCallback, null);
             }else{

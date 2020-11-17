@@ -1,7 +1,30 @@
-# Efolio:
+# E-FOLIO:
+
+## Table of Contence
+- #### Introduction 
+- #### Set up 
+  - Installing Packages 
+  - Backend env. Files
+- #### Running
+- #### Style Guide
+  - Code Style
+  - Constol Log 
+  - API Responses
+  - Git Hub
+  - Documentation
+- #### API Documentation
+ - Users
+ - Midia
+ - Post
+ - comments
+  
+
+
 ## Introduction
 This project was created by the Podoju was consists of a backend server using node.js, Express and Mongoose;
- a frontend written using html, css, node.js and react.js; a database using mongoDB, and a file server using AWS S3 Bucket.
+ a frontend written using html, css, node.js and react.js; a database using mongoDB, and a file server using AWS S3 Bucket. 
+ “E-FOLIO” is a web based digital portfolio system. E-FOLIO, allows users to ‘post’ work that they wish to showcase to their
+ profile, share their profile with others.
 
 ## Set Up
 #### Installing Packages
@@ -30,8 +53,9 @@ To run the frontend server for testing, run the command `npm run start` int the 
 To run the linter for the backend code,  run the command `npm run lint` in the root directory of the repository
 
 To run the tests for the backend code,  run the command `npm run test` in the root directory of the repository
-##Style Guide
-### Code Style:
+
+## Style Guide
+### Code Style
 - #### Use arrow functions when possible:
   - may not be possible in all scenarios
   - wrong:
@@ -141,7 +165,7 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
 - We are currently using a modified version of airbnb's style guide. Read more about it 
 [here](https://medium.com/docon/airbnb-javascript-style-guide-key-takeaways-ffd0370c053) and 
 [here](https://airbnb.io/javascript/).
-### Console Logs:
+### Console Logs
 - console logs should be done should be done before every `res.send()` is done in the backend
     - console logs should have the structure: `"<Func> (not) successful - <reasonOrInformation"`
 - there should be no console logs in the frontend code and should be present in development
@@ -154,7 +178,7 @@ To run the tests for the backend code,  run the command `npm run test` in the ro
     - ```javascript
       console.log("successfully trimmed firstName from user input");
       ```
-### API Responses:
+### API Responses
 - in a successful response, the error code should be in the form of "2XX" and be a JSON with
 relevant data:
     - wrong:
@@ -190,6 +214,7 @@ a string with the correct form:
       res.status(500);
       res.send("File upload not successful - something went wrong, try again");
       ```
+ 
 ### Git Hub:
 - Branches should be named `<developerName>/<featureName>`:
     - wrong:
@@ -208,9 +233,11 @@ made for the new functionality
 - a pull request **must be reviewed by another** before being approved
 - when a pull request is made, the relevant trello post is **moved into review**
 - when a pull request is approved, the relevant trello post is **moved into done**
+
 ### Documentation:
 - code must have relevant comments explaining what blocks do
 - API routes should be updated into this read me with all details included
+
 ## API Documentation
 Here is the needed documentation of the APIs used by the frontend to request to the backend.
 ### Users
@@ -641,49 +668,6 @@ Responses:
     "Media update failed - <reasonForError>"
     ```
 
-
-### Posts
-#### Add Post 
-###### Creates a new post in the database and returns the posts's ID
-Request to: `/api/post/add` as a `POST` request
-Takes : an authorization header with the format
-```
-Authorization: "Bearer <authenticationToken>"
-```
-and a JSON in the body, requiring the key-value pairs:
-```JSON
-{
-   "title": "<postTitle>",
-   "description": "<postDescription>"
-}
-```
-JSON can also include the optional key-value pair:
-```JSON
-{
-   "private": "<boolean>"
-}
-```
-Requirements:
-- Authorization header is required
-- Authentication token must be a valid token
-- private must be a boolean: true or false
-
-Responses:
-- On success: 
-  - the response will have status code of "201" and will have the new post's id
-  - ```JSON
-    {
-       "id": "<postID>"
-    }
-    ```
-- On failure: 
-  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
-  - status code in the form of "4XX" are for user input error
-  - status code in the form of "5XX" are for server error
-  - ```
-    "Add post not successful - <reasonForError>"
-    ```
-
 ## Posts
 #### Get Post 
 ###### Gets a lists of post from the database and which match the search requirements, must be public posts or belong to the searching user
@@ -783,6 +767,47 @@ Responses:
   - ```JSON
     {
         "id": "<newPostID>"
+    }
+    ```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Add post not successful - <reasonForError>"
+    ```
+ 
+#### Add Post 
+###### Creates a new post in the database and returns the posts's ID
+Request to: `/api/post/add` as a `POST` request
+Takes : an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON in the body, requiring the key-value pairs:
+```JSON
+{
+   "title": "<postTitle>",
+   "description": "<postDescription>"
+}
+```
+JSON can also include the optional key-value pair:
+```JSON
+{
+   "private": "<boolean>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- private must be a boolean: true or false
+
+Responses:
+- On success: 
+  - the response will have status code of "201" and will have the new post's id
+  - ```JSON
+    {
+       "id": "<postID>"
     }
     ```
 - On failure: 

@@ -17,6 +17,7 @@ import SignupPage from './components/signup/SignupPage';
 import SearchResults from './components/searchResults/SearchResults';
 
 import DrawerTest from './components/profile/DrawerTest'
+import EditPost from "./components/EditPost/EditPost";
 
 // css for containers
 const useStyles = makeStyles({
@@ -138,6 +139,9 @@ function App() {
           </Route>
           <Route path="/searchResults">
             <SearchResults token={token} user={user} searchResults={searchResults} searchBy={searchBy} />
+          </Route>
+          <Route path="/edit">
+            <EditPost token={token} user={user} />
           </Route>
           {/* <Route path="/test">
             <DrawerTest token={token} user={user} />

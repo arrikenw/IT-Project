@@ -55,7 +55,7 @@ export default function InfinitePostScroll({ sortDirection, sortField, currentUs
   // };
 
   return (
-    <div style={{padding: '60px', backgroundColor: '#f7ad23', width: "100%", margin: "20px" }}>
+    <div style={{backgroundColor: '#f7ad23', width: "80%", padding: '5%', margin: '5%'}}>
       {posts.map((post, index) => {
         if (posts.length === index + 1) {
           return (
@@ -82,7 +82,7 @@ export default function InfinitePostScroll({ sortDirection, sortField, currentUs
           !loading &&
           posts.length === 0 &&
           "Couldn't find a post that matched your query"}
-      </div>
+      </div> 
     </div>
   )
 

@@ -265,20 +265,14 @@ function ExpandPost({ user, token, history, location }) {
             <CardActions style={{paddingLeft:"30px"}}>
 
               {post &&  <LikeButtons post={post} user={user} token={token} /> }
-
-            
+              
               {post && (post.userID == user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently) && (
-                <IconButton variant="contained" size="medium" color="primary" onClick={addToPinned}>
-                  ADD TO YOUR PINNED POSTS
+                <Button variant="contained" size="medium" color="primary" onClick={addToPinned}>
+                  Pin post
                   <AddIcon />
-                </IconButton>
+                </Button>
               )}
 
-              {post && (post.userID == user._id) && ((user.pinnedPosts && user.pinnedPosts.includes(post._id)) || pinnedRecently) && (
-                <IconButton variant="contained" size="medium" color="primary" onClick={removeFromPinned}>
-                  Post is currently pinned. Click to unpin.
-                </IconButton>
-              )}
 
               {post && (post.userID == user._id) && ((user.pinnedPosts && user.pinnedPosts.includes(post._id)) || pinnedRecently) && (
                 <Button variant="contained" size="medium" color="primary" onClick={removeFromPinned}>

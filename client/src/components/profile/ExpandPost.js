@@ -299,8 +299,6 @@ function ExpandPost({ user, token, history, location }) {
                 </Button>
               )}
 
-
-
             </CardActions>
 
             <Divider variant="middle" style={{marginTop:"30px", marginBottom:"30px"}} />

@@ -157,7 +157,7 @@ function Comment({user, comment, postID, token}) {
     const textLimit = {maxHeight: "90px"}
     let titleString = ""
     if (userName) {
-        titleString = `${userName  }'s thoughts`;
+        titleString = `${userName  }`;
     }
     let imageString;
     if (returnedMedia){
@@ -169,44 +169,42 @@ function Comment({user, comment, postID, token}) {
         likeMessage = "You've liked this comment. Click again to remove your like."
     }
     return (
-      <div className={classes.commentBorder}>
-        <Card className={classes.comment}>
-          <div style={{height:"85%"}}>
-            <Grid container style={{backgroundColor: "white"}}>
-              <Grid item xs={0.5}>
-                {imageString && <Avatar src={imageString} />}
-              </Grid>
-              <Grid item xs={11}>
-                <div style={{paddingLeft: "10px"}}>
-                  <Typography gutterBottom style={{fontSize:20}} color="textPrimary" component="h2">
-                    {titleString}
-                  </Typography>
-                </div>
-              </Grid>
-              <Grid item xs={0.5} style={{float:"right"}}>
-                <Typography gutterBottom variant="heading6" color="textPrimary" component="h6">
+      <Card className={classes.comment}>
+        <div style={{height:"85%"}}>
+          <Grid container style={{backgroundColor: "white"}}>
+            <Grid item xs={0.5} style={{paddingLeft:"5px", paddingTop:"5px"}}>
+              {imageString && <Avatar src={imageString} />}
+            </Grid>
+            <Grid item xs={11}>
+              <div style={{paddingLeft: "10px"}}>
+                <Typography gutterBottom style={{fontSize:18, fontWeight:"bold", paddingTop:"5px"}} color="textPrimary" component="h2">
+                  {titleString}
+
+                </Typography>
+                <Typography style={{marginBottom:"15px", marginTop:"-8px", paddingLeft:"2px"}} gutterBottom variant="heading6" color="textSecondary" component="h6">
                   {comment && timeago.format(comment.createdAt, 'en_US')}
                 </Typography>
-              </Grid>
+              </div>
             </Grid>
-            <div style={{backgroundColor: "lightGrey"}}>
-              <Typography gutterBottom variant="body2" color="textSecondary" component="p">
-                {comment.comment}
-              </Typography>
-            </div>
-          </div>
 
-          <div style={{float:"left", height:"15%"}}>
-            <Button svariant="contained" size="small" color="primary" onClick={onToggleLike}>
-              <ThumbUpIcon />
-              <Typography style={{paddingLeft:"8px", fontWeight:"bold"}}>
-                {comment.likedBy.length + localLikeChange}
-              </Typography>
-            </Button>
+          </Grid>
+          <div style={{backgroundColor: "white", marginLeft:"47px"}}>
+            <Typography style={{marginLeft:"5px", fontSize:18, fontFamily:"Verdana"}} gutterBottom variant="body2" color="textPrimary" component="p">
+              {comment.comment}
+            </Typography>
           </div>
+        </div>
 
-        </Card>
-      </div>
+        <div style={{float:"left", height:"15%", marginLeft:"36px"}}>
+          <Button svariant="contained" size="small" color="primary" onClick={onToggleLike}>
+            <ThumbUpIcon />
+            <Typography style={{paddingLeft:"8px", fontWeight:"bold"}}>
+              {comment.likedBy.length + localLikeChange}
+            </Typography>
+          </Button>
+        </div>
+
+      </Card>
 
     );
 }

@@ -64,7 +64,7 @@ export default function InfinitePostScroll({ sortDirection, sortField, currentUs
               ref={lastPostElementRef}
               key={post._id}
             >
-              <ProfilePost post={post} token={token} user={user} showDescription />
+              <ProfilePost post={post} token={token} user={user} />
             </div>
           )
         }

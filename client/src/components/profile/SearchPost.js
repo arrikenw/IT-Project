@@ -56,7 +56,7 @@ class SearchPost extends Component {
 
   componentDidMount() {
     // if media is already stored
-    const { media, post, token, showDescription } = this.props;
+    const { media, post, token} = this.props;
     if (media){
       console.log("USING STORED MEDIA");
       this.setState({
@@ -75,6 +75,7 @@ class SearchPost extends Component {
       // TODO make thumbnail fetching work properly
       mediaID: post.thumbnailURL,
     };
+
     const headers = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -96,9 +97,14 @@ class SearchPost extends Component {
         // todo;
       });
 
-
+      const newHeader = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      console.log("header=", newHeader);
       const UserNamePayload = {userID: post.userID}
-      Axios.get('/api/user/get', UserNamePayload, headers)
+      Axios.get('/api/user/getPublic/', UserNamePayload, newHeader)
         .then((resp) => {
           console.log("resp=", resp)
             this.setState({postUserName :resp.userName});

@@ -4,6 +4,7 @@ import { green} from '@material-ui/core/colors';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom';
@@ -237,17 +238,22 @@ function ExpandPost({ user, token, history, location }) {
             </CardContent>
             <CardActions>
 
+              {post &&  <LikeButtons post={post} user={user} token={token} /> }
+
+
               {post && (post.userID == user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently) && (
-                <IconButton variant="contained" size="medium" color="primary" onClick={addToPinned}>
-                  ADD TO YOUR PINNED POSTS
+                <Button variant="contained" size="medium" color="primary" onClick={addToPinned}>
+                  Pin post
                   <AddIcon />
-                </IconButton>
+                </Button>
               )}
 
               {post && (post.userID == user._id) && ((user.pinnedPosts && user.pinnedPosts.includes(post._id)) || pinnedRecently) && (
-                <IconButton variant="contained" size="medium" color="primary" onClick={removeFromPinned}>
-                  Post is currently pinned. Click to unpin.
-                </IconButton>
+                <Button variant="contained" size="medium" color="primary" onClick={removeFromPinned}>
+                  Unpin post
+                  <RemoveIcon />
+                </Button>
+
               )}
 
               {post && (post.userID == user._id) && (

@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {Avatar, Card, Grid, IconButton, Typography} from "@material-ui/core";
 import * as timeago from "timeago.js";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ShareIcon from "@material-ui/icons/Share";
 import PropTypes, {arrayOf} from "prop-types";
 
 

@@ -126,7 +126,7 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
                      
                     <Grid container spacing={4} className={classes.resultsContainer}>
 
-                      //TODO change this to infinite scroll
+
                       {searchResults.map((result, idx) => (
                         <Grid item lg={4} md={6} sm={8} xs={12} key={result._id}>
                           <ProfilePost post={result} token={token} user={user} />

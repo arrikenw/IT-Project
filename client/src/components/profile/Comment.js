@@ -10,7 +10,6 @@ import {
 import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ShareIcon from "@material-ui/icons/Share";
 import * as timeago from 'timeago.js';
 import PropTypes from "prop-types";
 
@@ -207,12 +206,7 @@ function Comment({user, comment, postID, token}) {
             {' '}
             Likes
           </div>
-          <div style={{float:"right"}}>
-            <IconButton size="medium" color="primary">
-              <ShareIcon />
-              Share
-            </IconButton>
-          </div>
+
         </Card>
       </div>
 

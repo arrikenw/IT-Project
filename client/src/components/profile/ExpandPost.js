@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import {IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography,CircularProgress} from '@material-ui/core'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ShareIcon from '@material-ui/icons/Share';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles'
@@ -239,11 +238,7 @@ function ExpandPost({ user, token, history, location }) {
               )}
 
               {post &&  <LikeButtons post={post} user={user} token={token} /> }
-              <IconButton variant="contained" size="medium" color="primary">
-                <ShareIcon />
-                Share
-              </IconButton>
-              Click to copy a link to this post to your clipboard
+
             </CardActions>
           </Card>
           {post && (

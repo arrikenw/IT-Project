@@ -12,7 +12,7 @@ import {
   CardActions, IconButton,
 } from '@material-ui/core'
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ShareIcon from "@material-ui/icons/Share";
+
 
 // truncation is not supported for multiline, so using this lib
 import LinesEllipsis from 'react-lines-ellipsis'
@@ -133,12 +133,7 @@ class ProfilePost extends Component {
           <div style={{float:"left"}}>
             {post && <LikeButtons post={post} user={user} token={token} />}
           </div>
-          <div style={{float:"right"}}>
-            <IconButton size="medium" color="primary">
-              <ShareIcon />
-              Share
-            </IconButton>
-          </div>
+
 
         </CardActions>
       </Card>

@@ -172,13 +172,13 @@ function Comment({user, comment, postID, token}) {
       <div className={classes.commentBorder}>
         <Card className={classes.comment}>
           <div style={{height:"85%"}}>
-            <Grid container style={{backgroundColor: "grey"}}>
+            <Grid container style={{backgroundColor: "white"}}>
               <Grid item xs={0.5}>
                 {imageString && <Avatar src={imageString} />}
               </Grid>
               <Grid item xs={11}>
                 <div style={{paddingLeft: "10px"}}>
-                  <Typography gutterBottom variant="heading1" color="textPrimary" component="h2">
+                  <Typography gutterBottom style={{fontSize:20}} color="textPrimary" component="h2">
                     {titleString}
                   </Typography>
                 </div>

@@ -155,7 +155,6 @@ function ExpandPost({ user, token, history, location }) {
     }
 
 
-    console.log("pst", post)
     return (
       <Grid container className={classes.mainContainer}>
         <Grid item xs={false} />
@@ -213,6 +212,13 @@ function ExpandPost({ user, token, history, location }) {
                 </Button>
               )}
 
+              {post && (post.userID == user._id) && !(user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
+                <Button variant="contained" size="medium" color="primary" onClick={addToPinned}>
+                  Pin post
+                  <AddIcon />
+                </Button>
+              )}
+
               {post && (post.userID == user._id) && (
                 <Button
                   variant="contained"
@@ -231,12 +237,7 @@ function ExpandPost({ user, token, history, location }) {
                 </Button>
               )}
 
-              {post && (post.userID == user._id) && !(user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
-                <Button variant="contained" size="medium" color="primary" onClick={addToPinned}>
-                  Pin post
-                  <AddIcon />
-                </Button>
-              )}
+
 
             </CardActions>
 

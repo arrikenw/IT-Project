@@ -11,14 +11,18 @@ import {
   Typography,
   CardActions, IconButton,
 } from '@material-ui/core'
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import AddIcon from "@material-ui/icons/Add";
+
 
 
 // truncation is not supported for multiline, so using this lib
 import LinesEllipsis from 'react-lines-ellipsis'
 import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC'
+import * as timeago from "timeago.js";
 import PropTypes from "prop-types";
 import LikeButtons from "./LikeButtons";
+
+
 
 const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
 
@@ -46,7 +50,6 @@ class ProfilePost extends Component {
       // contentCategory: "",
     };
   }
-
 
   componentDidMount() {
     // if media is already stored
@@ -107,35 +110,43 @@ class ProfilePost extends Component {
     }
   }
 
+
+
   render(){
     const { classes, history, post, user, token} = this.props
     const { contentStr } = this.state
     const heightChange = {maxHeight:"800"};
-    const textLimit = {maxHeight: "90px"}
+    const textLimit = {/* maxHeight: "90px" */}
     const aspectChange = {backgroundColor:"red"};
     return (
       <Card className={classes.postCard} style={heightChange}>
         <CardActionArea onClick={() => { history.push(`/post?post=${post._id}`); }}>
           <CardContent style={{paddingBottom: "0px"}}>
 
-            <div style={textLimit}>
-              <Typography gutterBottom variant="h1" color="textPrimary" component="h2">
-                {post.title}
-              </Typography>
-              <Typography gutterBottom variant="body2" color="textSecondary" component="p">
-                <ResponsiveEllipsis text={post.description} maxLine={3} ellipsis="..." trimRight basedOn="letters" />
-              </Typography>
-            </div>
+            <Typography gutterBottom variant="h1" style={{fontFamily:"Verdana", fontSize:"25px", fontWeight:"bold", textAlign:"center"}} color="textPrimary" component="h1">
+              <ResponsiveEllipsis text={post.title} maxLine={2} ellipsis="..." trimRight basedOn="letters" />
+            </Typography>
+            <Typography gutterBottom variant="body2" color="textSecondary" component="p" style={{paddingBottom:"10px"}}>
+              <ResponsiveEllipsis text={post.description} maxLine={3} ellipsis="..." trimRight basedOn="letters" />
+            </Typography>
             <CardMedia className={classes.media} style={aspectChange} image={contentStr} />
+
           </CardContent>
         </CardActionArea>
+
         <CardActions style={{paddingBottom: "0px"}}>
-          <div style={{float:"left"}}>
+
+          <div style={{float:"left", paddingBottom:"10px", paddingLeft:"8px"}}>
             {post && <LikeButtons post={post} user={user} token={token} />}
           </div>
 
 
         </CardActions>
+
+        <Typography variant="heading6" component="h6" style={{paddingBottom:"10px", paddingLeft:"20px"}}>
+          {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')}`}
+        </Typography>
+
       </Card>
     )
   }
@@ -148,9 +159,12 @@ ProfilePost.propTypes = {
     thumbnailURL: PropTypes.string,
     mediaID: PropTypes.string,
     description: PropTypes.string,
+    createdAt: PropTypes.string,
+    userID: PropTypes.string,
   }).isRequired,
   user: PropTypes.shape({
-    _id: PropTypes.string
+    _id: PropTypes.string,
+    pinnedPosts: PropTypes.array,
   }).isRequired,
   token: PropTypes.string.isRequired,
   classes: PropTypes.objectOf(PropTypes.object).isRequired,

@@ -78,7 +78,7 @@ function LikeButtons({user, post, token}) {
     <div style={{float:"left", height:"15%"}}>
       <Button variant="contained" size="medium" color="primary" onClick={onToggleLike}>
         <ThumbUpIcon />
-        <Typography style={{paddingLeft:"20px", fontWeight:"bold"}}>
+        <Typography style={{paddingLeft:"10px", fontWeight:"bold"}}>
           {post.likedBy.length + localLikeChange}
         </Typography>
       </Button>

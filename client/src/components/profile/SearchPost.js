@@ -102,12 +102,12 @@ class SearchPost extends Component {
           Authorization: `Bearer ${token}`,
         },
       }
-      console.log("header=", newHeader);
-      const UserNamePayload = {userID: post.userID}
-      Axios.get('/api/user/getPublic/', UserNamePayload, newHeader)
+
+      const UserNamePayload = {filters: {"_id": post.userID}}
+      Axios.post('/api/user/getPublic/', UserNamePayload, newHeader)
         .then((resp) => {
           console.log("resp=", resp)
-            this.setState({postUserName :resp.userName});
+            this.setState({postUserName :resp.data[0].userName});
 
           }
         )

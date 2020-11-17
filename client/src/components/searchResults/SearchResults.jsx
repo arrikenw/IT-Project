@@ -8,7 +8,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
-import axios from 'axios'
+import Axios from 'axios'
 
 import { withRouter } from 'react-router-dom'
 
@@ -16,6 +16,7 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import SearchPost from '../profile/SearchPost'
 import InfinitePostScroll from '../profile/InfinitePostScroll'
+import FetchMediaUtil from "../utils/fetchMedia";
 
 
 
@@ -45,18 +46,20 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
     useEffect(() =>{
 
       // TODO make this not n^2
-        {searchResults.map((result, idx) => {
+        if (searchBy==="users") {
+          {searchResults.map((result, idx) => {
 
-                getProfilePic(result.profilePic)
-                .then((pic) => {
-                    setUsers((prevUsers) => [...prevUsers, {userName:result.userName,
-                                                firstName:result.firstName,
-                                                lastName:result.lastName, profilePic:pic}])
-                })
-                .catch((err) => {
-                    console.error(err)
-                })
-        })}
+            getProfilePic(result.profilePic)
+              .then((pic) => {
+                setUsers((prevUsers) => [...prevUsers, {userName:result.userName,
+                  firstName:result.firstName,
+                  lastName:result.lastName, profilePic:pic}])
+              })
+              .catch((err) => {
+                console.error(err)
+              })
+          })}
+        }
 
     // TODO: Create a state in App.js to track whether searching by posts or users
 
@@ -67,25 +70,39 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
 
     },[searchResults])
 
-    
-
-
     // TODO: change to getMedia helper function
     const getProfilePic = (picID) =>{
-    
+
+      console.log("fetching profile pic for usersearch")
+
         const authHeader = {
-          headers: {Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` }
         }
         const payload = {
           mediaID: picID
         }
-        return axios.post('/api/media', payload,  authHeader)
-          .then(response => {
-            return response.data.b64media;
-        })
-        .catch(err => {
-            console.error(err);
-        })
+
+
+          // if user is logged in, use /media
+          if(token) {
+            Axios.post('/api/media', payload, authHeader)
+              .then(response => {
+                return response.data.b64media;
+              })
+              .catch(err => {
+                console.error(err);
+              })
+          }
+          // if not logged in, use/media/getPublic
+          return Axios.post('/api/media/getPublic', payload, authHeader)
+            .then(response => {
+              return response.data.b64media;
+            })
+            .catch(err => {
+              console.error(err);
+            })
+
+
       }
 
 
@@ -120,9 +137,9 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
             return(
               <div>
                 <Grid container>
-                  <Grid item xs={3} />
+                  <Grid item xs={2} />
      
-                  <Grid item xs={6}>
+                  <Grid item xs={8}>
                      
                     <Grid container spacing={4} className={classes.resultsContainer}>
 
@@ -131,13 +148,13 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
                           <SearchPost post={result} token={token} user={user} showDescription={false}  />
                         </Grid>
 
-                                ))}
+                      ))}
 
 
                     </Grid>
                   </Grid>
                         
-                  <Grid item xs={3} />
+                  <Grid item xs={2} />
                 </Grid>
               </div>
              )

@@ -18,7 +18,7 @@ import InfinitePostScroll from "./InfinitePostScroll";
 import PinnedPosts from "./PinnedPosts";
 import ProfileDetails from "./ProfileDetails";
 
-const drawerWidth = 400;
+const drawerWidth = 'min(80vw, 500px)';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,7 +63,7 @@ function Profile({ user, token, history, location }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [filterTag, setFilterTag] = useState('none')
+  const [filterTag, setFilterTag] = useState('')
   const [sortField, setSortField] = useState('createdAt')
   const [sortDirection, setSortDirection] = useState('desc')
   const [currentUser, setCurrentUser] = useState('');
@@ -96,9 +96,9 @@ function Profile({ user, token, history, location }) {
 
   const boxSize = () => {
     if (mdLower) {
-      return 'md'
+      return 1000
     }
-    return 'sm'
+    return  800
   }
 
   const renderScroll = () => {
@@ -115,11 +115,11 @@ function Profile({ user, token, history, location }) {
   };
 
   return (
-    <div className={classes.root}>
 
+    <div className={classes.root}>
       {/* drawer itself */}
       <Drawer
-        className={classes.drawer}
+        // className={classes.drawer}
         variant="persistent"
         anchor="left"
         open={(open && mdLower)}
@@ -129,23 +129,19 @@ function Profile({ user, token, history, location }) {
       >
         {/* icon for closing drawer */}
         <div style={{height: "64px"}} />
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-        </IconButton>
-        <ProfileDetails currentUser={currentUser} setSearchDirection={setSortDirection} setSearchField={setSortField} setFilterTag={setFilterTag} />
-      </Drawer>
+        <Grid container style={{height: "calc(100% - 64px)"}}>
+          <Grid item xs={11}>
+            <ProfileDetails
+              currentUser={currentUser}
+              setSearchDirection={setSortDirection}
+              setSearchField={setSortField}
+              setFilterTag={setFilterTag}
+              token={token}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <div style={{height: "46%"}} />
 
-
-
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: (open && mdLower),
-        })}
-      >
-        <div style={{width: "100%", height: "100%", display: 'flex'}}>
-
-          <Hidden lgUp>
-            {/* icon for opening drawer */}
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -154,40 +150,57 @@ function Profile({ user, token, history, location }) {
             >
               <MenuIcon />
             </IconButton>
-          </Hidden>
+          </Grid>
+        </Grid>
+      </Drawer>
+      {/* <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: (open && mdLower),
+        })}
+      > */}
+      <div style={{width: "100%", height: "100%", display: 'flex'}}>
+        <Hidden lgUp>
+          {/* icon for opening drawer */}
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+          >
+            <MenuIcon />
+          </IconButton>
+        </Hidden>
 
 
-          <Hidden mdDown>
-            <Box maxWidth={400} style={{flex: "0 0 65%", paddingRight: "10%"}}>
-              <ProfileDetails currentUser={currentUser} setSearchDirection={setSortDirection} setSearchField={setSortField} setFilterTag={setFilterTag} />
-            </Box>
-          </Hidden>
+        <Hidden mdDown>
+          <Box maxWidth={400} style={{flex: "0 0 65%", marginRight: "10%"}}>
+            <ProfileDetails
+              currentUser={currentUser}
+              setSearchDirection={setSortDirection}
+              setSearchField={setSortField}
+              setFilterTag={setFilterTag}
+              token={token}
+            />
+          </Box>
+        </Hidden>
 
-          <div style={{overflowY: "scroll", width: "100%"}}>
-            <Container maxWidth={boxSize()} style={{backgroundColor: "red"}}>
-              <div
-                style={{
-                  marginTop: '50px',
-                  marginRight: '50px',
-                  marginLeft: '100px',
-                }}
-              >
-                <PinnedPosts id={user._id} />
-              </div>
-              <InfinitePostScroll
-                currentUser={currentUser}
-                sortField={sortField}
-                sortDirection={sortDirection}
-                filterTag={filterTag}
-                token={token}
-                user={user}
-              />
-            </Container> 
-          </div>
-
+        <div style={{overflowY: "scroll", width: "100%"}}>
+          <Box maxWidth={boxSize()} style={{backgroundColor: "red",  marginTop: 50, padding: "20px"}}>
+            {currentUser &&
+                (<PinnedPosts id={currentUser._id} />)}
+            <InfinitePostScroll
+              currentUser={currentUser}
+              sortField={sortField}
+              sortDirection={sortDirection}
+              filterTag={filterTag}
+              token={token}
+              user={user}
+            /> 
+          </Box>
         </div>
 
-      </main>
+      </div>
+      
     </div>
   );
 }

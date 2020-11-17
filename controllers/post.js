@@ -21,8 +21,13 @@ const getPost = (req, res) => {
   if (req.body.search) {
     query.$and.push({
       $or: [
-        { title: { $regex: req.body.search } },
-        { description: { $regex: req.body.search } },
+        { title: { $regex: new RegExp(req.body.search.toLowerCase(), "i") } },
+        {
+          description: {
+            $regex: new RegExp(req.body.search.toLowerCase(), "i"),
+          },
+        },
+        { tags: { $regex: new RegExp(req.body.search.toLowerCase(), "i") } },
       ],
     });
   }
@@ -94,6 +99,7 @@ const getPublicPost = (req, res) => {
             $regex: new RegExp(req.body.search.toLowerCase(), "i"),
           },
         },
+        { tags: { $regex: new RegExp(req.body.search.toLowerCase(), "i") } },
       ],
     });
   }
@@ -231,6 +237,12 @@ const addPost = (req, res) => {
 
         if (req.body.thumbnailURL) {
           payload.thumbnailURL = req.body.thumbnailURL;
+        }
+
+        if (!req.body.tags) {
+          payload.tags = [];
+        } else {
+          payload.tags = req.body.tags;
         }
 
         payload.contentCategory = doc.contentCategory;
@@ -383,6 +395,68 @@ const unlikePost = (req, res) => {
   );
 };
 
+// TODO ADD CHECK TO ENSURE USER CAN ONLY UPDATE POST TAGS IF THEY ARE THE CREATOR
+const addTag = (req, res) => {
+  const postID = req.body.postID;
+
+  const onAddTag = (err, results) => {
+    if (err) {
+      console.log(`addTag not successful: ${err.message}`);
+      res.status(500);
+      res.send("addTag not successful - something went wrong, try again");
+    } else {
+      console.log(`addTag successful: updated post ${postID}`);
+      res.status(200);
+      res.send({ postID });
+    }
+  };
+
+  if (!req.body.tag || !postID) {
+    res.status(400);
+    res.send(
+      "Tag addition not successful - tag field was empty or no id was provided"
+    );
+  }
+
+  PostModel.updateOne(
+    { _id: req.body.postID },
+    { addToSet: { tags: req.body.tag } },
+    onAddTag
+  );
+};
+
+// TODO ADD CHECK TO ENSURE USER CAN ONLY UPDATE POST TAGS IF THEY ARE THE CREATOR
+const removeTag = (req, res) => {
+  const postID = req.body.postID;
+
+  const onRemoveTag = (err, results) => {
+    if (err) {
+      console.log(`tag removal not successful: ${err.message}`);
+      res.status(500);
+      res.send("tag removal not successful - something went wrong, try again");
+    } else {
+      console.log(`tag removal successful: updated post ${postID}`);
+      res.status(200);
+      res.send({ postID });
+    }
+  };
+  if (!req.body.tag || !req.body.postID) {
+    res.status(400);
+    res.send(
+      "Tag removal not successful - tag field was empty or no id was provided"
+    );
+  }
+
+  PostModel.updateOne(
+    { _id: req.body.postID },
+    { pull: { tags: req.body.tag } },
+    onRemoveTag
+  );
+};
+
+
+module.exports.addTag = addTag;
+module.exports.removeTag = removeTag;
 module.exports.getPost = getPost;
 module.exports.getPublicPost = getPublicPost;
 module.exports.addPost = addPost;

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Button, IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography,CircularProgress} from '@material-ui/core'
+import { green} from '@material-ui/core/colors';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
@@ -215,15 +216,18 @@ function ExpandPost({ user, token, history, location }) {
               {post && (post.userID == user._id) && (
                 <Button
                   variant="contained"
-                  style={{justifyContent:'right'}}
-                  size="medium"
                   color="primary"
+                  style={{color:"white"}}
+                  size="medium"
                   onClick={() => {
                   history.push(`./edit?post=${postID}`)
                 }}
                 >
-                  Edit
-                  <EditIcon />
+                  <Typography>
+                    Edit
+                  </Typography>
+
+                  <EditIcon  />
                 </Button>
               )}
 

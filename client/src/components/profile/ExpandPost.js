@@ -175,7 +175,7 @@ function ExpandPost({ user, token, history, location }) {
                 <ArrowBackIcon />
               </IconButton>
               <Grid container justify="center" style={{paddingBottom:"20px"}}>
-                <Typography variant="h1" component="h1">
+                <Typography variant="h1" style={{ fontSize: "35px"}} component="h1">
                   {post && post.title}
                 </Typography>
               </Grid>

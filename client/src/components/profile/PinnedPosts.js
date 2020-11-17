@@ -71,7 +71,7 @@ function PinnedPost({ user, token, history, location, id }) {
         };
         const headers = {
             headers: {
-                Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+                Authorization: `Bearer ${token}`,
             },
         };
         Axios.post(controllerUrl, payload, headers)
@@ -112,7 +112,7 @@ function PinnedPost({ user, token, history, location, id }) {
 
         // recursively fetch first element and shorten array
         const headers = {
-            headers: { 'Authorization': `Bearer ${ window.localStorage.getItem("token")}`}
+            headers: { 'Authorization': `Bearer ${token}`}
         }
         let postUrl = '/api/post/get'
       if (!token) {
@@ -158,10 +158,11 @@ function PinnedPost({ user, token, history, location, id }) {
         }
       console.log(user)
         if (user && user._id === id) {
-          console.log(user)
+          console.log(user.pinnedPosts)
           setIds(user.pinnedPosts);
           setName( user.userName);
-          getPinnedPostContent(user.pinnedPosts, [], [], 0);
+          
+          getPinnedPostContent(user.pinnedPosts.map(item=>item), [], [], 0);
           return
         }
         const payload = {

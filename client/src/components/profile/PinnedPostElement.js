@@ -129,12 +129,12 @@ class PinnedPostElement extends Component {
             return <CardMedia className={classes.media} type={mimeType} controls style={aspectChange} image={contentStr} />
         }
         return (
-          <Card className={classes.postCard}>
+          <Card className={classes.postCard} style={{backgroundColor: "#ebebeb"}}>
             <CardActionArea onClick={() => { history.push(`/post?post=${post._id}`); }}>
               <CardContent style={{paddingBottom: "0px"}}>
                 {renderMedia()}
                 <div style={textLimit}>
-                  <Typography gutterBottom variant="h5" component="h2" style={{overflow:"hidden", textOverflow: "ellipsis"}}>
+                  <Typography gutterBottom variant="h5" component="h2" style={{overflow:"hidden", textOverflow: "ellipsis", textAlign: "center"}}>
                     {post.title}
                   </Typography>
                 </div>

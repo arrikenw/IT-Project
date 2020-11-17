@@ -25,9 +25,9 @@ const useStyles = makeStyles({
     display: 'flex',
     flexFlow: 'column',
     flexGrow: 1,
-    backgroundColor: '#34d15e',
+    backgroundColor: '#011d4a',
     overflowY: 'auto',
-    backgroundImage: 'url("https://about.unimelb.edu.au/__data/assets/image/0039/87879/old-quad-arches-bright-cropped.jpg")',
+    // backgroundImage: 'url("https://about.unimelb.edu.au/__data/assets/image/0039/87879/old-quad-arches-bright-cropped.jpg")',
     backgroundSize: 'cover'
   },
   mainContainer: {

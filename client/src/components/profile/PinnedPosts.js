@@ -4,13 +4,16 @@ import {
     Card,
     Grid,
     IconButton,
-    Typography
+    Typography,
+  Button,
+  Paper
 } from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import PropTypes from "prop-types";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import PinnedPostElement from "./PinnedPostElement";
 
 
@@ -53,6 +56,8 @@ function PinnedPost({ user, token, history, location, id }) {
     const [posts, setPosts] = useState([]);
     const [media, setMedia] = useState([]);
     const [okToRender, setOkToRender] = useState(false);
+
+    const [loading, setLoading] = useState("loading");
 
     function scroll(magnitude){
         const newI = i + magnitude;
@@ -109,7 +114,10 @@ function PinnedPost({ user, token, history, location, id }) {
         const headers = {
             headers: { 'Authorization': `Bearer ${ window.localStorage.getItem("token")}`}
         }
-        const postUrl = '/api/post/get'
+        let postUrl = '/api/post/get'
+      if (!token) {
+        postUrl = '/api/post/getPublic'
+      }
         const postPayload = {
             filters: {_id: postids[0]}
         }
@@ -144,7 +152,18 @@ function PinnedPost({ user, token, history, location, id }) {
 
 
     useEffect(() => {
-        const controllerUrl = "/api/user/getPublic";
+        let controllerUrl = "/api/user/getPublic";
+        if (token) {
+          controllerUrl = "/api/user/get"
+        }
+      console.log(user)
+        if (user && user._id === id) {
+          console.log(user)
+          setIds(user.pinnedPosts);
+          setName( user.userName);
+          getPinnedPostContent(user.pinnedPosts, [], [], 0);
+          return
+        }
         const payload = {
             filters: {_id: id}
         }
@@ -161,7 +180,7 @@ function PinnedPost({ user, token, history, location, id }) {
                 console.log(err);
                 // todo;
             });
-    }, []); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
+    }, [user]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 
 
     const classes = useStyles();
@@ -169,66 +188,65 @@ function PinnedPost({ user, token, history, location, id }) {
 
     if (ids && okToRender){
         return (
-          <Grid container>
-            <Grid item xs={12}>
-              <Grid container justify="center">
-                <Typography variant="h5">
-                  Pinned posts
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Grid container justify="center">
-                <Typography variant="h6">
-                  {name}
-                  &#39;s best work, handpicked by them
-                </Typography>
-              </Grid>
-            </Grid>
+          <Paper style={{display: "flex", backgroundColor: "white", padding: "10px", margin: "3%"}}>
             <Grid container>
               <Grid item xs={12}>
-                <div id="COULD PUT A CARD HERE TBH">
-                  <Grid container>
-                    <Grid item xs={4}>
-                      <div style={{marginRight: "10px"}}>
-                        {(posts.length > 0) && (<PinnedPostElement post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
-                      </div>
+                <Grid container justify="center">
+                  <Typography variant="h5" style={{color: "white", paddingBottom: "10px"}}>
+                    Pinned posts
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12}>
+                  <div id="COULD PUT A CARD HERE TBH">
+                    <Grid container>
+                      <Grid item xs={4}>
+                        <div style={{marginRight: "10px"}}>
+                          {(posts.length > 0) && (<PinnedPostElement post={posts[Math.abs((i+0) % posts.length)]} media={media[Math.abs((i+0) % posts.length)]} isPinned />)}
+                        </div>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <div style={{marginRight: "10px"}}>
+                          {(posts.length > 1) && (<PinnedPostElement post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
+                        </div>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <div style={{marginRight: "10px"}}>
+                          {(posts.length > 2) && (<PinnedPostElement post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
+                        </div>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={4}>
-                      <div style={{marginRight: "10px"}}>
-                        {(posts.length > 1) && (<PinnedPostElement post={posts[Math.abs((i+1) % posts.length)]} media={media[Math.abs((i+1) % posts.length)]} isPinned />)}
-                      </div>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <div style={{marginRight: "10px"}}>
-                        {(posts.length > 2) && (<PinnedPostElement post={posts[Math.abs((i+2) % posts.length)]} media={media[Math.abs((i+2) % posts.length)]} isPinned />)}
-                      </div>
-                    </Grid>
-                  </Grid>
-                </div>
+                  </div>
+                </Grid>
+              </Grid>
+
+              <Grid item xs={11}>
+                <Button variant="contained" size="medium" color="primary" style={{float:"left", marginLeft: "5px"}} onClick={()=> {scroll(-1);}}>
+                  <ChevronLeftIcon />
+                </Button>
+              </Grid>
+              <Grid item xs={1}>
+                <Button variant="contained" size="medium" color="primary" style={{float:"right", marginRight: "5px"}} onClick={()=> {scroll(1);}}>
+                  <ChevronRightIcon />
+                </Button>
               </Grid>
             </Grid>
+          </Paper>
 
-            <Grid item xs={11}>
-              <IconButton variant="contained" size="medium" color="primary" style={{float:"left"}} onClick={()=> {scroll(-1);}}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </Grid>
-            <Grid item xs={1}>
-              <IconButton size="medium" color="primary" style={{float:"right"}} onClick={()=> {scroll(1);}}>
-                <ChevronRightIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
         )
     }
-        return (<div> Sorry, no posts have been pinned yet.</div>);
+        return (
+          <div style={{width: "100%", height: '80px', justifyContent: "center", textAlign: "center", paddingTop: "30px"}}>
+            <CircularProgress />
+          </div>
+);
     
 }
 
 PinnedPost.propTypes = {
     token: PropTypes.string.isRequired,
-    user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
+    user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string, pinnedPosts: PropTypes.arrayOf(PropTypes.string)}).isRequired,
     history: PropTypes.shape({push: PropTypes.func}).isRequired,
     location: PropTypes.shape({search: PropTypes.func}).isRequired,
     id: PropTypes.string.isRequired,

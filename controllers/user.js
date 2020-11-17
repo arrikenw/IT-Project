@@ -355,7 +355,7 @@ const updateUser = (req, res) => {
       res.send("update not successful - something went wrong, try again");
       return;
     }
-    console.log(`updateUser successful: updated user ${id}`);
+    console.log(`changed privacy of ${results.n} posts`);
     res.status(200);
     res.send({ id });
   };
@@ -368,14 +368,13 @@ const updateUser = (req, res) => {
       return;
     }
     if (results.n === 1) {
-      if (!req.body.private) {
+      if (req.body.private) {
         console.log(`updateUser successful: updated user ${id}`);
-        res.status(200);
-        res.send({ id });
-        return;
       }
 
       // update privacy across all user posts
+      console.log(req.body);
+      console.log(req.body.private);
       PostModel.updateMany(
         { userID: id },
         { userIsPrivate: req.body.private },
@@ -387,7 +386,6 @@ const updateUser = (req, res) => {
       res.send(`update not successful - could not find user ${id}`);
     }
   };
-  
 
   const onHashPassword = (err, hash) => {
     if (err) {

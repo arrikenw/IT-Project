@@ -39,12 +39,13 @@ const useStyles = makeStyles({
     bodyContainer: {
         height: '100%',
         width: ' 100%',
-        overflow: 'auto',
+
     },
     mainContainer: {
         height: '100%',
         width: '100%',
         overflowX: 'hidden',
+      overflowY: 'scroll',
     },
 
 
@@ -330,7 +331,6 @@ function ExpandPost({ user, token, history, location }) {
                   </div>
                 </Grid>
               </Grid>
-
             </CardActions>
 
             <Divider variant="middle" style={{marginTop:"30px", marginBottom:"30px"}} />

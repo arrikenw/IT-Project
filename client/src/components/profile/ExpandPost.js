@@ -151,6 +151,7 @@ function ExpandPost({ user, token, history, location }) {
     }
 
 
+    console.log("pst", post)
     return (
       <Grid container className={classes.mainContainer}>
         <Grid item xs={false} />
@@ -169,6 +170,10 @@ function ExpandPost({ user, token, history, location }) {
         <Grid className={classes.bodyContainer} item xs={8}>
           <Card className={classes.postCard}>
             <CardContent>
+              <IconButton variant="contained" size="medium" color="primary" onClick={() => {history.goBack()}}>
+                BACK
+                <ArrowBackIcon />
+              </IconButton>
               <Grid container justify="center" style={{paddingBottom:"20px"}}>
                 <Typography variant="h1" component="h1">
                   {post && post.title}
@@ -198,10 +203,7 @@ function ExpandPost({ user, token, history, location }) {
               </Typography>
             </CardContent>
             <CardActions>
-              <IconButton variant="contained" size="medium" color="primary" onClick={() => {history.goBack()}}>
-                BACK
-                <ArrowBackIcon />
-              </IconButton>
+
 
               {post && (post.userID == user._id) && !(user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
                 <IconButton variant="contained" size="medium" color="primary" onClick={addToPinned}>
@@ -244,7 +246,7 @@ function ExpandPost({ user, token, history, location }) {
           {post && (
 
             <Card className={classes.comments}>
-              <CommentForm user={user} postID={post._id} token={token} />
+              <CommentForm user={user} postID={post._id} token={token} history={history} />
               <CommentList user={user} postID={post._id} comments={post.comments} token={token} />
             </Card>
 )}

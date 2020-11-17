@@ -15,6 +15,8 @@ import Button from '@material-ui/core/Button';
 
 import PropTypes from "prop-types";
 
+import {Redirect, withRouter} from "react-router-dom";
+
 
 const useStyles = makeStyles({
   root: {
@@ -33,7 +35,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CommentForm({user, postID, token}){
+function CommentForm({user, postID, token, history}){
 
 
   const [commentBody, setCommentBody] = useState('');
@@ -50,6 +52,8 @@ export default function CommentForm({user, postID, token}){
       const payload = {postID, comment: comment.commentBody}
       axios.post("/api/comment/add", payload,{headers: {Authorization: `Bearer ${token}`}})
     }
+
+    history.go(0)
 
   }
 
@@ -85,6 +89,8 @@ export default function CommentForm({user, postID, token}){
 
 }
 
+export default withRouter (CommentForm);
+
 
 CommentForm.propTypes = {
   user: PropTypes.shape({
@@ -99,6 +105,7 @@ CommentForm.propTypes = {
 
   postID: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
+  history: PropTypes.string.isRequired,
 
 }
 

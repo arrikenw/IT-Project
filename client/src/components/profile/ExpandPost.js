@@ -17,6 +17,7 @@ import CommentList from "./CommentList";
 import fetchMediaUtil from "../utils/fetchMedia";
 import CommentForm from "./CommentForm";
 import LikeButtons from "./LikeButtons";
+import GenericMedia from "../utils/GenericMedia";
 
 
 
@@ -73,7 +74,7 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     function addToPinned(){
-      if (pinnedRecently){
+      if (pinnedRecently || user.pinnedPosts.includes(post._id)){
         return;
       }
       setPinnedRecently(true);
@@ -85,8 +86,32 @@ function ExpandPost({ user, token, history, location }) {
       Axios.post(targetURL, payload, headers)
         .then((res) => {
           if (res.status === 201 || res.status === 200){
-            console.log("added to pinned posts");
             // TODO maybe add some kind of modal pop-up?
+            window.location.reload(false);
+          }
+        })
+        .catch((err) =>{
+          console.error(err);
+          // TODO maybe add some kind of modal pop-up?
+        })
+    }
+
+    function removeFromPinned(){
+      if (unpinnedRecently){
+        return;
+      }
+      setPinnedRecently(false);
+      setUnpinnedRecently(true);
+      const payload = {postID: post._id};
+      const targetURL = "/api/user/removeFromPinnedPosts";
+      const headers = {
+        headers: { 'Authorization': `Bearer ${ token}`}
+      }
+      Axios.post(targetURL, payload, headers)
+        .then((res) => {
+          if (res.status === 201 || res.status === 200){
+            // TODO maybe add some kind of modal pop-up?
+            window.location.reload(false);
           }
         })
         .catch((err) =>{
@@ -105,25 +130,22 @@ function ExpandPost({ user, token, history, location }) {
                 contentCategory: res.data.contentCategory,
                 componentType: mapCatToComp(res.data.contentCategory)
             };
-            setMedia(fetchedMedia);
+            setMedia(fetchedMedia)
         }else{
             // TODO
-            console.log("error getting media");
         }
     }
 
     const query = new URLSearchParams(location.search);
     const newPostID = query.get('post');
     if (newPostID !== postID) {
-      setPostID(newPostID);
-      console.log("dog");
+      setPostID(newPostID)
     }
 
 
 
     useEffect(() => {
         // get id from query string
-      console.log("dog222");
         // fetch post outlined by query string
         const postUrl = '/api/post/get'
         const postPayload = {
@@ -135,9 +157,10 @@ function ExpandPost({ user, token, history, location }) {
         Axios.post(postUrl, postPayload, headers).then((res) => {
             if (res.status === 200){
                 setPost(res.data[0]);
+              console.log("tags")
+                console.log(res.data.tags)
                 fetchMediaUtil(res.data[0].mediaID, token, getMediaCallback, null);
             }else{
-              console.log("dog5");
                 // TODO
             }
         }).catch((err) => {
@@ -182,10 +205,11 @@ function ExpandPost({ user, token, history, location }) {
                   {post && post.title}
                 </Typography>
               </Grid>
-              <Typography variant="heading6" component="h6" style={{paddingBottom:"25px"}}>
+              <Typography variant="h6" component="h6" style={{paddingBottom:"25px"}}>
                 {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')}`}
               </Typography>
-              {(media && media.mimeType !== 'application/pdf') && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
+              {(media && media.mimeType !== 'application/pdf') &&
+                <GenericMedia thumbnail={false} src={media.contentStr} mimeType={media.mimeType} />}
               {!media && (
               <Grid container justify="center">
                 <CircularProgress />
@@ -204,12 +228,11 @@ function ExpandPost({ user, token, history, location }) {
             </CardContent>
             <CardActions>
 
-              {post &&  <LikeButtons post={post} user={user} token={token} /> }
-
-              {post && (post.userID == user._id) && (user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
-                <Button variant="contained" size="medium" color="primary">
-                  Post is currently pinned
-                </Button>
+              {post && (post.userID === user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently) && (
+                <IconButton variant="contained" size="medium" color="primary" onClick={addToPinned}>
+                  ADD TO YOUR PINNED POSTS
+                  <AddIcon />
+                </IconButton>
               )}
 
               {post && (post.userID == user._id) && !(user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (

@@ -119,7 +119,13 @@ function PinnedPost({ user, token, history, location, id }) {
             if (res.status === 200) {
                 // todo store media here also
                 exportPosts.push(res.data[0]);
-                getMediaAndNextPost(res.data[0].thumbnailURL, postids, exportPosts, exportMedia, errcount);
+                if (res.data[0].thumbnailURL) {
+                  getMediaAndNextPost(res.data[0].thumbnailURL, postids, exportPosts, exportMedia, errcount);
+                }
+                else {
+                  getMediaAndNextPost(res.data[0].mediaID, postids, exportPosts, exportMedia, errcount);
+                }
+
             }else{
                 // TODO Look into this
                 // idk if we should add an error post or just ignore. continuing recursion for now

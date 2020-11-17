@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from "react";
 import CardMedia from "@material-ui/core/CardMedia";
 import PropTypes from 'prop-types'
+import { makeStyles } from "@material-ui/core/styles";
 import tempImg from "../../assets/logo512.png"
 
-function GenericMedia({ style, mimeType, src, className, title }) {
+import docTN from "../../assets/docs.png"
+import audioTN from "../../assets/audio.jpg"
+
+const useStyles = makeStyles({
+  media: {
+    /* height: 0,
+    paddingTop: '56.25%', // 16:9,
+    marginTop:'30' */
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  }
+})
+
+function GenericMedia({ style, mimeType, src, className, title, thumbnail }) {
   const [realSrc, setRealSrc] = useState(tempImg)
   const [realType, setRealType] = useState('img')
   const [realStyle, setRealStyle] = useState({})
+
 
   useEffect(() => {
     if (!mimeType || mimeType === "") {
@@ -28,11 +46,20 @@ function GenericMedia({ style, mimeType, src, className, title }) {
         setRealStyle(style)
         break
       case "audio":
+        if (thumbnail) {
+          setRealSrc(audioTN)
+        }
         setRealSrc(src)
         setRealType('audio')
         setRealStyle(style)
         break
       case "application":
+        if (thumbnail) {
+          setRealSrc(docTN)
+          setRealType('img')
+          setRealStyle(style)
+          break
+        }
         switch (secondPart) {
           case "pdf":
             setRealStyle((oldStyle) => {
@@ -44,56 +71,71 @@ function GenericMedia({ style, mimeType, src, className, title }) {
             setRealType('iframe')
             break
           case "vnd.openxmlformats-officedocument.wordprocessingml.document":
-            setRealSrc(tempImg)
+            setRealSrc(docTN)
             setRealType('img')
             setRealStyle(style)
             break
           case "msword":
-            setRealSrc(tempImg)
+            setRealSrc(docTN)
             setRealType('img')
             setRealStyle(style)
             break
           case "application/vnd.ms-powerpoint":
-            setRealSrc(tempImg)
+            setRealSrc(docTN)
             setRealType('img')
             setRealStyle(style)
             break
           case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-            setRealSrc(tempImg)
+            setRealSrc(docTN)
             setRealType('img')
             setRealStyle(style)
             break
           case "application/vnd.ms-excel":
-            setRealSrc(tempImg)
+            setRealSrc(docTN)
             setRealType('img')
             setRealStyle(style)
             break
           case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-            setRealSrc(tempImg)
+            setRealSrc(docTN)
             setRealType('img')
             setRealStyle(style)
             break
           default:
-            setRealSrc(tempImg)
+            setRealSrc(docTN)
             setRealType('img')
             setRealStyle(style)
             break
         }
         break
       default:
-        setRealSrc(tempImg)
+        setRealSrc(docTN)
         setRealType('img')
         setRealStyle(style)
         break
     }
   }, [mimeType, src, style])
+
+  const classes = useStyles()
   if (!src || src === "") {
     return <> </>
   }
-  return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <CardMedia component={realType} title={title} src={realSrc} className={className} style={realStyle} />
-  );
+  console.log(mimeType)
+  console.log(realType)
+
+  if (realType !== "audio") {
+    return (
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      <CardMedia type={mimeType} component={realType} title={title} src={realSrc} controls className={className} style={realStyle} />
+    );
+  }
+  
+    return (
+      <div style={{width: "100%", justifyContent: "center", textAlign: "center"}}>
+        <audio controls>
+          <source type={mimeType} src={realSrc} />
+        </audio>
+      </div>
+    )
 }
 
 GenericMedia.propTypes = {
@@ -102,6 +144,7 @@ GenericMedia.propTypes = {
   style: PropTypes.shape({}),
   src: PropTypes.string,
   title: PropTypes.string,
+  thumbnail: PropTypes.bool.isRequired
 }
 
 GenericMedia.defaultProps = {

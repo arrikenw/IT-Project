@@ -37,6 +37,7 @@ import logo from '../../assets/personal-profile.svg'
 function Header({ token, user, logout, history, searchResults, setSearchResults, searchBy, setSearchBy }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [profilePic, setProfilePic] = useState("");
+  const [mimeType, setMimeType] = useState("")
   //= const [searchBy, setSearchBy] = useState('posts');
   const [searchInput, setSearchInput] = useState('');
 
@@ -213,12 +214,13 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
      axios.post('/api/media', payload,  authHeader)
       .then(response => {
         setProfilePic(response.data.b64media);
+        setMimeType(response.data.mimeType)
       })
   }, [user, token])
 
 
   const renderAvatar = () => {
-    return <Avatar src={`data:image/jpeg;base64,${profilePic}`} />
+    return <Avatar src={`data:${mimeType};base64,${profilePic}`} />
     /* return <Avatar src={`data:image/jpeg;base64,${profilePic}`} /> */
   }
 

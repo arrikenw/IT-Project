@@ -217,11 +217,16 @@ function AddPostForm({ user, token, history }){
         if (resOne !== "") {
           payload.thumbnailURL = resOne._id
         }
-        Axios.post("/api/post/add", payload, {headers: {Authorization: `Bearer ${token}`}})
-          .then( (resp) => {
-            console.log(resp.data);
-            redirect();
-          }).catch((err) => {
+        console.log(currentTags)
+        Axios({
+          url: "/api/post/add",
+          method: "post",
+          data: payload,
+          headers: {Authorization: `Bearer ${token}`}
+        }).then( (resp) => {
+          console.log(resp.data);
+          redirect();
+        }).catch((err) => {
           console.error(err)
         });
       }
@@ -245,6 +250,7 @@ function AddPostForm({ user, token, history }){
           src={fileTN}
           className={classes.media}
           mimeType={mimeTypeTN}
+          thumbnail={false}
         />
       )
     }
@@ -254,6 +260,7 @@ function AddPostForm({ user, token, history }){
         src={file}
         className={classes.media}
         mimeType={mimeType}
+        thumbnail={false}
       />
     )
   }
@@ -342,7 +349,7 @@ function AddPostForm({ user, token, history }){
                 </Button>
               </label>
               <div>
-                <Typography variant="p">
+                <Typography>
                   {mediaName}
                 </Typography>
               </div>
@@ -355,7 +362,7 @@ function AddPostForm({ user, token, history }){
                 </Button>
               </label>
               <div>
-                <Typography variant="p">
+                <Typography>
                   {mediaNameTN}
                 </Typography>
               </div>

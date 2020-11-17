@@ -113,7 +113,7 @@ class ProfilePost extends Component {
 
 
   render(){
-    const { classes, history, post, user, token, showDescription} = this.props
+    const { classes, history, post, user, token} = this.props
     const { contentStr } = this.state
     const heightChange = {maxHeight:"800"};
     const textLimit = {/* maxHeight: "90px" */}
@@ -127,11 +127,9 @@ class ProfilePost extends Component {
               <ResponsiveEllipsis text={post.title} maxLine={2} ellipsis="..." trimRight basedOn="letters" />
             </Typography>
 
-            {showDescription && (
-              <Typography gutterBottom variant="body2" color="textSecondary" component="p" style={{paddingBottom:"10px"}}>
-                <ResponsiveEllipsis text={post.description} maxLine={3} ellipsis="..." trimRight basedOn="letters" />
-              </Typography>
-            )}
+            <Typography gutterBottom variant="body2" color="textSecondary" component="p" style={{paddingBottom:"10px"}}>
+              <ResponsiveEllipsis text={post.description} maxLine={3} ellipsis="..." trimRight basedOn="letters" />
+            </Typography>
 
             <CardMedia className={classes.media} style={aspectChange} image={contentStr} />
 
@@ -157,7 +155,6 @@ class ProfilePost extends Component {
 }
 
 ProfilePost.propTypes = {
-  showDescription: PropTypes.bool.isRequired,
   post: PropTypes.shape({
     title: PropTypes.string,
     _id: PropTypes.string,

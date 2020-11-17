@@ -111,6 +111,9 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
            
           history.push('/searchResults');
         })
+        .catch((err)=>{
+          console.log(err);
+        })
         
       }
   }
@@ -216,6 +219,9 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
         setProfilePic(response.data.b64media);
         setMimeType(response.data.mimeType)
       })
+       .catch((err)=>{
+         console.log(err);
+       })
   }, [user, token])
 
 

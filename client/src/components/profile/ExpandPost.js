@@ -4,6 +4,7 @@ import { green} from '@material-ui/core/colors';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom';
@@ -58,7 +59,10 @@ function ExpandPost({ user, token, history, location }) {
     const [post, setPost] = useState(null);
     const [media, setMedia] = useState(null);
     const [postID, setPostID] = useState("");
+    const [updatedUser, setUpdatedUser] = useState(null);
+    const [postUserName, setPostUserName] = useState("");
     const [pinnedRecently, setPinnedRecently] = useState(false);
+    const [unpinnedRecently, setUnpinnedRecently] = useState(false);
 
     function mapCatToComp(type){
         if (type === "image"){
@@ -78,6 +82,7 @@ function ExpandPost({ user, token, history, location }) {
         return;
       }
       setPinnedRecently(true);
+      setUnpinnedRecently(false);
       const payload = {postID: post._id};
       const targetURL = "/api/user/addToPinnedPosts";
       const headers = {
@@ -136,18 +141,36 @@ function ExpandPost({ user, token, history, location }) {
         }
     }
 
+    const getUserName = (postUserId)=>{
+
+      const UserNamePayload = {filters: {"_id": postUserId}}
+      Axios.post('/api/user/getPublic/', UserNamePayload)
+        .then((resp) => {
+          setPostUserName(resp.data[0].userName);
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+  }
+
+
     const query = new URLSearchParams(location.search);
     const newPostID = query.get('post');
     if (newPostID !== postID) {
-      setPostID(newPostID)
+      setPostID(newPostID);
     }
-
-
 
     useEffect(() => {
         // get id from query string
         // fetch post outlined by query string
-        const postUrl = '/api/post/get'
+        let postUrl;
+        if (token){
+          postUrl = '/api/post/get'
+        }
+        else{
+          postUrl = '/api/post/getPublic'
+        }
+
         const postPayload = {
             filters: {_id: postID}
         }
@@ -165,8 +188,19 @@ function ExpandPost({ user, token, history, location }) {
             }
         }).catch((err) => {
             // TODO
-            console.log(err);
+            console.error(err);
+
         });
+
+        // get the userName of the post's owner
+        if (post){
+          getUserName(post.userID);
+          console.log("username:", postUserName)
+        }
+
+
+
+
     }, [token, postID]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 
     const classes = useStyles()
@@ -226,20 +260,24 @@ function ExpandPost({ user, token, history, location }) {
                 {splitStrings && splitStrings.length > 1 && splitStrings[1]}
               </Typography>
             </CardContent>
-            <CardActions>
+            <CardActions style={{paddingLeft:"30px"}}>
 
-              {post && (post.userID === user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently) && (
-                <IconButton variant="contained" size="medium" color="primary" onClick={addToPinned}>
-                  ADD TO YOUR PINNED POSTS
-                  <AddIcon />
-                </IconButton>
-              )}
-
-              {post && (post.userID == user._id) && !(user.pinnedPosts && user.pinnedPosts.includes(post._id)) && (
+              {post &&  <LikeButtons post={post} user={user} token={token} /> }
+              
+              {post && (post.userID == user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently) && (
                 <Button variant="contained" size="medium" color="primary" onClick={addToPinned}>
                   Pin post
                   <AddIcon />
                 </Button>
+              )}
+
+
+              {post && (post.userID == user._id) && ((user.pinnedPosts && user.pinnedPosts.includes(post._id)) || pinnedRecently) && (
+                <Button variant="contained" size="medium" color="primary" onClick={removeFromPinned}>
+                  Unpin post
+                  <RemoveIcon />
+                </Button>
+
               )}
 
               {post && (post.userID == user._id) && (
@@ -255,7 +293,6 @@ function ExpandPost({ user, token, history, location }) {
                   <Typography>
                     Edit
                   </Typography>
-
                   <EditIcon  />
                 </Button>
               )}

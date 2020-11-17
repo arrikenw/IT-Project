@@ -387,6 +387,7 @@ const updateUser = (req, res) => {
       res.send(`update not successful - could not find user ${id}`);
     }
   };
+  
 
   const onHashPassword = (err, hash) => {
     if (err) {

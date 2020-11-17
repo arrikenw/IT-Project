@@ -148,11 +148,9 @@ class ProfilePost extends Component {
               <ResponsiveEllipsis text={post.title} maxLine={2} ellipsis="..." trimRight basedOn="letters" />
             </Typography>
 
-            {showDescription && (
-              <Typography gutterBottom variant="body2" color="textSecondary" component="p" style={{paddingBottom:"10px"}}>
-                <ResponsiveEllipsis text={post.description} maxLine={3} ellipsis="..." trimRight basedOn="letters" />
-              </Typography>
-            )}
+            <Typography gutterBottom variant="body2" color="textSecondary" component="p" style={{paddingBottom:"10px"}}>
+              <ResponsiveEllipsis text={post.description} maxLine={3} ellipsis="..." trimRight basedOn="letters" />
+            </Typography>
 
 
             {renderMedia()}
@@ -179,7 +177,6 @@ class ProfilePost extends Component {
 }
 
 ProfilePost.propTypes = {
-  showDescription: PropTypes.bool.isRequired,
   post: PropTypes.shape({
     title: PropTypes.string,
     _id: PropTypes.string,

@@ -233,6 +233,12 @@ const addPost = (req, res) => {
           payload.thumbnailURL = req.body.thumbnailURL;
         }
 
+        if (!req.body.tags) {
+          payload.tags = [];
+        } else {
+          payload.tags = req.body.tags;
+        }
+
         payload.contentCategory = doc.contentCategory;
 
         if (req.body.private) {

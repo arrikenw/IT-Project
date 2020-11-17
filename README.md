@@ -28,10 +28,10 @@ This project was created by the Podoju was consists of a backend server using no
 
 ## Set Up
 #### Installing Packages
-Make sure to run "npm install" in both the root directory and in the /client directory of this repository to install
+Make sure to run `npm install` in both the root directory and in the `/client` directory of this repository to install
 the needed packages
 #### Backend .env Files
-you will also need to create your ".env.development" and ".env.test" in the root directory of this repository.
+you will also need to create your `.env.development` and `.env.test` in the root directory of this repository.
 These ".env" files should include the listed variables with the correct values for each.
 ```dotenv
 PORT = <portForBackEndServer>

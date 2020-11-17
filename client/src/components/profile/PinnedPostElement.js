@@ -12,7 +12,6 @@ import {
     CardActions, IconButton,
 } from '@material-ui/core'
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ShareIcon from "@material-ui/icons/Share";
 import PropTypes from "prop-types";
 import InfinitePostScroll from "./InfinitePostScroll";
 

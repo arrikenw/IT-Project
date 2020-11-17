@@ -1,9 +1,8 @@
 import Axios from "axios";
 import React, {useEffect, useState} from "react";
-import {Avatar, Card, Grid, IconButton, Typography} from "@material-ui/core";
+import {Button, Avatar, Card, Grid, IconButton, Typography} from "@material-ui/core";
 import * as timeago from "timeago.js";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ShareIcon from "@material-ui/icons/Share";
 import PropTypes, {arrayOf} from "prop-types";
 
 
@@ -70,20 +69,20 @@ function LikeButtons({user, post, token}) {
   }, []);
 
 
-  let likeMessage = "Like";
+  let likeMessage = "";
   if (isLiked){
-    likeMessage = "You've liked this post. Click again to remove your like."
+    likeMessage = "+1"
   }
   
   return (
     <div style={{float:"left", height:"15%"}}>
-      <IconButton size="medium" color="primary" onClick={onToggleLike}>
+      <Button variant="contained" size="medium" color="primary" onClick={onToggleLike}>
         <ThumbUpIcon />
-        {likeMessage}
-      </IconButton>
-      {post.likedBy.length + localLikeChange}
-      {' '}
-      Likes
+        <Typography style={{paddingLeft:"10px", fontWeight:"bold"}}>
+          {post.likedBy.length + localLikeChange}
+        </Typography>
+      </Button>
+
     </div>
   );
 }

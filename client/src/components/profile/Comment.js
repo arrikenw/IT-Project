@@ -1,19 +1,17 @@
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
 import {
-    Avatar,
-    Card, CardActions, CardContent,
-    Grid,
-    IconButton,
-    Typography
+  Avatar, Button,
+  Card, CardActions, CardContent,
+  Grid,
+  Typography
 } from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ShareIcon from "@material-ui/icons/Share";
 import * as timeago from 'timeago.js';
 import PropTypes from "prop-types";
-
+import LikeButtons from "./LikeButtons";
 
 
 const useStyles = makeStyles({
@@ -199,20 +197,14 @@ function Comment({user, comment, postID, token}) {
           </div>
 
           <div style={{float:"left", height:"15%"}}>
-            <IconButton size="medium" color="primary" onClick={onToggleLike}>
+            <Button svariant="contained" size="small" color="primary" onClick={onToggleLike}>
               <ThumbUpIcon />
-              {likeMessage}
-            </IconButton>
-            {comment.likedBy.length + localLikeChange}
-            {' '}
-            Likes
+              <Typography style={{paddingLeft:"8px", fontWeight:"bold"}}>
+                {comment.likedBy.length + localLikeChange}
+              </Typography>
+            </Button>
           </div>
-          <div style={{float:"right"}}>
-            <IconButton size="medium" color="primary">
-              <ShareIcon />
-              Share
-            </IconButton>
-          </div>
+
         </Card>
       </div>
 

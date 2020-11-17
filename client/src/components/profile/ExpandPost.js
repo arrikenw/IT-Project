@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react'
-import {IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography,CircularProgress} from '@material-ui/core'
+import {Button, IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography,CircularProgress} from '@material-ui/core'
+import { green} from '@material-ui/core/colors';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ShareIcon from '@material-ui/icons/Share';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom';
+import Divider from '@material-ui/core/Divider';
 import Axios from "axios";
 import PropTypes from "prop-types";
 import * as timeago from 'timeago.js';
@@ -16,6 +17,8 @@ import CommentList from "./CommentList";
 import fetchMediaUtil from "../utils/fetchMedia";
 import CommentForm from "./CommentForm";
 import LikeButtons from "./LikeButtons";
+
+
 
 
 const useStyles = makeStyles({
@@ -202,13 +205,17 @@ function ExpandPost({ user, token, history, location }) {
 
         <Grid className={classes.bodyContainer} item xs={8}>
           <Card className={classes.postCard}>
-            <CardContent>
+            <IconButton variant="contained" size="medium" color="primary" onClick={() => {history.goBack()}}>
+              <ArrowBackIcon style={{fontSize: 50, color: "#f57c00"}} />
+            </IconButton>
+            <CardContent style={{marginTop:"-20px", paddingLeft:"40px", paddingRight:"40px"}}>
+
               <Grid container justify="center" style={{paddingBottom:"20px"}}>
-                <Typography variant="h1" component="h1">
+                <Typography variant="h1" style={{ fontFamily:"Verdana", fontWeight:"bold", fontSize: "35px"}} component="h1">
                   {post && post.title}
                 </Typography>
               </Grid>
-              <Typography variant="heading6" component="h6">
+              <Typography variant="heading6" component="h6" style={{paddingBottom:"25px"}}>
                 {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')}`}
               </Typography>
               {(media && media.mimeType !== 'application/pdf') && <CardMedia square className={classes.media} component={media.componentType} src={media.contentStr} controls />}
@@ -221,21 +228,14 @@ function ExpandPost({ user, token, history, location }) {
               </Grid>
 )}
               {media && media.mimeType === 'application/pdf' && <Grid container justify="center"><object data={media.contentStr} type="application/pdf" width="100%" height="500px" /></Grid>}
-              <Typography variant="body2" color="textPrimary" component="p">
-                <strong style={{fontSize:"115%"}}> 
-                  {' '}
-                  {splitStrings && splitStrings.length > 0 && splitStrings[0]}
-                  {' '}
-                </strong> 
+
+              <Typography variant="body2" color="textPrimary" component="p" style={{paddingTop:"40px", fontSize: 20}}>
+                {splitStrings && splitStrings.length > 0 && splitStrings[0]}
                 {' '}
                 {splitStrings && splitStrings.length > 1 && splitStrings[1]}
               </Typography>
             </CardContent>
             <CardActions>
-              <IconButton variant="contained" size="medium" color="primary" onClick={() => {history.goBack()}}>
-                BACK
-                <ArrowBackIcon />
-              </IconButton>
 
               {post && (post.userID == user._id) && (!(user.pinnedPosts && user.pinnedPosts.includes(post._id)) || !user.pinnedPosts || unpinnedRecently) && (
                 <IconButton variant="contained" size="medium" color="primary" onClick={addToPinned}>
@@ -251,34 +251,36 @@ function ExpandPost({ user, token, history, location }) {
               )}
 
               {post && (post.userID == user._id) && (
-                <IconButton
+                <Button
                   variant="contained"
-                  size="medium"
                   color="primary"
+                  style={{color:"white"}}
+                  size="medium"
                   onClick={() => {
                   history.push(`./edit?post=${postID}`)
                 }}
                 >
-                  EDIT POST
-                  <EditIcon />
-                </IconButton>
+                  <Typography>
+                    Edit
+                  </Typography>
+                  <EditIcon  />
+                </Button>
               )}
 
-              {post &&  <LikeButtons post={post} user={user} token={token} /> }
-              <IconButton variant="contained" size="medium" color="primary">
-                <ShareIcon />
-                Share
-              </IconButton>
-              Click to copy a link to this post to your clipboard
-            </CardActions>
-          </Card>
-          {post && (
 
-            <Card className={classes.comments}>
-              <CommentForm user={user} postID={post._id} token={token} />
-              <CommentList user={user} postID={post._id} comments={post.comments} token={token} />
-            </Card>
-)}
+
+            </CardActions>
+
+            <Divider variant="middle" style={{marginTop:"30px", marginBottom:"30px"}} />
+
+            {post && (
+              <>
+                <CommentForm user={user} postID={post._id} token={token} history={history} />
+                <CommentList user={user} postID={post._id} comments={post.comments} token={token} />
+              </>
+              )}
+          </Card>
+
         </Grid>
         <Grid item xs={3} />
       </Grid>

@@ -17,8 +17,6 @@ import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import SearchPost from '../profile/SearchPost'
-import InfinitePostScroll from '../profile/InfinitePostScroll'
-import FetchMediaUtil from "../utils/fetchMedia";
 
 
 
@@ -36,22 +34,13 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
         }))
     const classes = useStyles()
 
-    
-
-    // const [profilePics, setProfilePics] = useState([]);
     const [users, setUsers] = useState([]);
-    const [load, setLoad] = useState(false);
-    const [error, setError] = useState('');
-    const [sortDirection, setSortDirection] = useState('');
-    const [sortField, setSortField] = useState('');
-    const [filterTag, setFilterTag] = useState('');
 
     useEffect(() =>{
 
       // TODO make this not n^2
         if (searchBy==="users") {
-          {searchResults.map((result, idx) => {
-
+          searchResults.map((result) => {
             getProfilePic(result.profilePic)
               .then((pic) => {
                 setUsers((prevUsers) => [...prevUsers, {userName:result.userName,
@@ -61,7 +50,8 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
               .catch((err) => {
                 console.error(err)
               })
-          })}
+            return true
+          })
         }
 
     // TODO: Create a state in App.js to track whether searching by posts or users
@@ -76,16 +66,12 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
     // TODO: change to getMedia helper function
     const getProfilePic = (picID) =>{
 
-      console.log("fetching profile pic for usersearch")
-
         const authHeader = {
           headers: { Authorization: `Bearer ${token}` }
         }
         const payload = {
           mediaID: picID
         }
-
-
           // if user is logged in, use /media
           if(token) {
             Axios.post('/api/media', payload, authHeader)
@@ -104,8 +90,6 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
             .catch(err => {
               console.error(err);
             })
-
-
       }
 
 
@@ -117,7 +101,7 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
     }
 
     const renderUserDetails = (idx) => {
-        if (users[idx]){
+        if (users[idx]) {
             return (
               <ListItemText
                 id={idx}
@@ -138,9 +122,7 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
     }
 
     const goToProfile = (idx) => {
-        
         const profileUrl = `/profile?user=${users[idx].userName}`
-
         history.push(profileUrl);
     }
     
@@ -151,18 +133,14 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
               <div>
                 <Grid container>
                   <Grid item xs={2} />
-     
                   <Grid item xs={8}>
-                     
                     <Grid container spacing={4} className={classes.resultsContainer}>
 
                       {searchResults.map((result, idx) => (
                         <Grid item lg={4} md={6} sm={8} xs={12} key={result._id}>
                           <SearchPost post={result} token={token} user={user} showDescription={false}  />
                         </Grid>
-
                       ))}
-
 
                     </Grid>
                   </Grid>
@@ -210,13 +188,11 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
                                           </Box>
                                         </div>
                                       </Grid>
-
                                         // <Grid item xs={6} key={idx}>
                                         //     <a href = {profileUrl} >{result.userName}</a>
                                         // </Grid>
                                     )
                                     })}
-
                       </List>
 
                     </Grid>

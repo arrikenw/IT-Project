@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import Axios from "axios"
 import {withRouter} from "react-router-dom";
 import PropTypes from 'prop-types'
@@ -6,16 +6,11 @@ import {
   Button,
   Card,
   CardContent,
-  Container,
   Divider,
-  Grid,
   TextField,
-  Typography,
-  TableRow,
-  Checkbox, FormControlLabel, Select, FormHelperText, Chip, InputLabel, FormControl, Snackbar
+  Checkbox, FormControlLabel, Chip, Snackbar, Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import CardMedia from "@material-ui/core/CardMedia";
 import MuiAlert from "@material-ui/lab/Alert";
 import add from "../utils/addMedia"
 import GenericMedia from "../utils/GenericMedia";
@@ -51,7 +46,6 @@ const useStyles = makeStyles({
   },
   media: {
     height:" 100%",
-    // paddingTop: '56.25%', // 16:9
   }
 
 })
@@ -91,9 +85,6 @@ function AddPostForm({ user, token, history }){
   }
   const changeDescription = (e) => {
       setDescription(e.target.value)
-  }
-  const changeTag = (e) => {
-      setTag(e.target.value)
   }
 
   const changePostPrivacy = (e) => {

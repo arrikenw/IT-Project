@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import PropTypes, { objectOf } from "prop-types";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Avatar, Button, TextField, Typography, Chip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
 
 function ProfilePictureForm({ userName, setParentRawMedia, file, setFile,
                               professionalFields, setProfessionalFields }) {
-  // const [professionalFields, setProfessionalFields] = useState([]);
   const [currentField, setCurrentField] = useState('');
 
   const updateField = (e) => {
@@ -66,7 +65,6 @@ function ProfilePictureForm({ userName, setParentRawMedia, file, setFile,
       setParentRawMedia('');
       return setFile(null);
     }
-    console.log(e.target.files[0])
     setParentRawMedia(e.target.files[0]);
     return fileReader.readAsDataURL(e.target.files[0]);
   }

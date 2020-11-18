@@ -7,13 +7,9 @@ import {
     CardMedia,
     CardActionArea,
     CardContent,
-    Button,
     Typography,
-    CardActions, IconButton,
 } from '@material-ui/core'
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import PropTypes from "prop-types";
-import InfinitePostScroll from "./InfinitePostScroll";
 import audioTN from "../../assets/audio.jpg"
 import videoTN from "../../assets/video.jpg"
 import docTN from "../../assets/docs.png"
@@ -38,7 +34,7 @@ class PinnedPostElement extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // mimeType: "",
+            mimeType: "",
             contentStr: "",
             // contentCategory: "",
         };
@@ -152,7 +148,7 @@ PinnedPostElement.propTypes = {
         thumbnailURL: PropTypes.string,
         mediaID: PropTypes.string,
     }).isRequired,
-    classes: PropTypes.objectOf(PropTypes.object).isRequired,
+    classes: PropTypes.string.isRequired,
     history: PropTypes.shape({push: PropTypes.func}).isRequired,
     media: PropTypes.shape({contentStr: PropTypes.string, mimeType: PropTypes.string}).isRequired,
 

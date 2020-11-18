@@ -1,16 +1,13 @@
 import Axios from "axios";
 import React, {useEffect, useState} from "react";
-import {Button, Avatar, Card, Grid, IconButton, Typography} from "@material-ui/core";
-import * as timeago from "timeago.js";
+import {Button, Typography} from "@material-ui/core";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import PropTypes, {arrayOf} from "prop-types";
+import PropTypes from "prop-types";
 
 
 function LikeButtons({user, post, token}) {
   const [isLiked, setIsLiked] = useState(false);
   const [localLikeChange, setLocalLikeChange] = useState(0);
-  const [returnedMedia, setReturnedMedia] = useState(null);
-  const [userName, setUserName] = useState("");
 
   function likePost(){
     setIsLiked(true);
@@ -19,14 +16,12 @@ function LikeButtons({user, post, token}) {
       postID: post._id
     };
 
-    console.log(payload);
     const authHeader = {
       headers: {Authorization: `Bearer ${token}` }
     }
 
     Axios.post('/api/post/like', payload,  authHeader)
       .then(response => {
-        console.log(response);
       })
       .catch((err) => {console.error(err);});
   }
@@ -37,14 +32,12 @@ function LikeButtons({user, post, token}) {
     const payload = {
       postID: post._id
     };
-    console.log(payload);
     const authHeader = {
       headers: {Authorization: `Bearer ${token}` }
     }
 
     Axios.post('/api/post/unlike', payload,  authHeader)
       .then(response => {
-        console.log(response);
       })
       .catch((err) => {console.error(err);});
   }
@@ -68,12 +61,6 @@ function LikeButtons({user, post, token}) {
     setLocalLikeChange(0);
   }, []);
 
-
-  let likeMessage = "";
-  if (isLiked){
-    likeMessage = "+1"
-  }
-  
   return (
     <div style={{float:"left", height:"15%"}}>
       <Button variant="contained" size="medium" color="primary" onClick={onToggleLike}>

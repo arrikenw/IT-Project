@@ -6,45 +6,51 @@
     - Demo 
 - #### Set up
   - Installing Packages 
-  - Backend env. Files
+  - Backend .env Files
 - #### System Reqirements
 - #### Running
 - #### Style Guide
   - Code Style
-  - Constol Log 
+  - Console Logging
   - API Responses
-  - Git Hub
+  - GitHub
   - Documentation
 - #### API Documentation
  - Users
- - Midia
+ - Media
  - Post
- - comments
-- #### Tests Case
+ - Comments
+- #### Test Cases
   
 
 
 ## Introduction
-This project was created by the Podoju was consists of a backend server using node.js, Express and Mongoose;
- a frontend written using html, css, node.js, react.js, and Material UI; a database using mongoDB, and a file server using AWS S3 Bucket. 
- “E-FOLIO” is a web based digital portfolio system. E-FOLIO, allows users to ‘post’ work that they wish to showcase to their
- profile, share their profile with others.
-### Motivation for E-FOLIO 
-[Vision Documentation](/docs)
+E-folio is a web-based digital portfolio system. It allows users to post work that they hope to share with the world. Users can explore and search the posts of others and leave feedback and likes.
 
-This folder, `/docs `, includes: 
+The system is composed of:
+- A backend server that uses node.js with express middleware
+- A react.js frontend that makes use of MaterialUI for styling
+- A mongoDB database
+- An Amazon S3 Bucket file server 
+
+### Motivation for E-FOLIO 
+Documentation on the core vision of our system can be found in our [/docs directory](/docs).
+
+The  `/docs ` directory includes the following items: 
 - User Stories 
 - Personas
 - Motivational Model 
 - Class Diagram
 - Architecture Diagram 
-### Demo
-Bellow is a link to a demo the hosted project: 
-[https://efolio.herokuapp.com/](https://efolio.herokuapp.com/)
 
-Use the Demo login: 
-- Email:
-- Password:
+### Demo
+A hosted demo of the project can be found [here](https://efolio.herokuapp.com/).
+
+We have provided a demo account so that you can see a fully fleshed out account. However, feel free to create new user accounts and posts. 
+
+Demo credentials
+- Email: _______
+- Password: _______
 
 ## Database
 #### Database description
@@ -108,6 +114,21 @@ The document also stores the following references
 We have provided a "crows-foot" diagram of the relations between documents used in our database. Note that the S3 bucket included in the diagram is <b>NOT</b> part of our database.
 <img src="/images/db.png"/> 
 
+#### CI/CD Pipeline
+We have built a simple CI/CD pipeline to improve code quality and assist in the deployment of updates. 
+Tests triggered on merge requests to master must pass before code can be merged, and once merged, the updated master branch will be automatically deployed.
+We provide a brief sketch of the role of the CI/CD pipeline in the development cycle below.
+##### Development lifecycle 
+1. Create feature branch
+2. Write new code, test locally
+3. Make pull request
+4. \[CI\] Integration tests are automatically run using Github actions
+    - If tests fail, the merge cannot be completed. Return to step 2
+    - If tests pass, proceed to step 5
+5. Review and approve merge, pull onto master
+6. \[CD\] Merge onto master triggers an automatic deployment to Heroku using Github actions
+7. Heroku will install relevant packages and start the server. The site is now deployed  and reflects the latest changes from master
+
 ## Set Up
 #### Installing Packages
 Make sure to run `npm install` in both the root directory and in the `/client` directory of this repository to install
@@ -154,6 +175,16 @@ To run the frontend server for testing, run the command `npm run start` int the 
 To run the linter for the backend code,  run the command `npm run lint` in the root directory of the repository
 
 To run the tests for the backend code,  run the command `npm run test` in the root directory of the repository
+
+## Costs and licencing considerations
+- Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries comercially, a licencing fee must be paid.
+A licence can be obtained at https://www.pdftron.com/licensing/.
+
+- Our system is currently using the free-tier of AWS. Once in production, the system will need to be linked to a new amazon account and S3 bucket, and relevant usage fees will need to be paid. Pricing information can be found at https://aws.amazon.com/pricing/. 
+
+- Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply. Pricing information can be found at https://www.mongodb.com/pricing.
+
+
 
 ## Style Guide
 ### Code Style
@@ -1300,7 +1331,7 @@ Responses:
     ```
 
 ## Tests Case
-Test cases can be foun in the folder `/test`, or follow the link [Test Cases](/test).
+Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
 
 
 [## Introduction]: https://github.com/arrikenw/IT-Project#introduction-1

@@ -7,11 +7,10 @@ import {
   CardMedia,
   CardActionArea,
   CardContent,
-  Button,
   Typography,
-  CardActions, IconButton,
+  CardActions,
 } from '@material-ui/core'
-import AddIcon from "@material-ui/icons/Add";
+
 
 
 
@@ -61,7 +60,6 @@ class SearchPost extends Component {
     // if media is already stored
     const { media, post, token} = this.props;
     if (media){
-      console.log("USING STORED MEDIA");
       this.setState({
         contentStr: media.contentStr,
         mimeType: media.mimeType,
@@ -123,7 +121,7 @@ class SearchPost extends Component {
           }
           })
         .catch((err)=>{
-          console.log(err);
+          console.error(err);
         })
   }
 
@@ -132,7 +130,6 @@ class SearchPost extends Component {
     const { media } = this.props
     const { contentStr } = this.state
     if (media && media.contentStr !== contentStr){
-      console.log("USING STORED MEDIA");
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         contentStr: media.contentStr,
@@ -148,11 +145,9 @@ class SearchPost extends Component {
     const { classes, history, post, user, token, showDescription} = this.props
     const { contentStr, postUserName, mimeType } = this.state
     const heightChange = {maxHeight:"400"};
-    const textLimit = {/* maxHeight: "90px" */}
     const aspectChange = {backgroundColor:"white"};
     const profileUrl =`profile?user=${postUserName}`
     const renderMedia = () => {
-      console.log(mimeType)
       if (mimeType.startsWith('application')) {
         return (
           <CardMedia className={classes.media} style={aspectChange} image={docTN} />
@@ -199,7 +194,7 @@ class SearchPost extends Component {
 
         </CardActions>
 
-        <Typography variant="heading6" component="h6" style={{paddingBottom:"10px", paddingLeft:"20px"}}>
+        <Typography variant="h6" component="h6" style={{paddingBottom:"10px", paddingLeft:"20px"}}>
           {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')} by `}
           <a href={profileUrl}>
             {postUserName || user.userName}

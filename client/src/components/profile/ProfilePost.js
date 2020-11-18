@@ -7,23 +7,21 @@ import {
   CardMedia,
   CardActionArea,
   CardContent,
-  Button,
   Typography,
   CardActions,
-  IconButton,
 } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add'
+
 
 // truncation is not supported for multiline, so using this lib
 import LinesEllipsis from 'react-lines-ellipsis'
 import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC'
-import * as timeago from 'timeago.js'
-import PropTypes from 'prop-types'
-import audioTN from '../../assets/audio.jpg'
-import videoTN from '../../assets/video.jpg'
-import docTN from '../../assets/docs.png'
-import GenericMedia from '../utils/GenericMedia'
-import LikeButtons from './LikeButtons'
+import * as timeago from "timeago.js";
+import PropTypes from "prop-types";
+import audioTN from "../../assets/audio.jpg"
+import videoTN from "../../assets/video.jpg"
+import docTN from "../../assets/docs.png"
+import LikeButtons from "./LikeButtons";
+
 
 const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis)
 
@@ -118,11 +116,8 @@ class ProfilePost extends Component {
   render() {
     const { classes, history, post, user, token } = this.props
     const { contentStr, mimeType } = this.state
-    const heightChange = { maxHeight: '800' }
-    const textLimit = {
-      /* maxHeight: "90px" */
-    }
-    const aspectChange = { backgroundColor: 'white' }
+    const heightChange = {maxHeight:"800"};
+    const aspectChange = {backgroundColor:"white"};
     const renderMedia = () => {
       if (mimeType.startsWith('application')) {
         return (
@@ -221,14 +216,8 @@ class ProfilePost extends Component {
           </div>
         </CardActions>
 
-        <Typography
-          variant="heading6"
-          component="h6"
-          style={{ paddingBottom: '10px', paddingLeft: '20px' }}
-        >
-          {post &&
-            post.createdAt &&
-            `Posted ${timeago.format(post.createdAt, 'en_US')}`}
+        <Typography variant="h6" component="h6" style={{paddingBottom:"10px", paddingLeft:"20px"}}>
+          {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')}`}
         </Typography>
       </Card>
     )
@@ -250,12 +239,14 @@ ProfilePost.propTypes = {
     pinnedPosts: PropTypes.array,
   }).isRequired,
   token: PropTypes.string.isRequired,
-  classes: PropTypes.objectOf(PropTypes.object).isRequired,
-  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
-  media: PropTypes.shape({
-    contentStr: PropTypes.string,
-    mimeType: PropTypes.string,
-  }).isRequired,
+  classes: PropTypes.string.isRequired,
+  history: PropTypes.shape({push: PropTypes.func}).isRequired,
+  media: PropTypes.shape({contentStr: PropTypes.string, mimeType: PropTypes.string}).isRequired,
+
 }
+
+/* ProfilePost.defaultProps = {
+  media: {},
+} */
 
 export default withRouter(withStyles(styles, { withTheme: true })(ProfilePost))

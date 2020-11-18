@@ -1,24 +1,12 @@
 import React, { useEffect, useState } from "react";
 import CardMedia from "@material-ui/core/CardMedia";
 import PropTypes from 'prop-types'
-import { makeStyles } from "@material-ui/core/styles";
 import tempImg from "../../assets/logo512.png"
 
 import docTN from "../../assets/docs.png"
 import audioTN from "../../assets/audio.jpg"
 
-const useStyles = makeStyles({
-  media: {
-    /* height: 0,
-    paddingTop: '56.25%', // 16:9,
-    marginTop:'30' */
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  }
-})
+
 
 function GenericMedia({ style, mimeType, src, className, title, thumbnail }) {
   const [realSrc, setRealSrc] = useState(tempImg)
@@ -115,11 +103,9 @@ function GenericMedia({ style, mimeType, src, className, title, thumbnail }) {
     }
   }, [mimeType, src, style])
 
-  const classes = useStyles()
   if (!src || src === "") {
     return <> </>
   }
-  console.log(realStyle)
   if (realType !== "audio") {
     return (
       // eslint-disable-next-line react/jsx-props-no-spreading

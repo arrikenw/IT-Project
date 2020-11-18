@@ -3,34 +3,31 @@ import {
   Button,
   IconButton,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
-  CardMedia,
   Grid,
   Typography,
   CircularProgress,
-  Chip,
-} from '@material-ui/core'
-import { green } from '@material-ui/core/colors'
-import ThumbUpIcon from '@material-ui/icons/ThumbUp'
-import ArrowBackIcon from '@material-ui/icons/ArrowBack'
-import AddIcon from '@material-ui/icons/Add'
-import RemoveIcon from '@material-ui/icons/Remove'
-import EditIcon from '@material-ui/icons/Edit'
+  Chip
+} from "@material-ui/core";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles'
-import { withRouter } from 'react-router-dom'
-import Divider from '@material-ui/core/Divider'
-import Axios from 'axios'
-import PropTypes from 'prop-types'
-import * as timeago from 'timeago.js'
-import ProfileDetails from './ProfileDetails'
-import Comment from './Comment'
-import CommentList from './CommentList'
-import fetchMediaUtil from '../utils/fetchMedia'
-import CommentForm from './CommentForm'
-import LikeButtons from './LikeButtons'
-import GenericMedia from '../utils/GenericMedia'
+import { withRouter } from 'react-router-dom';
+import Divider from '@material-ui/core/Divider';
+import Axios from "axios";
+import PropTypes from "prop-types";
+import * as timeago from 'timeago.js';
+import CommentList from "./CommentList";
+import fetchMediaUtil from "../utils/fetchMedia";
+import CommentForm from "./CommentForm";
+import LikeButtons from "./LikeButtons";
+import GenericMedia from "../utils/GenericMedia";
+
+
+
 
 const useStyles = makeStyles({
   bodyContainer: {
@@ -62,25 +59,78 @@ const useStyles = makeStyles({
 })
 
 function ExpandPost({ user, token, history, location }) {
-  const [post, setPost] = useState(null)
-  const [media, setMedia] = useState(null)
-  const [postID, setPostID] = useState('')
-  const [updatedUser, setUpdatedUser] = useState(null)
-  const [postUserName, setPostUserName] = useState('')
-  const [pinnedRecently, setPinnedRecently] = useState(false)
-  const [unpinnedRecently, setUnpinnedRecently] = useState(false)
+    const [post, setPost] = useState(null);
+    const [media, setMedia] = useState(null);
+    const [postID, setPostID] = useState("");
+    const [postUserName, setPostUserName] = useState("");
+    const [unpinnedRecently, setUnpinnedRecently] = useState(false);
 
-  function mapCatToComp(type) {
-    if (type === 'image') {
-      return 'img'
+    function mapCatToComp(type){
+        if (type === "image"){
+            return "img";
+        }
+        if (type === "video"){
+            return "video";
+        }
+        if (type === "audio"){
+            return "audio";
+        }
+        return type; // idk
     }
-    if (type === 'video') {
-      return 'video'
+
+    function addToPinned(){
+      setUnpinnedRecently(false);
+      const payload = {postID: post._id};
+      const targetURL = "/api/user/addToPinnedPosts";
+      const headers = {
+        headers: { 'Authorization': `Bearer ${ token}`}
+      }
+      Axios.post(targetURL, payload, headers)
+        .then((res) => {
+          if (res.status === 201 || res.status === 200){
+            // TODO maybe add some kind of modal pop-up?
+            window.location.reload(false);
+          }
+        })
+        .catch((err) =>{
+          console.error(err);
+          // TODO maybe add some kind of modal pop-up?
+        })
+    }
+
+    function removeFromPinned(){
+      setUnpinnedRecently(true);
+      const payload = {postID: post._id};
+      const targetURL = "/api/user/removeFromPinnedPosts";
+      const headers = {
+        headers: { 'Authorization': `Bearer ${ token}`}
+      }
+      Axios.post(targetURL, payload, headers)
+        .then((res) => {
+          if (res.status === 201 || res.status === 200){
+            // TODO maybe add some kind of modal pop-up?
+            window.location.reload(false);
+          }
+        })
+        .catch((err) =>{
+          console.error(err);
+          // TODO maybe add some kind of modal pop-up?
+        })
     }
     if (type === 'audio') {
       return 'audio'
     }
-    return type // idk
+
+    const getUserName = (postUserId)=>{
+
+      const UserNamePayload = {filters: {"_id": postUserId}}
+      Axios.post('/api/user/getPublic/', UserNamePayload)
+        .then((resp) => {
+          setPostUserName(resp.data[0].userName);
+        })
+        .catch((err)=>{
+          console.error(err);
+        })
   }
 
   function addToPinned() {
@@ -302,7 +352,8 @@ function ExpandPost({ user, token, history, location }) {
                   height="500px"
                 />
               </Grid>
-            )}
+              )}
+              {media && media.mimeType === 'application/pdf' && <Grid container justify="center"><object aria-label='post' data={media.contentStr} type="application/pdf" width="100%" height="500px" /></Grid>}
 
             <Typography
               variant="body2"

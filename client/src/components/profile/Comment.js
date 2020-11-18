@@ -4,7 +4,8 @@ import {
   Avatar, Button,
   Card,
   Grid,
-  Typography
+  Typography,
+  Link
 } from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
@@ -146,9 +147,9 @@ function Comment({user, comment, postID, token}) {
     let titleString = ""
     if (userName) {
         titleString = (
-          <a href={profileUrl}>
+          <Link href={profileUrl} color="inherit">
             {userName}
-          </a>
+          </Link>
         )
     }
     let imageString;
@@ -169,7 +170,7 @@ function Comment({user, comment, postID, token}) {
                   {titleString}
 
                 </Typography>
-                <Typography style={{marginBottom:"15px", marginTop:"-8px", paddingLeft:"2px"}} gutterBottom variant="h6" color="textSecondary" component="h6">
+                <Typography style={{marginTop:"-8px", paddingLeft:"2px"}} gutterBottom variant="h6" color="textSecondary" component="h6">
                   {comment && timeago.format(comment.createdAt, 'en_US')}
                 </Typography>
               </div>

@@ -7,6 +7,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
+import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography'
 
 import Axios from 'axios'
 
@@ -101,7 +103,18 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
     const renderUserDetails = (idx) => {
         if (users[idx]) {
             return (
-              <ListItemText id={idx} primary={`${users[idx].firstName} ${users[idx].lastName}`} />
+              <ListItemText
+                id={idx}
+                primary={
+                (
+                  <Typography style={{paddingLeft:"20px"}}>
+                    {users[idx].firstName}
+                    {' '}
+                    {users[idx].lastName}
+                  </Typography>
+                )
+              }
+              />
             )}
       return (
         <ListItemText id={idx} primary="Undefined Undefined" />
@@ -168,6 +181,7 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
                                             >
 
                                               {renderAvatar(idx)}
+                                              <Divider orientation="vertical" flexItem />
                                               {renderUserDetails(idx)}
         
                                             </ListItem>

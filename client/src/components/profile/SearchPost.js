@@ -9,6 +9,7 @@ import {
   CardContent,
   Typography,
   CardActions,
+  Link
 } from '@material-ui/core'
 
 
@@ -111,8 +112,6 @@ class SearchPost extends Component {
         // todo;
       });
 
-
-
       const UserNamePayload = {filters: {"_id": post.userID}}
       Axios.post('/api/user/getPublic/', UserNamePayload)
         .then((resp) => {
@@ -185,18 +184,20 @@ class SearchPost extends Component {
 
         <CardActions style={{paddingBottom: "0px", display: 'flex'}}>
 
-          <div style={{float:"left", paddingBottom:"10px", paddingLeft:"8px"}}>
-            {post && <LikeButtons post={post} user={user} token={token} />}
-          </div>
+          {token && (
+            <div style={{ float: "left", paddingBottom: "10px", paddingLeft: "8px" }}>
+              {post && <LikeButtons post={post} user={user} token={token} />}
+            </div>
+            )}
 
 
         </CardActions>
 
         <Typography variant="h6" component="h6" style={{paddingBottom:"10px", paddingLeft:"20px"}}>
           {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')} by `}
-          <a href={profileUrl}>
+          <Link href={profileUrl} color="inherit">
             {postUserName || user.userName}
-          </a>
+          </Link>
         </Typography>
         <div style={{marginBottom: "2%"}} />
 

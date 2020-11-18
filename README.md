@@ -114,7 +114,7 @@ The document also stores the following references
 We have provided a "crows-foot" diagram of the relations between documents used in our database. Note that the S3 bucket included in the diagram is <b>NOT</b> part of our database.
 <img src="/images/db.png"/> 
 
-#### CI/CD Pipeline
+### CI/CD Pipeline
 We have built a simple CI/CD pipeline to improve code quality and assist in the deployment of updates. 
 Tests triggered on merge requests to master must pass before code can be merged, and once merged, the updated master branch will be automatically deployed.
 We provide a brief sketch of the role of the CI/CD pipeline in the development cycle below.

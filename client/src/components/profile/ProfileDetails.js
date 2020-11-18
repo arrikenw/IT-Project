@@ -24,9 +24,9 @@ import fetchMediaUtil from "../utils/fetchMedia";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    backgroundColor: "red",
-    height: "100%"
-
+    display: 'flex',
+    minheight: "100%",
+    minHeight: "100%"
     // zIndex: -1,
   },
   avatarSize: {
@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
   details: {
     // position: 'fixed',
     backgroundColor: theme.palette.background.paper,
-    height: "100%"
     // zIndex: 200,
   },
 }))

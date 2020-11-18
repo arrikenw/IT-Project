@@ -26,9 +26,10 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
         resultsContainer: {
             display: 'flex',
            // alignItems: 'center',
+          marginTop: "40px",
             paddingTop:"10px",
-            height: '100vh',
             background: '#00205B',
+          marginBottom: "40px",
           }
         }))
     const classes = useStyles()
@@ -180,7 +181,7 @@ function SearchResults({history, token, user, searchResults, searchBy}) {
                                             display="block"
                                             p={1}
                                             m={1} 
-                                            bgcolor="#70B877"
+                                            bgcolor="white"
                                           >
                                             <ListItem
                                               key={singleUser.userName}

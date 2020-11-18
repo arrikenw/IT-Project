@@ -6,7 +6,7 @@ import LoginForm from './LoginForm'
 
 const useStyles = makeStyles({
   loginContainer: {
-    paddingTop: '200px',
+    paddingTop: '300px',
   },
 })
 
@@ -14,10 +14,17 @@ function LoginPage({ setGlobalToken }) {
   const classes = useStyles()
   return (
     <Grid container justify="center">
+
+
+
+
+
       <Grid item xs={12}>
-        <Container className={classes.loginContainer} maxWidth="sm">
-          <LoginForm setGlobalToken={setGlobalToken} />
-        </Container>
+        <div style={{height:"100%"}}>
+          <Container className={classes.loginContainer} maxWidth="sm">
+            <LoginForm setGlobalToken={setGlobalToken} />
+          </Container>
+        </div>
       </Grid>
     </Grid>
   )

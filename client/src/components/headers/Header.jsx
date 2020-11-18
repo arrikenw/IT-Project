@@ -306,8 +306,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
             <Grid item xs={4}>
               {renderSearchBar()}
             </Grid>
-
-            //TODO: if screen is md, show drawer instead of this section
+            
             <section className={classes.rightToolbar}>
               <Grid container direction="row">
                 <Grid item xs={7}>

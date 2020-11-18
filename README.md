@@ -206,12 +206,15 @@ Our post search performs a regex string search across post content and tags. Thi
 Our system uses bearer tokens to authenticate requests. To ensure the security of user accounts, we have given the tokens a 6 hour expiry timer, preventing them for being reused by bad actors who gain access to a user's computer or token.
 
 
-For all requests made to routes that require authentication, our middleware extracts and validates the authorization token provided in the request. There are two possible outcomes to this validation.
+For all requests made to routes that require authentication, our middleware extracts and validates the authorization token provided in the request. There are three possible outcomes to this validation.
 
 - If the token is valid, user information is injected into the request before it is passed to our controllers.
 This user information can be accessed in a controller through ```req.user```, which contains the user's id and other data.
 
-- If the token is invalid, expired, or not provided, the server will respond with status code 403 and the message ```Forbidden```.
+- If the token is invalid or expired, the server will respond with status code 403 and the message ```Forbidden```.
+
+- If the token is not provided, the server will respond with status code 401 and the message ```Unauthorized```
+
 
 Note that some routes do not require authentication, for example those that handle the service of posts with public visibility.
 

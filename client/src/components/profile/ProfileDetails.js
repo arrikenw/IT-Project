@@ -174,7 +174,7 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
               disableTypography
               primary={
                 (
-                  <Typography style={{fontWeight:"bold", fontSize:20, fontFamily:"Verdana" }}>
+                  <Typography style={{ fontSize:20, fontFamily:"Bahnschrift Semibold" }}>
                     {currentUser.userName}
                   </Typography>
                 )

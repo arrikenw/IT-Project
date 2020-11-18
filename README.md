@@ -91,7 +91,7 @@ Select the orange "Create bucket" icon and create the S3 bucket. Ensure the Buck
 Finally, navigate to your username at the top right and select "My Security Credentials" from the drop down menu. Open the "Access keys (access key ID and secret access key)" menu and pree the "Create New Access Key" icon. Record the newly created Access Key ID and Secret Key.
 
  <p align="center">
-  <img src="images/aws_keyt_creation.png"  width="1000" >
+  <img src="images/aws_key_creation.png"  width="1000" >
 </p>
 
 

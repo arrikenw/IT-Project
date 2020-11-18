@@ -1,12 +1,7 @@
-import React, { useState } from 'react'
-import Axios from 'axios'
+import React  from 'react'
+
 import PropTypes from 'prop-types'
-import {
-  Card,
-  CardContent,
-  Typography,
-  TextField, FormControlLabel, Checkbox
-} from "@material-ui/core";
+import { TextField, FormControlLabel, Checkbox } from "@material-ui/core";
 
 function RequiredInfoForm({ firstName, setFirstName, lastName, setLastName,
                             userName, setUserName, emailPrivate, setEmailPrivate,
@@ -36,17 +31,11 @@ function RequiredInfoForm({ firstName, setFirstName, lastName, setLastName,
     setConfirmPassword(e.target.value)
   }
 
-  const [error, setError] = useState('');
-  const [helperText, setHelperText] = useState('');
-
-
     return (
       <div>
         <form>
           <div>
             <TextField
-              helperText={helperText}
-              error={error}
               id="signup-firstname"
               label="Enter Your First Name"
               variant="outlined"

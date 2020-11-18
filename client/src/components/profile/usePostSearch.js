@@ -49,7 +49,6 @@ export default function usePostSearch(
       .catch((e) => {
         if (axios.isCancel(e)) return
         setError(true)
-        console.log('error?>')
         console.error(e)
       })
     // eslint-disable-next-line consistent-return

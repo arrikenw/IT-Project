@@ -59,7 +59,6 @@ function SettingsOther({ localUser, editUser, setEditUser, updateProfessionalFie
   // sets media file
   const onFileChange = (e) => {
     setRawMedia(e.target.files[0])
-    console.log(e.target.files[0])
     const fileReader = new FileReader();
     fileReader.onloadend = (f) => {
       const content = f.target.result;

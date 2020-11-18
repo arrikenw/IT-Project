@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import { Grid, Box, Container } from '@material-ui/core'
+
+import { Grid, Box } from '@material-ui/core'
 import Axios from "axios";
 import Hidden from "@material-ui/core/Hidden";
 import PropTypes from "prop-types";
@@ -66,7 +64,7 @@ function Profile({ user, token, history, location }) {
   const [filterTag, setFilterTag] = useState('')
   const [sortField, setSortField] = useState('createdAt')
   const [sortDirection, setSortDirection] = useState('desc')
-  const [currentUser, setCurrentUser] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
 
   const query = new URLSearchParams(location.search)
   const userName = query.get('user')
@@ -81,7 +79,7 @@ function Profile({ user, token, history, location }) {
       setCurrentUser(user)
       return
     }
-    if (currentUser === "" || currentUser.userName !== userName) {
+    if (!currentUser || currentUser === "" || currentUser.userName !== userName) {
       const payload = {'filters': {userName}}
       Axios.post('api/user/getPublic', payload).then((res) => {
         if (res.data.length > 0) {
@@ -105,17 +103,9 @@ function Profile({ user, token, history, location }) {
     return  900
   }
 
-  const renderScroll = () => {
-    // eslint-disable-next-line no-empty
-    if (mdLower) {}
-  }
 
   const handleDrawerOpen = () => {
     setOpen((pastValue) => !pastValue);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
   };
 
   return (

@@ -92,10 +92,11 @@ InfinitePostScroll.propTypes = {
   token: PropTypes.string.isRequired,
   sortField: PropTypes.string.isRequired,
   sortDirection: PropTypes.string.isRequired,
-  currentUser: PropTypes.string.isRequired,
+  currentUser: PropTypes.shape({}),
   filterTag: PropTypes.string.isRequired,
   user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
 }
 
 InfinitePostScroll.defaultProps = {
+  currentUser: { },
 }

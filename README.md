@@ -155,6 +155,16 @@ To run the linter for the backend code,  run the command `npm run lint` in the r
 
 To run the tests for the backend code,  run the command `npm run test` in the root directory of the repository
 
+## Costs and licencing considerations
+- Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries comercially, a licencing fee must be paid.
+A licence can be obtained at https://www.pdftron.com/licensing/.
+
+- Our system is currently using the free-tier of AWS. Once in production, the system will need to be linked to a new amazon account and S3 bucket, and relevant usage fees will need to be paid. Pricing information can be found at https://aws.amazon.com/pricing/. 
+
+- Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply. Pricing information can be found at https://www.mongodb.com/pricing.
+
+
+
 ## Style Guide
 ### Code Style
 - #### Use arrow functions when possible:

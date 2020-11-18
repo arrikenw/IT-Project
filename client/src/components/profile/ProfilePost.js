@@ -121,7 +121,7 @@ class ProfilePost extends Component {
     const { contentStr, mimeType } = this.state
     const heightChange = {maxHeight:"800"};
     const textLimit = {/* maxHeight: "90px" */}
-    const aspectChange = {backgroundColor:"red"};
+    const aspectChange = {backgroundColor:"white"};
     const renderMedia = () => {
       if (mimeType.startsWith('application')) {
         return (

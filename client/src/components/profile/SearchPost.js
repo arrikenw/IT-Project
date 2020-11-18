@@ -21,6 +21,9 @@ import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC'
 import * as timeago from "timeago.js";
 import PropTypes from "prop-types";
 import LikeButtons from "./LikeButtons";
+import docTN from "../../assets/docs.png";
+import audioTN from "../../assets/audio.jpg";
+import videoTN from "../../assets/video.jpg";
 
 
 
@@ -46,7 +49,7 @@ class SearchPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // mimeType: "",
+      mimeType: "",
       contentStr: "",
       postUserName: "",
       // contentCategory: "",
@@ -61,7 +64,7 @@ class SearchPost extends Component {
       console.log("USING STORED MEDIA");
       this.setState({
         contentStr: media.contentStr,
-        // mimeType: media.mimeType,
+        mimeType: media.mimeType,
         // contentCategory: media.contentCategory
       })
       return;
@@ -83,6 +86,10 @@ class SearchPost extends Component {
       mediaID: post.thumbnailURL,
     };
 
+    if (!post.thumbnailURL) {
+      payload.mediaID = post.mediaID
+    }
+
     const headers = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -96,7 +103,7 @@ class SearchPost extends Component {
           const str = `data:${res.data.mimeType};base64,${res.data.b64media}`;
           this.setState({
             contentStr: str,
-            // mimeType: res.data.mimeType,
+            mimeType: res.data.mimeType,
             // contentCategory: res.data.contentCategory,
           });
         }
@@ -111,7 +118,9 @@ class SearchPost extends Component {
       const UserNamePayload = {filters: {"_id": post.userID}}
       Axios.post('/api/user/getPublic/', UserNamePayload)
         .then((resp) => {
+          if (resp.data[0]) {
             this.setState({postUserName :resp.data[0].userName});
+          }
           })
         .catch((err)=>{
           console.log(err);
@@ -127,7 +136,7 @@ class SearchPost extends Component {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         contentStr: media.contentStr,
-        // mimeType: this.props.media.mimeType,
+        mimeType: media.mimeType,
         // contentCategory: this.props.media.contentCategory
       })
 
@@ -137,12 +146,28 @@ class SearchPost extends Component {
 
   render(){
     const { classes, history, post, user, token, showDescription} = this.props
-    const { contentStr, postUserName } = this.state
+    const { contentStr, postUserName, mimeType } = this.state
     const heightChange = {maxHeight:"400"};
     const textLimit = {/* maxHeight: "90px" */}
-    const aspectChange = {backgroundColor:"red"};
+    const aspectChange = {backgroundColor:"white"};
     const profileUrl =`profile?user=${postUserName}`
-
+    const renderMedia = () => {
+      console.log(mimeType)
+      if (mimeType.startsWith('application')) {
+        return (
+          <CardMedia className={classes.media} style={aspectChange} image={docTN} />
+        )
+      }
+      if (mimeType.startsWith('audio')) {
+        return (
+          <CardMedia className={classes.media} style={aspectChange} image={audioTN} />
+        )
+      }
+      if (mimeType.startsWith('video')) {
+        return <CardMedia className={classes.media} type={mimeType} controls style={aspectChange} image={videoTN} />
+      }
+      return <CardMedia className={classes.media} type={mimeType} controls style={aspectChange} image={contentStr} />
+    }
     return (
       <Card className={classes.postCard} style={heightChange}>
         <CardActionArea onClick={() => { history.push(`/post?post=${post._id}`); }}>
@@ -158,7 +183,7 @@ class SearchPost extends Component {
               </Typography>
             )}
 
-            <CardMedia className={classes.media} style={aspectChange} image={contentStr} />
+            {renderMedia()}
 
           </CardContent>
         </CardActionArea>
@@ -175,7 +200,7 @@ class SearchPost extends Component {
         <Typography variant="heading6" component="h6" style={{paddingBottom:"10px", paddingLeft:"20px"}}>
           {post && post.createdAt && `Posted ${ timeago.format(post.createdAt, 'en_US')} by `}
           <a href={profileUrl}>
-            {postUserName}
+            {postUserName || user.userName}
           </a>
         </Typography>
 
@@ -198,11 +223,12 @@ SearchPost.propTypes = {
   user: PropTypes.shape({
     _id: PropTypes.string,
     pinnedPosts: PropTypes.array,
+    userName: PropTypes.string,
   }).isRequired,
   token: PropTypes.string.isRequired,
   classes: PropTypes.objectOf(PropTypes.object).isRequired,
   history: PropTypes.shape({push: PropTypes.func}).isRequired,
-  media: PropTypes.shape({contentStr: PropTypes.string}).isRequired,
+  media: PropTypes.shape({contentStr: PropTypes.string, mimeType: PropTypes.string}).isRequired,
 
 }
 

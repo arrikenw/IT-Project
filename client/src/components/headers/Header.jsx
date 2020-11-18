@@ -29,8 +29,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PostAddIcon from '@material-ui/icons/PostAdd'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import axios from'axios';
-import logo from '../../assets/personal-profile.svg'
-
+import logo from '../../assets/efolio-icon.svg'
 
 
 
@@ -96,8 +95,15 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   const sendSearchData = () => {
     const payload = {"search":searchInput}
+    let url1 = "/api/post/getPublic";
+    const config = {headers: {
+      Authorization: `Bearer ${token}`,
+    }}
+    if (token) {
+      url1 = '/api/post/get'
+    }
       if(searchBy === "posts"){
-        axios.post("/api/post/getPublic", payload)
+        axios.post(url1, payload, config)
         .then((resp) =>{
           setSearchResults(resp.data);
           history.push('/searchResults');
@@ -105,16 +111,17 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       }
 
       if(searchBy === "users"){
-        axios.post("/api/user/getPublic", payload)
+        const url2 = "/api/user/getPublic";
+        axios.post(url2, payload, config)
         .then((resp) =>{
           setSearchResults(resp.data);
-           
+
           history.push('/searchResults');
         })
         .catch((err)=>{
           console.log(err);
         })
-        
+
       }
   }
   const handleKeyPress = (e) => {
@@ -135,7 +142,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       <div>
         <Button onClick={handleClick} color="inherit" href={profileLink}>
           {renderAvatar()}
-          <Typography variant="button">{user.userName}</Typography>
+          <Typography style={{paddingLeft:"5px"}} variant="button">{user.userName}</Typography>
           <ArrowDropDownIcon />
         </Button>
 
@@ -157,16 +164,16 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   const renderSignup = () => {
     return (
-      <Button color="inherit" href="/signup">
-        <Typography variant="h6">Sign up</Typography>
+      <Button variant="outlined" color="inherit" href="/signup">
+        <Typography style={{fontFamily:"Verdana"}} variant="h6">Sign up</Typography>
       </Button>
     )
   }
 
   const renderLogin = () => {
     return (
-      <Button color="inherit" href="/login">
-        <Typography variant="h6">Login</Typography>
+      <Button variant="outlined" color="inherit" href="/login">
+        <Typography style={{fontFamily:"Verdana"}} variant="h6">Login</Typography>
       </Button>
     )
   }
@@ -235,7 +242,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       <div className={classes.search}>
         <div className="font-icon-wrapper">
           <IconButton onClick={sendSearchData} className={classes.searchIcon}>
-            <SearchIcon />
+            <SearchIcon style={{color:"white"}} />
           </IconButton>
         </div>
         <form style={{ display: 'flex' }}>
@@ -253,11 +260,12 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
           <FormControl style={{minWidth:100, paddingBottom:10,}}>
             <InputLabel style={{color:'inherit'}}>Search by</InputLabel>
-            <Select 
+            <Select
               value={searchBy}
               onChange={handleSearchByChange}
+              style={{color:"white"}}
             >
-              <MenuItem style={{marginTop: "40px"}} value="users">Users</MenuItem>
+              <MenuItem style={{ marginTop: "40px"}} value="users">Users</MenuItem>
               <MenuItem value="posts">Posts</MenuItem>
             </Select>
           </FormControl>
@@ -269,10 +277,10 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   const renderAddPost = () => {
     return (
-      <IconButton color="inherit" href="/addpost">
+      <Button style={{marginTop:"5px"}} variant="outlined" color="inherit" href="/addpost">
         <PostAddIcon />
         <Typography variant="button">Add post</Typography>
-      </IconButton>
+      </Button>
     )
   }
 
@@ -285,12 +293,12 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
               <Button href="/">
                 <img
                   src={logo}
-                  alt="dog"
+                  alt="efolio-logo"
                   style={{ height: '35px', marginRight: '5px' }}
                 />
                 <Hidden only={['xs']}>
-                  <Typography style={{ color: 'white' }} variant="h6">
-                    Efolio
+                  <Typography style={{ color: 'white', fontFamily:"Verdana" }} variant="h6">
+                    E-folio
                   </Typography>
                 </Hidden>
               </Button>
@@ -298,7 +306,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
             <Grid item xs={4}>
               {renderSearchBar()}
             </Grid>
-
+            
             <section className={classes.rightToolbar}>
               <Grid container direction="row">
                 <Grid item xs={7}>
@@ -309,6 +317,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
                 </Grid>
               </Grid>
             </section>
+
           </Toolbar>
         </AppBar>
       )
@@ -319,6 +328,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   const renderAuthenticatedHeader = () => {
     if (token !== '' && user !== {}) {
       return (
+
         <AppBar position="static" style={{ height: '60px', boxShadow:  "none" }}>
           <Toolbar disableGutters>
             <section className={classes.leftToolbar}>

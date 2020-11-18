@@ -226,14 +226,14 @@ function ExpandPost({ user, token, history, location }) {
             color="primary"
             onClick={addToPinned}
           >
-            Pin post
+            Pin
             <AddIcon />
           </Button>
           )
       }
           return (
             <Button style={{marginLeft: "10px"}} variant="contained" size="medium" color="primary" onClick={removeFromPinned}>
-              Unpin post
+              Unpin
               <RemoveIcon />
             </Button>
         )
@@ -242,23 +242,12 @@ function ExpandPost({ user, token, history, location }) {
 
     return (
       <Grid container className={classes.mainContainer}>
-        <Grid item xs={false} />
-        <Grid item xs={2}>
-          <div
-            style={{
-                        marginTop: '50px',
-                        marginRight: '50px',
-                        marginLeft: '100px',
-                    }}
-          >
-            {/*  <ProfileDetails user={user} /> */}
-          </div>
-        </Grid>
+        <Grid item xs={false} sm={2} md={3} />
 
-        <Grid className={classes.bodyContainer} item xs={8}>
+        <Grid className={classes.bodyContainer} item xs={12} sm={8} md={6}>
           <Card className={classes.postCard}>
             <IconButton variant="contained" size="medium" color="primary" onClick={() => {history.goBack()}}>
-              <ArrowBackIcon style={{fontSize: 50, color: "#f57c00"}} />
+              <ArrowBackIcon style={{fontSize: 50, color: "#094183"}} />
             </IconButton>
             <CardContent style={{marginTop:"-20px", paddingLeft:"40px", paddingRight:"40px"}}>
 
@@ -291,7 +280,11 @@ function ExpandPost({ user, token, history, location }) {
             <CardActions style={{paddingLeft:"30px"}}>
               <Grid container>
                 <Grid item xs={12} style={{ width:"100%", height: "50px"}}>
-                  {post &&  <LikeButtons post={post} user={user} token={token} /> }
+                  {post && (
+                    <div>
+                      <LikeButtons post={post} user={user} token={token} />
+                    </div>
+                  )}
                   {renderPin()}
                   {post && (post.userID === user._id) && (
                     <Button
@@ -342,7 +335,7 @@ function ExpandPost({ user, token, history, location }) {
           </Card>
 
         </Grid>
-        <Grid item xs={3} />
+        <Grid item xs={false} sm={2} md={3} />
       </Grid>
     )
 }

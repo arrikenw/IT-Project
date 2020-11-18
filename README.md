@@ -219,6 +219,14 @@ Note that some routes do not require authentication, for example those that serv
 
 The media route is used for all requests that deal with the uploading, fetching, updating, or deletion of media files. All requests to this route are handled by the controller located at ```/controllers/media.js```.
 
+#### Handling of special file types
+
+Due to the limited support for web-display of microsoft ```.docx```, ```.xlsx```, and ```.pptx``` files, our media controller converts these files to ```.pdf``` form to allow them to be simply displayed in our frontend. 
+
+When a request is made to our ```/api/media/add``` route, the controller identifies microsoft file formats and converts them to ```.pdf``` form. 
+The converted files are stored in our s3 bucket, and our database stores metadata that reflects the details of the converted file.
+
+
 #### Add media 
 ###### Creates a new media document in the database, saves the media blob to a s3 bucket, returns the media document id
 Request to: `/api/media/add` as a `POST` request

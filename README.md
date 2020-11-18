@@ -34,7 +34,7 @@ The system is composed of:
 - An Amazon S3 Bucket file server 
 
 ### Motivation for E-FOLIO 
-Documentation on the core vision of our system can be found in our [/docs directory](/docs).
+Documentation on the core vision of our system can be found in the [/docs directory](/docs).
 
 The  `/docs ` directory includes the following items: 
 - User Stories 
@@ -199,7 +199,15 @@ Our system's backend uses node.js with express middleware. The system is compose
 - A collection of controllers associated with comments, media, posts, and users. These controllers are located in ```/controllers```.
 - A collection of Mongoose models and basic database connection logic. Models and DB logic are located in ```/models```.
 
-We provide a more in-depth review of our authentication process and controller functionality below.
+The flow of control during the handling of a request is as follows:
+1. Request is received at index router
+2. Request is passed down to sub-router by index router
+3. Authentication of user token occurs
+4. Controller function is called by sub-router
+5. Controller carries out request
+6. Response is sent 
+
+We provide an in-depth review of our authentication process and controller functionality below.
 
 ### Unconventional algorithms
 

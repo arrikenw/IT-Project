@@ -3,17 +3,13 @@ import {
   Button,
   IconButton,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
-  CardMedia,
   Grid,
   Typography,
   CircularProgress,
   Chip
 } from "@material-ui/core";
-import { green} from '@material-ui/core/colors';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -24,8 +20,6 @@ import Divider from '@material-ui/core/Divider';
 import Axios from "axios";
 import PropTypes from "prop-types";
 import * as timeago from 'timeago.js';
-import ProfileDetails from './ProfileDetails';
-import Comment from './Comment';
 import CommentList from "./CommentList";
 import fetchMediaUtil from "../utils/fetchMedia";
 import CommentForm from "./CommentForm";
@@ -72,9 +66,7 @@ function ExpandPost({ user, token, history, location }) {
     const [post, setPost] = useState(null);
     const [media, setMedia] = useState(null);
     const [postID, setPostID] = useState("");
-    const [updatedUser, setUpdatedUser] = useState(null);
     const [postUserName, setPostUserName] = useState("");
-    const [pinnedRecently, setPinnedRecently] = useState(false);
     const [unpinnedRecently, setUnpinnedRecently] = useState(false);
 
     function mapCatToComp(type){
@@ -91,7 +83,6 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     function addToPinned(){
-      setPinnedRecently(true);
       setUnpinnedRecently(false);
       const payload = {postID: post._id};
       const targetURL = "/api/user/addToPinnedPosts";
@@ -112,7 +103,6 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     function removeFromPinned(){
-      setPinnedRecently(false);
       setUnpinnedRecently(true);
       const payload = {postID: post._id};
       const targetURL = "/api/user/removeFromPinnedPosts";
@@ -154,10 +144,9 @@ function ExpandPost({ user, token, history, location }) {
       Axios.post('/api/user/getPublic/', UserNamePayload)
         .then((resp) => {
           setPostUserName(resp.data[0].userName);
-          console.log("username:", postUserName)
         })
         .catch((err)=>{
-          console.log(err);
+          console.error(err);
         })
   }
 
@@ -269,7 +258,7 @@ function ExpandPost({ user, token, history, location }) {
                 {' '}
               </Grid>
               )}
-              {media && media.mimeType === 'application/pdf' && <Grid container justify="center"><object data={media.contentStr} type="application/pdf" width="100%" height="500px" /></Grid>}
+              {media && media.mimeType === 'application/pdf' && <Grid container justify="center"><object aria-label='post' data={media.contentStr} type="application/pdf" width="100%" height="500px" /></Grid>}
 
               <Typography variant="body2" color="textPrimary" component="p" style={{paddingTop:"40px", fontSize: 20}}>
                 {splitStrings && splitStrings.length > 0 && splitStrings[0]}

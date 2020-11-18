@@ -4,8 +4,6 @@ import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Axios from 'axios'
 import './App.css'
-// eslint-disable-next-line import/extensions
-import zIndex from "@material-ui/core/styles/zIndex";
 import Header from './components/headers/Header'
 import Home from './components/home/Home'
 import LoginPage from './components/login/LoginPage'
@@ -16,7 +14,6 @@ import AddPost from "./components/AddPost/AddPost";
 import SignupPage from './components/signup/SignupPage';
 import SearchResults from './components/searchResults/SearchResults';
 
-import DrawerTest from './components/profile/DrawerTest'
 import EditPost from "./components/EditPost/EditPost";
 
 // css for containers

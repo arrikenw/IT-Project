@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react"
 import Axios from "axios"
-import { DropzoneArea } from 'material-ui-dropzone'
 import PropTypes from 'prop-types'
 import {
   Container,
   Grid,
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {Redirect, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import EditPostForm from "./EditPostForm";
-import add from "../utils/addMedia"
 import fetchMediaUtil from "../utils/fetchMedia";
 
 
@@ -20,7 +18,7 @@ const useStyles = makeStyles({
   },
 })
 
-function EditPost({ user, token, history, location }) {
+function EditPost({ user, token, location }) {
  const [post, setPost] = useState(null)
  const [media, setMedia] = useState(null)
  const [mediaTN, setMediaTN] = useState(null)
@@ -49,7 +47,7 @@ function EditPost({ user, token, history, location }) {
   useEffect(() => {
     const errorCB = (err) => {
       console.error(err)
-      console.log(err.message)
+      console.error(err.message)
     }
     if (!post) return
     if (post.mediaID) {
@@ -82,6 +80,5 @@ export default withRouter(EditPost);
 EditPost.propTypes = {
  token: PropTypes.string.isRequired,
  user: PropTypes.shape({_id: PropTypes.string}).isRequired,
- history: PropTypes.shape({push: PropTypes.func}).isRequired,
  location: PropTypes.shape({search: PropTypes.string}).isRequired,
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { makeStyles } from '@material-ui/core/styles';
 import { Button, Typography, StepLabel, Step, Stepper, Card, Box, Snackbar, CircularProgress  } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert';
 import CardContent from "@material-ui/core/CardContent";
@@ -159,10 +158,6 @@ function SignupPage({ setGlobalToken }) {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  /* const handleReset = () => {
-    setActiveStep(0);
-  }; */
 
   // submit sign up
   useEffect( () => {

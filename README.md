@@ -68,8 +68,8 @@ We selected MongoDB as our database for a handful of reasons:
 The media document type is used to store media metadata. The id of the media file is used as a key for the media content stored in our S3 bucket. 
 
 The document stores:
-- A general "content category"
 - The MIME-type and extension of the file
+- A general "content category"
 - Privacy settings
 
 The document also stores the following references:
@@ -78,23 +78,26 @@ The document also stores the following references:
 The post document is used to represent the user-produced content that our e-folio system displays. 
 
 The document stores:
-- Privacy settings
+
 - A tile and description
 - Tags and a general "content category"
 - A list of <b>Comment</b> documents representing the comments made on a post 
+- Timestamps and other dating information
+- Privacy settings
 
 The document also stores the following references:
 - The ids of the <b>media</b> documents that contain the thumbnails and files used in the post
 - The id of the <b>user</b> who created the post
 - An array of <b>user</b> ids that represent the users permitted to access a private post
+
 ##### User
 The user document represents the users of our website.
 
 The document stores:
-- Privacy settings
 - Contact details
 - Biographical data
 - Username and a hashed password
+- Privacy settings
 
 The document also stores the following references:
 - The id of a <b>media</b> document that contains the profile picture of the user.

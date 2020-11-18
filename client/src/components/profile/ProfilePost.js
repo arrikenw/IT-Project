@@ -56,7 +56,7 @@ class ProfilePost extends Component {
 
   componentDidMount() {
     // if media is already stored
-    const { media, post } = this.props;
+    const { media, post, token } = this.props;
     if (media){
       this.setState({
         contentStr: media.contentStr,
@@ -69,7 +69,13 @@ class ProfilePost extends Component {
       return;
     }
 
-    const controllerUrl = "/api/media/";
+    let controllerUrl;
+    if (token){
+      controllerUrl = "/api/media/";
+    }
+    else{
+      controllerUrl = "/api/media/getPublic";
+    }
     const payload = {
       // TODO make thumbnail fetching work properly
       mediaID: post.thumbnailURL,

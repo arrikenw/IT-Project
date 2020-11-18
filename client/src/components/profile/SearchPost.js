@@ -203,6 +203,7 @@ class SearchPost extends Component {
             {postUserName || user.userName}
           </a>
         </Typography>
+        <div style={{marginBottom: "2%"}} />
 
       </Card>
     )

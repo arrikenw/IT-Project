@@ -9,7 +9,7 @@ export default function CommentList({user, postID, comments, token}) {
 
   // eslint-disable-next-line consistent-return
   return (
-    <div style={{ padding: '60px', backgroundColor: '#f7ad23' }}>
+    <div style={{ padding: '60px', backgroundColor: 'white' }}>
       {comments.reverse().map((comment, index) => {
         if (comments.length === index + 1) {
           return (

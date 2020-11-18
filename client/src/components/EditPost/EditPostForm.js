@@ -242,8 +242,12 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
         if (resOne !== "") {
           payload.thumbnailURL = resOne._id
         }
-        Axios.post("/api/post/update", {postID: post._id, update: payload}, {headers: {Authorization: `Bearer ${token}`}})
-          .then( (resp) => {
+        Axios({
+          url: "/api/post/update",
+          method: "post",
+          data: {postID: post._id, update: payload},
+          headers: {Authorization: `Bearer ${token}`}
+        }).then( (resp) => {
             redirect();
           }).catch((err) => {
           console.error(err)

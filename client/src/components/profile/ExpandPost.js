@@ -39,12 +39,13 @@ const useStyles = makeStyles({
     bodyContainer: {
         height: '100%',
         width: ' 100%',
-        overflow: 'auto',
+
     },
     mainContainer: {
         height: '100%',
         width: '100%',
         overflowX: 'hidden',
+      overflowY: 'scroll',
     },
 
 
@@ -90,9 +91,6 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     function addToPinned(){
-      if (pinnedRecently || user.pinnedPosts.includes(post._id)){
-        return;
-      }
       setPinnedRecently(true);
       setUnpinnedRecently(false);
       const payload = {postID: post._id};
@@ -114,9 +112,6 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     function removeFromPinned(){
-      if (unpinnedRecently){
-        return;
-      }
       setPinnedRecently(false);
       setUnpinnedRecently(true);
       const payload = {postID: post._id};
@@ -211,7 +206,7 @@ function ExpandPost({ user, token, history, location }) {
 
 
 
-    }, [token, postID]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
+    }, [token, postID, user]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 
     const classes = useStyles()
 
@@ -330,7 +325,6 @@ function ExpandPost({ user, token, history, location }) {
                   </div>
                 </Grid>
               </Grid>
-
             </CardActions>
 
             <Divider variant="middle" style={{marginTop:"30px", marginBottom:"30px"}} />

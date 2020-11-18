@@ -96,8 +96,15 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   const sendSearchData = () => {
     const payload = {"search":searchInput}
+    let url1 = "/api/post/getPublic";
+    const config = {headers: {
+      Authorization: `Bearer ${token}`,
+    }}
+    if (token) {
+      url1 = '/api/post/get'
+    }
       if(searchBy === "posts"){
-        axios.post("/api/post/getPublic", payload)
+        axios.post(url1, payload, config)
         .then((resp) =>{
           setSearchResults(resp.data);
           history.push('/searchResults');
@@ -105,7 +112,8 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       }
 
       if(searchBy === "users"){
-        axios.post("/api/user/getPublic", payload)
+        const url2 = "/api/user/getPublic";
+        axios.post(url2, payload, config)
         .then((resp) =>{
           setSearchResults(resp.data);
 

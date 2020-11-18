@@ -203,17 +203,17 @@ We provide a more in-depth review of our authentication process and our controll
 Our post search performs a regex string search across post content and tags. This has a complexity of O(n), where n is the length of the entire corpus of our site. WE DOOMED, WHAT AN ALGORITHM!!!
 
 ### User authentication
-Our system uses bearer tokens to authenticate requests. The tokens have a 6-hour expiry time for ________________________________ TODO security explanation.
+Our system uses bearer tokens to authenticate requests. To ensure the security of user accounts, we have given the tokens a 6 hour expiry timer, preventing them for being reused by bad actors who gain access to a user's computer or token.
 
 
-For all requests made to routes that require authentication, our middleware extracts and validates the provided authorization token.
+For all requests made to routes that require authentication, our middleware extracts and validates the authorization token provided in the request. There are two possible outcomes to this validation.
 
-If the token is valid, user information is injected into the request before it is passed to our controllers.
-To use this user information in a backend controller, simply access ```req.user``` to find the user id and other information.
+- If the token is valid, user information is injected into the request before it is passed to our controllers.
+This user information can be accessed in a controller through ```req.user```, which contains the user's id and other data.
 
-If the token is invalid, expired, or not provided, the server will respond with status code 403 and the message ```Forbidden```.
+- If the token is invalid, expired, or not provided, the server will respond with status code 403 and the message ```Forbidden```.
 
-Note that some routes do not require authentication, for example those that serve posts with public visibility.
+Note that some routes do not require authentication, for example those that handle the service of posts with public visibility.
 
 ### Media controller (```/api/media```)
 

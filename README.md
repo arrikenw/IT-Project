@@ -656,7 +656,84 @@ Responses:
   - ```
     "Delete user not successful - <reasonForError>"
     ```
+    
+#### Add to pinned posts
+###### Adds a post to the user's pinned post list
+Request to: `/api/user/addToPinnedPosts` as a `POST` request
 
+Takes: an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON in the body, requiring the key-value pairs:
+```JSON
+{
+    "postID": "<postID>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must a valid token
+- A valid postID must be provided
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and will have the ID of the pinned post
+  - ```JSON
+    {
+        "id": "<postID>"
+    }
+    ```
+- on unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- on forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Pinning the post was not successful - <reasonForError>"
+    ```
+    
+#### Remove from pinned posts
+###### Removes a post from the user's pinned post list
+Request to: `/api/user/removeFromPinnedPosts` as a `POST` request
+
+Takes: an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON in the body, requiring the key-value pairs:
+```JSON
+{
+    "postID": "<postID>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must a valid token
+- A valid postID must be provided
+
+Responses:
+- On success: 
+  - the response will have status code of "200" and will have the ID of the unpinned post
+  - ```JSON
+    {
+        "id": "<postID>"
+    }
+    ```
+- on unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- on forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Pinning the post was not successful - <reasonForError>"
+    
 ### Posts (```/api/post```)
 
 The post route is used for all requests that create, edit, fetch, delete, like, or mutate posts. All requests to this route are handled by the controller located at ```/controllers/post.js```.

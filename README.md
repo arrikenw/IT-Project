@@ -1,10 +1,13 @@
 # E-FOLIO:
 
 ## Table of Contents
-- #### Introduction 
-- #### Set up 
+-  #### Introduction
+    - Motivation for E-FOLIO
+    - Demo 
+- #### Set up
   - Installing Packages 
   - Backend env. Files
+- #### System Reqirements
 - #### Running
 - #### Style Guide
   - Code Style
@@ -17,14 +20,31 @@
  - Midia
  - Post
  - comments
+- #### Tests Case
   
 
 
 ## Introduction
 This project was created by the Podoju was consists of a backend server using node.js, Express and Mongoose;
- a frontend written using html, css, node.js and react.js; a database using mongoDB, and a file server using AWS S3 Bucket. 
+ a frontend written using html, css, node.js, react.js, and Material UI; a database using mongoDB, and a file server using AWS S3 Bucket. 
  “E-FOLIO” is a web based digital portfolio system. E-FOLIO, allows users to ‘post’ work that they wish to showcase to their
  profile, share their profile with others.
+### Motivation for E-FOLIO 
+[Vision Documentation](/docs)
+
+This folder, `/docs `, includes: 
+- User Stories 
+- Personas
+- Motivational Model 
+- Class Diagram
+- Architecture Diagram 
+### Demo
+Bellow is a link to a demo the hosted project: 
+[https://efolio.herokuapp.com/](https://efolio.herokuapp.com/)
+
+Use the Demo login: 
+- Email:
+- Password:
 
 ## Database
 #### Database description
@@ -91,7 +111,12 @@ We have provided a "crows-foot" diagram of the relations between documents used 
 ## Set Up
 #### Installing Packages
 Make sure to run `npm install` in both the root directory and in the `/client` directory of this repository to install
-the needed packages
+the needed packages. Material UI is installed as a npm pakage, to save and install to the `package.json` dependencies, 
+run: 
+```
+// with npm
+npm install @material-ui/core@next @emotion/react @emotion/styled
+```
 #### Backend .env Files
 you will also need to create your `.env.development` and `.env.test` in the root directory of this repository.
 These ".env" files should include the listed variables with the correct values for each.
@@ -106,6 +131,20 @@ AWS_SECRET_ACCESS_KEY = <secretAcessKeyForAWSBucket>
 ```
 A different value should be used between the files ".env.development" and ".env.test" for the variable`DB_NAME`
  to ensure the tests are run on a different database than the development database.
+
+## System Requirements
+This system requires: 
+
+Backend
+- Mongo DB ____(??version??)
+- Node.js
+- Expressive
+- AWS Backet
+
+Frontend
+-Material UI ___ (??version)
+-Node.js
+-React.js
 
 ## Running
 To run the backend server, run the command `npm run start` in the root directory of the repository
@@ -1260,3 +1299,18 @@ Responses:
     "Unlike comment not successful - <reasonForError>"
     ```
 
+## Tests Case
+Test cases can be foun in the folder `/test`, or follow the link [Test Cases](/test).
+
+
+[## Introduction]: https://github.com/arrikenw/IT-Project#introduction-1
+
+[/docs]: /docs
+
+[### Motivation for E-FOLIO]: /docs
+
+[## Set Up]: /docs
+
+[## Set Up]: /setup
+
+[##-set-up]: ##-set-up

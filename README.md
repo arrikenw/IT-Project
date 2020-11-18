@@ -198,7 +198,7 @@ Our backend is built using node.js with express middleware. The core of our syst
 
 We provide a more in-depth review of our authentication process and our controller functionality below.
 
-### Unconvential algorithms
+### Unconventional algorithms
 
 Our post search performs a regex string search across post content and tags. This has a complexity of O(n), where n is the length of the entire corpus of our site. WE DOOMED, WHAT AN ALGORITHM!!!
 

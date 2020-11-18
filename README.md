@@ -7,7 +7,7 @@
 * [Set Up](#set-up)
 * [System Requirements](#system-requirements)
 * [Running](#running)
-* [Deployment](#deplyoment)
+* [Deployment](#deployment)
 - #### Style Guide
   - Code Style
   - Console Logging
@@ -62,16 +62,38 @@ To create a database to use with Efolio, first make an account and create a clus
 
 Once the cluster has been made, navigate to "Network Access" under "Security" on the right side menu. Within this tab, the IP address of Efolio server can be whitelisted to allow the backend server to access the MongoDB database. An IP address of 0.0.0.0 can also be added to whitelist all IP addresses.
 
+<p align="center">
+  <img src="images/mongo_db_ip_address.png"  width="1000" >
+</p>
+
 Next, navigate to the "Database Access" tab and create a new database user. Ensure the authentication method is password and the user is given both read and write privileges. The username and password created here will be used by the backend server to access the MongoDB database.
+
+<p align="center">
+  <img src="images/mongo_db_new_user.png"  width="1000" >
+</p>
+
 
 #### Creating AWS S3 Bucket
 Efolio uses an AWS S3 Bucket to store user's uploaded files, such as images, videos and other documents. In the currently deployed version, a free S3 Bucket is used with limited monthly requests.
 
  To create a AWS S3 Bucket, first create an AWS account [here](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start).  Next navigate to the service called "S3". This can be done by simply searching for "S3" in the Find Services search box.
+ 
+ <p align="center">
+  <img src="images/aws_bucket_search.png"  width="1000" >
+</p>
 
 Select the orange "Create bucket" icon and create the S3 bucket. Ensure the Bucket name is recorded as it will be later. Do not change any other settings for the S3 Bucket.
 
+ <p align="center">
+  <img src="images/aws_bucket_creation.png"  width="1000" >
+</p>
+
 Finally, navigate to your username at the top right and select "My Security Credentials" from the drop down menu. Open the "Access keys (access key ID and secret access key)" menu and pree the "Create New Access Key" icon. Record the newly created Access Key ID and Secret Key.
+
+ <p align="center">
+  <img src="images/aws_keyt_creation.png"  width="1000" >
+</p>
+
 
 #### Backend .env Files
 The backend server requires the two `.env` files `.env.development` and `.env.test` to be created at the root of the repository in order for the development and testing environments to function.
@@ -100,6 +122,11 @@ Attributes:
 Continuous Inegration testing allows the code to automatically tested whenever a new pull request to the Master branch is made. The GitHub action can be found within the `.github` directory and the testing is done the package Jest. 
 
 To set up the continuous integration testing, the attributes from the `.env.test` file made prior must be replicated within the GitHub secrets of the repository. Navigate to the repository settings and click onto he "Secrets" tab. Enter the `.env.test` attributes with the same key and value pairs.
+
+ <p align="center">
+  <img src="images/github_actions.png"  width="1000" >
+</p>
+
 ## System Requirements
 This system requires: 
 - Mongo DB server
@@ -147,7 +174,15 @@ The process for remote deployment is same to local deployment. Repeat the above 
 #### Heroku Deployment
 Create an Heroku account [here](https://www.heroku.com/) and create a new app. Within the app, select the "Deploy" tab and choose "GitHub" under "Deployment Method" and connect the repository to the app. Alternate deployment methods can be used as well.  
 
+ <p align="center">
+  <img src="images/heroku_select_repo.png"  width="1000" >
+</p>
+
 Navigate to the "Settings" tab and select the "Reveal Config Vars" icon. Within here, add the key value pairs specified in the `.env` files to the Heroku app. Ensure the key value pair: `NODE_ENV` and `production` is also included.
+
+ <p align="center">
+  <img src="images/heroku_add_vars.png"  width="1000" >
+</p>
 
 Navigate back to the "Deploy" tab and select the branch to be deployed under "Manual Deploy" and select "Deploy Branch". Automatic deploys can be also be enabled if desired. This should deploy the Efolio project to the link `<appname>.herokuapp.com`. The creation of the build of the frontend is handled by the script `heroku-postbuild` which can be found in the file `./package.json`.
 

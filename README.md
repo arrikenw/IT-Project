@@ -1,10 +1,13 @@
 # E-FOLIO:
 
-## Table of Contence
-- #### Introduction 
-- #### Set up 
+## Table of Contents
+-  #### Introduction
+    - Motivation for E-FOLIO
+    - Demo 
+- #### Set up
   - Installing Packages 
   - Backend env. Files
+- #### System Reqirements
 - #### Running
 - #### Style Guide
   - Code Style
@@ -17,19 +20,103 @@
  - Midia
  - Post
  - comments
+- #### Tests Case
   
 
 
 ## Introduction
 This project was created by the Podoju was consists of a backend server using node.js, Express and Mongoose;
- a frontend written using html, css, node.js and react.js; a database using mongoDB, and a file server using AWS S3 Bucket. 
+ a frontend written using html, css, node.js, react.js, and Material UI; a database using mongoDB, and a file server using AWS S3 Bucket. 
  “E-FOLIO” is a web based digital portfolio system. E-FOLIO, allows users to ‘post’ work that they wish to showcase to their
  profile, share their profile with others.
+### Motivation for E-FOLIO 
+[Vision Documentation](/docs)
+
+This folder, `/docs `, includes: 
+- User Stories 
+- Personas
+- Motivational Model 
+- Class Diagram
+- Architecture Diagram 
+### Demo
+Bellow is a link to a demo the hosted project: 
+[https://efolio.herokuapp.com/](https://efolio.herokuapp.com/)
+
+Use the Demo login: 
+- Email:
+- Password:
+
+## Database
+#### Database description
+Our database stores account data, comments, media file metadata, and posts created by users. 
+File storage for uploaded media is not handled by our database – instead, the files are stored in an AWS S3 bucket and their key stored in our database. 
+Our fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format.
+#### Technology rationale
+We selected MongoDB as our database for a handful of reasons:
+- The document-store / schemaless approach allowed us to quickly iterate on our design
+- Our team was familiar with mongoDB and had previously used it to build other systems  
+- Our data was well suited to a “document” style  – many fields are _____ FILL IN HERE____________
+
+#### Document description
+##### Media
+The media document type is used to store media metadata. The id of the media file is used as a key for the media content stored in our S3 bucket. 
+
+The document stores:
+- A general "content category"
+- The MIME-type and extension of the file
+- Privacy settings
+
+The document also stores the following references:
+- The id of the <b>user</b> who uploaded the media file
+##### Posts
+The post document is used to represent the user-produced content that our e-folio system displays. 
+
+The document stores:
+- Privacy settings
+- A tile and description
+- Tags and a general "content category"
+- A list of <b>Comment</b> documents representing the comments made on a post 
+
+The document also stores the following references:
+- The ids of the <b>media</b> documents that contain the thumbnails and files used in the post
+- The id of the <b>user</b> who created the post
+- An array of <b>user</b> ids that represent the users permitted to access a private post
+##### User
+The user document represents the users of our website.
+
+The document stores:
+- Privacy settings
+- Contact details
+- Biographical data
+- Username and a hashed password
+
+The document also stores the following references:
+- The id of a <b>media</b> document that contains the profile picture of the user.
+
+##### Comment
+The comment document is used to store data about comments made on user posts.
+
+The document stores:
+- The comment body
+- Timestamps and other dating information
+
+The document also stores the following references
+- The ids of the <b>users</b> who have liked the post
+- The id of the <b>user</b> who posted the comment
+
+##### Diagram
+We have provided a "crows-foot" diagram of the relations between documents used in our database. Note that the S3 bucket included in the diagram is <b>NOT</b> part of our database.
+<img src="/images/db.png"/> 
 
 ## Set Up
 #### Installing Packages
 Make sure to run `npm install` in both the root directory and in the `/client` directory of this repository to install
-the needed packages
+the needed packages. Material UI is installed as a npm pakage, to save and install to the `package.json` dependencies, 
+run: 
+```
+// with npm
+npm install @material-ui/core@next @emotion/react @emotion/styled
+```
 #### Backend .env Files
 you will also need to create your `.env.development` and `.env.test` in the root directory of this repository.
 These ".env" files should include the listed variables with the correct values for each.
@@ -44,6 +131,20 @@ AWS_SECRET_ACCESS_KEY = <secretAcessKeyForAWSBucket>
 ```
 A different value should be used between the files ".env.development" and ".env.test" for the variable`DB_NAME`
  to ensure the tests are run on a different database than the development database.
+
+## System Requirements
+This system requires: 
+
+Backend
+- Mongo DB ____(??version??)
+- Node.js
+- Expressive
+- AWS Backet
+
+Frontend
+-Material UI ___ (??version)
+-Node.js
+-React.js
 
 ## Running
 To run the backend server, run the command `npm run start` in the root directory of the repository
@@ -1198,3 +1299,18 @@ Responses:
     "Unlike comment not successful - <reasonForError>"
     ```
 
+## Tests Case
+Test cases can be foun in the folder `/test`, or follow the link [Test Cases](/test).
+
+
+[## Introduction]: https://github.com/arrikenw/IT-Project#introduction-1
+
+[/docs]: /docs
+
+[### Motivation for E-FOLIO]: /docs
+
+[## Set Up]: /docs
+
+[## Set Up]: /setup
+
+[##-set-up]: ##-set-up

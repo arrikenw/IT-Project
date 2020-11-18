@@ -175,7 +175,7 @@ function Header({ token, user, logout, history, setSearchResults, searchBy, setS
   const renderLogin = () => {
     return (
       <Button variant="outlined" color="inherit" href="/login">
-        <Typography variant="h6">Login</Typography>
+        <Typography style={{fontFamily:"Verdana"}} variant="h6">Login</Typography>
       </Button>
     )
   }
@@ -244,7 +244,7 @@ function Header({ token, user, logout, history, setSearchResults, searchBy, setS
       <div className={classes.search}>
         <div className="font-icon-wrapper">
           <IconButton style={{padding: "20px", paddingBottom: "25px"}} onClick={sendSearchData} className={classes.searchIcon}>
-            <SearchIcon />
+            <SearchIcon style={{color:"white"}} />
           </IconButton>
         </div>
         <form style={{ display: 'flex', minWidth: "140px" }}>
@@ -266,9 +266,9 @@ function Header({ token, user, logout, history, setSearchResults, searchBy, setS
             <Select
               value={searchBy}
               onChange={handleSearchByChange}
-              style={{width: "67px"}}
+              style={{width: "67px", color:"white"}}
             >
-              <MenuItem style={{marginTop: "40px"}} value="users">Users</MenuItem>
+              <MenuItem style={{ marginTop: "40px"}} value="users">Users</MenuItem>
               <MenuItem value="posts">Posts</MenuItem>
             </Select>
           </FormControl>

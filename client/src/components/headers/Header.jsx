@@ -30,7 +30,6 @@ import PostAddIcon from '@material-ui/icons/PostAdd'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import axios from'axios';
 import logo from '../../assets/efolio-icon.svg'
-import HeaderDrawer from './HeaderDrawer'
 
 
 
@@ -174,7 +173,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   const renderLogin = () => {
     return (
       <Button variant="outlined" color="inherit" href="/login">
-        <Typography variant="h6">Login</Typography>
+        <Typography style={{fontFamily:"Verdana"}} variant="h6">Login</Typography>
       </Button>
     )
   }
@@ -243,7 +242,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       <div className={classes.search}>
         <div className="font-icon-wrapper">
           <IconButton onClick={sendSearchData} className={classes.searchIcon}>
-            <SearchIcon />
+            <SearchIcon style={{color:"white"}} />
           </IconButton>
         </div>
         <form style={{ display: 'flex' }}>
@@ -264,8 +263,9 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
             <Select
               value={searchBy}
               onChange={handleSearchByChange}
+              style={{color:"white"}}
             >
-              <MenuItem style={{marginTop: "40px"}} value="users">Users</MenuItem>
+              <MenuItem style={{ marginTop: "40px"}} value="users">Users</MenuItem>
               <MenuItem value="posts">Posts</MenuItem>
             </Select>
           </FormControl>
@@ -306,7 +306,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
             <Grid item xs={4}>
               {renderSearchBar()}
             </Grid>
-
+            
             <section className={classes.rightToolbar}>
               <Grid container direction="row">
                 <Grid item xs={7}>
@@ -317,6 +317,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
                 </Grid>
               </Grid>
             </section>
+
           </Toolbar>
         </AppBar>
       )

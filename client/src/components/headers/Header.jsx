@@ -29,7 +29,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PostAddIcon from '@material-ui/icons/PostAdd'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import axios from'axios';
-import logo from '../../assets/personal-profile.svg'
+import logo from '../../assets/efolio-icon.svg'
 import HeaderDrawer from './HeaderDrawer'
 
 
@@ -157,15 +157,15 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   const renderSignup = () => {
     return (
-      <Button color="inherit" href="/signup">
-        <Typography variant="h6">Sign up</Typography>
+      <Button variant="outlined" color="inherit" href="/signup">
+        <Typography style={{fontFamily:"Verdana"}} variant="h6">Sign up</Typography>
       </Button>
     )
   }
 
   const renderLogin = () => {
     return (
-      <Button color="inherit" href="/login">
+      <Button variant="outlined" color="inherit" href="/login">
         <Typography variant="h6">Login</Typography>
       </Button>
     )
@@ -285,12 +285,12 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
               <Button href="/">
                 <img
                   src={logo}
-                  alt="dog"
+                  alt="efolio-logo"
                   style={{ height: '35px', marginRight: '5px' }}
                 />
                 <Hidden only={['xs']}>
-                  <Typography style={{ color: 'white' }} variant="h6">
-                    Efolio
+                  <Typography style={{ color: 'white', fontFamily:"Verdana" }} variant="h6">
+                    E-folio
                   </Typography>
                 </Hidden>
               </Button>

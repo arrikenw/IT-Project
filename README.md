@@ -108,6 +108,21 @@ The document also stores the following references
 We have provided a "crows-foot" diagram of the relations between documents used in our database. Note that the S3 bucket included in the diagram is <b>NOT</b> part of our database.
 <img src="/images/db.png"/> 
 
+#### CI/CD Pipeline
+We have built a simple CI/CD pipeline to improve code quality and assist in the deployment of updates. 
+Tests triggered on merge requests to master must pass before code can be merged, and once merged, the updated master branch will be automatically deployed.
+We provide a brief sketch of the role of the CI/CD pipeline in the development cycle below.
+##### Development lifecycle 
+1. Create feature branch
+2. Write new code, test locally
+3. Make pull request
+4. \[CI\] Integration tests are automatically run using Github actions
+    - If tests fail, the merge cannot be completed. Return to step 2
+    - If tests pass, proceed to step 5
+5. Review and approve merge, pull onto master
+6. \[CD\] Merge onto master triggers an automatic deployment to Heroku using Github actions
+7. Heroku will install relevant packages and start the server. The site is now deployed  and reflects the latest changes from master
+
 ## Set Up
 #### Installing Packages
 Make sure to run `npm install` in both the root directory and in the `/client` directory of this repository to install

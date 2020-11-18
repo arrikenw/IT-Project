@@ -190,13 +190,13 @@ Pricing information can be found at https://aws.amazon.com/pricing/.
 ## Backend Architecture
 ### General design
 
-Our backend is built using node.js with express middleware. The core of our system is built from the following key components:
+Our system's backend uses node.js with express middleware. The system is composed of the following key components:
 - An index router that passes requests down to sub-routers. The router is located at ```/routes/index.js```.
 - Sub-routers that authenticate the user and call controller functions. These routers are located in ```/routes```.
 - A collection of controllers associated with comments, media, posts, and users. These controllers are located in ```/controllers```.
 - A collection of Mongoose models and basic database connection logic. Models and DB logic are located in ```/models```.
 
-We provide a more in-depth review of our authentication process and our controller functionality below.
+We provide a more in-depth review of our authentication process and controller functionality below.
 
 ### Unconventional algorithms
 

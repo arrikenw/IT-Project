@@ -4,7 +4,8 @@ import {
   Avatar, Button,
   Card, CardActions, CardContent,
   Grid,
-  Typography
+  Typography,
+  Link
 } from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
@@ -160,9 +161,9 @@ function Comment({user, comment, postID, token}) {
     let titleString = ""
     if (userName) {
         titleString = (
-          <a href={profileUrl}>
+          <Link href={profileUrl} color="inherit">
             {userName}
-          </a>
+          </Link>
         )
     }
     let imageString;

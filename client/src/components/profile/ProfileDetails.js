@@ -6,7 +6,9 @@ import {
   ListItemText,
   Avatar,
   Select,
-  MenuItem, TextField
+  MenuItem,
+  TextField,
+  Typography
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from "prop-types";
@@ -153,6 +155,8 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
       <div
         className={classes.details}
       >
+        {currentUser &&
+        (
         <List component="nav" aria-label="mailbox folders">
           <ListItem className={classes.center}>
             <Avatar
@@ -167,7 +171,7 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
               primary={
                 (
                   <Typography style={{ fontSize:20, fontFamily:"Bahnschrift Semibold" }}>
-                    {currentUser.userName}
+                    { currentUser.userName}
                   </Typography>
                 )
                }
@@ -262,6 +266,7 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
             />
           </ListItem>
         </List>
+        )}
       </div>
     </div>
 

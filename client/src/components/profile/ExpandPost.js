@@ -8,7 +8,7 @@ import {
   Grid,
   Typography,
   CircularProgress,
-  Chip
+  Chip, Link
 } from "@material-ui/core";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
@@ -63,6 +63,8 @@ function ExpandPost({ user, token, history, location }) {
     const [media, setMedia] = useState(null);
     const [postID, setPostID] = useState("");
     const [postUserName, setPostUserName] = useState("");
+    const [profileUrl, setProfileUrl] = useState("");
+    const [pinnedRecently, setPinnedRecently] = useState(false);
     const [unpinnedRecently, setUnpinnedRecently] = useState(false);
 
     function mapCatToComp(type){
@@ -117,21 +119,6 @@ function ExpandPost({ user, token, history, location }) {
           // TODO maybe add some kind of modal pop-up?
         })
     }
-    if (type === 'audio') {
-      return 'audio'
-    }
-
-    const getUserName = (postUserId)=>{
-
-      const UserNamePayload = {filters: {"_id": postUserId}}
-      Axios.post('/api/user/getPublic/', UserNamePayload)
-        .then((resp) => {
-          setPostUserName(resp.data[0].userName);
-        })
-        .catch((err)=>{
-          console.error(err);
-        })
-  }
 
   function addToPinned() {
     setPinnedRecently(true)
@@ -190,24 +177,16 @@ function ExpandPost({ user, token, history, location }) {
     }
   }
 
-  const getUserName = (postUserId) => {
-    const UserNamePayload = { filters: { _id: postUserId } }
-    Axios.post('/api/user/getPublic/', UserNamePayload)
-      .then((resp) => {
-        setPostUserName(resp.data[0].userName)
-        console.log('username:', postUserName)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
   const query = new URLSearchParams(location.search)
   const newPostID = query.get('post')
   if (newPostID !== postID) {
     setPostID(newPostID)
+
   }
 
+
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     // get id from query string
     // fetch post outlined by query string
@@ -238,12 +217,9 @@ function ExpandPost({ user, token, history, location }) {
         console.error(err)
       })
 
-    // get the userName of the post's owner
-    if (post) {
-      getUserName(post.userID)
-    }
   }, [token, postID, user]) // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const classes = useStyles()
 
   let splitStrings = null
@@ -285,6 +261,21 @@ function ExpandPost({ user, token, history, location }) {
       </Button>
     )
   }
+
+  if (post){
+    const UserNamePayload = {filters: {"_id": post.userID}}
+    console.log("username playload", UserNamePayload)
+    Axios.post('/api/user/getPublic/', UserNamePayload)
+      .then((resp) => {
+        if (resp.data[0]) {
+          setPostUserName(resp.data[0].userName);
+        }
+      })
+      .catch((err)=>{
+        console.error(err);
+      })
+  }
+
 
   return (
     <Grid container className={classes.mainContainer}>
@@ -329,7 +320,10 @@ function ExpandPost({ user, token, history, location }) {
             >
               {post &&
                 post.createdAt &&
-                `Posted ${timeago.format(post.createdAt, 'en_US')}`}
+                `Posted ${timeago.format(post.createdAt, 'en_US')} by `}
+              <Link href={profileUrl} color="inherit">
+                {postUserName || user.userName}
+              </Link>
             </Typography>
             {media && media.mimeType !== 'application/pdf' && (
               <GenericMedia
@@ -340,7 +334,9 @@ function ExpandPost({ user, token, history, location }) {
             )}
             {!media && (
               <Grid container justify="center">
-                <CircularProgress /> Loading post media{' '}
+                <CircularProgress />
+                Loading post media
+                {' '}
               </Grid>
             )}
             {media && media.mimeType === 'application/pdf' && (
@@ -353,7 +349,8 @@ function ExpandPost({ user, token, history, location }) {
                 />
               </Grid>
               )}
-              {media && media.mimeType === 'application/pdf' && <Grid container justify="center"><object aria-label='post' data={media.contentStr} type="application/pdf" width="100%" height="500px" /></Grid>}
+
+            {media && media.mimeType === 'application/pdf' && <Grid container justify="center"><object aria-label='post' data={media.contentStr} type="application/pdf" width="100%" height="500px" /></Grid>}
 
             <Typography
               variant="body2"
@@ -361,7 +358,8 @@ function ExpandPost({ user, token, history, location }) {
               component="p"
               style={{ paddingTop: '40px', fontSize: 20 }}
             >
-              {splitStrings && splitStrings.length > 0 && splitStrings[0]}{' '}
+              {splitStrings && splitStrings.length > 0 && splitStrings[0]}
+              {' '}
               {splitStrings && splitStrings.length > 1 && splitStrings[1]}
             </Typography>
           </CardContent>

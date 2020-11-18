@@ -170,7 +170,7 @@ function Comment({user, comment, postID, token}) {
                   {titleString}
 
                 </Typography>
-                <Typography style={{marginBottom:"15px", marginTop:"-8px", paddingLeft:"2px"}} gutterBottom variant="h6" color="textSecondary" component="h6">
+                <Typography style={{marginTop:"-8px", paddingLeft:"2px"}} gutterBottom variant="h6" color="textSecondary" component="h6">
                   {comment && timeago.format(comment.createdAt, 'en_US')}
                 </Typography>
               </div>

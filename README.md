@@ -52,6 +52,106 @@ Demo credentials
 - Email: _______
 - Password: _______
 
+## Set Up
+#### Installing Packages
+To install the required Node.js packages, run the command `npm install` in both the root directory and in the `/client` directory of this repository. In order to use the npm, ensure Node.js is installed. 
+
+#### Creating MongoDB Database
+Efolio uses a database maintained by MongoDB to store and retreive the websites data. These instructions are for using MongoDB's cloud hosted database. However, a locally hosted MongoDB server can be used [instead](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/).
+
+To create a database to use with Efolio, first make an account and create a cluster  with their [website](https://www.mongodb.com/). The currently deployed version of Efolio uses the free tier of MongoDB. 
+
+Once the cluster has been made, navigate to "Network Access" under "Security" on the right side menu. Within this tab, the IP address of Efolio server can be whitelisted to allow the backend server to access the MongoDB database. An IP address of 0.0.0.0 can also be added to whitelist all IP addresses.
+
+Next, navigate to the "Database Access" tab and create a new database user. Ensure the authentication method is password and the user is given both read and write privileges. The username and password created here will be used by the backend server to access the MongoDB database.
+
+#### Creating AWS S3 Bucket
+Efolio uses an AWS S3 Bucket to store user's uploaded files, such as images, videos and other documents. In the currently deployed version, a free S3 Bucket is used with limited monthly requests.
+
+ To create a AWS S3 Bucket, first create an AWS account [here](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start).  Next navigate to the service called "S3". This can be done by simply searching for "S3" in the Find Services search box.
+
+Select the orange "Create bucket" icon and create the S3 bucket. Ensure the Bucket name is recorded as it will be later. Do not change any other settings for the S3 Bucket.
+
+Finally, navigate to your username at the top right and select "My Security Credentials" from the drop down menu. Open the "Access keys (access key ID and secret access key)" menu and pree the "Create New Access Key" icon. Record the newly created Access Key ID and Secret Key.
+
+#### Backend .env Files
+The backend server requires the two `.env` files `.env.development` and `.env.test` to be created at the root of the repository in order for the development and testing environments to function.
+The `.env` files should include the listed variables with the correct values for each.
+```dotenv
+PORT = <portForBackEndServer>
+MONGO_USERNAME = <userNameForMongoDBConnection>
+MONGO_USERNAME = <passwordForMongoDBConnection>
+DB_NAME = <nameOfDataBase>
+SECRET = <secretUsedToCreateAuthTokens>
+AWS_ACCESS_KEY_ID = <accessKeyForAWSBucket>
+AWS_SECRET_ACCESS_KEY = <secretAcessKeyForAWSBucket>
+AWS_BUCKET_NAME = <AWSBucketName>
+```
+Attributes:
+- <b>\<portForBackEndServer></b> should the port which the backend server should run on.
+- <b>\<userNameForMongoDBConnection></b> should be the username of the created mongoDB user made earlier.
+- <b>\<passwordForMongoDBConnection></b> should be the password of the created mongoDB user made earlier.
+- <b>\<nameOfDataBase></b> should be a name for the MongoDB Collection used by the backend server. For initial set up, any server name can be chosen as a new Collection will made if supplied name does not exist. The Collection name should differ between the two `.env` files `.env.development` and `.env.test`to ensure the tests are not run on the development Collection.
+- <b>\<secretUsedToCreateAuthTokens></b> Should be a long random string with which access tokens can be securely generated from. The secret currently used in deployment is 138 characters long.
+- <b>\<accessKeyForAWSBucket></b> Should be the Access Key ID created earlier when setting up the AWS S3 Bucket.
+- <b>\<secretAcessKeyForAWSBucket></b> Should be the Secret Key created earlier when setting up the AWS S3 Bucket.
+- <b>\<AWSBucketName></b> Should be the Bucket name created earlier when setting up the AWS S3 Bucket.
+
+#### GitHub Actions Continuous Integration
+Continuous Inegration testing allows the code to automatically tested whenever a new pull request to the Master branch is made. The GitHub action can be found within the `.github` directory and the testing is done the package Jest. 
+
+To set up the continuous integration testing, the attributes from the `.env.test` file made prior must be replicated within the GitHub secrets of the repository. Navigate to the repository settings and click onto he "Secrets" tab. Enter the `.env.test` attributes with the same key and value pairs.
+## System Requirements
+This system requires: 
+- Mongo DB server
+	- can be hosted locally or on the cloud
+- Node.js
+	- version 12.x^
+	- key  packages used
+		- Express
+		- Mongoose
+		- Jest
+		- React
+		- Material UI
+- AWS S3 Bucket
+
+## Running
+
+#### Development Backend Server
+To run the backend server in development mode, run the command `node server.js` with the environmental variable "NODE_ENV" set to "development". This can be done on Linux with the command `NODE_ENV=development node ./server.js`. To do this Windows, run either `SET NODE_ENV=development&node server.js` or the script `npm run start`. These commands should be run within the root directory of the repository.
+
+#### Development Frontend Server
+To run a server for frontend development, run the command `react-scripts start` or the script `npm run start` in the `/client` directory of the repository. The front end server will automatically request to the backend server for a simple development process.
+
+#### Backend Testing
+To run the tests for the backend code,  run the command `npm run test` in the root directory of the repository. This will run all of the integration tests created for the backend and display which tests succeed and which failed. These tests are run on the test MongoDB collection as it uses the `.env.test` file created earlier. To ensure no race conditions affect testing, do not run multiple tests at the same time, including the GitHub continuous integration testing.
+
+#### Code Linting
+Eslint was used in the creation of Efolio, and ensure consistency within the code. To run Eslint on the project, run the command `npm run lint` in the root directory of the repository.
+
+## Deployment
+Efolio is current deployed with Heroku [here](https://efolio.herokuapp.com/). Deployment can be done locally or using a hosting service such as Heroku. 
+
+#### Local Deployment
+To deploy locally, run the command `npm run build` in the `/client` directory to create a build of the frontend. Next run the backend server with the the environmental variable "NODE_ENV" set to "production" as well as the other environmental variable specified in the `.env` files. Ensure this is done the in root of the repository.
+Demo Commands:
+- For Linux:
+	- `NODE_ENV=production PORT=<port> MONGO_USERNAME=<username> MONGO_USERNAME=<password> DB_NAME=<dbname> SECRET=<secret> AWS_ACCESS_KEY_ID=<accesskey> AWS_SECRET_ACCESS_KEY=<secretkey>
+AWS_BUCKET_NAME=<bucketname> node ./server.js`
+- For Windows:
+	- `SET "NODE_ENV=production" & SET "PORT=<port>" & SET "MONGO_USERNAME=<username>" & SET "MONGO_USERNAME=<password>" & SET "DB_NAME=<dbname>" & SET "SECRET=<secret>" & SET "AWS_ACCESS_KEY_ID=<accesskey>" & SET "AWS_SECRET_ACCESS_KEY=<secretkey>" & SET
+"AWS_BUCKET_NAME=<bucketname>" & node ./server.js`
+
+#### Remote Deployment
+The process for remote deployment is same to local deployment. Repeat the above process on the chosen remoting hosting solution. The rest of this guide will foucs of deployment on Heroku, which the project was streamlined for.
+
+#### Heroku Deployment
+Create an Heroku account [here](https://www.heroku.com/) and create a new app. Within the app, select the "Deploy" tab and choose "GitHub" under "Deployment Method" and connect the repository to the app. Alternate deployment methods can be used as well.  
+
+Navigate to the "Settings" tab and select the "Reveal Config Vars" icon. Within here, add the key value pairs specified in the `.env` files to the Heroku app. Ensure the key value pair: `NODE_ENV` and `production` is also included.
+
+Navigate back to the "Deploy" tab and select the branch to be deployed under "Manual Deploy" and select "Deploy Branch". Automatic deploys can be also be enabled if desired. This should deploy the Efolio project to the link `<appname>.herokuapp.com`. The creation of the build of the frontend is handled by the script `heroku-postbuild` which can be found in the file `./package.json`.
+
 ## Database
 #### Database description
 Our database stores account data, comments, media file metadata, and posts created by users. 
@@ -128,53 +228,6 @@ We provide a brief sketch of the role of the CI/CD pipeline in the development c
 5. Review and approve merge, pull onto master
 6. \[CD\] Merge onto master triggers an automatic deployment to Heroku using Github actions
 7. Heroku will install relevant packages and start the server. The site is now deployed  and reflects the latest changes from master
-
-## Set Up
-#### Installing Packages
-Make sure to run `npm install` in both the root directory and in the `/client` directory of this repository to install
-the needed packages. Material UI is installed as a npm pakage, to save and install to the `package.json` dependencies, 
-run: 
-```
-// with npm
-npm install @material-ui/core@next @emotion/react @emotion/styled
-```
-#### Backend .env Files
-you will also need to create your `.env.development` and `.env.test` in the root directory of this repository.
-These ".env" files should include the listed variables with the correct values for each.
-```dotenv
-PORT = <portForBackEndServer>
-MONGO_USERNAME = <userNameForMMongoDBConnection>
-MONGO_USERNAME = <passwordForMMongoDBConnection>
-DB_NAME = <nameOfDataBase>
-SECRET = <secretUsedToCreateAuthTokens>
-AWS_ACCESS_KEY_ID = <accessKeyForAWSBucket>
-AWS_SECRET_ACCESS_KEY = <secretAcessKeyForAWSBucket>
-```
-A different value should be used between the files ".env.development" and ".env.test" for the variable`DB_NAME`
- to ensure the tests are run on a different database than the development database.
-
-## System Requirements
-This system requires: 
-
-Backend
-- Mongo DB ____(??version??)
-- Node.js
-- Expressive
-- AWS Backet
-
-Frontend
--Material UI ___ (??version)
--Node.js
--React.js
-
-## Running
-To run the backend server, run the command `npm run start` in the root directory of the repository
-
-To run the frontend server for testing, run the command `npm run start` int the `/client` directory of the repository
-
-To run the linter for the backend code,  run the command `npm run lint` in the root directory of the repository
-
-To run the tests for the backend code,  run the command `npm run test` in the root directory of the repository
 
 ## Costs and licencing considerations
 - Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries comercially, a licencing fee must be paid.

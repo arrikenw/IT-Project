@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 function Profile({ user, token, history, location }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [filterTag, setFilterTag] = useState('')
   const [sortField, setSortField] = useState('createdAt')
   const [sortDirection, setSortDirection] = useState('desc')

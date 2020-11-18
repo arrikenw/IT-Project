@@ -1,14 +1,13 @@
 # E-FOLIO:
 
 ## Table of Contents
--  #### Introduction
+* [Introduction](#introduction)
     - Motivation for E-FOLIO
     - Demo 
-- #### Set up
-  - Installing Packages 
-  - Backend .env Files
-- #### System Reqirements
-- #### Running
+* [Set Up](#set-up)
+* [System Requirements](#system-requirements)
+* [Running](#running)
+* [Deployment](#deplyoment)
 - #### Style Guide
   - Code Style
   - Console Logging

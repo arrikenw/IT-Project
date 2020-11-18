@@ -160,6 +160,7 @@ Efolio is current deployed with Heroku [here](https://efolio.herokuapp.com/). De
 
 #### Local Deployment
 To deploy locally, run the command `npm run build` in the `/client` directory to create a build of the frontend. Next run the backend server with the the environmental variable "NODE_ENV" set to "production" as well as the other environmental variable specified in the `.env` files. Ensure this is done the in root of the repository.
+
 Demo Commands:
 - For Linux:
 	- `NODE_ENV=production PORT=<port> MONGO_USERNAME=<username> MONGO_USERNAME=<password> DB_NAME=<dbname> SECRET=<secret> AWS_ACCESS_KEY_ID=<accesskey> AWS_SECRET_ACCESS_KEY=<secretkey>

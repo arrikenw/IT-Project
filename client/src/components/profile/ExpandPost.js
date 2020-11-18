@@ -91,9 +91,6 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     function addToPinned(){
-      if (pinnedRecently || user.pinnedPosts.includes(post._id)){
-        return;
-      }
       setPinnedRecently(true);
       setUnpinnedRecently(false);
       const payload = {postID: post._id};
@@ -115,9 +112,6 @@ function ExpandPost({ user, token, history, location }) {
     }
 
     function removeFromPinned(){
-      if (unpinnedRecently){
-        return;
-      }
       setPinnedRecently(false);
       setUnpinnedRecently(true);
       const payload = {postID: post._id};

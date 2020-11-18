@@ -131,30 +131,34 @@ function Profile({ user, token, history, location }) {
           paper: classes.drawerPaper,
         }}
       >
-        {/* icon for closing drawer */}
-        <div style={{height: "64px"}} />
-        <Grid container style={{height: "calc(100% - 64px)"}}>
-          <Grid item xs={11}>
-            <ProfileDetails
-              currentUser={currentUser}
-              setSearchDirection={setSortDirection}
-              setSearchField={setSortField}
-              setFilterTag={setFilterTag}
-              token={token}
-            />
+        <div style={{overflowY: "scroll"}}>
+          {/* icon for closing drawer */}
+          <div style={{height: "64px"}} />
+          <Grid container style={{height: "calc(100% - 64px)"}}>
+            <Grid item xs={10}>
+              <ProfileDetails
+                currentUser={currentUser}
+                setSearchDirection={setSortDirection}
+                setSearchField={setSortField}
+                setFilterTag={setFilterTag}
+                token={token}
+              />
+            </Grid>
+            <Grid item xs={2}>
+
+              <Button
+                style={{height: "100vh"}}
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+              >
+                <MenuIcon />
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={1}>
-            <div style={{height: "46%"}} />
-            <Button
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-            >
-              <MenuIcon />
-            </Button>
-          </Grid>
-        </Grid>
+        </div>
+
       </Drawer>
       {/* <main
         className={clsx(classes.content, {
@@ -176,7 +180,7 @@ function Profile({ user, token, history, location }) {
 
 
         <Hidden mdDown>
-          <Box maxWidth={400} style={{flex: "0 0 65%", marginRight: "10%"}}>
+          <Box maxWidth={500} style={{flex: "0 0 65%", marginRight: "10%", overflowY: 'auto'}}>
             <ProfileDetails
               currentUser={currentUser}
               setSearchDirection={setSortDirection}

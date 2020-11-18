@@ -161,7 +161,7 @@ function PinnedPost({ user, token, history, location, id }) {
           console.log(user.pinnedPosts)
           setIds(user.pinnedPosts);
           setName( user.userName);
-          
+
           getPinnedPostContent(user.pinnedPosts.map(item=>item), [], [], 0);
           return
         }
@@ -193,7 +193,7 @@ function PinnedPost({ user, token, history, location, id }) {
             <Grid container>
               <Grid item xs={12}>
                 <Grid container justify="center">
-                  <Typography variant="h5" style={{color: "white", paddingBottom: "10px"}}>
+                  <Typography variant="h5" style={{color: "black", paddingBottom: "10px"}}>
                     Pinned posts
                   </Typography>
                 </Grid>

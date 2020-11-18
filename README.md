@@ -6,45 +6,51 @@
     - Demo 
 - #### Set up
   - Installing Packages 
-  - Backend env. Files
+  - Backend .env Files
 - #### System Reqirements
 - #### Running
 - #### Style Guide
   - Code Style
-  - Constol Log 
+  - Console Logging
   - API Responses
-  - Git Hub
+  - GitHub
   - Documentation
 - #### API Documentation
  - Users
- - Midia
+ - Media
  - Post
- - comments
-- #### Tests Case
+ - Comments
+- #### Test Cases
   
 
 
 ## Introduction
-This project was created by the Podoju was consists of a backend server using node.js, Express and Mongoose;
- a frontend written using html, css, node.js, react.js, and Material UI; a database using mongoDB, and a file server using AWS S3 Bucket. 
- “E-FOLIO” is a web based digital portfolio system. E-FOLIO, allows users to ‘post’ work that they wish to showcase to their
- profile, share their profile with others.
-### Motivation for E-FOLIO 
-[Vision Documentation](/docs)
+E-folio is a web-based digital portfolio system. It allows users to post work that they hope to share with the world. Users can explore and search the posts of others and leave feedback and likes.
 
-This folder, `/docs `, includes: 
+The system is composed of:
+- A backend server that uses node.js with express middleware
+- A react.js frontend that makes use of MaterialUI for styling
+- A mongoDB database
+- An Amazon S3 Bucket file server 
+
+### Motivation for E-FOLIO 
+Documentation on the core vision of our system can be found in our [/docs directory](/docs).
+
+The  `/docs ` directory includes the following items: 
 - User Stories 
 - Personas
 - Motivational Model 
 - Class Diagram
 - Architecture Diagram 
-### Demo
-Bellow is a link to a demo the hosted project: 
-[https://efolio.herokuapp.com/](https://efolio.herokuapp.com/)
 
-Use the Demo login: 
-- Email:
-- Password:
+### Demo
+A hosted demo of the project can be found [here](https://efolio.herokuapp.com/).
+
+We have provided a demo account so that you can see a fully fleshed out account. However, feel free to create new user accounts and posts. 
+
+Demo credentials
+- Email: _______
+- Password: _______
 
 ## Database
 #### Database description
@@ -1325,7 +1331,7 @@ Responses:
     ```
 
 ## Tests Case
-Test cases can be foun in the folder `/test`, or follow the link [Test Cases](/test).
+Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
 
 
 [## Introduction]: https://github.com/arrikenw/IT-Project#introduction-1

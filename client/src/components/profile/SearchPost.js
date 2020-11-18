@@ -190,9 +190,11 @@ class SearchPost extends Component {
 
         <CardActions style={{paddingBottom: "0px", display: 'flex'}}>
 
-          <div style={{float:"left", paddingBottom:"10px", paddingLeft:"8px"}}>
-            {post && <LikeButtons post={post} user={user} token={token} />}
-          </div>
+          {token && (
+            <div style={{ float: "left", paddingBottom: "10px", paddingLeft: "8px" }}>
+              {post && <LikeButtons post={post} user={user} token={token} />}
+            </div>
+            )}
 
 
         </CardActions>

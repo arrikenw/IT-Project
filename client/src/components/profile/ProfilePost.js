@@ -69,7 +69,14 @@ class ProfilePost extends Component {
       return;
     }
 
-    const controllerUrl = "/api/media/";
+    let controllerUrl
+    if (window.localStorage.getItem("token")){
+      controllerUrl = "/api/media/";
+    }
+    else{
+      controllerUrl = "/api/media/getPublic";
+    }
+
     const payload = {
       // TODO make thumbnail fetching work properly
       mediaID: post.thumbnailURL,

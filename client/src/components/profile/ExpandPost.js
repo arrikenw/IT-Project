@@ -291,8 +291,8 @@ function ExpandPost({ user, token, history, location }) {
             <CardActions style={{paddingLeft:"30px"}}>
               <Grid container>
                 <Grid item xs={12} style={{ width:"100%", height: "50px"}}>
-                  {post &&  <LikeButtons post={post} user={user} token={token} /> }
-                  {renderPin()}
+                  {token && post &&  <LikeButtons post={post} user={user} token={token} /> }
+                  {token && post && (post.userID === user._id) && renderPin()}
                   {post && (post.userID === user._id) && (
                     <Button
                       variant="contained"

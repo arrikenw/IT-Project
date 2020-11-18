@@ -18,7 +18,6 @@ import PropTypes from "prop-types";
 import Container from "@material-ui/core/Container";
 import { Row, Dropdown, DropdownButton } from "react-bootstrap";
 import Button from "@material-ui/core/Button";
-import testImage from '../../assets/logo512.png'
 import fetchMediaUtil from "../utils/fetchMedia";
 
 const useStyles = makeStyles((theme) => ({
@@ -171,19 +170,37 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
             />
           </ListItem>
           <ListItem className={classes.center}>
-            <ListItemText>{currentUser.userName}</ListItemText>
+            <ListItemText
+              disableTypography
+              primary={
+                (
+                  <Typography style={{fontWeight:"bold", fontSize:20, fontFamily:"Verdana" }}>
+                    {currentUser.userName}
+                  </Typography>
+                )
+               }
+            />
           </ListItem>
           <ListItem>
-            <ListItemText>
-              {currentUser.firstName}
-              {' '}
-              {currentUser.lastName}
-            </ListItemText>
+            <ListItemText
+              disableTypography
+              primary={
+                (
+                  <Typography style={{}}>
+                    <b>Name</b>
+                    <br />
+                    {currentUser.firstName}
+                    {' '}
+                    {currentUser.lastName}
+                  </Typography>
+                )
+              }
+            />
           </ListItem>
           <Divider variant="middle" />
           <ListItem>
             <ListItemText>
-              Biography:
+              <b>About</b>
               <br />
               {currentUser.biography}
             </ListItemText>
@@ -193,7 +210,7 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
           {renderPhone()}
           <ListItem>
             <ListItemText>
-              Organisation:
+              <b>Organisation</b>
               <br />
               {currentUser.organisation}
             </ListItemText>
@@ -201,16 +218,27 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
           <Divider variant="middle" />
           <ListItem>
             <ListItemText>
-              Professional Fields:
+              <b>Professional Fields</b>
               <br />
               {getProfessionalFields()}
             </ListItemText>
           </ListItem>
           <Divider className={classes.dividers} />
-          <ListItem>
-            <ListItemText>
-              View:
-            </ListItemText>
+          <ListItem
+            alignItems='center'
+          >
+            <ListItemText
+              disableTypography
+              primary={
+                (
+                  <Typography style={{fontWeight:"bold",  align: "center"}}>
+                    View
+                  </Typography>
+                )
+              }
+            />
+
+
           </ListItem>
           <ListItem>
             <ListItemText>

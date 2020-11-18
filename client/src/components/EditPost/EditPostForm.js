@@ -18,7 +18,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import CardMedia from "@material-ui/core/CardMedia";
 import MuiAlert from "@material-ui/lab/Alert";
 import add from "../utils/addMedia"
-import testImage from '../../assets/logo512.png'
 import GenericMedia from "../utils/GenericMedia";
 
 const useStyles = makeStyles({

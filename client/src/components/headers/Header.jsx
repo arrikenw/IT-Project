@@ -30,7 +30,7 @@ import PostAddIcon from '@material-ui/icons/PostAdd'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import axios from'axios';
 import logo from '../../assets/personal-profile.svg'
-import HeaderDrawer from './headerDrawer'
+import HeaderDrawer from './HeaderDrawer'
 
 
 
@@ -269,10 +269,10 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   const renderAddPost = () => {
     return (
-      <IconButton color="inherit" href="/addpost">
+      <Button style={{marginTop:"5px"}} variant="outlined" color="inherit" href="/addpost">
         <PostAddIcon />
         <Typography variant="button">Add post</Typography>
-      </IconButton>
+      </Button>
     )
   }
 

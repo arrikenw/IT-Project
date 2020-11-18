@@ -190,7 +190,32 @@ Pricing information can be found at https://aws.amazon.com/pricing/.
 ## Backend Architecture
 ### General design
 
-### Media (```/api/media```)
+Our backend is built using node.js with express middleware. The core of our system is built from the following key components:
+- An index router that passes requests down to sub-routers. The router is located at ```/routes/index.js```.
+- Sub-routers that authenticate the user and call controller functions. These routers are located in ```/routes```.
+- A collection of controllers associated with comments, media, posts, and users. These controllers are located in ```/controllers```.
+- A collection of Mongoose models and basic database connection logic. Models and DB logic are located in ```/models```.
+
+We provide a more in-depth review of our authentication process and our controller functionality below.
+
+### Unconvential algorithms
+
+Our post search performs a regex string search across post content and tags. This has a complexity of O(n), where n is the length of the entire corpus of our site. WE DOOMED, WHAT AN ALGORITHM!!!
+
+### User authentication
+Our system uses bearer tokens to authenticate requests. The tokens have a 6-hour expiry time for ________________________________ TODO security explanation.
+
+
+For all requests made to routes that require authentication, our middleware extracts and validates the provided authorization token.
+
+If the token is valid, user information is injected into the request before it is passed to our controllers.
+To use this user information in a backend controller, simply access ```req.user``` to find the user id and other information.
+
+If the token is invalid, expired, or not provided, the server will respond with status code 403 and the message ```Forbidden```.
+
+Note that some routes do not require authentication, for example those that serve posts with public visibility.
+
+### Media controller (```/api/media```)
 
 The media route is used for all requests that deal with the uploading, fetching, updating, or deletion of media files. All requests to this route are handled by the controller located at ```/controllers/media.js```.
 

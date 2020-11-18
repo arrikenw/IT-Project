@@ -85,8 +85,8 @@ The document also stores the following references
 - The id of the <b>user</b> who posted the comment
 
 ##### Diagram
-We have provided a "crows-foot" diagram of the relations between documents used in our database. Note that the S3 bucket included in the diagram is NOT part of our database.
-<img src="/.images/db.png"/> 
+We have provided a "crows-foot" diagram of the relations between documents used in our database. Note that the S3 bucket included in the diagram is <b>NOT</b> part of our database.
+<img src="/images/db.png"/> 
 
 ## Set Up
 #### Installing Packages

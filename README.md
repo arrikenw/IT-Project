@@ -1,6 +1,6 @@
 # E-FOLIO:
 
-## Table of Contence
+## Table of Contents
 -  #### Introduction
     - Motivation for E-FOLIO
     - Demo 
@@ -45,6 +45,68 @@ Bellow is a link to a demo the hosted project:
 Use the Demo login: 
 - Email:
 - Password:
+
+## Database
+#### Database description
+Our database stores account data, comments, media file metadata, and posts created by users. 
+File storage for uploaded media is not handled by our database – instead, the files are stored in an AWS S3 bucket and their key stored in our database. 
+Our fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format.
+#### Technology rationale
+We selected MongoDB as our database for a handful of reasons:
+- The document-store / schemaless approach allowed us to quickly iterate on our design
+- Our team was familiar with mongoDB and had previously used it to build other systems  
+- Our data was well suited to a “document” style  – many fields are _____ FILL IN HERE____________
+
+#### Document description
+##### Media
+The media document type is used to store media metadata. The id of the media file is used as a key for the media content stored in our S3 bucket. 
+
+The document stores:
+- A general "content category"
+- The MIME-type and extension of the file
+- Privacy settings
+
+The document also stores the following references:
+- The id of the <b>user</b> who uploaded the media file
+##### Posts
+The post document is used to represent the user-produced content that our e-folio system displays. 
+
+The document stores:
+- Privacy settings
+- A tile and description
+- Tags and a general "content category"
+- A list of <b>Comment</b> documents representing the comments made on a post 
+
+The document also stores the following references:
+- The ids of the <b>media</b> documents that contain the thumbnails and files used in the post
+- The id of the <b>user</b> who created the post
+- An array of <b>user</b> ids that represent the users permitted to access a private post
+##### User
+The user document represents the users of our website.
+
+The document stores:
+- Privacy settings
+- Contact details
+- Biographical data
+- Username and a hashed password
+
+The document also stores the following references:
+- The id of a <b>media</b> document that contains the profile picture of the user.
+
+##### Comment
+The comment document is used to store data about comments made on user posts.
+
+The document stores:
+- The comment body
+- Timestamps and other dating information
+
+The document also stores the following references
+- The ids of the <b>users</b> who have liked the post
+- The id of the <b>user</b> who posted the comment
+
+##### Diagram
+We have provided a "crows-foot" diagram of the relations between documents used in our database. Note that the S3 bucket included in the diagram is <b>NOT</b> part of our database.
+<img src="/images/db.png"/> 
 
 ## Set Up
 #### Installing Packages

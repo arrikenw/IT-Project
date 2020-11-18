@@ -1,26 +1,27 @@
 # E-FOLIO:
 
-## Table of Contence
--  #### Introduction
+## Table of Contents
+- [Introduction](#Introduction)
     - Motivation for E-FOLIO
     - Demo 
-- #### Set up
+- [Set up](#Set Up)
   - Installing Packages 
   - Backend env. Files
-- #### System Reqirements
-- #### Running
-- #### Style Guide
+- [System Requirements](#System Requirements)
+- [Running](#Running)
+- [Style Guide](#Style Guide)
   - Code Style
   - Constol Log 
   - API Responses
   - Git Hub
   - Documentation
-- #### API Documentation
+- [Features](#Features)
+- [API Documentation](#API Documentation)
  - Users
  - Midia
  - Post
  - comments
-- #### Tests Case
+- [Tests Case](#Test Case)
   
 
 
@@ -36,7 +37,7 @@ This folder, `/docs `, includes:
 - User Stories 
 - Personas
 - Motivational Model 
-- Class Diagram
+- Class Diagram 
 - Architecture Diagram 
 ### Demo
 Bellow is a link to a demo the hosted project: 
@@ -80,9 +81,9 @@ Backend
 - AWS Backet
 
 Frontend
--Material UI ___ (??version)
--Node.js
--React.js
+- Material UI ___ (??version)
+- Node.js
+- React.js
 
 ## Running
 To run the backend server, run the command `npm run start` in the root directory of the repository
@@ -272,10 +273,14 @@ made for the new functionality
 - a pull request **must be reviewed by another** before being approved
 - when a pull request is made, the relevant trello post is **moved into review**
 - when a pull request is approved, the relevant trello post is **moved into done**
-
 ### Documentation:
 - code must have relevant comments explaining what blocks do
 - API routes should be updated into this read me with all details included
+
+## Features
+
+
+
 
 ## API Documentation
 Here is the needed documentation of the APIs used by the frontend to request to the backend.

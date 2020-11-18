@@ -65,7 +65,10 @@ function PinnedPost({ user, token, history, location, id }) {
     }
 
     function getMediaAndNextPost(mID, PostIDs, exportPosts, exportMedia, errCount){
-        const controllerUrl = "/api/media/";
+        let controllerUrl = "/api/media/";
+        if (!token) {
+          controllerUrl = "/api/media/getPublic"
+        }
         const payload = {
             mediaID: mID,
         };
@@ -187,7 +190,7 @@ function PinnedPost({ user, token, history, location, id }) {
     const classes = useStyles();
 
 
-    if (ids && okToRender){
+    if (ids.length > 0 && okToRender){
         return (
           <Paper style={{display: "flex", backgroundColor: "white", padding: "10px", margin: "3%"}}>
             <Grid container>
@@ -237,11 +240,14 @@ function PinnedPost({ user, token, history, location, id }) {
 
         )
     }
-        return (
-          <div style={{width: "100%", height: '80px', justifyContent: "center", textAlign: "center", paddingTop: "30px"}}>
-            <CircularProgress />
-          </div>
-);
+    if (okToRender) {
+      return <> </>
+    }
+  return (
+    <div style={{width: "100%", height: '80px', justifyContent: "center", textAlign: "center", paddingTop: "30px"}}>
+      <CircularProgress />
+    </div>
+  )
     
 }
 

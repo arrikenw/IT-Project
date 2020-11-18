@@ -119,7 +119,7 @@ function GenericMedia({ style, mimeType, src, className, title, thumbnail }) {
   if (!src || src === "") {
     return <> </>
   }
-
+  console.log(realStyle)
   if (realType !== "audio") {
     return (
       // eslint-disable-next-line react/jsx-props-no-spreading

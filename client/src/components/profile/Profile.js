@@ -131,10 +131,10 @@ function Profile({ user, token, history, location }) {
           paper: classes.drawerPaper,
         }}
       >
-        <div style={{overflowY: "scroll"}}>
+        <div style={{overflowY: "auto"}}>
           {/* icon for closing drawer */}
           <div style={{height: "64px"}} />
-          <Grid container style={{height: "calc(100% - 64px)"}}>
+          <Grid container>
             <Grid item xs={10}>
               <ProfileDetails
                 currentUser={currentUser}
@@ -147,7 +147,7 @@ function Profile({ user, token, history, location }) {
             <Grid item xs={2}>
 
               <Button
-                style={{height: "100vh"}}
+                style={{marginTop: "50vh"}}
                 color="inherit"
                 aria-label="open drawer"
                 onClick={handleDrawerOpen}

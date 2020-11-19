@@ -13,7 +13,6 @@ require("./models");
 // import index router
 const routes = require("./routes/index");
 
-
 // create express app
 const app = express();
 
@@ -34,6 +33,12 @@ app.use(
   },
   routes
 );
+
+// The formidable library cannot properly handle some errors - a failure in formidable will not be caught with try/catch
+// to protect our server from crashing, we have had to implement this ugly error catching
+process.on("uncaughtException", function (err) {
+  console.log(`Uncaught exception - most likely from formidable: ${err}`);
+});
 
 // Serve static files from the React app
 if (process.env.NODE_ENV === "production") {

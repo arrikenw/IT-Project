@@ -368,16 +368,16 @@ const updateUser = (req, res) => {
       return;
     }
     if (results.n === 1) {
-      if (req.body.private) {
+      if (req.body.update.private) {
         console.log(`updateUser successful: updated user ${id}`);
       }
 
       // update privacy across all user posts
       console.log(req.body);
-      console.log(req.body.private);
+      console.log(req.body.update.private);
       PostModel.updateMany(
         { userID: id },
-        { userIsPrivate: req.body.private },
+        { userIsPrivate: req.body.update.private },
         onUpdatePrivacy
       );
     } else {

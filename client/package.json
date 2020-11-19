@@ -16,6 +16,7 @@
     "axios": "^0.20.0",
     "clsx": "^1.1.1",
     "date-fns": "^2.16.1",
+    "dotenv": "^8.2.0",
     "http-proxy-middleware": "^1.0.5",
     "install": "^0.13.0",
     "javascript-time-ago": "^2.3.2",
@@ -28,9 +29,9 @@
     "react-pdf": "^5.0.0",
     "react-picker": "^1.2.16",
     "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.0",
     "time-ago.js": "^1.0.0",
-    "timeago.js": "^4.0.2",
-    "react-scripts": "^4.0.0"
+    "timeago.js": "^4.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

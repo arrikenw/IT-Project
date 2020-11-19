@@ -1,24 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import Axios from 'axios'
 import {
-  Grid,
-  Paper,
-  Typography,
   Divider,
   List,
   ListItem,
   ListItemText,
   Avatar,
   Select,
-  MenuItem, TextField
+  MenuItem,
+  TextField,
+  Typography
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles'
-import zIndex from "@material-ui/core/styles/zIndex";
 import PropTypes from "prop-types";
-import Container from "@material-ui/core/Container";
-import { Row, Dropdown, DropdownButton } from "react-bootstrap";
-import Button from "@material-ui/core/Button";
-import testImage from '../../assets/logo512.png'
 import fetchMediaUtil from "../utils/fetchMedia";
 
 const useStyles = makeStyles((theme) => ({
@@ -55,7 +48,6 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
   useEffect(() => {
     const errorCB = (err) => {
       console.error(err)
-      console.log(err.message)
     }
     if (!currentUser) return
     if (currentUser.profilePic) {
@@ -93,7 +85,6 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
         setSearchField('title')
         break
       default:
-        console.log(" not meant to make it here")
         setSort(0)
         setSearchDirection('desc')
         setSearchField('createdAt')
@@ -102,7 +93,7 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
   }
 
   const getProfessionalFields = () => {
-    if (currentUser === '' ) {
+    if (!currentUser || currentUser === '' ) {
       return ''
     }
     let fields = ""
@@ -121,14 +112,14 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
   }
 
   const renderEmail = () => {
-    if (currentUser.email) {
+    if (currentUser && currentUser.email) {
       return (
         <>
           <ListItem>
             <ListItemText>
               Email Address:
               <br />
-              {currentUser.email}
+              {currentUser && currentUser.email}
             </ListItemText>
           </ListItem>
           <Divider variant="middle" />
@@ -139,14 +130,14 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
   }
 
   const renderPhone = () => {
-    if (currentUser.phoneNumber) {
+    if ( currentUser && currentUser.phoneNumber) {
       return (
         <>
           <ListItem>
             <ListItemText>
               Phone Number:
               <br />
-              {currentUser.phoneNumber}
+              {currentUser && currentUser.phoneNumber}
             </ListItemText>
           </ListItem>
           <Divider variant="middle" />
@@ -156,12 +147,16 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
     return <> </>
   }
 
-    const classes = useStyles()
+
+  const classes = useStyles()
+
   return (
     <div className={classes.root}>
       <div
         className={classes.details}
       >
+        {currentUser &&
+        (
         <List component="nav" aria-label="mailbox folders">
           <ListItem className={classes.center}>
             <Avatar
@@ -171,21 +166,39 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
             />
           </ListItem>
           <ListItem className={classes.center}>
-            <ListItemText>{currentUser.userName}</ListItemText>
+            <ListItemText
+              disableTypography
+              primary={
+                (
+                  <Typography style={{ fontSize:20, fontFamily:"Bahnschrift Semibold" }}>
+                    { currentUser.userName}
+                  </Typography>
+                )
+               }
+            />
           </ListItem>
           <ListItem>
-            <ListItemText>
-              {currentUser.firstName}
-              {' '}
-              {currentUser.lastName}
-            </ListItemText>
+            <ListItemText
+              disableTypography
+              primary={
+                (
+                  <Typography style={{}}>
+                    <b>Name</b>
+                    <br />
+                    {currentUser.firstName}
+                    {' '}
+                    {currentUser.lastName}
+                  </Typography>
+                )
+              }
+            />
           </ListItem>
           <Divider variant="middle" />
           <ListItem>
             <ListItemText>
-              Biography:
+              <b>About</b>
               <br />
-              {currentUser.biography}
+              {currentUser && currentUser.biography}
             </ListItemText>
           </ListItem>
           <Divider variant="middle" />
@@ -193,24 +206,35 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
           {renderPhone()}
           <ListItem>
             <ListItemText>
-              Organisation:
+              <b>Organisation</b>
               <br />
-              {currentUser.organisation}
+              {currentUser && currentUser.organisation}
             </ListItemText>
           </ListItem>
           <Divider variant="middle" />
           <ListItem>
             <ListItemText>
-              Professional Fields:
+              <b>Professional Fields</b>
               <br />
               {getProfessionalFields()}
             </ListItemText>
           </ListItem>
           <Divider className={classes.dividers} />
-          <ListItem>
-            <ListItemText>
-              View:
-            </ListItemText>
+          <ListItem
+            alignItems='center'
+          >
+            <ListItemText
+              disableTypography
+              primary={
+                (
+                  <Typography style={{fontWeight:"bold",  align: "center"}}>
+                    View
+                  </Typography>
+                )
+              }
+            />
+
+
           </ListItem>
           <ListItem>
             <ListItemText>
@@ -242,6 +266,7 @@ function ProfileDetails({ currentUser, token, setSearchField, setSearchDirection
             />
           </ListItem>
         </List>
+        )}
       </div>
     </div>
 
@@ -262,11 +287,15 @@ ProfileDetails.propTypes = {
     phoneNumber: PropTypes.string,
     profilePic: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
+  }),
   setSearchField: PropTypes.func.isRequired,
   setSearchDirection: PropTypes.func.isRequired,
   setFilterTag: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
+}
+
+ProfileDetails.defaultProps = {
+  currentUser: { },
 }
 
 export default ProfileDetails

@@ -1,15 +1,12 @@
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
 import {
-    Card,
     Grid,
-    IconButton,
     Typography,
   Button,
   Paper
 } from "@material-ui/core";
 import {withRouter} from "react-router-dom";
-import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import PropTypes from "prop-types";
@@ -17,47 +14,14 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import PinnedPostElement from "./PinnedPostElement";
 
 
-const useStyles = makeStyles({
-    bodyContainer: {
-        height: '100%',
-        width: ' 100%',
-        overflow: 'auto',
-    },
-    mainContainer: {
-        height: '100%',
-        width: '100%',
-        overflowX: 'hidden',
-    },
-
-
-
-    postCard: {
-        minHeight: '1000px',
-        marginBottom: '30px',
-    },
-    media: {
-        height: "1000px",
-        objectFit: "contain", // other option is cover etc.
-        marginTop:'0',
-    },
-
-    comments: {
-        height: "500px",
-        backgroundColor: "red"
-    }
-})
-
-
-function PinnedPost({ user, token, history, location, id }) {
+function PinnedPost({ user, token, id }) {
 
     const [i, setI] = useState(0);
-    const [name, setName] = useState("LOADING NAME");
     const [ids, setIds] = useState([]);
     const [posts, setPosts] = useState([]);
     const [media, setMedia] = useState([]);
     const [okToRender, setOkToRender] = useState(false);
 
-    const [loading, setLoading] = useState("loading");
 
     function scroll(magnitude){
         const newI = i + magnitude;
@@ -88,15 +52,12 @@ function PinnedPost({ user, token, history, location, id }) {
                     };
                     exportMedia.push(newmedia);
                     getPinnedPostContent(PostIDs, exportPosts, exportMedia, errCount);
-                }else{
-                    console.log(res.status);
-                    if (errCount < 3){
+                }else if (errCount < 3){
                         getMediaAndNextPost(mID, PostIDs, exportPosts, exportMedia, errCount + 1);
                     }
-                }
             })
             .catch((err) => {
-                console.log(err);
+                console.error(err);
                 if (errCount < 3){
                     getMediaAndNextPost(mID, PostIDs, exportPosts, exportMedia, errCount + 1);
                 }
@@ -105,7 +66,7 @@ function PinnedPost({ user, token, history, location, id }) {
 
 
     function getPinnedPostContent(postids, exportPosts, exportMedia, errcount){
-        if (postids.length <= 0){
+        if (postids.length <= 0 || !postids){
             // return once we have processed all posts
             setPosts(exportPosts);
             setMedia(exportMedia);
@@ -159,11 +120,8 @@ function PinnedPost({ user, token, history, location, id }) {
         if (token) {
           controllerUrl = "/api/user/get"
         }
-      console.log(user)
         if (user && user._id === id) {
-          console.log(user.pinnedPosts)
           setIds(user.pinnedPosts);
-          setName( user.userName);
 
           getPinnedPostContent(user.pinnedPosts.map(item=>item), [], [], 0);
           return
@@ -175,19 +133,14 @@ function PinnedPost({ user, token, history, location, id }) {
             .then((res) => {
                 if (res.status === 200 ) {
                     setIds(res.data[0].pinnedPosts);
-                    setName(res.data[0].userName);
                     getPinnedPostContent(res.data[0].pinnedPosts, [], [], 0);
                 }
             })
             .catch((err) => {
-                console.log("GET USER FAILED WITH ERR")
-                console.log(err);
+                console.error(err);
                 // todo;
             });
     }, [user]); // don't remove the empty dependencies array or this will trigger perpetually, quickly exhausting our AWS budget
-
-
-    const classes = useStyles();
 
 
     if (ids.length > 0 && okToRender){
@@ -254,8 +207,6 @@ function PinnedPost({ user, token, history, location, id }) {
 PinnedPost.propTypes = {
     token: PropTypes.string.isRequired,
     user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string, pinnedPosts: PropTypes.arrayOf(PropTypes.string)}).isRequired,
-    history: PropTypes.shape({push: PropTypes.func}).isRequired,
-    location: PropTypes.shape({search: PropTypes.func}).isRequired,
     id: PropTypes.string.isRequired,
 
 }

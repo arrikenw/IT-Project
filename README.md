@@ -1675,7 +1675,7 @@ Responses:
     "Unlike comment not successful - <reasonForError>"
     ```
 
-## Tests Case
+## Test Cases
 
 Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
 
@@ -1683,7 +1683,7 @@ Test cases can be found in the `/test` directory. The directory can be accessed 
 
 #### Header
 
-The website header is displayed on every page, its files are stored in header which contains:
+The website header is displayed on every page. Related files are stored in ```/client/src/header``` which contains:
 
 - Front end code for Search bar
 - Link to user's profile
@@ -1693,24 +1693,23 @@ The website header is displayed on every page, its files are stored in header wh
 
 #### Home
 
-The home page is shown after successful login or clicking on logo in the header
-
-Its files are stored in the home folder which contains
+The home page is shown after successful login or clicking on logo in the header. Related files are stored in ```/client/src/header```, which contains:
 
 - Home page
 - Welcome message
 
 #### Profile page
 
-The user profile page contains:
+The user profile can be accessed through the search screen or by clicking on a link to the user's profile. Related files are stored in ```/client/src/profile```, which contains:
 
 - Infinite scrolling list of posts
 - Pinned posts
 - User's profile details
 
-These files are located in the profile folder
 
 #### Posts
+
+Posts appear in the search screen, in a user's feed, and when a post is expanded. Related files are stored in ```/client/src/Post```
 
 Each post contains:
 
@@ -1743,13 +1742,9 @@ Each post contains:
     synchronousFunc(param, (err, result) => {});
     ```
   - right:
-  - ````javascript
-        synchronousFunc(param).then(result).catch(err);
-    <<<<<<< HEAD
-        ```
-    =======
-    >>>>>>> d7811dacded0eeff4562e0fdc1947b5eb1dbfeb7
-    ````
+  - ```javascript
+    synchronousFunc(param).then(result).catch(err);
+    ```
 
 - #### Camel case is used for variable and function names
 

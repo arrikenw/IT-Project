@@ -10,7 +10,6 @@ export default function InfinitePostScroll({ sortDirection, sortField, currentUs
   const [localSortField, setSortField] = useState('createdAt')
   const [localSortDirection, setSortDirection] = useState('desc')
 
-
   useEffect(() => {
     setSortField(sortField)
     setSortDirection(sortDirection)

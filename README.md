@@ -1870,12 +1870,3 @@ Our system makes use of utiliy functions to simply our media requests. Related f
         res.status(500);
         res.send("File upload not successful - something went wrong, try again");
         ```
-
-### Documentation:
-
-- code must have relevant comments explaining what blocks do
-- API routes should be updated into this read me with all details include
-
-## Tests Case
-
-Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).

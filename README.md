@@ -80,17 +80,35 @@ Demo credentials
 - Password: _______
 
 ## Features implemented
-Our E-Folio comes with useful features which enhance the user experience:
-- Create account: E-Folio gives users the ability to create their own accounts for work sharing purposes. Also, by distinguishing contents by their creators and giving each user a profile page, users can visit each other and view others contents. This is a crucial requirement from our clients to give users the ability to view other users’ work.
-- Upload file: Our website let users upload Microsoft documents, images, videos, as well as audio and pdfs. The clients ask for the ability to upload different file types to make the E-Folio more diverse in content.
-- Edit post: Another request from the clients is to be able to edit the post after posting it. We implement this through a setting button for every post. This feature gives the post owner the power to change every aspect of the post to suit the purpose, from post description, files to privacy settings of the post.
-- Edit account: Users can change their user information like name, phone number, email, or profile picture to suit their user information.
-- Header: Every page of the website is fitted with a header on top. All headers have a home shortcut button, a search bar and its filter, a user profile shortcut button, as well as a login/logout button.
-- Profile detail: Every page in our website contains a profile detail component, either of the user or other users when visiting their site. Each profile detail component contains the user’s information, as well as a filter button.
-- Filter: Each profile can filter posts through their tags. This is a requisite from the clients, and we implement the filter feature through creating tags for posts for easier filtering.
-- Search: the search bar can be found on the header to search for users or posts. The clients required for this feature, so we implement……
-- Interaction: Another request from the clients is to add comments for each post. Therefore, we implement like button, comment, and share button for each post to increase the level of interaction between users.
-- Pinned bar: We come up with this idea to emphasize the important or significant posts that the user wants to put up front in an easy spot to see. The pinned bar is a carousel below the header, which can hold 20 pinned posts…..
+
+We provide a brief outline of the key features of our system.
+
+- Account creation: Our system allows users to create their own accounts. A user’s account allows them to display their professional fields, biography, and contact details, allowing them to easily connect with other users. An account also allows the user to participate in the community by creating posts and comments.
+
+- Account editing: Users can update their account details, allowing them to change their biographical details, profile picture, privacy settings, display name, and areas of professional interest.
+
+- File upload / media support: Our system allows users to upload a variety of files, including images, videos, pdf files, spreadsheets, and word documents. By providing users with the ability to upload a wide variety of media, users gain the ability to create a portfolio that closely reflects their skills and body of work.
+
+- Post creation: Our system allows users to create posts containing media, a title, and a description. Posts can be tagged with specific topics by users to focus conversation and to improve their visibility to other users.
+
+- Post editing: Posts can be edited after creation, allowing users to correct mistakes in their portfolio. Additionally, posts can have their privacy settings modified, allowing users to hide posts that they feel have attracted unwanted attention, or to show their previously private posts to the world.
+
+- Search bar: We have added search functionality to our site so that users can find content and people that match their interests. Searching can be performed using the search bar in the header. 
+    - Posts can be searched and filtered based on their title, tags, and description.
+    - Users can be searched based on their username and professional fields.
+    
+- Post feed: When viewing a user’s profile, a feed of their posts is visible. The feed supports infinite scrolling and will dynamically fetch new posts as the viewer scrolls.
+    - Post filtering: A filter can be applied to the posts that appear in a user’s profile feed, allowing viewers to search for posts from the user that contain specific words or tags.
+    
+- Pinned post bar: We have implemented a “pinned-post” carousel that allows a user to draw attention to posts they feel are significant. Posts selected by the user are placed in a carousel that sits at the top of their profile, allowing them to shape the first impression they give to page visitors.
+
+- Commenting: Users can create comments on posts, allowing them to give feedback and encouragement to other students, professionals, and creators.
+
+- Post liking: All posts and comments can be liked by users. This ability to interact helps to build a sense of community on the site and gives the creator of a liked post or comment a sense of validation. 
+
+- Dynamic header: To allow users to quickly navigate around our site, we have added a header to all our pages. The header displays navigation links, a search bar, and either the user’s profile details or the login/signup buttons depending on if the user is logged in. On smaller screens, some nav links from the header are moved to a dropdown.
+
+- Dynamic profile card: On a user’s profile page, their name, interests, bio, contact information, and photograph are displayed in a card format. This prominent summary of the user makes it simple for recruiters and other users to get a measure of someone from their profile. When viewing a profile page on devices with smaller screen sizes, the profile card is initially hidden and can be slid out from the left of the screen.
 
 ## Set Up
 #### Installing Packages

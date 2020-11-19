@@ -376,13 +376,13 @@ We provide a brief sketch of the role of the CI/CD pipeline in the development c
 ## Costs and licencing considerations
 
 - Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries commercially, a licencing fee must be paid.
-  A licence can be obtained at https://www.pdftron.com/licensing/.
+  A licence can be obtained [here](https://www.pdftron.com/licensing/).
 
 - Our system is currently using the free-tier of AWS. Once in production, the system will need to be linked to a new amazon account and S3 bucket, and relevant usage fees will need to be paid.
-  Pricing information can be found at https://aws.amazon.com/pricing/.
+  Pricing information can be found [here](https://aws.amazon.com/pricing/).
 
 - Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply.
-  Pricing information can be found at https://www.mongodb.com/pricing.
+  Pricing information can be found [here](https://www.mongodb.com/pricing).
 
 ## Backend Architecture
 

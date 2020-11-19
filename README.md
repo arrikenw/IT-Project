@@ -1679,18 +1679,14 @@ Responses:
 
 Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
 
-## Design Architecture
+## Front-end Architecture
 
 Assets used in our front-end (eg. image missing thumbnails) are stored in the ```/client/src/assets``` directory. Source code for components is stored in the ```client/src/components``` directory.
 #### Header
 
 The website header is displayed on every page. Related files are stored in ```/client/src/header``` which contains:
 
-- Front end code for Search bar
-- Link to user's profile
-- Link to settings page
-- Add post button
-- Logout button
+- A header component
 
 #### Home
 
@@ -1713,9 +1709,14 @@ The user profile can be accessed through the search screen or by clicking on a l
 
 Posts appear in the search screen, in a user's feed, and when a post is expanded. Related files are stored in ```/client/src/Post```, which contains:
 
-- Comments
-- Likes
-- Forms for adding and editing posts
+- Comment related components
+    - A component for the create comment form
+    - A component for displaying a list of comments
+    - A component for individual comments
+- A component for post previews
+- Components for like buttons
+- Components for the adding and edit post forms
+- The expanded post view page
 
 #### Login 
 

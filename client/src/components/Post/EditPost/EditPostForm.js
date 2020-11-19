@@ -104,6 +104,11 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
   }, [post, media, mediaTN])
 
   const validateFields = () => {
+    if (!title) {
+      setWarningMessage("Posts require a title")
+      setWarning(true)
+      return 1
+    }
     if (rawMedia && rawMedia.size /1024 / 1024 > 15) {
       setWarningMessage("File size must be less than 15mb")
       setWarning(true)
@@ -114,17 +119,17 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
       setWarning(true)
       return 1
     }
-    if (title.length > 200) {
+    if (title && title.length > 200) {
       setWarningMessage("Title must be less than 201 characters long")
       setWarning(true)
       return 1
     }
-    if (description.length > 2200) {
+    if (description && description.length > 2200) {
       setWarningMessage("Description must be less than 2200 characters long")
       setWarning(true)
       return 1
     }
-    if (!mimeTypeTN.startsWith("image")) {
+    if (mimeTypeTN && !mimeTypeTN.startsWith("image")) {
       setWarningMessage("Thumbnail must be an image")
       setWarning(true)
       return 1
@@ -182,7 +187,7 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
   // sets file for thumbnail
   const onFileChangeTN = (e) => {
 
-
+    setRawMediaTN(e.target.files[0])
     const fileReader = new FileReader();
     fileReader.onloadend = (f) => {
       const content = f.target.result;
@@ -193,8 +198,12 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
     if (!e.target.files[0]) {
       setFileTN(null)
       setMediaNameTN("")
-      setMimeTypeTN(mediaTN.mimeType)
-      setFile(`data:${mediaTN.mimeType};base64,${mediaTN.b64media}`)
+      setMimeTypeTN("")
+      if (mediaTN) {
+        setMimeTypeTN(mediaTN.mimeType)
+        setFileTN(`data:${mediaTN.mimeType};base64,${mediaTN.b64media}`)
+      }
+
       return;
     }
     if (!e.target.files[0].type.startsWith("image")) {
@@ -342,7 +351,7 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
   return (
     <Card>
       <CardContent>
-        <Typography className={classes.center} variant="h5">Add New Post</Typography>
+        <Typography className={classes.center} variant="h5">Edit Post</Typography>
         <form>
           <div style={{ marginTop: '20px' }}>
             <TextField

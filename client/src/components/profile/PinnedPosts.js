@@ -116,20 +116,21 @@ function PinnedPost({ user, token, id }) {
 
 
     useEffect(() => {
-        let controllerUrl = "/api/user/getPublic";
-        if (token) {
+        const controllerUrl = "/api/user/getPublic";
+        const method = 'post'
+        /* if (token) {
           controllerUrl = "/api/user/get"
-        }
+          method = 'get'
+        } */
         if (user && user._id === id) {
           setIds(user.pinnedPosts);
-
           getPinnedPostContent(user.pinnedPosts.map(item=>item), [], [], 0);
           return
         }
         const payload = {
             filters: {_id: id}
         }
-        Axios({url: controllerUrl, method: "post", data: payload})
+        Axios({url: controllerUrl, method, data: payload})
             .then((res) => {
                 if (res.status === 200 ) {
                     setIds(res.data[0].pinnedPosts);

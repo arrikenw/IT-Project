@@ -20,7 +20,7 @@ import LinesEllipsis from 'react-lines-ellipsis'
 import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC'
 import * as timeago from "timeago.js";
 import PropTypes from "prop-types";
-import LikeButtons from "./LikeButtons";
+import LikeButtons from "./likes/LikeButtons";
 import docTN from "../../assets/docs.png";
 import audioTN from "../../assets/audio.jpg";
 import videoTN from "../../assets/video.jpg";

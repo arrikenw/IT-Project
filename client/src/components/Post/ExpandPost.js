@@ -20,10 +20,10 @@ import Divider from '@material-ui/core/Divider';
 import Axios from "axios";
 import PropTypes from "prop-types";
 import * as timeago from 'timeago.js';
-import CommentList from "./CommentList";
+import CommentList from "./comment/CommentList";
 import fetchMediaUtil from "../utils/fetchMedia";
-import CommentForm from "./CommentForm";
-import LikeButtons from "./LikeButtons";
+import CommentForm from "./comment/CommentForm";
+import LikeButtons from "./likes/LikeButtons";
 import GenericMedia from "../utils/GenericMedia";
 
 
@@ -63,7 +63,7 @@ function ExpandPost({ user, token, history, location }) {
     const [media, setMedia] = useState(null);
     const [postID, setPostID] = useState("");
     const [postUserName, setPostUserName] = useState("");
-    const [profileUrl, setProfileUrl] = useState("");
+    const [profileUrl, setProfileUrl] = useState(null);
     const [pinnedRecently, setPinnedRecently] = useState(false);
     const [unpinnedRecently, setUnpinnedRecently] = useState(false);
 
@@ -186,6 +186,7 @@ function ExpandPost({ user, token, history, location }) {
 
 
 
+
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     // get id from query string
@@ -264,11 +265,14 @@ function ExpandPost({ user, token, history, location }) {
 
   if (post){
     const UserNamePayload = {filters: {"_id": post.userID}}
-    console.log("username playload", UserNamePayload)
     Axios.post('/api/user/getPublic/', UserNamePayload)
       .then((resp) => {
         if (resp.data[0]) {
           setPostUserName(resp.data[0].userName);
+          if(!profileUrl){
+            setProfileUrl(`/profile?user=${resp.data[0].userName}`)
+          }
+
         }
       })
       .catch((err)=>{
@@ -322,7 +326,7 @@ function ExpandPost({ user, token, history, location }) {
                 post.createdAt &&
                 `Posted ${timeago.format(post.createdAt, 'en_US')} by `}
               <Link href={profileUrl} color="inherit">
-                {postUserName || user.userName}
+                {postUserName}
               </Link>
             </Typography>
             {media && media.mimeType !== 'application/pdf' && (

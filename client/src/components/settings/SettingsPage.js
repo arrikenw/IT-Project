@@ -356,7 +356,7 @@ function SettingsPage({ token, user }) {
     }
 
     if (rawMedia) {
-      add(rawMedia, localUser.private, "profilePic", token, callback)
+      add(rawMedia, false, "profilePic", token, callback)
     }
     else {
       callback("")

@@ -13,8 +13,8 @@ import {
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import MuiAlert from "@material-ui/lab/Alert";
-import add from "../utils/addMedia"
-import GenericMedia from "../utils/GenericMedia";
+import add from "../../utils/addMedia"
+import GenericMedia from "../../utils/GenericMedia";
 
 const useStyles = makeStyles({
   mainContainer: {
@@ -239,13 +239,13 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
         });
       }
     if (rawMedia) {
-      add(rawMedia, postPrivacy, mediaName, token, callback);
+      add(rawMedia, false, mediaName, token, callback);
     }
     callback("")
     }
 
     if (rawMediaTN) {
-      add(rawMediaTN, postPrivacy, mediaNameTN, token, firstCallBack)
+      add(rawMediaTN, false, mediaNameTN, token, firstCallBack)
     }
     else {
       firstCallBack("")

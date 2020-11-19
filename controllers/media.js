@@ -104,12 +104,7 @@ const validateMediaType = (file) => {
     type !== "mp4" &&
     type !== "mpga" && // code for mp3
     type !== "wav" &&
-    type !== "mov" &&
-    type !== "txt" &&
-    type !== "py" &&
-    type !== "c" &&
-    type !== "js" &&
-    type !== "java"
+    type !== "mov"
   )
     return false;
   return true;
@@ -183,8 +178,8 @@ const uploadMedia = async (req, res) => {
       const split = files.mediafile.name.split(".");
       if (split.length !== 2) {
         sendHelper(res, {
-          status: 200,
-          msg: "Media filename did not have exactly 1 period",
+          status: 400,
+          msg: "Media filename did not have exactly one period",
         });
         PDFNet.shutdown();
         return;

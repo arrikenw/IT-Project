@@ -571,8 +571,8 @@ const addToPinnedPosts = (req, res) => {
         UserModel.updateOne({ _id: req.user.id }, update)
           .then((doc2) => {
             console.log("Pinning post was successful");
-            res.status(201);
-            res.send(req.body.postID);
+            res.status(200);
+            res.send({ postID: req.body.postID });
           })
           .catch((err) => {
             console.log(`addToPinnedPosts not successful: ${err.message}`);
@@ -615,7 +615,7 @@ const removeFromPinnedPosts = (req, res) => {
       if (response.n === 1) {
         console.log(`Unpin post successful: removed  ${req.body.postID}`);
         res.status(200);
-        res.send(req.body.postID);
+        res.send({ postID: req.body.postID });
       } else {
         console.log(
           `unpin post not successful: post ${req.body.postID} was not pinned`

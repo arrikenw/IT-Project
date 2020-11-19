@@ -86,13 +86,13 @@ Demo credentials
 
 We provide a brief outline of the key features of our system.
 
-- Account creation: Our system allows users to create their own accounts. A user’s account allows them to display their professional fields, biography, and contact details, allowing them to easily connect with other users. An account also allows the user to participate in the community by creating posts and comments.
+- Account creation: Users can create their own accounts. A user’s account allows them to display their professional fields, biography, and contact details, allowing them to easily connect with other users. An account also allows the user to participate in the community by creating posts and comments.
 
 - Account editing: Users can update their account details, allowing them to change their biographical details, profile picture, privacy settings, display name, and areas of professional interest.
 
-- File upload / media support: Our system allows users to upload a variety of files, including images, videos, pdf files, spreadsheets, and word documents. By providing users with the ability to upload a wide variety of media, users gain the ability to create a portfolio that closely reflects their skills and body of work.
+- File upload / media support: Users can upload a variety of files, including images, videos, pdf files, spreadsheets, and word documents. By providing users with the ability to upload a wide variety of media, users gain the ability to create a portfolio that closely reflects their skills and body of work.
 
-- Post creation: Our system allows users to create posts containing media, a title, and a description. Posts can be tagged with specific topics by users to focus conversation and to improve their visibility to other users.
+- Post creation: Users can create posts containing media, a title, and a description. Posts can be tagged with specific topics by users to focus conversation and to improve their visibility to other users.
 
 - Post editing: Posts can be edited after creation, allowing users to correct mistakes in their portfolio. Additionally, posts can have their privacy settings modified, allowing users to hide posts that they feel have attracted unwanted attention, or to show their previously private posts to the world.
 
@@ -107,7 +107,7 @@ We provide a brief outline of the key features of our system.
 
 - Commenting: Users can create comments on posts, allowing them to give feedback and encouragement to other students, professionals, and creators.
 
-- Post liking: All posts and comments can be liked by users. This ability to interact helps to build a sense of community on the site and gives the creator of a liked post or comment a sense of validation. 
+- Post liking: Users can like comments and posts. This ability to interact with the work of other users helps to build a sense of community on the site, and receiving likes gives the creator of a liked post or comment a sense of validation. 
 
 - Dynamic header: To allow users to quickly navigate around our site, we have added a header to all our pages. The header displays navigation links, a search bar, and either the user’s profile details or the login/signup buttons depending on if the user is logged in. On smaller screens, some nav links from the header are moved to a dropdown.
 

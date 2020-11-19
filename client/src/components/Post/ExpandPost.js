@@ -350,7 +350,7 @@ function ExpandPost({ user, token, history, location }) {
               </Grid>
               )}
 
-            {media && media.mimeType === 'application/pdf' && <Grid container justify="center"><object aria-label='post' data={media.contentStr} type="application/pdf" width="100%" height="500px" /></Grid>}
+            {/* {media && media.mimeType === 'application/pdf' && <Grid container justify="center"><object aria-label='post' data={media.contentStr} type="application/pdf" width="100%" height="500px" /></Grid>} */}
 
             <Typography
               variant="body2"

@@ -410,7 +410,7 @@ We provide a brief sketch of the role of the CI/CD pipeline in the development c
   <img src="images/front%20end%20architecture%20diagram.png"  width="1000" >
 </p>
 
-# Assets used in our front-end (eg. image missing thumbnails) are stored in the `/client/src/assets` directory. Source code for components is stored in the `client/src/components` directory.
+Assets used in our front-end (eg. image missing thumbnails) are stored in the `/client/src/assets` directory. Source code for components is stored in the `client/src/components` directory.
 
 #### Header
 

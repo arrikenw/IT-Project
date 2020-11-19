@@ -181,7 +181,7 @@ The `.env` files should include the listed variables with the correct values for
 ```dotenv
 PORT = <portForBackEndServer>
 MONGO_USERNAME = <userNameForMongoDBConnection>
-MONGO_USERNAME = <passwordForMongoDBConnection>
+MONGO_PASSWORD = <passwordForMongoDBConnection>
 DB_NAME = <nameOfDataBase>
 SECRET = <secretUsedToCreateAuthTokens>
 AWS_ACCESS_KEY_ID = <accessKeyForAWSBucket>
@@ -292,7 +292,7 @@ Navigate back to the "Deploy" tab and select the branch to be deployed under "Ma
 
 #### Database description
 
-Our database stores account data, comments, media file metadata, and posts created by users.
+Our system uses a MongoDB database to store account data, comments, media file metadata, and posts created by users.
 File storage for uploaded media is not handled by our database – instead, the files are stored in an AWS S3 bucket and their key stored in our database.
 
 Key fields fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format. Additionally, all database documents store timestamps for the document creation and the document's most recent update.
@@ -303,6 +303,8 @@ We selected MongoDB as our database for two main reasons:
 - Our team was familiar with mongoDB and had previously used it to build other systems
 
 #### Document description
+
+We provide an explanation of the main documents used in our database below:
 
 ##### Media
 

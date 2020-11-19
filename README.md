@@ -54,7 +54,7 @@ This folder, `/docs `, includes:
      method of questioning in meetings with the client.  What should the system DO? What should the system BE? How should the user FEEl? 
      These answers are then mapped to a diagram, the parallelograms are the "DO", the cloud is the "BE", and the heart is the "FEEL". 
 
-![motivationalModel](/docs/motivationalModel.pdf)
+![motivationalModel](/images/MotivationalModel.png)
 
 - User Stories
     - The user stories created to help define the features fo this project were drived form the motivational model and the personas. There
@@ -63,16 +63,12 @@ This folder, `/docs `, includes:
 - Class Diagram 
     - How the pages in the frontend interact is demonstrated in this diagram. 
 
-![classDiagram](/docs/Class%20Diagram.pdf)
+![classDiagram](/images/classdiagram.png)
 - Architecture Diagram 
     - The system implemented for this project has a frontend; which is responsible for the user interface, a backend server; which handles 
     requests from the frontend; and finally a database which provides the necessary data to the backend server. 
 
-![archectureDiagram](/docs/Architecture%20Diagram.pdf)
-### Demo
-Bellow is a link to a demo the hosted project: 
-[https://efolio.herokuapp.com/](https://efolio.herokuapp.com/)
-
+![archectureDiagram](/images/architecture.png)
 
 ### Demo
 A hosted demo of the project can be found [here](https://efolio.herokuapp.com/).

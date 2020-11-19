@@ -60,9 +60,12 @@ This folder, `/docs `, includes:
      are general user stories for all types of users, but there are also specific user stories that answer the needs of that specific user 
      group.
 - Class Diagram 
+    - How the pages in the frontend interact is demonstrated in this diagram. 
 
 ![classDiagram](/docs/Class%20Diagram.pdf)
 - Architecture Diagram 
+    - The system implemented for this project has a frontend; which is responsible for the user interface, a backend server; which handles 
+    requests from the frontend; and finally a database which provides the necessary data to the backend server. 
 
 ![archectureDiagram](/docs/Architecture%20Diagram.pdf)
 ### Demo

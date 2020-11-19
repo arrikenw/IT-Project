@@ -108,7 +108,7 @@ function Header({ token, user, logout, history, setSearchResults, searchBy, setS
         axios.post(url1, payload, config)
         .then((resp) =>{
           setSearchResults(resp.data);
-          history.push('/search');
+          history.push('/searchResults');
         })
       }
 
@@ -118,7 +118,7 @@ function Header({ token, user, logout, history, setSearchResults, searchBy, setS
         .then((resp) =>{
           setSearchResults(resp.data);
 
-          history.push('/search');
+          history.push('/searchResults');
         })
         .catch((err)=>{
           console.error(err);

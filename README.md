@@ -36,7 +36,7 @@
   - [Code Style](#code-style)
   - [Console Logs](#console-logs)
   - [API Responses](#api-responses)
-- [Tests Cases](#Test-Cases)
+- [Test Cases](#Test-Cases)
 
 ## Introduction
 
@@ -489,12 +489,13 @@ Our system's backend uses node.js with express middleware. The system is compose
 
 The flow of control during the handling of a request is as follows:
 
-1. Request is received at index router
-2. Request is passed down to sub-router by index router
-3. Authentication of user token occurs
-4. Controller function is called by sub-router
-5. Controller carries out request
-6. Response is sent
+1. Request is recieved at server.js
+2. Request is passed to index router
+3. Request is passed down to sub-router by index router
+4. Authentication of user token occurs (optional)
+5. Controller function is called by sub-router
+6. Controller carries out request
+7. Response is sent
 
 We provide an in-depth review of our authentication process and controller functionality below.
 
@@ -599,9 +600,9 @@ Responses:
   - the response will have a status code of "200" and will contain base64 encoding of the media file in the following format
   - ```JSON
 	{
-	   "b64media": "<base64 encoding of file>"
-	   "extention": "<file extention name>"
-	   "mimeType": "<file mime type>"
+	   "b64media": "<base64 encoding of file>",
+	   "extention": "<file extention name>",
+	   "mimeType": "<file mime type>",
 	   "contentCategory": "<general file cateogry>"
 	}
 	```
@@ -635,9 +636,9 @@ Responses:
   - the response will have a status code of "200" and will contain base64 encoding of the media file in the following format
   - ```JSON
 	{
-	   "b64media": "<base64 encoding of file>"
-	   "extention": "<file extention name>"
-	   "mimeType": "<file mime type>"
+	   "b64media": "<base64 encoding of file>",
+	   "extention": "<file extention name>",
+	   "mimeType": "<file mime type>",
 	   "contentCategory": "<general file cateogry>"
 	}
 	```
@@ -1544,7 +1545,7 @@ and a JSON body, which must include key-value pairs:
 ```JSON
 {
    "postID": "<commentPostID>",
-   "commentID": "<deleteCommentID>",
+   "commentID": "<deleteCommentID>"
 }
 ```
 Requirements:
@@ -1584,7 +1585,7 @@ and a JSON body, which must include key-value pair:
 ```JSON
 {
    "postID": "<commentPostID>",
-   "commentID": "<likeCommentID>",
+   "commentID": "<likeCommentID>"
 }
 ```
 Requirements:
@@ -1624,7 +1625,7 @@ and a JSON body, which must include key-value pair:
 ```JSON
 {
    "postID": "<commentPostID>",
-   "commentID": "<likeCommentID>",
+   "commentID": "<likeCommentID>"
 }
 ```
 Requirements:

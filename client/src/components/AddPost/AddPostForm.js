@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import Axios from "axios"
 import {withRouter} from "react-router-dom";
 import PropTypes from 'prop-types'
@@ -6,19 +6,13 @@ import {
   Button,
   Card,
   CardContent,
-  Container,
   Divider,
-  Grid,
   TextField,
-  Typography,
-  TableRow,
-  Checkbox, FormControlLabel, Select, FormHelperText, Chip, InputLabel, FormControl, Snackbar
+  Checkbox, FormControlLabel, Chip, Snackbar, Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import CardMedia from "@material-ui/core/CardMedia";
 import MuiAlert from "@material-ui/lab/Alert";
 import add from "../utils/addMedia"
-import testImage from '../../assets/logo512.png'
 import GenericMedia from "../utils/GenericMedia";
 
 const useStyles = makeStyles({
@@ -52,7 +46,6 @@ const useStyles = makeStyles({
   },
   media: {
     height:" 100%",
-    // paddingTop: '56.25%', // 16:9
   }
 
 })
@@ -92,9 +85,6 @@ function AddPostForm({ user, token, history }){
   }
   const changeDescription = (e) => {
       setDescription(e.target.value)
-  }
-  const changeTag = (e) => {
-      setTag(e.target.value)
   }
 
   const changePostPrivacy = (e) => {
@@ -217,11 +207,14 @@ function AddPostForm({ user, token, history }){
         if (resOne !== "") {
           payload.thumbnailURL = resOne._id
         }
-        Axios.post("/api/post/add", payload, {headers: {Authorization: `Bearer ${token}`}})
-          .then( (resp) => {
-            console.log(resp.data);
-            redirect();
-          }).catch((err) => {
+        Axios({
+          url: "/api/post/add",
+          method: "post",
+          data: payload,
+          headers: {Authorization: `Bearer ${token}`}
+        }).then( (resp) => {
+          redirect();
+        }).catch((err) => {
           console.error(err)
         });
       }
@@ -245,6 +238,7 @@ function AddPostForm({ user, token, history }){
           src={fileTN}
           className={classes.media}
           mimeType={mimeTypeTN}
+          thumbnail={false}
         />
       )
     }
@@ -254,6 +248,7 @@ function AddPostForm({ user, token, history }){
         src={file}
         className={classes.media}
         mimeType={mimeType}
+        thumbnail={false}
       />
     )
   }
@@ -342,7 +337,7 @@ function AddPostForm({ user, token, history }){
                 </Button>
               </label>
               <div>
-                <Typography variant="p">
+                <Typography>
                   {mediaName}
                 </Typography>
               </div>
@@ -355,7 +350,7 @@ function AddPostForm({ user, token, history }){
                 </Button>
               </label>
               <div>
-                <Typography variant="p">
+                <Typography>
                   {mediaNameTN}
                 </Typography>
               </div>

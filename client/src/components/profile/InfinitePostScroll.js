@@ -55,7 +55,7 @@ export default function InfinitePostScroll({ sortDirection, sortField, currentUs
   // };
 
   return (
-    <div style={{backgroundColor: '#f7ad23', width: "80%", padding: '5%', margin: '5%'}}>
+    <div style={{width: "94%", margin: '3%'}}>
       {posts.map((post, index) => {
         if (posts.length === index + 1) {
           return (
@@ -64,7 +64,7 @@ export default function InfinitePostScroll({ sortDirection, sortField, currentUs
               ref={lastPostElementRef}
               key={post._id}
             >
-              <ProfilePost post={post} token={token} user={user} showDescription />
+              <ProfilePost post={post} token={token} user={user} />
             </div>
           )
         }
@@ -92,10 +92,11 @@ InfinitePostScroll.propTypes = {
   token: PropTypes.string.isRequired,
   sortField: PropTypes.string.isRequired,
   sortDirection: PropTypes.string.isRequired,
-  currentUser: PropTypes.string.isRequired,
+  currentUser: PropTypes.shape({}),
   filterTag: PropTypes.string.isRequired,
   user: PropTypes.shape({_id: PropTypes.string, userName: PropTypes.string}).isRequired,
 }
 
 InfinitePostScroll.defaultProps = {
+  currentUser: { },
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react'
+import React from 'react'
 import PropTypes from "prop-types";
 import Comment from './Comment'
 
@@ -9,8 +9,8 @@ export default function CommentList({user, postID, comments, token}) {
 
   // eslint-disable-next-line consistent-return
   return (
-    <div style={{ padding: '60px', backgroundColor: '#f7ad23' }}>
-      {comments.map((comment, index) => {
+    <div style={{ padding: '60px', backgroundColor: 'white' }}>
+      {comments.reverse().map((comment, index) => {
         if (comments.length === index + 1) {
           return (
             <div

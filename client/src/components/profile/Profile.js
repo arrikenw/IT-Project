@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import { Grid, Box, Container } from '@material-ui/core'
+
+import { Grid, Box } from '@material-ui/core'
 import Axios from "axios";
 import Hidden from "@material-ui/core/Hidden";
 import PropTypes from "prop-types";
@@ -18,7 +16,7 @@ import InfinitePostScroll from "./InfinitePostScroll";
 import PinnedPosts from "./PinnedPosts";
 import ProfileDetails from "./ProfileDetails";
 
-const drawerWidth = 'min(80vw, 500px)';
+const drawerWidth = 'min(80vw, 600px)';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,11 +60,11 @@ const useStyles = makeStyles((theme) => ({
 function Profile({ user, token, history, location }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [filterTag, setFilterTag] = useState('')
   const [sortField, setSortField] = useState('createdAt')
   const [sortDirection, setSortDirection] = useState('desc')
-  const [currentUser, setCurrentUser] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
 
   const query = new URLSearchParams(location.search)
   const userName = query.get('user')
@@ -77,7 +75,11 @@ function Profile({ user, token, history, location }) {
   }
 
   const getUser = () => {
-    if (currentUser === "" || currentUser.userName !== userName) {
+    if (user.userName === userName) {
+      setCurrentUser(user)
+      return
+    }
+    if (!currentUser || currentUser === "" || currentUser.userName !== userName) {
       const payload = {'filters': {userName}}
       Axios.post('api/user/getPublic', payload).then((res) => {
         if (res.data.length > 0) {
@@ -98,20 +100,12 @@ function Profile({ user, token, history, location }) {
     if (mdLower) {
       return 1000
     }
-    return  800
+    return  900
   }
 
-  const renderScroll = () => {
-    // eslint-disable-next-line no-empty
-    if (mdLower) {}
-  }
 
   const handleDrawerOpen = () => {
     setOpen((pastValue) => !pastValue);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
   };
 
   return (
@@ -127,31 +121,34 @@ function Profile({ user, token, history, location }) {
           paper: classes.drawerPaper,
         }}
       >
-        {/* icon for closing drawer */}
-        <div style={{height: "64px"}} />
-        <Grid container style={{height: "calc(100% - 64px)"}}>
-          <Grid item xs={11}>
-            <ProfileDetails
-              currentUser={currentUser}
-              setSearchDirection={setSortDirection}
-              setSearchField={setSortField}
-              setFilterTag={setFilterTag}
-              token={token}
-            />
-          </Grid>
-          <Grid item xs={1}>
-            <div style={{height: "46%"}} />
+        <div style={{overflowY: "auto"}}>
+          {/* icon for closing drawer */}
+          <div style={{height: "64px"}} />
+          <Grid container>
+            <Grid item xs={10}>
+              <ProfileDetails
+                currentUser={currentUser}
+                setSearchDirection={setSortDirection}
+                setSearchField={setSortField}
+                setFilterTag={setFilterTag}
+                token={token}
+              />
+            </Grid>
+            <Grid item xs={2}>
 
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-            >
-              <MenuIcon />
-            </IconButton>
+              <Button
+                style={{marginTop: "50vh"}}
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+              >
+                <MenuIcon />
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
+
       </Drawer>
       {/* <main
         className={clsx(classes.content, {
@@ -161,19 +158,19 @@ function Profile({ user, token, history, location }) {
       <div style={{width: "100%", height: "100%", display: 'flex'}}>
         <Hidden lgUp>
           {/* icon for opening drawer */}
-          <IconButton
-            color="inherit"
+          <Button
+            color="primary"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
           >
             <MenuIcon />
-          </IconButton>
+          </Button>
         </Hidden>
 
 
         <Hidden mdDown>
-          <Box maxWidth={400} style={{flex: "0 0 65%", marginRight: "10%"}}>
+          <Box maxWidth={500} style={{flex: "0 0 65%", marginRight: "10%", overflowY: 'auto'}}>
             <ProfileDetails
               currentUser={currentUser}
               setSearchDirection={setSortDirection}
@@ -185,9 +182,9 @@ function Profile({ user, token, history, location }) {
         </Hidden>
 
         <div style={{overflowY: "scroll", width: "100%"}}>
-          <Box maxWidth={boxSize()} style={{backgroundColor: "red",  marginTop: 50, padding: "20px"}}>
+          <Box maxWidth={boxSize()} style={{backgroundColor: "#094183",  marginTop: 50, padding: "20px"}}>
             {currentUser &&
-                (<PinnedPosts id={currentUser._id} />)}
+                (<PinnedPosts id={currentUser._id} user={user} token={token} />)}
             <InfinitePostScroll
               currentUser={currentUser}
               sortField={sortField}

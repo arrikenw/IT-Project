@@ -9,7 +9,7 @@ import {
   Typography,
   Button,
   TextField,
-  Snackbar, Checkbox, FormControlLabel
+  Snackbar,
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
@@ -106,31 +106,21 @@ function SettingsPage({ token, user }) {
     })
   }
 
-  // TODO remove tags
-  const updateTags = (newTags) => {
-    setUser((oldUser) => {
-      const newUser = {...oldUser}
-      newUser.tags = newTags;
-      return newUser
-    })
-  }
 
   // gets profile picture
   useEffect(() => {
     const callBack = (res) => {
-      console.log(res);
       setCurrentProfilePic(res.data.b64media)
       setCurrentMimeType(res.data.mimeType)
     }
 
     const errorCB = (err) => {
       console.error(err)
-      console.log(err.message)
+      console.error(err.message)
     }
 
     if (!user.profilePic) return
 
-    console.log(user.profilePic)
     fetchMediaUtil(user.profilePic, token, callBack, errorCB)
 
   }, [user, token])
@@ -143,7 +133,6 @@ function SettingsPage({ token, user }) {
       const newUser = {...oldUser}
       if (!e.persist) {
         newUser.dateOfBirth = e;
-        console.log(newUser.dateOfBirth)
         return newUser
       }
       if (e.target.name.endsWith('Private') || e.target.name === 'private') {
@@ -470,9 +459,9 @@ function SettingsPage({ token, user }) {
 SettingsPage.propTypes = {
   token: PropTypes.string.isRequired,
   user: PropTypes.shape({
-    emailPrivate: PropTypes.bool.isRequired,
-    phoneNumberPrivate: PropTypes.bool.isRequired,
-    private: PropTypes.bool.isRequired,
+    emailPrivate: PropTypes.bool,
+    phoneNumberPrivate: PropTypes.bool,
+    private: PropTypes.bool,
     dateOfBirth: PropTypes.string,
     profilePic: PropTypes.string
   }).isRequired,

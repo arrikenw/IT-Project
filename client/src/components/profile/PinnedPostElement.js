@@ -7,13 +7,12 @@ import {
     CardMedia,
     CardActionArea,
     CardContent,
-    Button,
     Typography,
-    CardActions, IconButton,
 } from '@material-ui/core'
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import PropTypes from "prop-types";
-import InfinitePostScroll from "./InfinitePostScroll";
+import audioTN from "../../assets/audio.jpg"
+import videoTN from "../../assets/video.jpg"
+import docTN from "../../assets/docs.png"
 
 
 // https://stackoverflow.com/questions/50272814/image-on-material-ui-cardmedia
@@ -35,7 +34,7 @@ class PinnedPostElement extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // mimeType: "",
+            mimeType: "",
             contentStr: "",
             // contentCategory: "",
         };
@@ -46,10 +45,9 @@ class PinnedPostElement extends Component {
         // if media is already stored
         const { media, post } = this.props;
         if (media){
-            console.log("USING STORED MEDIA");
             this.setState({
                 contentStr: media.contentStr,
-                // mimeType: this.props.media.mimeType,
+                mimeType: media.mimeType,
                 // contentCategory: this.props.media.contentCategory
             })
             return;
@@ -63,6 +61,9 @@ class PinnedPostElement extends Component {
             // TODO make thumbnail fetching work properly
             mediaID: post.thumbnailURL,
         };
+        if (!post.thumbnailURL) {
+            payload.mediaID = post.mediaID
+        }
         const headers = {
             headers: {
                 Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -74,7 +75,7 @@ class PinnedPostElement extends Component {
                     const str = `data:${res.data.mimeType};base64,${res.data.b64media}`;
                     this.setState({
                         contentStr: str,
-                        // mimeType: res.data.mimeType,
+                        mimeType: res.data.mimeType,
                         // contentCategory: res.data.contentCategory,
                     });
                 }
@@ -90,11 +91,10 @@ class PinnedPostElement extends Component {
         const { media } = this.props
         const { contentStr } = this.state
         if (media && media.contentStr !== contentStr){
-            console.log("USING STORED MEDIA");
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 contentStr: media.contentStr,
-                // mimeType: media.mimeType,
+                mimeType: media.mimeType,
                 // contentCategory: media.contentCategory
             })
         }
@@ -102,16 +102,35 @@ class PinnedPostElement extends Component {
 
     render(){
         const { classes, history, post } = this.props;
-        const { contentStr } = this.state
+        const { contentStr,mimeType } = this.state
         const textLimit = {height: "60px"};
         const aspectChange = {paddingTop: '56.25%'};
+        const renderMedia = () => {
+            if (!mimeType) {
+                return <CardMedia className={classes.media} type={mimeType} controls style={aspectChange} image={contentStr} />
+            }
+            if (mimeType.startsWith('application')) {
+                return (
+                  <CardMedia className={classes.media} style={aspectChange} image={docTN} />
+                )
+            }
+            if (mimeType.startsWith('audio')) {
+                return (
+                  <CardMedia className={classes.media} style={aspectChange} image={audioTN} />
+                )
+            }
+            if (mimeType.startsWith('video')) {
+                return <CardMedia className={classes.media} type={mimeType} controls style={aspectChange} image={videoTN} />
+            }
+            return <CardMedia className={classes.media} type={mimeType} controls style={aspectChange} image={contentStr} />
+        }
         return (
-          <Card className={classes.postCard}>
+          <Card className={classes.postCard} style={{backgroundColor: "#ebebeb"}}>
             <CardActionArea onClick={() => { history.push(`/post?post=${post._id}`); }}>
               <CardContent style={{paddingBottom: "0px"}}>
-                <CardMedia className={classes.media} style={aspectChange} image={contentStr} />
+                {renderMedia()}
                 <div style={textLimit}>
-                  <Typography gutterBottom variant="h5" component="h2" style={{overflow:"hidden", textOverflow: "ellipsis"}}>
+                  <Typography gutterBottom variant="h5" component="h2" style={{overflow:"hidden", textOverflow: "ellipsis", textAlign: "center"}}>
                     {post.title}
                   </Typography>
                 </div>
@@ -129,9 +148,9 @@ PinnedPostElement.propTypes = {
         thumbnailURL: PropTypes.string,
         mediaID: PropTypes.string,
     }).isRequired,
-    classes: PropTypes.objectOf(PropTypes.object).isRequired,
+    classes: PropTypes.string.isRequired,
     history: PropTypes.shape({push: PropTypes.func}).isRequired,
-    media: PropTypes.shape({contentStr: PropTypes.string}).isRequired,
+    media: PropTypes.shape({contentStr: PropTypes.string, mimeType: PropTypes.string}).isRequired,
 
 }
 

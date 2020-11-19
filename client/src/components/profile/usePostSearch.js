@@ -31,13 +31,10 @@ export default function usePostSearch(
       url = 'api/post/getPublic';
     }
     const filters = { userID: currentUser._id }
-    if (filterTag !== '') {
-      filters.tags = { $regex: new RegExp(filterTag.toLowerCase(), "i") }
-    }
     axios
       .post(
         url,
-        { skip, limit: 5, sortField, sortDirection, filters },
+        { skip, limit: 5, sortField, sortDirection, search: filterTag, filters },
         {
           headers: { Authorization: `Bearer ${token}` },
           // eslint-disable-next-line no-return-assign
@@ -52,7 +49,6 @@ export default function usePostSearch(
       .catch((e) => {
         if (axios.isCancel(e)) return
         setError(true)
-        console.log('error?>')
         console.error(e)
       })
     // eslint-disable-next-line consistent-return

@@ -6,19 +6,14 @@ import {
   Button,
   Card,
   CardContent,
-  Container,
   Divider,
-  Grid,
   TextField,
   Typography,
-  TableRow,
-  Checkbox, FormControlLabel, Select, FormHelperText, Chip, InputLabel, FormControl, Snackbar
+  Checkbox, FormControlLabel, Chip, Snackbar
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import CardMedia from "@material-ui/core/CardMedia";
 import MuiAlert from "@material-ui/lab/Alert";
 import add from "../utils/addMedia"
-import testImage from '../../assets/logo512.png'
 import GenericMedia from "../utils/GenericMedia";
 
 const useStyles = makeStyles({
@@ -52,7 +47,6 @@ const useStyles = makeStyles({
   },
   media: {
     height:" 100%",
-    // paddingTop: '56.25%', // 16:9
   }
 
 })
@@ -159,9 +153,6 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
   const changeDescription = (e) => {
       setDescription(e.target.value)
   }
-  const changeTag = (e) => {
-      setTag(e.target.value)
-  }
 
   const changePostPrivacy = (e) => {
       setPostPrivacy((old) => !old)
@@ -224,12 +215,6 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
 
   // updates post
   const onSubmit = (e) => {
-    if (rawMediaTN) {
-      console.log(rawMediaTN.size / 1024 /1204)
-    }
-    if (rawMedia) {
-      console.log(rawMedia.size / 1024 /1204)
-    }
     if (validateFields() === 1) {
       return
     }
@@ -242,8 +227,12 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
         if (resOne !== "") {
           payload.thumbnailURL = resOne._id
         }
-        Axios.post("/api/post/update", {postID: post._id, update: payload}, {headers: {Authorization: `Bearer ${token}`}})
-          .then( (resp) => {
+        Axios({
+          url: "/api/post/update",
+          method: "post",
+          data: {postID: post._id, update: payload},
+          headers: {Authorization: `Bearer ${token}`}
+        }).then( (resp) => {
             redirect();
           }).catch((err) => {
           console.error(err)
@@ -294,6 +283,7 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
           src={fileTN}
           className={classes.media}
           mimeType={mimeTypeTN}
+          thumbnail={false}
         />
       )
     }
@@ -303,6 +293,7 @@ function EditPostForm({ user, token, history, post, media, mediaTN }){
         src={file}
         className={classes.media}
         mimeType={mimeType}
+        thumbnail={false}
       />
     )
   }
@@ -512,27 +503,3 @@ EditPostForm.propTypes = {
   media:  PropTypes.shape({b64media: PropTypes.string, mimeType: PropTypes.string}).isRequired,
   mediaTN:  PropTypes.shape({b64media: PropTypes.string, mimeType: PropTypes.string}).isRequired,
 }
-
-/*
-<div style={{width: "100%", marginTop: "20px",  marginBottom: "20px"}}>
-  <FormControl className={classes.formControl}>
-    <InputLabel id="demo-simple-select-label" style={{width: "300px"}}>Select post tag</InputLabel>
-    <Select
-      labelId="demo-simple-select-label"
-      id="demo-simple-select"
-      value={tag}
-      onChange={changeTag}
-    >
-      <MenuItem value="Untagged"> Untagged</MenuItem>
-      {currentTags.map((singleTag) => {
-        return (
-          <MenuItem value={singleTag} key={singleTag}>
-            {' '}
-            {singleTag}
-          </MenuItem>
-        )
-      })}
-      {/!* renderAddTag() *!/}
-    </Select>
-  </FormControl>
-</div> */

@@ -6,13 +6,14 @@ import {
   Typography,
   Hidden,
   Avatar,
-  Grid,
   IconButton,
   InputBase,
+
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import SearchIcon from '@material-ui/icons/Search'
 import SettingsIcon from '@material-ui/icons/Settings'
+import MenuIcon from '@material-ui/icons/Menu';
 
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
@@ -29,16 +30,17 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import PostAddIcon from '@material-ui/icons/PostAdd'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import axios from'axios';
-import logo from '../../assets/personal-profile.svg'
+import logo from '../../assets/efolio-icon.svg'
 
 
-
-
-function Header({ token, user, logout, history, searchResults, setSearchResults, searchBy, setSearchBy }) {
+function Header({ token, user, logout, history, setSearchResults, searchBy, setSearchBy }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [profilePic, setProfilePic] = useState("");
-  //= const [searchBy, setSearchBy] = useState('posts');
+  const [mimeType, setMimeType] = useState("")
   const [searchInput, setSearchInput] = useState('');
+
+  const [anchorEl2, setAnchorEl2] = React.useState(null);
+
 
 
   const useStyles = makeStyles((theme) => ({
@@ -57,7 +59,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       borderRadius: theme.shape.borderRadius,
       marginLeft: 0,
       paddingTop: 5,
-      width: '100%',
+      maxWidth: "500px"
     },
     searchIcon: {
       padding: theme.spacing(0, 2),
@@ -94,9 +96,16 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   }
 
   const sendSearchData = () => {
-    const payload = {"search":searchInput}
+    const payload = {search: searchInput, limit: 100000}
+    let url1 = "/api/post/getPublic";
+    const config = {headers: {
+      Authorization: `Bearer ${token}`,
+    }}
+    if (token) {
+      url1 = '/api/post/get'
+    }
       if(searchBy === "posts"){
-        axios.post("/api/post/getPublic", payload)
+        axios.post(url1, payload, config)
         .then((resp) =>{
           setSearchResults(resp.data);
           history.push('/searchResults');
@@ -104,13 +113,17 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       }
 
       if(searchBy === "users"){
-        axios.post("/api/user/getPublic", payload)
+        const url2 = "/api/user/getPublic";
+        axios.post(url2, payload, config)
         .then((resp) =>{
           setSearchResults(resp.data);
-           
+
           history.push('/searchResults');
         })
-        
+        .catch((err)=>{
+          console.error(err);
+        })
+
       }
   }
   const handleKeyPress = (e) => {
@@ -131,7 +144,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
       <div>
         <Button onClick={handleClick} color="inherit" href={profileLink}>
           {renderAvatar()}
-          <Typography variant="button">{user.userName}</Typography>
+          <Typography style={{paddingLeft:"5px"}} variant="button">{user.userName}</Typography>
           <ArrowDropDownIcon />
         </Button>
 
@@ -141,7 +154,7 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
           keepMounted
           open={Boolean(anchorEl)}
           onClose={handleClose}
-          style={{zIndex: 1401, marginTop: "43px", marginLeft: "45px"}}
+          style={{zIndex: 1401, marginTop: "43px", marginLeft: "10px"}}
         >
           <MenuItem onClick={handleClose}>{renderViewProfile()}</MenuItem>
           <MenuItem onClick={handleClose}>{renderSettings()}</MenuItem>
@@ -153,16 +166,16 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   const renderSignup = () => {
     return (
-      <Button color="inherit" href="/signup">
-        <Typography variant="h6">Sign up</Typography>
+      <Button variant="outlined" color="inherit" href="/signup">
+        <Typography style={{fontFamily:"Verdana"}} variant="h6">Sign up</Typography>
       </Button>
     )
   }
 
   const renderLogin = () => {
     return (
-      <Button color="inherit" href="/login">
-        <Typography variant="h6">Login</Typography>
+      <Button variant="outlined" color="inherit" href="/login">
+        <Typography style={{fontFamily:"Verdana"}} variant="h6">Login</Typography>
       </Button>
     )
   }
@@ -213,12 +226,16 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
      axios.post('/api/media', payload,  authHeader)
       .then(response => {
         setProfilePic(response.data.b64media);
+        setMimeType(response.data.mimeType)
       })
+       .catch((err)=>{
+         console.error(err);
+       })
   }, [user, token])
 
 
   const renderAvatar = () => {
-    return <Avatar src={`data:image/jpeg;base64,${profilePic}`} />
+    return <Avatar src={`data:${mimeType};base64,${profilePic}`} />
     /* return <Avatar src={`data:image/jpeg;base64,${profilePic}`} /> */
   }
 
@@ -226,12 +243,13 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
     return (
       <div className={classes.search}>
         <div className="font-icon-wrapper">
-          <IconButton onClick={sendSearchData} className={classes.searchIcon}>
-            <SearchIcon />
+          <IconButton style={{padding: "20px", paddingBottom: "25px"}} onClick={sendSearchData} className={classes.searchIcon}>
+            <SearchIcon style={{color:"white"}} />
           </IconButton>
         </div>
-        <form style={{ display: 'flex' }}>
+        <form style={{ display: 'flex', minWidth: "140px" }}>
           <InputBase
+            style={{paddingLeft: "0"}}
             value={searchInput}
             onChange={handleSearchInputChange}
             onKeyDown={handleKeyPress}
@@ -243,13 +261,14 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
             }}
           />
 
-          <FormControl style={{minWidth:100, paddingBottom:10,}}>
-            <InputLabel style={{color:'inherit'}}>Search by</InputLabel>
-            <Select 
+          <FormControl style={{width: "130px", paddingBottom:10 }}>
+            <InputLabel style={{color:'inherit', width: '80px'}}>Search by</InputLabel>
+            <Select
               value={searchBy}
               onChange={handleSearchByChange}
+              style={{width: "67px", color:"white"}}
             >
-              <MenuItem style={{marginTop: "40px"}} value="users">Users</MenuItem>
+              <MenuItem style={{ marginTop: "40px"}} value="users">Users</MenuItem>
               <MenuItem value="posts">Posts</MenuItem>
             </Select>
           </FormControl>
@@ -261,48 +280,100 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
 
   const renderAddPost = () => {
     return (
-      <IconButton color="inherit" href="/addpost">
-        <PostAddIcon />
-        <Typography variant="button">Add post</Typography>
-      </IconButton>
+      <div style={{width: 138}}>
+        <Button style={{marginTop:"5px"}} variant="outlined" color="inherit" href="/addpost">
+          <PostAddIcon />
+          <Typography variant="button">Add post</Typography>
+        </Button>
+      </div>
+
     )
+  }
+
+  const renderAddPostBurger = () => {
+    return (
+      <IconButton color="inherit" aria-label="Profile" href="/addpost">
+        <PostAddIcon />
+        <Typography variant="h6">Add post</Typography>
+      </IconButton>
+      )
+  }
+
+  const hamburgerOnClick = (event) => {
+    setAnchorEl2(event.currentTarget);
+  }
+
+  const hamburgerClose = () => {
+    setAnchorEl2(null);
+  };
+
+  const renderHamburger = () => {
+    return (
+      <div>
+        <IconButton
+          aria-controls="customized-menu"
+          aria-haspopup="true"
+          variant="contained"
+          color="red"
+          onClick={hamburgerOnClick}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Menu
+          id="customized-menu"
+          anchorEl={anchorEl2}
+          keepMounted
+          open={Boolean(anchorEl2)}
+          onClose={hamburgerClose}
+        >
+          <MenuItem style={{marginTop: "40px"}} onClick={hamburgerClose}>{renderViewProfile()}</MenuItem>
+          <MenuItem onClick={hamburgerClose}>{renderAddPostBurger()}</MenuItem>
+          <MenuItem onClick={hamburgerClose}>{renderSettings()}</MenuItem>
+          <MenuItem>{renderLogout()}</MenuItem>
+        </Menu>
+      </div>
+      )
   }
 
   const renderUnauthenticatedHeader = () => {
     if (token === '') {
       return (
-        <AppBar position="static" style={{ height: '60px', boxShadow:  "none" }}>
-          <Toolbar disableGutters>
-            <section className={classes.leftToolbar}>
-              <Button href="/">
+        <div style={{flexGrow: 1}}>
+          <AppBar position="static" style={{ height: '60px', boxShadow:  "none" }}>
+            <Toolbar disableGutters>
+              <Button href="/" style={{marginRight: "0px", paddingRight: 0}}>
                 <img
                   src={logo}
                   alt="dog"
                   style={{ height: '35px', marginRight: '5px' }}
                 />
-                <Hidden only={['xs']}>
+                <Hidden only={['xs', 'sm']}>
                   <Typography style={{ color: 'white' }} variant="h6">
                     Efolio
                   </Typography>
                 </Hidden>
               </Button>
-            </section>
-            <Grid item xs={4}>
-              {renderSearchBar()}
-            </Grid>
-
-            <section className={classes.rightToolbar}>
-              <Grid container direction="row">
-                <Grid item xs={7}>
+              <div style={{flexGrow: 1}} />
+              <div style={{ marginBottom: 3, position: 'relative' }}>
+                {renderSearchBar()}
+              </div>
+              <div style={{flexGrow: 1}} />
+              <Hidden xsDown>
+                <div style={{ marginBottom: 3, width: '170px', position: 'relative' }}>
                   {renderSignup()}
-                </Grid>
-                <Grid item xs={5}>
+                </div>
+                <div style={{ marginRight: 20 }}>
                   {renderLogin()}
-                </Grid>
-              </Grid>
-            </section>
-          </Toolbar>
-        </AppBar>
+                </div>
+              </Hidden>
+              <Hidden smUp>
+                <div style={{ marginRight: "25" }}>
+                  {renderHamburger()}
+                </div>
+              </Hidden>
+            </Toolbar>
+          </AppBar>
+        </div>
       )
     }
     return <></>
@@ -311,50 +382,43 @@ function Header({ token, user, logout, history, searchResults, setSearchResults,
   const renderAuthenticatedHeader = () => {
     if (token !== '' && user !== {}) {
       return (
-        <AppBar position="static" style={{ height: '60px', boxShadow:  "none" }}>
-          <Toolbar disableGutters>
-            <section className={classes.leftToolbar}>
-              <Button href="/">
+        <div style={{flexGrow: 1}}>
+          <AppBar position="static" style={{ height: '60px', boxShadow:  "none" }}>
+            <Toolbar disableGutters>
+              <Button href="/" style={{marginRight: "0px", paddingRight: 0}}>
                 <img
                   src={logo}
                   alt="dog"
                   style={{ height: '35px', marginRight: '5px' }}
                 />
-                <Hidden only={['xs']}>
+                <Hidden only={['xs', 'sm']}>
                   <Typography style={{ color: 'white' }} variant="h6">
                     Efolio
                   </Typography>
                 </Hidden>
               </Button>
-            </section>
-            <Grid item xs={4}>
-              <div style={{ marginBottom: 3 }}>{renderSearchBar()}</div>
-            </Grid>
+              <div style={{flexGrow: 1}} />
+              <div style={{ marginBottom: 3, position: 'relative' }}>
+                {renderSearchBar()}
+              </div>
+              <div style={{flexGrow: 1}} />
+              <Hidden xsDown>
+                <div style={{ marginBottom: 3, position: 'relative' }}>
+                  {renderAddPost()}
+                </div>
+                <div style={{ marginLeft: 0 }}>
+                  {renderUserMenu()}
+                </div>
+              </Hidden>
+              <Hidden smUp>
+                <div style={{ marginRight: "25" }}>
+                  {renderHamburger()}
+                </div>
+              </Hidden>
+            </Toolbar>
+          </AppBar>
+        </div>
 
-            <section className={classes.rightToolbar}>
-              <Grid
-                item
-                style={{ minWidth: '40vh' }}
-                container
-                direction="row"
-                xs={12}
-                spacing={0}
-              >
-                <Grid item xs={4}>
-                  <div style={{ marginTop: 2, display: 'flex' }}>
-                    {renderAddPost()}
-                  </div>
-                  {' '}
-                </Grid>
-                <Grid item xs={8}>
-                  <div style={{ marginLeft: 25, display: 'flex' }}>
-                    {renderUserMenu()}
-                  </div>
-                </Grid>
-              </Grid>
-            </section>
-          </Toolbar>
-        </AppBar>
       )
     }
     return <></>
@@ -373,7 +437,6 @@ Header.propTypes = {
   history: PropTypes.shape({push: PropTypes.func}).isRequired,
   token: PropTypes.string,
   logout: PropTypes.func.isRequired,
-  searchResults: PropTypes.arrayOf(PropTypes.object),
   setSearchResults: PropTypes.func.isRequired,
   searchBy: PropTypes.string,
   setSearchBy: PropTypes.func.isRequired,
@@ -382,7 +445,6 @@ Header.propTypes = {
 Header.defaultProps = {
   user: {},
   token: '',
-  searchResults:[],
   searchBy:'',
 }
 

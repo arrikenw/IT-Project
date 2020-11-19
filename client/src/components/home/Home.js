@@ -4,9 +4,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from "prop-types";
 import WelcomeMessage from './WelcomeMessage'
 import LoginForm from '../login/LoginForm'
-import LoginPage from "../login/LoginPage";
-// import LoginForm from './Login/LoginForm'
-// import ProfilePic from './ProfilePic/ProfilePic'
 
 // css for containers
 const useStyles = makeStyles({

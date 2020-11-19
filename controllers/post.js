@@ -15,7 +15,9 @@ const getPost = (req, res) => {
   const query = {};
   query.$and = [];
   // search for public posts or posts that belong to the user
-  query.$and.push({ $or: [{ private: false }, { userID: user }] });
+  query.$and.push({
+    $or: [{ private: false, userIsPrivate: false }, { userID: user }],
+  });
 
   // if request has search term, search the post titles and descriptions for it
   if (req.body.search) {
@@ -87,7 +89,7 @@ const getPublicPost = (req, res) => {
   const query = {};
   query.$and = [];
   // search for public posts
-  query.$and.push({ private: false });
+  query.$and.push({ private: false, userIsPrivate: false });
 
   // if request has search term, search the post titles and descriptions for it
   if (req.body.search) {
@@ -453,7 +455,6 @@ const removeTag = (req, res) => {
     onRemoveTag
   );
 };
-
 
 module.exports.addTag = addTag;
 module.exports.removeTag = removeTag;

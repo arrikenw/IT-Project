@@ -43,7 +43,7 @@ router.post("/addToPinnedPosts", authenticateToken, (req, res) => {
 });
 
 router.post("/removeFromPinnedPosts", authenticateToken, (req, res) => {
-  userController.removeFromPinnedPosts(req,res);
+  userController.removeFromPinnedPosts(req, res);
 });
 
 // export router for use index.js

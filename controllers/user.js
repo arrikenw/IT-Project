@@ -355,7 +355,7 @@ const updateUser = (req, res) => {
       res.send("update not successful - something went wrong, try again");
       return;
     }
-    console.log(`updateUser successful: updated user ${id}`);
+    console.log(`changed privacy of ${results.n} posts`);
     res.status(200);
     res.send({ id });
   };
@@ -368,17 +368,16 @@ const updateUser = (req, res) => {
       return;
     }
     if (results.n === 1) {
-      if (!req.body.private) {
+      if (req.body.update.private) {
         console.log(`updateUser successful: updated user ${id}`);
-        res.status(200);
-        res.send({ id });
-        return;
       }
 
       // update privacy across all user posts
+      console.log(req.body);
+      console.log(req.body.update.private);
       PostModel.updateMany(
         { userID: id },
-        { userIsPrivate: req.body.private },
+        { userIsPrivate: req.body.update.private },
         onUpdatePrivacy
       );
     } else {
@@ -387,7 +386,6 @@ const updateUser = (req, res) => {
       res.send(`update not successful - could not find user ${id}`);
     }
   };
-  
 
   const onHashPassword = (err, hash) => {
     if (err) {
@@ -595,7 +593,7 @@ const addToPinnedPosts = (req, res) => {
 };
 
 const removeFromPinnedPosts = (req, res) => {
-  if (!req.body.postID){
+  if (!req.body.postID) {
     console.log("Unpinning the post was not successful: missing post id");
     res.status(400);
     res.send("Unpinning the post was not successful - missing post id");

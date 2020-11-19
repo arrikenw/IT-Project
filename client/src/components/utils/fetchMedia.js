@@ -12,8 +12,6 @@ const fetchMediaUtil = (mediaID, token, callback, errorCallback) => {
         mediaID,
     };
 
-    console.log(`fetching id: ${mediaID}`);
-    console.log(`with token: ${token}`);
     // fetch with token
     if (token){
         const controllerUrl = "/api/media/";
@@ -22,13 +20,12 @@ const fetchMediaUtil = (mediaID, token, callback, errorCallback) => {
                 Authorization: `Bearer ${token}`,
             },
         };
-        console.log(payload);
         Axios.post(controllerUrl, payload, headers)
             .then((res) => {
                 callback(res);
             })
             .catch((err) => {
-                console.log(err);
+                console.error(err);
                 if (errorCallback){
                     errorCallback(err);
                 }
@@ -41,7 +38,7 @@ const fetchMediaUtil = (mediaID, token, callback, errorCallback) => {
                 callback(res);
             })
             .catch((err) => {
-                console.log(err);
+                console.error(err);
                 if (errorCallback){
                     errorCallback(err);
                 }

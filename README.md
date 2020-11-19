@@ -10,10 +10,11 @@
 - [System Requirements](#System Requirements)
 - [Running](#Running)
 - [Style Guide](#Style Guide)
+
   - Code Style
-  - Constol Log 
+  - Console Logging
   - API Responses
-  - Git Hub
+  - GitHub
   - Documentation
 - [Features](#Features)
 - [API Documentation](#API Documentation)
@@ -22,9 +23,11 @@
   - Post
   - comments
 - [Tests Case](#Test Case)
+
   
 
 ## Introduction
+
 The problem that we as a software development team have answered is to construct a digital portfolio system primarily for students to 
 display their work, but could be used by anyone as a digital portfolio. The concept is essentially for a user to be able to showcase
 work that they are proud of on a digital platform. In the case of students the platform they also have to be able to reflect on their 
@@ -72,9 +75,92 @@ This folder, `/docs `, includes:
 Bellow is a link to a demo the hosted project: 
 [https://efolio.herokuapp.com/](https://efolio.herokuapp.com/)
 
-Use the Demo login: 
-- Email:
-- Password:
+
+### Demo
+A hosted demo of the project can be found [here](https://efolio.herokuapp.com/).
+
+We have provided a demo account so that you can see a fully fleshed out account. However, feel free to create new user accounts and posts. 
+
+Demo credentials
+- Email: _______
+- Password: _______
+
+## Database
+#### Database description
+Our database stores account data, comments, media file metadata, and posts created by users. 
+File storage for uploaded media is not handled by our database – instead, the files are stored in an AWS S3 bucket and their key stored in our database. 
+Our fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format.
+#### Technology rationale
+We selected MongoDB as our database for a handful of reasons:
+- The document-store / schemaless approach allowed us to quickly iterate on our design
+- Our team was familiar with mongoDB and had previously used it to build other systems  
+- Our data was well suited to a “document” style  – many fields are _____ FILL IN HERE____________
+
+#### Document description
+##### Media
+The media document type is used to store media metadata. The id of the media file is used as a key for the media content stored in our S3 bucket. 
+
+The document stores:
+- A general "content category"
+- The MIME-type and extension of the file
+- Privacy settings
+
+The document also stores the following references:
+- The id of the <b>user</b> who uploaded the media file
+##### Posts
+The post document is used to represent the user-produced content that our e-folio system displays. 
+
+The document stores:
+- Privacy settings
+- A tile and description
+- Tags and a general "content category"
+- A list of <b>Comment</b> documents representing the comments made on a post 
+
+The document also stores the following references:
+- The ids of the <b>media</b> documents that contain the thumbnails and files used in the post
+- The id of the <b>user</b> who created the post
+- An array of <b>user</b> ids that represent the users permitted to access a private post
+##### User
+The user document represents the users of our website.
+
+The document stores:
+- Privacy settings
+- Contact details
+- Biographical data
+- Username and a hashed password
+
+The document also stores the following references:
+- The id of a <b>media</b> document that contains the profile picture of the user.
+
+##### Comment
+The comment document is used to store data about comments made on user posts.
+
+The document stores:
+- The comment body
+- Timestamps and other dating information
+
+The document also stores the following references
+- The ids of the <b>users</b> who have liked the post
+- The id of the <b>user</b> who posted the comment
+
+##### Diagram
+We have provided a "crows-foot" diagram of the relations between documents used in our database. Note that the S3 bucket included in the diagram is <b>NOT</b> part of our database.
+<img src="/images/db.png"/> 
+
+#### CI/CD Pipeline
+We have built a simple CI/CD pipeline to improve code quality and assist in the deployment of updates. 
+Tests triggered on merge requests to master must pass before code can be merged, and once merged, the updated master branch will be automatically deployed.
+We provide a brief sketch of the role of the CI/CD pipeline in the development cycle below.
+##### Development lifecycle 
+1. Create feature branch
+2. Write new code, test locally
+3. Make pull request
+4. \[CI\] Integration tests are automatically run using Github actions
+    - If tests fail, the merge cannot be completed. Return to step 2
+    - If tests pass, proceed to step 5
+5. Review and approve merge, pull onto master
+6. \[CD\] Merge onto master triggers an automatic deployment to Heroku using Github actions
+7. Heroku will install relevant packages and start the server. The site is now deployed  and reflects the latest changes from master
 
 ## Set Up
 #### Installing Packages
@@ -122,6 +208,16 @@ To run the frontend server for testing, run the command `npm run start` int the 
 To run the linter for the backend code,  run the command `npm run lint` in the root directory of the repository
 
 To run the tests for the backend code,  run the command `npm run test` in the root directory of the repository
+
+## Costs and licencing considerations
+- Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries comercially, a licencing fee must be paid.
+A licence can be obtained at https://www.pdftron.com/licensing/.
+
+- Our system is currently using the free-tier of AWS. Once in production, the system will need to be linked to a new amazon account and S3 bucket, and relevant usage fees will need to be paid. Pricing information can be found at https://aws.amazon.com/pricing/. 
+
+- Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply. Pricing information can be found at https://www.mongodb.com/pricing.
+
+
 
 ## Style Guide
 ### Code Style
@@ -1272,6 +1368,6 @@ Responses:
     ```
 
 ## Tests Case
-Test cases can be foun in the folder `/test`, or follow the link [Test Cases](/test).
+Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
 
 

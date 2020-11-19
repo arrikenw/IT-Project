@@ -262,7 +262,7 @@ We selected MongoDB as our database for a handful of reasons:
 
 - The document-store / schemaless approach allowed us to quickly iterate on our design
 - Our team was familiar with mongoDB and had previously used it to build other systems
-- Our data was well suited to a “document” style – many fields are **\_** FILL IN HERE****\_\_\_\_****
+- Our data was well suited to a “document” style – many fields are **\_** FILL IN HERE\***\*\_\_\_\_\*\***
 
 #### Document description
 
@@ -1018,6 +1018,7 @@ Responses:
 - on forbidden:
   - the response will have status code "403" which represents an invalid authentication token
 - On failure:
+
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -1665,6 +1666,53 @@ Responses:
     "Unlike comment not successful - <reasonForError>"
     ```
 
+## Tests Case
+
+Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
+
+## Design Architecture
+
+#### Header
+
+The website header is displayed on every page, its files are stored in header which contains:
+
+- Front end code for Search bar
+- Link to user's profile
+- Link to settings page
+- Add post button
+- Logout button
+
+#### Home
+
+The home page is shown after successful login or clicking on logo in the header
+
+Its files are stored in the home folder which contains
+
+- Home page
+- Welcome message
+
+#### Profile page
+
+The user profile page contains:
+
+- Infinite scrolling list of posts
+- Pinned posts
+- User's profile details
+
+These files are located in the profile folder
+
+#### Posts
+
+Each post contains:
+
+- comments
+- likes
+- edit post
+
+[## introduction]: https://github.com/arrikenw/IT-Project#introduction-1
+[/docs]: /docs
+[### motivation for e-folio]: /docs
+
 ## Style Guide
 
 ### Code Style
@@ -1686,11 +1734,16 @@ Responses:
     synchronousFunc(param, (err, result) => {});
     ```
   - right:
-  - ```javascript
-    synchronousFunc(param).then(result).catch(err);
-    ```
+  - ````javascript
+        synchronousFunc(param).then(result).catch(err);
+    <<<<<<< HEAD
+        ```
+    =======
+    >>>>>>> d7811dacded0eeff4562e0fdc1947b5eb1dbfeb7
+    ````
 
 - #### Camel case is used for variable and function names
+
   - wrong:
   - ```javascript
     const myvariablename = 5;
@@ -1706,6 +1759,7 @@ Responses:
 
     const myFuncName = (param) => {};
     ```
+
 - #### When possible, Australian English spelling is used
   - May not be possible for specific packages
   - wrong:
@@ -1728,6 +1782,7 @@ Responses:
     const myFunc = () => {};
     ```
 - #### Use FIXME and TODO to annoate
+
   - wrong:
   - ```javascript
     // this needs to be fixed
@@ -1743,6 +1798,7 @@ Responses:
 
     // TODO need to add error handling
     ```
+
 - We are currently using a modified version of airbnb's style guide. Read more about it
   [here](https://medium.com/docon/airbnb-javascript-style-guide-key-takeaways-ffd0370c053) and
   [here](https://airbnb.io/javascript/).
@@ -1767,16 +1823,9 @@ Responses:
 - in a successful response, the error code should be in the form of "2XX" and be a JSON with
   relevant data: - wrong: - `javascript res.status(300); res.send("Successful request!"); ` - right: - `javascript res.status(201) res.send({ id: userID, email: user.email }); `
 - in an unsuccessful response, the error code should be in the form of not "2XX" and be
-  a string with the correct form: - the correct form is of `"<request> not successful - <reasonOrError>"` - the response string should be in a form that can be directly shown to a front end user - status codes in the form "4XX" are used for user error - status codes in the form "5XX" are used for server error - wrong: - ```javascript
-  res.status(500);
-  res.send("formidable.parse parse error");
-        res.status(400);
-        res.send("updateUser not successful - mongoose error: duplicate key: { email }");
-        ```
-      - right:
-      - ```javascript
-        res.status(400);
-        res.send("Update user not successful - an account with that email already exists");
+  a string with the correct form: - the correct form is of `"<request> not successful - <reasonOrError>"` - the response string should be in a form that can be directly shown to a front end user - status codes in the form "4XX" are used for user error - status codes in the form "5XX" are used for server error - wrong: - `javascript res.status(500); res.send("formidable.parse parse error"); res.status(400); res.send("updateUser not successful - mongoose error: duplicate key: { email }"); ` - right: - ```javascript
+  res.status(400);
+  res.send("Update user not successful - an account with that email already exists");
 
         res.status(500);
         res.send("File upload not successful - something went wrong, try again");

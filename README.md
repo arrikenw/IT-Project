@@ -40,52 +40,42 @@
 
 ## Introduction
 
-The problem that we as a software development team have answered is to construct a digital portfolio system primarily for students to
-display their work, but could be used by anyone as a digital portfolio. The concept is essentially for a user to be able to showcase
-work that they are proud of on a digital platform. In the case of students the platform they also have to be able to reflect on their
-work and be able to submit assessable work. This means a balance between the privacy (to ensure no plagiarism) and display work they are
-proud of. For this digital portfolio system to be compatible with many fields it must accept many file types. And finally allow the user
-to reflect on their work so that they may develop.
+E-folio is a digital portfolio system designed to allow students and creators to display their work.
+Users can upload posts containing media and text, browse the works of others, and interact with other works through comments and likes.
 
-As an answer to this problem Podoju has developed the “E-FOLIO”, and is a web based digital portfolio system. E-FOLIO, allows users to
-‘post’ work that they wish to showcase to their profile, share their profile with others. This project was created by the Podoju was
-consists of a backend server using node.js, Express and Mongoose;a frontend written using html, css, node.js, react.js, and Material UI;
-a database using mongoDB, and a file server using AWS S3 Bucket.
+The system has been designed with a focus on students, but would be useful for anyone hoping to display their work online as part of a digital portfolio. 
+A student, for example, could regularlly post reflective reports to be viewed and assessed by their mentors and peers. Similarly, an artist or musician could use the folio to display their work. 
+
+Our stack is javascript heavy - our backend is written using node.js with express middleware, and our frontend is built with react.js and Material UI.
+For data and file storage, we use a mongoDB database and an AWS S3 bucket.
 
 ### Motivation for E-FOLIO
 
-Documentation on the core vision of our system can be found in the [/docs directory](/docs).
-E-Foilio as the response to the problem was motivated by the idea that this platform should be able to be used by anyone who wanted
-to show case their work, but is primarily for the academic arena. In order to grasp the differnt user types we made personas.
+Our conception of E-folio was motivated by the idea that the platform should be a simple platform that could be used by anyone who wanted
+to showcase their work, with a primary focus on the academic arena.
 
-This folder, `/docs `, includes:
+Detailed design documents relating to our core vision of the e-folio system can be found in the [/docs directory](/docs). We have provided a description of these documents below.
 
-- Personas
-  - Building a range of personas help as understand the users needs, behaviours, goals and experiences. Four Sets of uses were
-    identified, the undergraduate student, the post graduate student, the lecturer, and industry representatives.
-- Motivational Model
-  - We used a Motivational Model to represent the requirement of this project. Motivational Models are created using the DO-BE-FEEL
-    method of questioning in meetings with the client. What should the system DO? What should the system BE? How should the user FEEl?
-    These answers are then mapped to a diagram, the parallelograms are the "DO", the cloud is the "BE", and the heart is the "FEEL".
+
+#### Personas
+A range of personas have been constructed to help us identify user needs, behaviours, goals and experiences. They include:
+- The undergraduate student
+- The post graduate student
+- The lecturer
+- The industry representatives.
+
+#### Motivational Model
+A motivational model was used to help determine the key requirements of the system. Our motivational model was created after a DO-BE-FEEL
+questioning session with the clients.
 
 ![motivationalModel](/images/MotivationalModel.png)
 
-- User Stories
-  - The user stories created to help define the features fo this project were drived form the motivational model and the personas. There
-    are general user stories for all types of users, but there are also specific user stories that answer the needs of that specific user
-    group.
-- Class Diagram
-  - How the pages in the frontend interact is demonstrated in this diagram.
+#### User stories
+We have derived a series of user stories from our personas and motivational model in order to help define the core features of our project. These include
+general user stories for classes of users and specific user stories that answer the needs of individual users.
 
-![classDiagram](/images/classdiagram.PNG)
 
-- Architecture Diagram
-  - The system implemented for this project has a frontend; which is responsible for the user interface, a backend server; which handles
-    requests from the frontend; and finally a database which provides the necessary data to the backend server.
-
-![architectureDiagram](/images/architecture.png)
-
-### Demo
+## Demo
 
 A hosted demo of the project can be found [here](https://efolio.herokuapp.com/).
 
@@ -292,6 +282,12 @@ Navigate back to the "Deploy" tab and select the branch to be deployed under "Ma
 - Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply.
   Pricing information can be found [here](https://www.mongodb.com/pricing).
   
+  
+## Architecture Diagram
+We have provided an architecture diagram to outline the connections between different layers of our system. These layers will be explored in greater depth in the subsequent sections of the readme.
+
+![architectureDiagram](/images/architecture.png)
+  
 ## Database
 
 #### Database description
@@ -406,23 +402,28 @@ We provide a brief sketch of the role of the CI/CD pipeline in the development c
 
 ## Frontend Architecture
 
-Assets used in our front-end (eg. default thumbnails) are stored in the ```/client/src/assets``` directory. Source code for components is stored in the ```client/src/components``` directory.
+We have provided an outline of the main components used in our frontend, as well as a class diagram illustrating the interactions between pages in our frontend.
+
+#### Class Diagram
+
+![classDiagram](/images/classdiagram.PNG)
+
 #### Header
 
-The website header is displayed on every page. Related files are stored in ```/client/src/header``` which contains:
+The website header is displayed on every page. Related files are stored in ```/client/src/components/header``` which contains:
 
 - A header component
 
 #### Home
 
-The home page is shown after successful login or clicking on logo in the header. Related files are stored in ```/client/src/header```, which contains:
+The home page is shown after successful login or clicking on logo in the header. Related files are stored in ```/client/src/components/header```, which contains:
 
 - A welcome message component
 - The home screen
 
 #### Profile page
 
-The user profile can be accessed through the search screen or by clicking on a link to the user's profile. Related files are stored in ```/client/src/profile```, which contains:
+The user profile can be accessed through the search screen or by clicking on a link to the user's profile. Related files are stored in ```/client/src/components/profile```, which contains:
 
 - Components for the infinite scroll of posts
 - Components for the display of pinned posts
@@ -432,7 +433,7 @@ The user profile can be accessed through the search screen or by clicking on a l
 
 #### Posts
 
-Posts appear in the search screen, in a user's feed, and when a post is expanded. Related files are stored in ```/client/src/Post```, which contains:
+Posts appear in the search screen, in a user's feed, and when a post is expanded. Related files are stored in ```/client/src/components/Post```, which contains:
 
 - Comment related components
     - A component for the create comment form
@@ -445,28 +446,28 @@ Posts appear in the search screen, in a user's feed, and when a post is expanded
 
 #### Login 
 
-The login page is used to log users in and give them new auth tokens. Related files are stored in ```/client/src/login```, which contains:
+The login page is used to log users in and give them new auth tokens. Related files are stored in ```/client/src/components/login```, which contains:
 
 - Components for the login form
 - The login page
 
 #### Signup
 
-The signup page is used to create new user accounts. Related files are stored in ```/client/src/signup```, which contains:
+The signup page is used to create new user accounts. Related files are stored in ```/client/src/components/signup```, which contains:
 
 - Components and forms for different stages of the signup process
 - The signup page
 
 #### Search
 
-The search screen is used to display search results. Related files are stored in ```/client/src/search```, which contains:
+The search screen is used to display search results. Related files are stored in ```/client/src/components/search```, which contains:
 
 - Components for helping carry out search logic
 - The search results page
 
 #### Settings
 
-The settings form is used to update a user's account details and settings. Related files are stored in ```/client/src/settings```, which contains:
+The settings form is used to update a user's account details and settings. Related files are stored in ```/client/src/components/settings```, which contains:
 
 - Components for different stages of the account update process
 - The settings page
@@ -477,7 +478,6 @@ Our system makes use of utiliy functions to simply our media requests. Related f
 
 - Utility functions for fetching media with and without tokens
 - Utility functions for uploading media files
-
 
 
 ## Backend Architecture
@@ -1773,3 +1773,21 @@ Responses:
 ## Test Cases
 
 Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
+
+We have provided traceability matrices for the acceptance criteria, as well as for other functional requirements we identified. 
+
+Note the naming convention for tests is as follows: ```<testfile> <ith description>.<jth test>```. 
+For example, the second test in the first description in the user test file is named "User 1.2"
+
+#### Traceability Matrix - Acceptance Criteria: 
+<p align="center">
+  <img src="images/acceptanceCriteria.PNG"  width="1000" >
+</p>
+
+
+#### Traceability Matrix - Other Functional Requirements: 
+<p align="center">
+  <img src="images/otherRequirements.PNG"  width="1000" >
+</p>
+
+

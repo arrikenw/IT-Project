@@ -299,6 +299,22 @@ function Header({ token, user, logout, history, setSearchResults, searchBy, setS
       )
   }
 
+  const renderLoginBurger = () => {
+    return (
+      <IconButton color="inherit" aria-label="Profile" href="/login">
+        <Typography variant="h6">Login</Typography>
+      </IconButton>
+    )
+  }
+
+  const renderSignUpBurger = () => {
+    return (
+      <IconButton color="inherit" aria-label="Profile" href="/signUp">
+        <Typography variant="h6">Sign Up</Typography>
+      </IconButton>
+    )
+  }
+
   const hamburgerOnClick = (event) => {
     setAnchorEl2(event.currentTarget);
   }
@@ -308,6 +324,31 @@ function Header({ token, user, logout, history, setSearchResults, searchBy, setS
   };
 
   const renderHamburger = () => {
+    if (token === "" || !token) {
+      return (
+        <div>
+          <IconButton
+            aria-controls="customized-menu"
+            aria-haspopup="true"
+            variant="contained"
+            color="red"
+            onClick={hamburgerOnClick}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            id="customized-menu"
+            anchorEl={anchorEl2}
+            keepMounted
+            open={Boolean(anchorEl2)}
+            onClose={hamburgerClose}
+          >
+            <MenuItem style={{marginTop: "40px"}} onClick={hamburgerClose}>{renderLoginBurger()}</MenuItem>
+            <MenuItem onClick={hamburgerClose}>{renderSignUpBurger()}</MenuItem>
+          </Menu>
+        </div>
+      )
+    }
     return (
       <div>
         <IconButton

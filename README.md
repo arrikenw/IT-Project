@@ -77,7 +77,7 @@ This folder, `/docs `, includes:
 - Class Diagram
   - How the pages in the frontend interact is demonstrated in this diagram.
 
-![classDiagram](/images/classdiagram.png)
+![classDiagram](/images/classdiagram.PNG)
 
 - Architecture Diagram
   - The system implemented for this project has a frontend; which is responsible for the user interface, a backend server; which handles

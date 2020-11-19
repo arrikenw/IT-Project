@@ -1334,6 +1334,38 @@ Responses:
 Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
 
 
+
+## Design Architecture
+
+####Header
+The website header is displayed on every page, its files are stored in header which contains:
+- Front end code for Search bar 
+- Link to user's profile
+- Link to settings page
+- Add post button
+- Logout button
+
+####Home
+The home page is shown when after successful login or clicking on
+####Profile page 
+The user profile page contains:
+ - Infinite scroll of posts
+ - Pinned posts
+ - Profile details
+
+These files are located in the profile folder
+ 
+####Posts
+Each post contains:
+- comments
+- likes
+- edit post 
+ 
+
+ 
+
+
+
 [## Introduction]: https://github.com/arrikenw/IT-Project#introduction-1
 
 [/docs]: /docs

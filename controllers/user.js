@@ -176,6 +176,7 @@ const getPublicUser = (req, res) => {
   console.log(query);
   sort[sortField] = sortDirection;
   UserModel.find(query)
+    .collation({ locale: "en" })
     .sort(sort)
     .skip(skip)
     .limit(limit)

@@ -1,28 +1,42 @@
-# E-FOLIO:
+# Efolio Documentation:
 
 ## Table of Contents
 
 - [Introduction](#introduction)
-  - Motivation for E-FOLIO
-  - Demo
+  - [Motivation](#motivation-for-e-folio)
+  - [Demo](#demo)
+- [Features](#features-implemented)
 - [Set Up](#set-up)
+  - [Installing Packages](#installing-packages)
+  - [Creating MongoDB Database](#creating-mongodb-database)
+  - [Creating AWS S3 Bucket](#creating-aws-s3-bucket)
+  - [Backend .env Files](#backend-.env-files)
+  - [GitHub Actions Continuous Integration](#github-actions-continuous-integration)
 - [System Requirements](#system-requirements)
 - [Running](#running)
+  - [Deployment Backend Server](#deployment-backend-server)
+  - [Development Frontend Server](#development-frontend-server)
+  - [Backend Testing](#backend-testing)
+  - [Code Linting](#code-linting)
 - [Deployment](#deployment)
-- [Style Guide](style-guide)
-  - Code Style
-  - Console Logging
-  - API Responses
-  - GitHub
-  - Documentation
-
-* [Features](#features)
-* [API Documentation](#API-documentation)
-  - Users
-  - Midia
-  - Post
-  - comments
-* [Tests Case](#Test-Case)
+  - [Local Deployment](#local-deployment)
+  - [Remote Deployment](#remote-deployment)
+  - [Heroku Deployment](#heroku-deployment)
+- [Costs and licencing Considerations](#costs-and-licencing-considerations)
+- [Database](#database)
+- [Frontend Architecture](#frontend-architecture)
+- [Backend Architecture](#backend-architecture)
+  - [General Design](#general-design)
+  - [User Authentication](#user-authentication)
+  - [Media API](#media-apimedia)
+  - [Users API](#users-apiuser)
+  - [Posts API](#posts-apipost)
+  - [Comments API](#comments-apicomment)
+- [Style Guide](#style-guide)
+  - [Code Style](#code-style)
+  - [Console Logs](#console-logs)
+  - [API Responses](#api-responses)
+- [Tests Cases](#Test-Cases)
 
 ## Introduction
 
@@ -63,7 +77,7 @@ This folder, `/docs `, includes:
 - Class Diagram
   - How the pages in the frontend interact is demonstrated in this diagram.
 
-![classDiagram](/images/classdiagram.png)
+![classDiagram](/images/classdiagram.PNG)
 
 - Architecture Diagram
   - The system implemented for this project has a frontend; which is responsible for the user interface, a backend server; which handles
@@ -84,18 +98,34 @@ Demo credentials
 
 ## Features implemented
 
-Our E-Folio comes with useful features which enhance the user experience:
+We provide a brief outline of the key features of our system.
 
-- Create account: E-Folio gives users the ability to create their own accounts for work sharing purposes. Also, by distinguishing contents by their creators and giving each user a profile page, users can visit each other and view others contents. This is a crucial requirement from our clients to give users the ability to view other users’ work.
-- Upload file: Our website let users upload Microsoft documents, images, videos, as well as audio and pdfs. The clients ask for the ability to upload different file types to make the E-Folio more diverse in content.
-- Edit post: Another request from the clients is to be able to edit the post after posting it. We implement this through a setting button for every post. This feature gives the post owner the power to change every aspect of the post to suit the purpose, from post description, files to privacy settings of the post.
-- Edit account: Users can change their user information like name, phone number, email, or profile picture to suit their user information.
-- Header: Every page of the website is fitted with a header on top. All headers have a home shortcut button, a search bar and its filter, a user profile shortcut button, as well as a login/logout button.
-- Profile detail: Every page in our website contains a profile detail component, either of the user or other users when visiting their site. Each profile detail component contains the user’s information, as well as a filter button.
-- Filter: Each profile can filter posts through their tags. This is a requisite from the clients, and we implement the filter feature through creating tags for posts for easier filtering.
-- Search: the search bar can be found on the header to search for users or posts. The clients required for this feature, so we implement……
-- Interaction: Another request from the clients is to add comments for each post. Therefore, we implement like button, comment, and share button for each post to increase the level of interaction between users.
-- Pinned bar: We come up with this idea to emphasize the important or significant posts that the user wants to put up front in an easy spot to see. The pinned bar is a carousel below the header, which can hold 20 pinned posts…..
+- Account creation: Users can create their own accounts. A user’s account allows them to display their professional fields, biography, and contact details, allowing them to easily connect with other users. An account also allows the user to participate in the community by creating posts and comments.
+
+- Account editing: Users can update their account details, allowing them to change their biographical details, profile picture, privacy settings, display name, and areas of professional interest.
+
+- File upload / media support: Users can upload a variety of files, including images, videos, pdf files, spreadsheets, and word documents. By providing users with the ability to upload a wide variety of media, users gain the ability to create a portfolio that closely reflects their skills and body of work.
+
+- Post creation: Users can create posts containing media, a title, and a description. Posts can be tagged with specific topics by users to focus conversation and to improve their visibility to other users.
+
+- Post editing: Posts can be edited after creation, allowing users to correct mistakes in their portfolio. Additionally, posts can have their privacy settings modified, allowing users to hide posts that they feel have attracted unwanted attention, or to show their previously private posts to the world.
+
+- Search bar: We have added search functionality to our site so that users can find content and people that match their interests. Searching can be performed using the search bar in the header. 
+    - Posts can be searched and filtered based on their title, tags, and description.
+    - Users can be searched based on their username and professional fields.
+    
+- Post feed: When viewing a user’s profile, a feed of their posts is visible. The feed supports infinite scrolling and will dynamically fetch new posts as the viewer scrolls.
+    - Post filtering: A filter can be applied to the posts that appear in a user’s profile feed, allowing viewers to search for posts from the user that contain specific words or tags.
+    
+- Pinned post bar: We have implemented a “pinned-post” carousel that allows a user to draw attention to posts they feel are significant. Posts selected by the user are placed in a carousel that sits at the top of their profile, allowing them to shape the first impression they give to page visitors.
+
+- Commenting: Users can create comments on posts, allowing them to give feedback and encouragement to other students, professionals, and creators.
+
+- Post liking: Users can like comments and posts. This ability to interact with the work of other users helps to build a sense of community on the site, and receiving likes gives the creator of a liked post or comment a sense of validation. 
+
+- Dynamic header: To allow users to quickly navigate around our site, we have added a header to all our pages. The header displays navigation links, a search bar, and either the user’s profile details or the login/signup buttons depending on if the user is logged in. On smaller screens, some nav links from the header are moved to a dropdown.
+
+- Dynamic profile card: On a user’s profile page, their name, interests, bio, contact information, and photograph are displayed in a card format. This prominent summary of the user makes it simple for recruiters and other users to get a measure of someone from their profile. When viewing a profile page on devices with smaller screen sizes, the profile card is initially hidden and can be slid out from the left of the screen.
 
 ## Set Up
 
@@ -247,6 +277,17 @@ Navigate to the "Settings" tab and select the "Reveal Config Vars" icon. Within 
 
 Navigate back to the "Deploy" tab and select the branch to be deployed under "Manual Deploy" and select "Deploy Branch". Automatic deploys can be also be enabled if desired. This should deploy the Efolio project to the link `<appname>.herokuapp.com`. The creation of the build of the frontend is handled by the script `heroku-postbuild` which can be found in the file `./package.json`.
 
+## Costs and licencing considerations
+
+- Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries commercially, a licencing fee must be paid.
+  A licence can be obtained [here](https://www.pdftron.com/licensing/).
+
+- Our system is currently using the free-tier of AWS. Once in production, the system will need to be linked to a new amazon account and S3 bucket, and relevant usage fees will need to be paid.
+  Pricing information can be found [here](https://aws.amazon.com/pricing/).
+
+- Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply.
+  Pricing information can be found [here](https://www.mongodb.com/pricing).
+  
 ## Database
 
 #### Database description
@@ -254,15 +295,12 @@ Navigate back to the "Deploy" tab and select the branch to be deployed under "Ma
 Our database stores account data, comments, media file metadata, and posts created by users.
 File storage for uploaded media is not handled by our database – instead, the files are stored in an AWS S3 bucket and their key stored in our database.
 
-Our fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format. All database schemas also store timestamps for when a document is created and when it was last updated.
+Key fields fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format. Additionally, all database documents store timestamps for the document creation and the document's most recent update.
 
-#### Technology rationale
-
-We selected MongoDB as our database for a handful of reasons:
-
-- The document-store / schemaless approach allowed us to quickly iterate on our design
+#### Selection rationale
+We selected MongoDB as our database for two main reasons:
+- The schemaless nature of the database allowed us to quickly iterate on our design and add or remove features
 - Our team was familiar with mongoDB and had previously used it to build other systems
-- Our data was well suited to a “document” style – many fields are **\_** FILL IN HERE\***\*\_\_\_\_\*\***
 
 #### Document description
 
@@ -348,7 +386,7 @@ We have built a simple CI/CD pipeline to improve code quality and assist in the 
 Tests triggered on merge requests to master must pass before code can be merged, and once merged, the updated master branch will be automatically deployed.
 We provide a brief sketch of the role of the CI/CD pipeline in the development cycle below.
 
-##### Development lifecycle
+##### Development Lifecycle
 
 1. Create feature branch
 2. Write new code, test locally
@@ -360,20 +398,85 @@ We provide a brief sketch of the role of the CI/CD pipeline in the development c
 6. \[CD\] Merge onto master triggers an automatic deployment to Heroku using Github actions
 7. Heroku will install relevant packages and start the server. The site is now deployed and reflects the latest changes from master
 
-## Costs and licencing considerations
+## Frontend Architecture
 
-- Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries commercially, a licencing fee must be paid.
-  A licence can be obtained at https://www.pdftron.com/licensing/.
+Assets used in our front-end (eg. image missing thumbnails) are stored in the ```/client/src/assets``` directory. Source code for components is stored in the ```client/src/components``` directory.
+#### Header
 
-- Our system is currently using the free-tier of AWS. Once in production, the system will need to be linked to a new amazon account and S3 bucket, and relevant usage fees will need to be paid.
-  Pricing information can be found at https://aws.amazon.com/pricing/.
+The website header is displayed on every page. Related files are stored in ```/client/src/header``` which contains:
 
-- Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply.
-  Pricing information can be found at https://www.mongodb.com/pricing.
+- A header component
+
+#### Home
+
+The home page is shown after successful login or clicking on logo in the header. Related files are stored in ```/client/src/header```, which contains:
+
+- A welcome message component
+- The home screen
+
+#### Profile page
+
+The user profile can be accessed through the search screen or by clicking on a link to the user's profile. Related files are stored in ```/client/src/profile```, which contains:
+
+- Components for the infinite scroll of posts
+- Components for the display of pinned posts
+- Components for the display of a user's profile details
+- The profile page
+
+
+#### Posts
+
+Posts appear in the search screen, in a user's feed, and when a post is expanded. Related files are stored in ```/client/src/Post```, which contains:
+
+- Comment related components
+    - A component for the create comment form
+    - A component for displaying a list of comments
+    - A component for individual comments
+- A component for post previews
+- Components for like buttons
+- Components for the adding and edit post forms
+- The expanded post view page
+
+#### Login 
+
+The login page is used to log users in and give them new auth tokens. Related files are stored in ```/client/src/login```, which contains:
+
+- Components for the login form
+- The login page
+
+#### Signup
+
+The signup page is used to create new user accounts. Related files are stored in ```/client/src/signup```, which contains:
+
+- Components and forms for different stages of the signup process
+- The signup page
+
+#### Search
+
+The search screen is used to display search results. Related files are stored in ```/client/src/search```, which contains:
+
+- Components for helping carry out search logic
+- The search results page
+
+#### Settings
+
+The settings form is used to update a user's account details and settings. Related files are stored in ```/client/src/settings```, which contains:
+
+- Components for different stages of the account update process
+- The settings page
+
+#### Utils
+
+Our system makes use of utiliy functions to simply our media requests. Related files are stored in ```/client/src/utils```, which contains:
+
+- Utility functions for fetching media with and without tokens
+- Utility functions for uploading media files
+
+
 
 ## Backend Architecture
 
-### General design
+### General Design
 
 Our system's backend uses node.js with express middleware. The system is composed of the following key components:
 
@@ -393,11 +496,7 @@ The flow of control during the handling of a request is as follows:
 
 We provide an in-depth review of our authentication process and controller functionality below.
 
-### Unconventional algorithms
-
-Our post search performs a regex string search across post content and tags. This has a complexity of O(n), where n is the length of the entire corpus of our site. WE DOOMED, WHAT AN ALGORITHM!!!
-
-### User authentication
+### User Authentication
 
 Our system uses bearer tokens to authenticate requests. To ensure the security of user accounts, we have given the tokens a 6 hour expiry timer, preventing them for being reused by bad actors who gain access to a user's computer or token.
 
@@ -412,65 +511,60 @@ For all requests made to routes that require authentication, our middleware extr
 
 Note that some routes do not require authentication, for example those that handle the service of posts with public visibility.
 
-### Media controller (`/api/media`)
+### Media (```/api/media```)
 
-The media route is used for all requests that deal with the uploading, fetching, updating, or deletion of media files. All requests to this route are handled by the controller located at `/controllers/media.js`.
+The media route is used for all requests that deal with the uploading, fetching, updating, or deletion of media files. All requests to this route are handled by the controller located at ```/controllers/media.js```.
 
-#### Handling of special file types
+#### Handling of Special File Types
 
-Due to the limited support for web-display of microsoft `.docx`, `.xlsx`, and `.pptx` files, our media controller converts these files to `.pdf` form to allow them to be simply displayed in our frontend.
+Due to the limited support for web-display of microsoft ```.docx```, ```.xlsx```, and ```.pptx``` files, our media controller converts these files to ```.pdf``` form to allow them to be simply displayed in our frontend. 
 
-When a request is made to our `/api/media/add` route, the controller identifies microsoft file formats and converts them to `.pdf` form.
+When a request is made to our ```/api/media/add``` route, the controller identifies microsoft file formats and converts them to ```.pdf``` form. 
 The converted files are stored in our s3 bucket, and our database stores metadata that reflects the details of the converted file.
 
-#### Add media
 
+#### Add Media 
 ###### Creates a new media document in the database, saves the media blob to a s3 bucket, returns the media document id
-
 Request to: `/api/media/add` as a `POST` request
 
 Takes: an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
 
 and HTML form data containing the following fields:
-
 ```
 -isPrivate: "<privacyBoolean>",
 -givenFileName: "<fileDisplayName>",
 -mediafile: <mediablob>"
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
-- file display name must be <= 20 characters
+- file display name must be <= 2000 characters
 - a privacy status must be provided
 - a media file must be provided
-- the media file must have a size <= 100 mb
+- the media file must have a size <= 15 mb
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have a status code of "201" and will contain the media metadata
-
-```JSON
-{
-   "_id": "<mediaID>",
-   "mimeType": "<mimeType>",
-   "contentCategory": "<fileCategory>",
-   "extension": "<fileExtension>",
-   "isPrivate": "<privacyBoolean>",
-   "canAccess": ["<UserOneID>", "<UserTwoID>", "<...>"],
-   "creator": "<creatorUserID",
-   "givenFileName": "<mediaDisplayName>"
-}
-```
-
-- On failure:
+  - ```JSON
+	{
+	   "_id": "<mediaID>",
+	   "mimeType": "<mimeType>",
+	   "contentCategory": "<fileCategory>",
+	   "extension": "<fileExtension>",
+	   "isPrivate": "<privacyBoolean>",
+	   "creator": "<creatorUserID",
+	   "givenFileName": "<mediaDisplayName>"
+	}
+	```
+- on unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- on forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -478,44 +572,42 @@ Responses:
     "Media upload failed - <reasonForError>"
     ```
 
-#### Get media
 
+#### Get Media 
 ###### Retrieves media
-
 Request to: `/api/media/` as a `GET` request
 
 Takes: an Authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON request body containing the following key-value pair:
-
 ```JSON
 {
    "mediaID": "<mediaDocumentID>"
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
-- MediaID must be a valid document id
+- mediaID must be a valid document ID
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have a status code of "200" and will contain base64 encoding of the media file in the following format
-
-```JSON
-{
-   "b64media": "<base64 encoding of file>"
-}
-```
-
-- On failure:
+  - ```JSON
+	{
+	   "b64media": "<base64 encoding of file>"
+	   "extention": "<file extention name>"
+	   "mimeType": "<file mime type>"
+	   "contentCategory": "<general file cateogry>"
+	}
+	```
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -523,101 +615,119 @@ Responses:
     "Media retrieval failed - <reasonForError>"
     ```
 
-#### Delete media
-
-###### Deletes file from s3 bucket and removes media metadata from database
-
-Request to: `/api/media/delete` as a `POST` request
-
-Takes: an authorization header with the format
-
+#### Get Media Public
+###### Retrieves public media
+Request to: `/api/media/` as a `GET` request
 ```
-Authorization: "Bearer <authenticationToken>"
-```
-
-and HTML form data containing the following fields:
-
+and a JSON request body containing the following key-value pair:
 ```JSON
 {
    "mediaID": "<mediaDocumentID>"
 }
 ```
-
 Requirements:
-
-- Authorization header is required
-- Authentication token must be a valid token
-- Provided media ID must be valid
+- mediaID must be a valid document ID
 
 Responses:
-
-- On success:
-  - The response will have a status code of "200" and will contain the following message:
-    "Media deletion success - deleted <"deletedMediaID">"
-- On failure:
+- On success: 
+  - the response will have a status code of "200" and will contain base64 encoding of the media file in the following format
+  - ```JSON
+	{
+	   "b64media": "<base64 encoding of file>"
+	   "extention": "<file extention name>"
+	   "mimeType": "<file mime type>"
+	   "contentCategory": "<general file cateogry>"
+	}
+	```
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
-    "Media deletion failed - <reasonForError>"
+    "Media retrieval failed - <reasonForError>"
     ```
 
-#### Update media
-
-###### Updates the privacy and display metadata for a media file
-
-Request to: `/api/media/update` as a `POST` request
+#### Delete Media 
+###### Deletes file from s3 bucket and removes media metadata from database
+Request to: `/api/media/delete` as a `POST` request
 
 Takes: an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
 
 and HTML form data containing the following fields:
-
 ```JSON
 {
-   "isPrivate": "<mediaDocumentID>",
-   "canAccess": "[<userID1>, <userID2>, ... <userIDn>]",
-   "givenFileName": "<fileName>"
+   "mediaID": "<mediaDocumentID>"
 }
 ```
-
 Requirements:
-
-- Authentication token must be associated with the original creator of the media file
+- Authorization header is required
 - Authentication token must be a valid token
 - Provided media ID must be valid
-- isPrivate, canAccess, and givenFileName must be provided
 
 Responses:
-
-- On success:
-
-  - The response will have a status code of "201" and will contain the following message:
-    "Media update success - updated <updatedMediaId>"
-
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
-  - ```
-    "Media update failed - <reasonForError>"
-    ```
+  - ```"Media deletion failed - <reasonForError>" ```
+- On success: 
+  - The response will have a status code of "200" and will contain the following message:
+  -  ```"Media deletion success - deleted <"deletedMediaID">"```
+   
 
-### Users (`/api/user`)
+#### Update Media 
+###### Updates the privacy and display metadata for a media file
+Request to: `/api/media/update` as a `POST` request
 
-The user route is used for all requests that need to modify, delete, or create user accounts. All requests to this route are handled by the controller located at `/controllers/user.js`.
+Takes: an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
 
-#### Add User
+and HTML form data containing the following fields:
+```JSON
+{
+   "isPrivate": "<mediaDocumentID>",
+   "givenFileName": "<fileName>"
+}
+```
+Requirements:
+- Authentication token must be associated with the original creator of the media file
+- Authentication token must be a valid token
+- Provided media ID must be valid
+- isPrivate, and givenFileName must be provided 
 
+Responses:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```"Media update failed - <reasonForError>" ```
+- On success: 
+  - The response will have a status code of "201" and will contain the following message:
+   - ```"Media update success - updated <updatedMediaId>"```
+
+
+### Users (```/api/user```)
+
+The user route is used for all requests that need to modify, delete, or create user accounts. All requests to this route are handled by the controller located at ```/controllers/user.js```.
+
+#### Add User 
 ###### Creates a new user in the database and returns the user's ID
-
 Request to: `/api/user/add` as a `POST` request
 
 Takes: a JSON in the body, requiring the key-value pairs:
-
 ```JSON
 {
    "email": "<userEmail>",
@@ -627,9 +737,7 @@ Takes: a JSON in the body, requiring the key-value pairs:
    "userName": "<userUserName>"
 }
 ```
-
 JSON can also include the optional key-value pairs:
-
 ```JSON
 {
    "organisation": "<userOrganisation>",
@@ -637,16 +745,13 @@ JSON can also include the optional key-value pairs:
    "dateOfBirth": "<userDateOfBirth>",
    "phoneNumber": "<userPhoneNumber>",
    "biography": "<userBiography>",
-   "tags": ["<tagOne>", "<tagTwo>"],
    "private": "boolean",
    "phoneNumberPrivate": "boolean",
    "emailPrivate": "boolean",
    "profilePic": "<mediaID>"
 }
 ```
-
 Requirements:
-
 - No headers required
 - password must be greater than 8 characters
 - password must be less than 80 characters
@@ -655,15 +760,14 @@ Requirements:
 - userName must be unique in the database
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "201" and will have the new user's id
   - ```JSON
     {
        "id": "<userID>"
     }
     ```
-- On failure:
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -672,62 +776,51 @@ Responses:
     ```
 
 #### Login User
-
 ###### Generates and returns an authentication token for a given valid user
-
 Request to: `/api/user/login` as a `POST` request
 
 Takes: a JSON in the body, requiring the key-value pairs:
-
 ```JSON
 {
     "email": "<userEmail>",
     "password": "<userPassword>"
 }
 ```
-
 Requirements:
-
 - No headers required
 - email must belong to a user currently in the database
 - password must match the password for the specified user email
-  Responses:
-- On success:
+Responses:
+- On success: 
   - the response will have status code of "200" and will have the generated authentication token
   - ```JSON
     {
         "token": "<authenticationToken>"
     }
     ```
-- On failure:
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Login in not successful - <reasonForError>"
     ```
-
+	
 #### Get User
-
 ###### Returns a user's details from a valid authentication token
-
 Request to: `/api/user/get` as a `GET` request
 
 Takes: an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must a valid token
 
 Responses:
-
-- On success:
-  - the response will have status code of "200" and will the user's details
+- On success: 
+  - the response will have status code of "200" and the user's details which are present
   - ```JSON
     {
         "_id": "<userID>",
@@ -736,34 +829,38 @@ Responses:
         "email": "<userEmail>",
         "firstName": "<userFirstName>",
         "lastName": "<userLastName>",
-        "userName": "<userUserName>"
+        "userName": "<userUserName>",
+        "profilePic": "<userProfilePictureID>",
+        "organisation": "<userOrganisation>",
+        "dateOfBirth": "<userDateOfBirth>",
+        "phoneNumber": "<userPhoneNumber>",
+        "biography": "<userBiography>",
+        "private": "<userPrivacySetting>",
+        "phoneNumberPrivate": "<userPhoneNumberPrivacy>",
+        "emailPrivate": "<userEmailPrivacy>"
+        "pinnedPosts": ["<pinnedPostIDOne>", "<pinnedPostIDTwo>", "<...>"]
     }
     ```
-- on unauthorized:
+- On unauthorized:
   - the response will have status code "401" which represents a missing authentication token
-- on forbidden:
+- On forbidden:
   - the response will have status code "403" which represents an invalid authentication token
-- On failure:
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Get user not successful - <reasonForError>"
     ```
-
+	
 #### Get Public User
-
 ###### Returns a list user's public details from a list user IDs
-
 Request to: `/api/user/getPublic` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and an optional JSON body, which can include the optional key-value pair:
-
 ```JSON
 {
    "search": "<searchString>",
@@ -778,20 +875,20 @@ and an optional JSON body, which can include the optional key-value pair:
    "sortDirection": "<directionOfSort>"
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - filters is a JSON of key value pairs that the posts must have
-- IDMatch is a list of IDs that a post much match atleast one of
+- IDMatch is a list of IDs that a post much match at least one of
 - limit is the amount of users which should be returned
-- skip is the amount of users which should be skipped
+- skip is the amount  of users which should be skipped 
 - sortField is a valid field from posts to which the result should be sorted by
 - sortDirection is either "asc" or "desc"
-  Responses:
-- On success:
+Responses:
+- On success: 
   - the response will have status code of "200" and will have a list of the users' public details
+  - the user's email and phone number may be included if they are made public by the user
+  - some fields may not be present as they optional when set by the user
   - ```JSON
     [
            {
@@ -800,7 +897,14 @@ Requirements:
                 "role": "<userOneRole>",
                 "firstName": "<userOneFirstName>",
                 "lastName": "<userOneLastName>",
-                "userName": "<userOneUserName>"
+                "userName": "<userOneUserName>",
+                "email": "<ifUserEmailPublic>",
+                "phoneNumber": "<ifUserPhoneNumberPublic>",
+                "pinnedPosts": ["<pinnedPostIDOne>", "<pinnedPostIDTwo>", "<...>"],
+                "biography": "<userOneBiography>",
+                "profilePic": "<userOneProfilePictureID>",
+                "organisation": "<userOneOrganisation>",
+                "dateOfBirth": "<userOneDateOfBirth>"
            },
            {
                 "_id": "<userTwoID>",
@@ -808,33 +912,33 @@ Requirements:
                 "role": "<userTwoRole>",
                 "firstName": "<userTwoFirstName>",
                 "lastName": "<userTwoLastName>",
-                "userName": "<userTwoUserName>"
+                "userName": "<userTwoUserName>",
+                "pinnedPosts": ["<pinnedPostIDOne>", "<pinnedPostIDTwo>", "<...>"],
+                "biography": "<userTwoBiography>",
+                "profilePic": "<userTwoProfilePictureID>",
+                "organisation": "<userTwoOrganisation>",
+                "dateOfBirth": "<userTwoDateOfBirth>"
            },
            "..."
     ]
     ```
-- On failure:
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Get public user not successful - <reasonForError>"
     ```
-
+	
 #### Update User
-
 ###### Updates a user's detail from an update, a password and an authentication token
-
 Request to: `/api/user/update` as a `POST` request
 
 Takes: an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON in the body, requiring the key-value pairs:
-
 ```JSON
 {
     "update": {
@@ -845,9 +949,7 @@ and a JSON in the body, requiring the key-value pairs:
     "password": "<userPassword>"
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must a valid token
 - Update JSON can include, but does not have any of the keys:
@@ -857,193 +959,164 @@ Requirements:
   - userName (must be unique)
   - password
   - organisation
-  - bio
+  - biography
   - professionalFields
-  - DOB
-  - phone
-- Password must match the user for the given authentication token
+  - dateOfBirth
+  - phoneNumber
+  - phoneNumberPrivate
+  - emailPrivate
+  - profilePic
+  - private
+- Password must match the user for the given authentication token 
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and will have the updated user's id
   - ```JSON
     {
         "id": "<userID>"
     }
     ```
-- on unauthorized:
+- On unauthorized:
   - the response will have status code "401" which represents a missing authentication token
-- on forbidden:
+- On forbidden:
   - the response will have status code "403" which represents an invalid authentication token
-- On failure:
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Update user not successful - <reasonForError>"
     ```
-
+	
 #### Delete User
-
 ###### Deletes a user from a password and an authentication token
-
 Request to: `/api/user/delete` as a `POST` request
 
 Takes: an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON in the body, requiring the key-value pairs:
-
 ```JSON
 {
     "password": "<userPassword>"
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must a valid token
 - Password must match the user for the given authentication token
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and will have the deleted user's id
   - ```JSON
     {
         "id": "<userID>"
     }
     ```
-- on unauthorized:
+- On unauthorized:
   - the response will have status code "401" which represents a missing authentication token
-- on forbidden:
+- On forbidden:
   - the response will have status code "403" which represents an invalid authentication token
-- On failure:
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Delete user not successful - <reasonForError>"
     ```
-
-#### Add to pinned posts
-
+    
+#### Add to Pinned Posts
 ###### Adds a post to the user's pinned post list
-
 Request to: `/api/user/addToPinnedPosts` as a `POST` request
 
 Takes: an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON in the body, requiring the key-value pairs:
-
 ```JSON
 {
     "postID": "<postID>"
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must a valid token
 - A valid postID must be provided
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and will have the ID of the pinned post
   - ```JSON
     {
         "id": "<postID>"
     }
     ```
-- on unauthorized:
+- On unauthorized:
   - the response will have status code "401" which represents a missing authentication token
-- on forbidden:
+- On forbidden:
   - the response will have status code "403" which represents an invalid authentication token
-- On failure:
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Pinning the post was not successful - <reasonForError>"
     ```
-
-#### Remove from pinned posts
-
+    
+#### Remove from Pinned Posts
 ###### Removes a post from the user's pinned post list
-
 Request to: `/api/user/removeFromPinnedPosts` as a `POST` request
 
 Takes: an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON in the body, requiring the key-value pairs:
-
 ```JSON
 {
     "postID": "<postID>"
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must a valid token
 - A valid postID must be provided
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and will have the ID of the unpinned post
   - ```JSON
     {
         "id": "<postID>"
     }
     ```
-- on unauthorized:
+- On unauthorized:
   - the response will have status code "401" which represents a missing authentication token
-- on forbidden:
+- On forbidden:
   - the response will have status code "403" which represents an invalid authentication token
-- On failure:
-
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Pinning the post was not successful - <reasonForError>"
+    
+### Posts (```/api/post```)
 
-    ```
+The post route is used for all requests that create, edit, fetch, delete, like, or mutate posts. All requests to this route are handled by the controller located at ```/controllers/post.js```.
 
-### Posts (`/api/post`)
-
-The post route is used for all requests that create, edit, fetch, delete, like, or mutate posts. All requests to this route are handled by the controller located at `/controllers/post.js`.
-
-#### Get Post
-
+#### Get Post 
 ###### Gets a lists of post from the database and which match the search requirements, must be public posts or belong to the searching user
-
 Request to: `/api/post/get` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and an optional JSON body, which can include the optional key-value pair:
-
 ```JSON
 {
    "search": "<searchString>",
@@ -1058,21 +1131,18 @@ and an optional JSON body, which can include the optional key-value pair:
    "sortDirection": "<directionOfSort>"
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - filters is a JSON of key value pairs that the posts must have
 - IDMatch is a list of IDs that a post much match atleast one of
 - limit is the amount of posts which should be returned
-- skip is the amount of posts which should be skipped
+- skip is the amount  of posts which should be skipped 
 - sortField is a valid field from posts to which the result should be sorted by
 - sortDirection is either "asc" or "desc"
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and will have an array of the matching posts
   - ```JSON
     [
@@ -1097,7 +1167,11 @@ Responses:
         }
     ]
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -1105,28 +1179,21 @@ Responses:
     "Get post not successful - <reasonForError>"
     ```
 
-#### Add Post
-
+#### Add Post 
 ###### Creates a new post with the given values for a logged in user
-
 Request to: `/api/post/add` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON body:
-
 ```JSON
 {
    "title": "<postTitle>",
    "mediaID": "<postMediaID>"
 }
 ```
-
 JSON can also include the optional key-value pairs:
-
 ```JSON
 {
    "description": "<postDescription>",
@@ -1134,87 +1201,35 @@ JSON can also include the optional key-value pairs:
    "thumbnailURL": "<thumbNailURLL>"
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - mediaID and thumbnailURL must be valid IDs from the media database
-  Responses:
-- On success:
+Responses:
+- On success: 
   - the response will have status code of "201" and will have an json of the new post ID
   - ```JSON
     {
         "id": "<newPostID>"
     }
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Add post not successful - <reasonForError>"
     ```
-
-#### Add Post
-
-###### Creates a new post in the database and returns the posts's ID
-
-Request to: `/api/post/add` as a `POST` request
-Takes : an authorization header with the format
-
-```
-Authorization: "Bearer <authenticationToken>"
-```
-
-and a JSON in the body, requiring the key-value pairs:
-
-```JSON
-{
-   "title": "<postTitle>",
-   "description": "<postDescription>"
-}
-```
-
-JSON can also include the optional key-value pair:
-
-```JSON
-{
-   "private": "<boolean>"
-}
-```
-
-Requirements:
-
-- Authorization header is required
-- Authentication token must be a valid token
-- private must be a boolean: true or false
-
-Responses:
-
-- On success:
-  - the response will have status code of "201" and will have the new post's id
-  - ```JSON
-    {
-       "id": "<postID>"
-    }
-    ```
-- On failure:
-  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
-  - status code in the form of "4XX" are for user input error
-  - status code in the form of "5XX" are for server error
-  - ```
-    "Add post not successful - <reasonForError>"
-    ```
-
-#### Get Public Post
-
+ 
+#### Get Public Post 
 ###### Gets a lists of post from the database and which match the search requirements, must be public posts
-
 Request to: `/api/post/getPublic` as a `POST` request
 
 Takes: and a JSON body, which can include the optional key-value pair:
-
 ```JSON
 {
    "search": "<searchString>",
@@ -1228,18 +1243,15 @@ Takes: and a JSON body, which can include the optional key-value pair:
    "sortDirection": "<directionOfSort>"
 }
 ```
-
 Requirements:
-
 - filters is a JSON of key value pairs that the posts must have
 - limit is the amount of posts which should be returned
-- skip is the amount of posts which should be skipped
+- skip is the amount  of posts which should be skipped 
 - sortField is a valid field from posts to which the result should be sorted by
 - sortDirection is either "asc" or "desc"
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and will have an array of the matching posts
   - ```JSON
     [
@@ -1264,7 +1276,7 @@ Responses:
         }
     ]
     ```
-- On failure:
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -1272,19 +1284,14 @@ Responses:
     "Get public post not successful - <reasonForError>"
     ```
 
-#### Update Post
-
+#### Update Post 
 ###### Update a post belonging to the logged in user
-
 Request to: `/api/post/update` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON body, which must include key-value pairs:
-
 ```JSON
 {
    "postID": "<updatePostID>",
@@ -1294,23 +1301,30 @@ and a JSON body, which must include key-value pairs:
    }
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - the post being updated must belong to the logged in user (authorization token matches postID)
+- update can contain the keys:
+	- title
+	- description
+	- private
+	- mediaID
+	- thumbnailURL
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and have the updated post's ID
   - ```JSON
     {
         "postID": "<updatedPostID>"
     }
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -1318,41 +1332,37 @@ Responses:
     "Update post not successful - <reasonForError>"
     ```
 
-#### Delete Post
-
+#### Delete Post 
 ###### Delete a post belonging to the logged in user
-
 Request to: `/api/post/delete` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON body, which must include key-value pair:
-
 ```JSON
 {
    "postID": "<deletePostID>",
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - the post being deleted must belong to the logged in user (authorization token matches postID)
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and have the deleted post's ID
   - ```JSON
     {
         "postID": "<deletedPostID>"
     }
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -1360,41 +1370,37 @@ Responses:
     "Delete post not successful - <reasonForError>"
     ```
 
-#### Like Post
-
+#### Like Post 
 ###### Likes a post for a logged in user
-
 Request to: `/api/post/like` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON body, which must include key-value pair:
-
 ```JSON
 {
    "postID": "<likePostID>",
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - must be a valid postID
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and have the liked post's ID
   - ```JSON
     {
         "postID": "<likedPostID>"
     }
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -1402,108 +1408,96 @@ Responses:
     "Like post not successful - <reasonForError>"
     ```
 
-#### Unlike Post
 
+#### Unlike Post 
 ###### Unlikes a post for a logged in user
-
 Request to: `/api/post/unlike` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON body, which must include key-value pair:
-
 ```JSON
 {
    "postID": "<unlikePostID>",
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - must be a valid postID
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and have the unliked post's ID
   - ```JSON
     {
         "postID": "<unlikedPostID>"
     }
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Like post not successful - <reasonForError>"
     ```
+    
+### Comments (```/api/comment```)
 
-### Comments (`/api/comment`)
+The comment route is used for all requests that create, delete, or like comments. All requests to this route are handled by the controller located at ```/controllers/comment.js```.
 
-The comment route is used for all requests that create, delete, or like comments. All requests to this route are handled by the controller located at `/controllers/comment.js`.
-
-#### Add Comment
-
+#### Add Comment 
 ###### Adds a comment to a post for a logged in user
-
 Request to: `/api/comment/add` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON body, which must include key-value pairs:
-
 ```JSON
 {
    "postID": "<commentPostID>",
    "comment": "<commentBody>"
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - postID must belong to a valid post
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "201" and will have the id of the post the comment was added to
   - ```JSON
     {
         "postID": "<commentedPostID>",
     }
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Add comment not successful - <reasonForError>"
     ```
-
-#### Update Comment
-
+ 
+#### Update Comment 
 ###### Updates a comment of a post for a logged in user
-
 Request to: `/api/comment/update` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON body, which must include key-value pairs:
-
 ```JSON
 {
    "postID": "<commentPostID>",
@@ -1511,68 +1505,65 @@ and a JSON body, which must include key-value pairs:
    "comment": "<newCommentBody>"
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - postID must belong to a valid post
 - commentID must belong to the logged in user
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and will have the id of the updated comment
   - ```JSON
     {
         "commentID": "<UpdatedCommentedID>",
     }
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Update comment not successful - <reasonForError>"
     ```
-
-#### Delete Comment
-
+ 
+#### Delete Comment 
 ###### Deletes a comment of a post for a logged in user
-
 Request to: `/api/comment/delete` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON body, which must include key-value pairs:
-
 ```JSON
 {
    "postID": "<commentPostID>",
    "commentID": "<deleteCommentID>",
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - postID must belong to a valid post
 - commentID must belong to the logged in user
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and will have the id of the deleted comment
   - ```JSON
     {
         "commentID": "<DeletedCommentedID>",
     }
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -1580,42 +1571,38 @@ Responses:
     "Delete comment not successful - <reasonForError>"
     ```
 
-#### Like Comment
-
+#### Like Comment 
 ###### Likes a comment of a post for a logged in user
-
 Request to: `/api/comment/like` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON body, which must include key-value pair:
-
 ```JSON
 {
    "postID": "<commentPostID>",
    "commentID": "<likeCommentID>",
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - must be a valid postID
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and have the liked comments's ID
   - ```JSON
     {
         "CommentID": "<likedCommentID>"
     }
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
@@ -1623,96 +1610,46 @@ Responses:
     "Like comment not successful - <reasonForError>"
     ```
 
-#### Unlike Comment
 
+#### Unlike Comment 
 ###### Unlikes a comment of a post for a logged in user
-
 Request to: `/api/comment/unlike` as a `POST` request
 Takes : an authorization header with the format
-
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
 and a JSON body, which must include key-value pair:
-
 ```JSON
 {
    "postID": "<commentPostID>",
    "commentID": "<likeCommentID>",
 }
 ```
-
 Requirements:
-
 - Authorization header is required
 - Authentication token must be a valid token
 - must be a valid postID
 
 Responses:
-
-- On success:
+- On success: 
   - the response will have status code of "200" and have the unliked comments's ID
   - ```JSON
     {
         "CommentID": "<unlikedCommentID>"
     }
     ```
-- On failure:
+- On unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- On forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
+- On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
     "Unlike comment not successful - <reasonForError>"
     ```
-
-## Tests Case
-
-Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
-
-## Design Architecture
-
-#### Header
-
-The website header is displayed on every page, its files are stored in header which contains:
-
-- Front end code for Search bar
-- Link to user's profile
-- Link to settings page
-- Add post button
-- Logout button
-
-#### Home
-
-The home page is shown after successful login or clicking on logo in the header
-
-Its files are stored in the home folder which contains
-
-- Home page
-- Welcome message
-
-#### Profile page
-
-The user profile page contains:
-
-- Infinite scrolling list of posts
-- Pinned posts
-- User's profile details
-
-These files are located in the profile folder
-
-#### Posts
-
-Each post contains:
-
-- comments
-- likes
-- edit post
-
-[## introduction]: https://github.com/arrikenw/IT-Project#introduction-1
-[/docs]: /docs
-[### motivation for e-folio]: /docs
-
+	
 ## Style Guide
 
 ### Code Style
@@ -1734,13 +1671,9 @@ Each post contains:
     synchronousFunc(param, (err, result) => {});
     ```
   - right:
-  - ````javascript
-        synchronousFunc(param).then(result).catch(err);
-    <<<<<<< HEAD
-        ```
-    =======
-    >>>>>>> d7811dacded0eeff4562e0fdc1947b5eb1dbfeb7
-    ````
+  - ```javascript
+    synchronousFunc(param).then(result).catch(err);
+    ```
 
 - #### Camel case is used for variable and function names
 
@@ -1831,11 +1764,6 @@ Each post contains:
         res.send("File upload not successful - something went wrong, try again");
         ```
 
-### Documentation:
-
-- code must have relevant comments explaining what blocks do
-- API routes should be updated into this read me with all details include
-
-## Tests Case
+## Test Cases
 
 Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).

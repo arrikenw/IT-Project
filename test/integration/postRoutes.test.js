@@ -169,6 +169,32 @@ describe("test /api/post/update route and updatePost controller", () => {
   });
 });
 
+// 4
+describe("test /api/comment/add route and addComment controller", () => {
+  let token;
+  let postID;
+  // clear database before each test
+  beforeEach(async () => {
+    await database.clearCollections();
+    token = await getUserToken();
+    postID = await getPostID(token);
+  });
+
+  // 4.1
+  test("addComment with valid inputs", async (done) => {
+    const payload = {
+      postID,
+      comment: "Test comment",
+    };
+    const response = await request(app)
+      .post("/api/comment/add")
+      .send(payload)
+      .set("Authorization", token);
+    expect(response.status).toBe(201);
+    done();
+  });
+});
+
 afterAll((done) => {
   database.disconnectDB();
   done();

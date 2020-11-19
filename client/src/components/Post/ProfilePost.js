@@ -20,7 +20,7 @@ import PropTypes from "prop-types";
 import audioTN from "../../assets/audio.jpg"
 import videoTN from "../../assets/video.jpg"
 import docTN from "../../assets/docs.png"
-import LikeButtons from "./LikeButtons";
+import LikeButtons from "./likes/LikeButtons";
 
 
 const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis)

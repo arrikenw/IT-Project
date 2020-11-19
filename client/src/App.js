@@ -4,17 +4,17 @@ import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Axios from 'axios'
 import './App.css'
-import Header from './components/headers/Header'
+import Header from './components/header/Header'
 import Home from './components/home/Home'
 import LoginPage from './components/login/LoginPage'
 import Profile from './components/profile/Profile'
 import SettingsPage from './components/settings/SettingsPage'
-import ExpandPost from './components/profile/ExpandPost'
-import AddPost from "./components/AddPost/AddPost";
+import ExpandPost from './components/Post/ExpandPost'
+import AddPost from "./components/Post/AddPost/AddPost";
 import SignupPage from './components/signup/SignupPage';
-import SearchResults from './components/searchResults/SearchResults';
+import SearchResults from './components/search/SearchResults';
 
-import EditPost from "./components/EditPost/EditPost";
+import EditPost from "./components/Post/EditPost/EditPost";
 
 // css for containers
 const useStyles = makeStyles({

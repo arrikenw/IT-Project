@@ -149,6 +149,16 @@ function AddPostForm({ user, token, history }){
   }
 
   const validateFields = () => {
+    if (!title) {
+      setWarningMessage("Posts require a title")
+      setWarning(true)
+      return 1
+    }
+    if (!rawMedia) {
+      setWarningMessage("Posts require a file")
+      setWarning(true)
+      return 1
+    }
     if (rawMedia && rawMedia.size /1024 / 1024 > 15) {
       setWarningMessage("File size must be less than 15mb")
       setWarning(true)
@@ -179,12 +189,12 @@ function AddPostForm({ user, token, history }){
       setWarning(true)
       return 1
     }
-    if (title.length > 200) {
+    if (title && title.length > 200) {
       setWarningMessage("Title must be less than 201 characters long")
       setWarning(true)
       return 1
     }
-    if (description.length > 2200) {
+    if (description && description.length > 2200) {
       setWarningMessage("Description must be less than 2200 characters long")
       setWarning(true)
       return 1

@@ -69,14 +69,18 @@ describe("test /api/comment/add route and the getPost controller", () => {
   let token;
   let postID;
   // clear database before each test
-  beforeEach(async () => {
+  /* beforeEach(async () => {
     await database.clearCollections();
     token = await getUserToken();
     postID = await getPostID(token);
-  });
+  }); */
 
   // 1.1
   test("add a comment with valid inputs", async (done) => {
+    await database.clearCollections();
+    token = await getUserToken();
+    postID = await getPostID(token);
+
     const payload = {
       postID,
       comment: "test comment",

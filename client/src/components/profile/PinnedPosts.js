@@ -66,7 +66,7 @@ function PinnedPost({ user, token, id }) {
 
 
     function getPinnedPostContent(postids, exportPosts, exportMedia, errcount){
-        if (postids.length <= 0){
+        if (postids.length <= 0 || !postids){
             // return once we have processed all posts
             setPosts(exportPosts);
             setMedia(exportMedia);

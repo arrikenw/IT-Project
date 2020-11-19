@@ -76,7 +76,7 @@ describe("test POST /api/media/ route and the serveMedia controller", () => {
       .set("Content-Type", "multipart/form-data")
       .field("isPrivate", false)
       .field("givenFileName", "test txt")
-      .attach("mediafile", "./test/resources/test.txt");
+      .attach("mediafile", "./test/resources/test.png");
 
     const payload = {
       mediaID: response.body._id,
@@ -88,7 +88,6 @@ describe("test POST /api/media/ route and the serveMedia controller", () => {
 
     const buffer = new Buffer(retrieveResponse.body.b64media, "base64");
     expect(retrieveResponse.status).toBe(200);
-    expect(buffer.toString()).toBe("teststring123");
 
     // delete from s3 file server after test
     const deleteResponse = await request(app)
@@ -106,7 +105,7 @@ describe("test POST /api/media/ route and the serveMedia controller", () => {
       .set("Content-Type", "multipart/form-data")
       .field("isPrivate", false)
       .field("givenFileName", "test txt")
-      .attach("mediafile", "./test/resources/test.txt");
+      .attach("mediafile", "./test/resources/test.png");
 
     const payload2 = {};
     const retrieveResponse = await request(app)
@@ -157,7 +156,7 @@ describe("test POST /api/media/delete route and the deleteMedia controller", () 
       .set("Content-Type", "multipart/form-data")
       .field("isPrivate", false)
       .field("givenFileName", "test txt")
-      .attach("mediafile", "./test/resources/test.txt");
+      .attach("mediafile", "./test/resources/test.png");
 
     const payload = {
       mediaID: response.body._id,

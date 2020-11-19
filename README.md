@@ -1,28 +1,42 @@
-# E-FOLIO:
+# Efolio Documentation:
 
 ## Table of Contents
 
 - [Introduction](#introduction)
-  - Motivation for E-FOLIO
-  - Demo
+  - [Motivation](#motivation-for-e-folio)
+  - [Demo](#demo)
+- [Features](#features-implemented)
 - [Set Up](#set-up)
+  - [Installing Packages](#installing-packages)
+  - [Creating MongoDB Database](#creating-mongodb-database)
+  - [Creating AWS S3 Bucket](#creating-aws-s3-bucket)
+  - [Backend .env Files](#backend-.env-files)
+  - [GitHub Actions Continuous Integration](#github-actions-continuous-integration)
 - [System Requirements](#system-requirements)
 - [Running](#running)
+  - [Deployment Backend Server](#deployment-backend-server)
+  - [Development Frontend Server](#development-frontend-server)
+  - [Backend Testing](#backend-testing)
+  - [Code Linting](#code-linting)
 - [Deployment](#deployment)
-- [Style Guide](style-guide)
-  - Code Style
-  - Console Logging
-  - API Responses
-  - GitHub
-  - Documentation
-
-* [Features](#features)
-* [API Documentation](#API-documentation)
-  - Users
-  - Midia
-  - Post
-  - comments
-* [Tests Case](#Test-Case)
+  - [Local Deployment](#local-deployment)
+  - [Remote Deployment](#remote-deployment)
+  - [Heroku Deployment](#heroku-deployment)
+- [Costs and licencing Considerations](#costs-and-licencing-considerations)
+- [Database](#database)
+- [Frontend Architecture](#frontend-architecture)
+- [Backend Architecture](#backend-architecture)
+  - [General Design](#general-design)
+  - [User Authentication](#user-authentication)
+  - [Media API](#media-apimedia)
+  - [Users API](#users-apiuser)
+  - [Posts API](#posts-apipost)
+  - [Comments API](#comments-apicomment)
+- [Style Guide](#style-guide)
+  - [Code Style](#code-style)
+  - [Console Logs](#console-logs)
+  - [API Responses](#api-responses)
+- [Tests Cases](#Test-Cases)
 
 ## Introduction
 
@@ -372,7 +386,7 @@ We have built a simple CI/CD pipeline to improve code quality and assist in the 
 Tests triggered on merge requests to master must pass before code can be merged, and once merged, the updated master branch will be automatically deployed.
 We provide a brief sketch of the role of the CI/CD pipeline in the development cycle below.
 
-##### Development lifecycle
+##### Development Lifecycle
 
 1. Create feature branch
 2. Write new code, test locally
@@ -384,9 +398,85 @@ We provide a brief sketch of the role of the CI/CD pipeline in the development c
 6. \[CD\] Merge onto master triggers an automatic deployment to Heroku using Github actions
 7. Heroku will install relevant packages and start the server. The site is now deployed and reflects the latest changes from master
 
+## Frontend Architecture
+
+Assets used in our front-end (eg. image missing thumbnails) are stored in the ```/client/src/assets``` directory. Source code for components is stored in the ```client/src/components``` directory.
+#### Header
+
+The website header is displayed on every page. Related files are stored in ```/client/src/header``` which contains:
+
+- A header component
+
+#### Home
+
+The home page is shown after successful login or clicking on logo in the header. Related files are stored in ```/client/src/header```, which contains:
+
+- A welcome message component
+- The home screen
+
+#### Profile page
+
+The user profile can be accessed through the search screen or by clicking on a link to the user's profile. Related files are stored in ```/client/src/profile```, which contains:
+
+- Components for the infinite scroll of posts
+- Components for the display of pinned posts
+- Components for the display of a user's profile details
+- The profile page
+
+
+#### Posts
+
+Posts appear in the search screen, in a user's feed, and when a post is expanded. Related files are stored in ```/client/src/Post```, which contains:
+
+- Comment related components
+    - A component for the create comment form
+    - A component for displaying a list of comments
+    - A component for individual comments
+- A component for post previews
+- Components for like buttons
+- Components for the adding and edit post forms
+- The expanded post view page
+
+#### Login 
+
+The login page is used to log users in and give them new auth tokens. Related files are stored in ```/client/src/login```, which contains:
+
+- Components for the login form
+- The login page
+
+#### Signup
+
+The signup page is used to create new user accounts. Related files are stored in ```/client/src/signup```, which contains:
+
+- Components and forms for different stages of the signup process
+- The signup page
+
+#### Search
+
+The search screen is used to display search results. Related files are stored in ```/client/src/search```, which contains:
+
+- Components for helping carry out search logic
+- The search results page
+
+#### Settings
+
+The settings form is used to update a user's account details and settings. Related files are stored in ```/client/src/settings```, which contains:
+
+- Components for different stages of the account update process
+- The settings page
+
+#### Utils
+
+Our system makes use of utiliy functions to simply our media requests. Related files are stored in ```/client/src/utils```, which contains:
+
+- Utility functions for fetching media with and without tokens
+- Utility functions for uploading media files
+
+
+
 ## Backend Architecture
 
-### General design
+### General Design
 
 Our system's backend uses node.js with express middleware. The system is composed of the following key components:
 
@@ -406,7 +496,7 @@ The flow of control during the handling of a request is as follows:
 
 We provide an in-depth review of our authentication process and controller functionality below.
 
-### User authentication
+### User Authentication
 
 Our system uses bearer tokens to authenticate requests. To ensure the security of user accounts, we have given the tokens a 6 hour expiry timer, preventing them for being reused by bad actors who gain access to a user's computer or token.
 
@@ -425,7 +515,7 @@ Note that some routes do not require authentication, for example those that hand
 
 The media route is used for all requests that deal with the uploading, fetching, updating, or deletion of media files. All requests to this route are handled by the controller located at ```/controllers/media.js```.
 
-#### Handling of special file types
+#### Handling of Special File Types
 
 Due to the limited support for web-display of microsoft ```.docx```, ```.xlsx```, and ```.pptx``` files, our media controller converts these files to ```.pdf``` form to allow them to be simply displayed in our frontend. 
 
@@ -433,7 +523,7 @@ When a request is made to our ```/api/media/add``` route, the controller identif
 The converted files are stored in our s3 bucket, and our database stores metadata that reflects the details of the converted file.
 
 
-#### Add media 
+#### Add Media 
 ###### Creates a new media document in the database, saves the media blob to a s3 bucket, returns the media document id
 Request to: `/api/media/add` as a `POST` request
 
@@ -483,7 +573,7 @@ Responses:
     ```
 
 
-#### Get media 
+#### Get Media 
 ###### Retrieves media
 Request to: `/api/media/` as a `GET` request
 
@@ -525,7 +615,7 @@ Responses:
     "Media retrieval failed - <reasonForError>"
     ```
 
-#### Get media Public
+#### Get Media Public
 ###### Retrieves public media
 Request to: `/api/media/` as a `GET` request
 ```
@@ -557,7 +647,7 @@ Responses:
     "Media retrieval failed - <reasonForError>"
     ```
 
-#### Delete media 
+#### Delete Media 
 ###### Deletes file from s3 bucket and removes media metadata from database
 Request to: `/api/media/delete` as a `POST` request
 
@@ -592,7 +682,7 @@ Responses:
   -  ```"Media deletion success - deleted <"deletedMediaID">"```
    
 
-#### Update media 
+#### Update Media 
 ###### Updates the privacy and display metadata for a media file
 Request to: `/api/media/update` as a `POST` request
 
@@ -715,6 +805,7 @@ Responses:
   - ```
     "Login in not successful - <reasonForError>"
     ```
+	
 #### Get User
 ###### Returns a user's details from a valid authentication token
 Request to: `/api/user/get` as a `GET` request
@@ -761,6 +852,7 @@ Responses:
   - ```
     "Get user not successful - <reasonForError>"
     ```
+	
 #### Get Public User
 ###### Returns a list user's public details from a list user IDs
 Request to: `/api/user/getPublic` as a `POST` request
@@ -837,6 +929,7 @@ Responses:
   - ```
     "Get public user not successful - <reasonForError>"
     ```
+	
 #### Update User
 ###### Updates a user's detail from an update, a password and an authentication token
 Request to: `/api/user/update` as a `POST` request
@@ -895,6 +988,7 @@ Responses:
   - ```
     "Update user not successful - <reasonForError>"
     ```
+	
 #### Delete User
 ###### Deletes a user from a password and an authentication token
 Request to: `/api/user/delete` as a `POST` request
@@ -934,7 +1028,7 @@ Responses:
     "Delete user not successful - <reasonForError>"
     ```
     
-#### Add to pinned posts
+#### Add to Pinned Posts
 ###### Adds a post to the user's pinned post list
 Request to: `/api/user/addToPinnedPosts` as a `POST` request
 
@@ -973,7 +1067,7 @@ Responses:
     "Pinning the post was not successful - <reasonForError>"
     ```
     
-#### Remove from pinned posts
+#### Remove from Pinned Posts
 ###### Removes a post from the user's pinned post list
 Request to: `/api/user/removeFromPinnedPosts` as a `POST` request
 
@@ -1555,89 +1649,7 @@ Responses:
   - ```
     "Unlike comment not successful - <reasonForError>"
     ```
-
-## Front-end Architecture
-
-Assets used in our front-end (eg. image missing thumbnails) are stored in the ```/client/src/assets``` directory. Source code for components is stored in the ```client/src/components``` directory.
-#### Header
-
-The website header is displayed on every page. Related files are stored in ```/client/src/header``` which contains:
-
-- A header component
-
-#### Home
-
-The home page is shown after successful login or clicking on logo in the header. Related files are stored in ```/client/src/header```, which contains:
-
-- A welcome message component
-- The home screen
-
-#### Profile page
-
-The user profile can be accessed through the search screen or by clicking on a link to the user's profile. Related files are stored in ```/client/src/profile```, which contains:
-
-- Components for the infinite scroll of posts
-- Components for the display of pinned posts
-- Components for the display of a user's profile details
-- The profile page
-
-
-#### Posts
-
-Posts appear in the search screen, in a user's feed, and when a post is expanded. Related files are stored in ```/client/src/Post```, which contains:
-
-- Comment related components
-    - A component for the create comment form
-    - A component for displaying a list of comments
-    - A component for individual comments
-- A component for post previews
-- Components for like buttons
-- Components for the adding and edit post forms
-- The expanded post view page
-
-#### Login 
-
-The login page is used to log users in and give them new auth tokens. Related files are stored in ```/client/src/login```, which contains:
-
-- Components for the login form
-- The login page
-
-#### Signup
-
-The signup page is used to create new user accounts. Related files are stored in ```/client/src/signup```, which contains:
-
-- Components and forms for different stages of the signup process
-- The signup page
-
-#### Search
-
-The search screen is used to display search results. Related files are stored in ```/client/src/search```, which contains:
-
-- Components for helping carry out search logic
-- The search results page
-
-#### Settings
-
-The settings form is used to update a user's account details and settings. Related files are stored in ```/client/src/settings```, which contains:
-
-- Components for different stages of the account update process
-- The settings page
-
-#### Utils
-
-Our system makes use of utiliy functions to simply our media requests. Related files are stored in ```/client/src/utils```, which contains:
-
-- Utility functions for fetching media with and without tokens
-- Utility functions for uploading media files
-
-[## introduction]: https://github.com/arrikenw/IT-Project#introduction-1
-[/docs]: /docs
-[### motivation for e-folio]: /docs
-
-## Test Cases
-
-Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
-
+	
 ## Style Guide
 
 ### Code Style
@@ -1751,3 +1763,7 @@ Test cases can be found in the `/test` directory. The directory can be accessed 
         res.status(500);
         res.send("File upload not successful - something went wrong, try again");
         ```
+
+## Test Cases
+
+Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).

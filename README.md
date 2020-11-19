@@ -17,28 +17,54 @@
   - Documentation
 - [Features](#Features)
 - [API Documentation](#API Documentation)
- - Users
- - Midia
- - Post
- - comments
+  - Users
+  - Midia
+  - Post
+  - comments
 - [Tests Case](#Test Case)
   
 
-
 ## Introduction
-This project was created by the Podoju was consists of a backend server using node.js, Express and Mongoose;
- a frontend written using html, css, node.js, react.js, and Material UI; a database using mongoDB, and a file server using AWS S3 Bucket. 
- “E-FOLIO” is a web based digital portfolio system. E-FOLIO, allows users to ‘post’ work that they wish to showcase to their
- profile, share their profile with others.
+The problem that we as a software development team have answered is to construct a digital portfolio system primarily for students to 
+display their work, but could be used by anyone as a digital portfolio. The concept is essentially for a user to be able to showcase
+work that they are proud of on a digital platform. In the case of students the platform they also have to be able to reflect on their 
+work and be able to submit assessable work. This means a balance between the privacy (to ensure no plagiarism) and display work they are 
+proud of.  For this digital portfolio system to be compatible with many fields it must accept many file types. And finally allow the user
+to reflect on their work so that they may develop.  
+ 
+As an answer to this problem Podoju has developed the “E-FOLIO”, and is a web based digital portfolio system. E-FOLIO, allows users to 
+‘post’ work that they wish to showcase to their profile, share their profile with others.  This project was created by the Podoju was 
+consists of a backend server using node.js, Express and Mongoose;a frontend written using html, css, node.js, react.js, and Material UI;
+a database using mongoDB, and a file server using AWS S3 Bucket. 
+
 ### Motivation for E-FOLIO 
+E-Foilio as the response to the problem was motivated by the idea that this platform should be able to be used by anyone who wanted
+to show case their work, but is primarily for the academic arena. In order to grasp the differnt user types we made personas. 
+
+
 [Vision Documentation](/docs)
 
 This folder, `/docs `, includes: 
-- User Stories 
 - Personas
-- Motivational Model 
+     - Building a range of personas help as understand the users needs, behaviours, goals and experiences. Four Sets of uses were
+      identified, the undergraduate student, the post graduate student, the lecturer, and industry representatives.  
+- Motivational Model
+     - We used a Motivational Model to represent the requirement of this project.  Motivational Models are created using the DO-BE-FEEL 
+     method of questioning in meetings with the client.  What should the system DO? What should the system BE? How should the user FEEl? 
+     These answers are then mapped to a diagram, the parallelograms are the "DO", the cloud is the "BE", and the heart is the "FEEL". 
+
+![motivationalModel](/docs/motivationalModel.pdf)
+
+- User Stories
+    - The user stories created to help define the features fo this project were drived form the motivational model and the personas. There
+     are general user stories for all types of users, but there are also specific user stories that answer the needs of that specific user 
+     group.
 - Class Diagram 
+
+![classDiagram](/docs/Class%20Diagram.pdf)
 - Architecture Diagram 
+
+![archectureDiagram](/docs/Architecture%20Diagram.pdf)
 ### Demo
 Bellow is a link to a demo the hosted project: 
 [https://efolio.herokuapp.com/](https://efolio.herokuapp.com/)
@@ -1246,14 +1272,3 @@ Responses:
 Test cases can be foun in the folder `/test`, or follow the link [Test Cases](/test).
 
 
-[## Introduction]: https://github.com/arrikenw/IT-Project#introduction-1
-
-[/docs]: /docs
-
-[### Motivation for E-FOLIO]: /docs
-
-[## Set Up]: /docs
-
-[## Set Up]: /setup
-
-[##-set-up]: ##-set-up

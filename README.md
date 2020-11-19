@@ -40,11 +40,10 @@ consists of a backend server using node.js, Express and Mongoose;a frontend writ
 a database using mongoDB, and a file server using AWS S3 Bucket. 
 
 ### Motivation for E-FOLIO 
+Documentation on the core vision of our system can be found in the [/docs directory](/docs).
 E-Foilio as the response to the problem was motivated by the idea that this platform should be able to be used by anyone who wanted
 to show case their work, but is primarily for the academic arena. In order to grasp the differnt user types we made personas. 
 
-
-[Vision Documentation](/docs)
 
 This folder, `/docs `, includes: 
 - Personas
@@ -237,9 +236,11 @@ We selected MongoDB as our database for a handful of reasons:
 The media document type is used to store media metadata. The ID of the media file is used as a key for the media content stored in our S3 bucket. Files must be less than 15mb.
 
 The document stores:
+
 - mimeType: The MIME-type and extension of the file
 - isPrivate: The privacy of the media
 - givenFileName: The name of the media
+
 
 The document also stores the following references:
 - creator: The ID of the <b>User</b> who uploaded the media file
@@ -247,6 +248,7 @@ The document also stores the following references:
 The post document is used to represent the user-produced content that our e-folio system displays. 
 
 The document stores:
+
 - title: The title of the post
 - description: The description of the post (optional)
 - private: The privacy of the post
@@ -258,6 +260,7 @@ The document also stores the following references:
 - mediaID: The ID of the <b>Media</b> document for the post content
 - thumbnailURL: The ID of the <b>Media</b> document for the post thumbnail (optional)
 - userID: The ID of the <b>User</b> who created the post
+
 ##### User
 The user document represents the users of our website.
 
@@ -277,6 +280,7 @@ The document stores:
 - phoneNumberPrivate: The privacy of the user's phone number
 - emailPrivate: The privacy of the user's email
 
+
 The document also stores the following references:
 - profilePic: The ID of a <b>Media</b> document that contains the profile picture of the user
 
@@ -294,7 +298,7 @@ The document also stores the following references
 We have provided a "crows-foot" diagram of the relations between documents used in our database. Note that the S3 bucket included in the diagram is <b>NOT</b> part of our database.
 <img src="/images/db.png"/>
 
-#### CI/CD Pipeline
+### CI/CD Pipeline
 We have built a simple CI/CD pipeline to improve code quality and assist in the deployment of updates. 
 Tests triggered on merge requests to master must pass before code can be merged, and once merged, the updated master branch will be automatically deployed.
 We provide a brief sketch of the role of the CI/CD pipeline in the development cycle below.
@@ -310,206 +314,222 @@ We provide a brief sketch of the role of the CI/CD pipeline in the development c
 7. Heroku will install relevant packages and start the server. The site is now deployed  and reflects the latest changes from master
 
 ## Costs and licencing considerations
-- Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries comercially, a licencing fee must be paid.
+- Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries commercially, a licencing fee must be paid.
 A licence can be obtained at https://www.pdftron.com/licensing/.
 
-- Our system is currently using the free-tier of AWS. Once in production, the system will need to be linked to a new amazon account and S3 bucket, and relevant usage fees will need to be paid. Pricing information can be found at https://aws.amazon.com/pricing/. 
+- Our system is currently using the free-tier of AWS. Once in production, the system will need to be linked to a new amazon account and S3 bucket, and relevant usage fees will need to be paid. 
+Pricing information can be found at https://aws.amazon.com/pricing/. 
 
-- Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply. Pricing information can be found at https://www.mongodb.com/pricing.
-
-
-
-## Style Guide
-### Code Style
-- #### Use arrow functions when possible:
-  - may not be possible in all scenarios
-  - wrong:
-  - ```javascript
-    function myFunc(param) {};
-    const myFunc = function(param) {};
-    ```
-  - right:
-  - ```javascript
-    const myFunc = (param) => {};
-    ```
-- #### Arrow functions with one parameter should have brackets:
-    - wrong:
-    - ```javascript
-      const myFunc = param => {};
-      ```
-    - right:
-    - ```javascript
-      const myFunc = (param) => {};
-      ```
-- #### Use promises over callbacks when possible:
-  - may not be possible in all scenarios
-  - wrong:
-  - ```javascript
-    synchronousFunc(param, (err, result) => {});
-    ```
-  - right:
-  - ```javascript
-    synchronousFunc(param).then(result).catch(err);
-- #### Indentation is done with two spaces
-  - tabs are not used
-  - wrong:
-  - ```javascript
-    if (boolean) {    
-        console.log("no tabs");
-    };
-    ```
-  - right:
-  - ```javascript
-    if (boolean) {    
-      console.log("two spaces for indentation");
-    };
-    ```
-- #### Camel case is used for variable and function names
-  - wrong:
-  - ```javascript
-    const myvariablename = 5;
-    const my_variable_name = 5;
-    
-    const myfuncname = (param) => {};
-    const my_func_name = (param) => {};
-    ```
-  - right:
-  - ```javascript
-    const myVariableName = 5;
-    
-    const myFuncName = (param) => {};
-    ```
-- #### Callbacks must be declared individually
-  - required to avoid "callback hell"
-  - wrong:
-  - ```javascript
-    synchronousFunc(param, (err, result) => {});
-    ```
-  - right:
-  - ```javascript
-    const callBack = (err, result) => {};
-    
-    synchronousFunc(param, callBack);
-    ```
-- #### When possible, Australian English spelling is used
-  - May not be possible for specific packages
-  - wrong:
-  - ```javascript
-    const bestColor = "#4132";
-    ```
-  - right:
-  - ```javascript
-    const bestColour = "#4132";
-    ```
-- #### Spaces after double slash for comments
-  - wrong:
-  - ```javascript
-    //This is a function
-    const myFunc = () => {};
-    ```
-  - right:
-  - ```javascript
-    // This is a function
-    const myFunc = () => {};
-    ```
-- #### Use FIXME and TODO to annoate
-  - wrong:
-  - ```javascript
-    // this needs to be fixed
-    const brokenFunc = () => {};
-    
-    // need to add error handling
-    ```
-  - right:
-  - ```javascript
-    // FIXME brokenFunc does not work
-        const brokenFunc = () => {};
-        
-    // TODO need to add error handling
-    ```
-- We are currently using a modified version of airbnb's style guide. Read more about it 
-[here](https://medium.com/docon/airbnb-javascript-style-guide-key-takeaways-ffd0370c053) and 
-[here](https://airbnb.io/javascript/).
-### Console Logs
-- console logs should be done should be done before every `res.send()` is done in the backend
-    - console logs should have the structure: `"<Func> (not) successful - <reasonOrInformation"`
-- there should be no console logs in the frontend code and should be present in development
-- console log should always be informative:
-    - wrong:
-    - ```javascript
-      console.log("testing");
-      ```
-    - right:
-    - ```javascript
-      console.log("successfully trimmed firstName from user input");
-      ```
-### API Responses
-- in a successful response, the error code should be in the form of "2XX" and be a JSON with
-relevant data:
-    - wrong:
-    - ```javascript
-      res.status(300);
-      res.send("Successful request!");
-      ```
-    - right:
-    - ```javascript
-      res.status(201)
-      res.send({ id: userID, email: user.email });
-      ```
-- in an unsuccessful response, the error code should be in the form of not "2XX" and be 
-a string with the correct form:
-    - the correct form is of `"<request> not successful - <reasonOrError>"`
-    - the response string should be in a form that can be directly shown to a front end user
-    - status codes in the form "4XX" are used for user error
-    - status codes in the form "5XX" are used for server error
-    - wrong:
-    - ```javascript
-      res.status(500);
-      res.send("formidable.parse parse error");
-      
-      
-      res.status(400);
-      res.send("updateUser not successful - mongoose error: duplicate key: { email }");
-      ```
-    - right:
-    - ```javascript
-      res.status(400);
-      res.send("Update user not successful - an account with that email already exists");
-      
-      res.status(500);
-      res.send("File upload not successful - something went wrong, try again");
-      ```
- 
-### Git Hub:
-- Branches should be named `<developerName>/<featureName>`:
-    - wrong:
-    - ```
-      benBranch
-      
-      loginPage
-      ```
-    - right:
-    - ```
-      ben/login-page
-      ```
-- before a pull request is made, the code **must have passed all the tests**, including new tests
-made for the new functionality
-- **all new code _must_ have tests created as new functionality is created**
-- a pull request **must be reviewed by another** before being approved
-- when a pull request is made, the relevant trello post is **moved into review**
-- when a pull request is approved, the relevant trello post is **moved into done**
-### Documentation:
-- code must have relevant comments explaining what blocks do
-- API routes should be updated into this read me with all details included
-
-## Features
+- Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply.
+ Pricing information can be found at https://www.mongodb.com/pricing.
 
 
+## Backend Architecture
+### General design
+
+Our system's backend uses node.js with express middleware. The system is composed of the following key components:
+- An index router that passes requests down to sub-routers. The router is located at ```/routes/index.js```.
+- Sub-routers that authenticate the user and call controller functions. These routers are located in ```/routes```.
+- A collection of controllers associated with comments, media, posts, and users. These controllers are located in ```/controllers```.
+- A collection of Mongoose models and basic database connection logic. Models and DB logic are located in ```/models```.
+
+The flow of control during the handling of a request is as follows:
+1. Request is received at index router
+2. Request is passed down to sub-router by index router
+3. Authentication of user token occurs
+4. Controller function is called by sub-router
+5. Controller carries out request
+6. Response is sent 
+
+We provide an in-depth review of our authentication process and controller functionality below.
+
+### Unconventional algorithms
+
+Our post search performs a regex string search across post content and tags. This has a complexity of O(n), where n is the length of the entire corpus of our site. WE DOOMED, WHAT AN ALGORITHM!!!
+
+### User authentication
+Our system uses bearer tokens to authenticate requests. To ensure the security of user accounts, we have given the tokens a 6 hour expiry timer, preventing them for being reused by bad actors who gain access to a user's computer or token.
 
 
-## API Documentation
-Here is the needed documentation of the APIs used by the frontend to request to the backend.
-### Users
+For all requests made to routes that require authentication, our middleware extracts and validates the authorization token provided in the request. There are three possible outcomes to this validation.
+
+- If the token is valid, user information is injected into the request before it is passed to our controllers.
+This user information can be accessed in a controller through ```req.user```, which contains the user's id and other data.
+
+- If the token is invalid or expired, the server will respond with status code 403 and the message ```Forbidden```.
+
+- If the token is not provided, the server will respond with status code 401 and the message ```Unauthorized```
+
+
+Note that some routes do not require authentication, for example those that handle the service of posts with public visibility.
+
+### Media controller (```/api/media```)
+
+The media route is used for all requests that deal with the uploading, fetching, updating, or deletion of media files. All requests to this route are handled by the controller located at ```/controllers/media.js```.
+
+#### Handling of special file types
+
+Due to the limited support for web-display of microsoft ```.docx```, ```.xlsx```, and ```.pptx``` files, our media controller converts these files to ```.pdf``` form to allow them to be simply displayed in our frontend. 
+
+When a request is made to our ```/api/media/add``` route, the controller identifies microsoft file formats and converts them to ```.pdf``` form. 
+The converted files are stored in our s3 bucket, and our database stores metadata that reflects the details of the converted file.
+
+
+#### Add media 
+###### Creates a new media document in the database, saves the media blob to a s3 bucket, returns the media document id
+Request to: `/api/media/add` as a `POST` request
+
+Takes: an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+
+and HTML form data containing the following fields:
+```
+-isPrivate: "<privacyBoolean>",
+-givenFileName: "<fileDisplayName>",
+-mediafile: <mediablob>"
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- file display name must be <= 20 characters
+- a privacy status must be provided
+- a media file must be provided
+- the media file must have a size <= 100 mb
+
+Responses:
+- On success: 
+  - the response will have a status code of "201" and will contain the media metadata
+```JSON
+{
+   "_id": "<mediaID>",
+   "mimeType": "<mimeType>",
+   "contentCategory": "<fileCategory>",
+   "extension": "<fileExtension>",
+   "isPrivate": "<privacyBoolean>",
+   "canAccess": ["<UserOneID>", "<UserTwoID>", "<...>"],
+   "creator": "<creatorUserID",
+   "givenFileName": "<mediaDisplayName>"
+}
+```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Media upload failed - <reasonForError>"
+    ```
+
+
+#### Get media 
+###### Retrieves media
+Request to: `/api/media/` as a `GET` request
+
+Takes: an Authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+and a JSON request body containing the following key-value pair:
+```JSON
+{
+   "mediaID": "<mediaDocumentID>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- MediaID must be a valid document id
+
+Responses:
+- On success: 
+  - the response will have a status code of "200" and will contain base64 encoding of the media file in the following format
+```JSON
+{
+   "b64media": "<base64 encoding of file>"
+}
+```
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Media retrieval failed - <reasonForError>"
+    ```
+
+#### Delete media 
+###### Deletes file from s3 bucket and removes media metadata from database
+Request to: `/api/media/delete` as a `POST` request
+
+Takes: an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+
+and HTML form data containing the following fields:
+```JSON
+{
+   "mediaID": "<mediaDocumentID>"
+}
+```
+Requirements:
+- Authorization header is required
+- Authentication token must be a valid token
+- Provided media ID must be valid
+
+Responses:
+- On success: 
+  - The response will have a status code of "200" and will contain the following message:
+   "Media deletion success - deleted <"deletedMediaID">"
+   
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Media deletion failed - <reasonForError>"
+    ```
+
+#### Update media 
+###### Updates the privacy and display metadata for a media file
+Request to: `/api/media/update` as a `POST` request
+
+Takes: an authorization header with the format
+```
+Authorization: "Bearer <authenticationToken>"
+```
+
+and HTML form data containing the following fields:
+```JSON
+{
+   "isPrivate": "<mediaDocumentID>",
+   "canAccess": "[<userID1>, <userID2>, ... <userIDn>]",
+   "givenFileName": "<fileName>"
+}
+```
+Requirements:
+- Authentication token must be associated with the original creator of the media file
+- Authentication token must be a valid token
+- Provided media ID must be valid
+- isPrivate, canAccess, and givenFileName must be provided 
+
+Responses:
+- On success: 
+  - The response will have a status code of "201" and will contain the following message:
+   "Media update success - updated <updatedMediaId>"
+
+- On failure: 
+  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
+  - status code in the form of "4XX" are for user input error
+  - status code in the form of "5XX" are for server error
+  - ```
+    "Media update failed - <reasonForError>"
+    ```
+
+### Users (```/api/user```)
+
+The user route is used for all requests that need to modify, delete, or create user accounts. All requests to this route are handled by the controller located at ```/controllers/user.js```.
+
 #### Add User 
 ###### Creates a new user in the database and returns the user's ID
 Request to: `/api/user/add` as a `POST` request
@@ -784,160 +804,88 @@ Responses:
   - ```
     "Delete user not successful - <reasonForError>"
     ```
-
-### Media
-#### Add media 
-###### Creates a new media document in the database, saves the media blob to a s3 bucket, returns the media document id
-Request to: `/api/media/add` as a `POST` request
-
-Takes: an authorization header with the format
-```
-Authorization: "Bearer <authenticationToken>"
-```
-
-and HTML form data containing the following fields:
-```
--isPrivate: "<privacyBoolean>",
--givenFileName: "<fileDisplayName>",
--mediafile: <mediablob>"
-```
-Requirements:
-- Authorization header is required
-- Authentication token must be a valid token
-- file display name must be <= 20 characters
-- a privacy status must be provided
-- a media file must be provided
-- the media file must have a size <= 100 mb
-
-Responses:
-- On success: 
-  - the response will have a status code of "201" and will contain the media metadata
-```JSON
-{
-   "_id": "<mediaID>",
-   "mimeType": "<mimeType>",
-   "contentCategory": "<fileCategory>",
-   "extension": "<fileExtension>",
-   "isPrivate": "<privacyBoolean>",
-   "canAccess": ["<UserOneID>", "<UserTwoID>", "<...>"],
-   "creator": "<creatorUserID",
-   "givenFileName": "<mediaDisplayName>"
-}
-```
-- On failure: 
-  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
-  - status code in the form of "4XX" are for user input error
-  - status code in the form of "5XX" are for server error
-  - ```
-    "Media upload failed - <reasonForError>"
-    ```
-
-
-#### Get media 
-###### Retrieves media
-Request to: `/api/media/` as a `GET` request
-
-Takes: an Authorization header with the format
-```
-Authorization: "Bearer <authenticationToken>"
-```
-and a JSON request body containing the following key-value pair:
-```JSON
-{
-   "mediaID": "<mediaDocumentID>"
-}
-```
-Requirements:
-- Authorization header is required
-- Authentication token must be a valid token
-- MediaID must be a valid document id
-
-Responses:
-- On success: 
-  - the response will have a status code of "200" and will contain base64 encoding of the media file in the following format
-```JSON
-{
-   "b64media": "<base64 encoding of file>"
-}
-```
-- On failure: 
-  - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
-  - status code in the form of "4XX" are for user input error
-  - status code in the form of "5XX" are for server error
-  - ```
-    "Media retrieval failed - <reasonForError>"
-    ```
-
-#### Delete media 
-###### Deletes file from s3 bucket and removes media metadata from database
-Request to: `/api/media/delete` as a `POST` request
+    
+#### Add to pinned posts
+###### Adds a post to the user's pinned post list
+Request to: `/api/user/addToPinnedPosts` as a `POST` request
 
 Takes: an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
-and HTML form data containing the following fields:
+and a JSON in the body, requiring the key-value pairs:
 ```JSON
 {
-   "mediaID": "<mediaDocumentID>"
+    "postID": "<postID>"
 }
 ```
 Requirements:
 - Authorization header is required
-- Authentication token must be a valid token
-- Provided media ID must be valid
+- Authentication token must a valid token
+- A valid postID must be provided
 
 Responses:
 - On success: 
-  - The response will have a status code of "200" and will contain the following message:
-   "Media deletion success - deleted <"deletedMediaID">"
-   
+  - the response will have status code of "200" and will have the ID of the pinned post
+  - ```JSON
+    {
+        "id": "<postID>"
+    }
+    ```
+- on unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- on forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
 - On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
-    "Media deletion failed - <reasonForError>"
+    "Pinning the post was not successful - <reasonForError>"
     ```
-
-#### Update media 
-###### Updates the privacy and display metadata for a media file
-Request to: `/api/media/update` as a `POST` request
+    
+#### Remove from pinned posts
+###### Removes a post from the user's pinned post list
+Request to: `/api/user/removeFromPinnedPosts` as a `POST` request
 
 Takes: an authorization header with the format
 ```
 Authorization: "Bearer <authenticationToken>"
 ```
-
-and HTML form data containing the following fields:
+and a JSON in the body, requiring the key-value pairs:
 ```JSON
 {
-   "isPrivate": "<mediaDocumentID>",
-   "canAccess": "[<userID1>, <userID2>, ... <userIDn>]",
-   "givenFileName": "<fileName>"
+    "postID": "<postID>"
 }
 ```
 Requirements:
-- Authentication token must be associated with the original creator of the media file
-- Authentication token must be a valid token
-- Provided media ID must be valid
-- isPrivate, canAccess, and givenFileName must be provided 
+- Authorization header is required
+- Authentication token must a valid token
+- A valid postID must be provided
 
 Responses:
 - On success: 
-  - The response will have a status code of "201" and will contain the following message:
-   "Media update success - updated <updatedMediaId>"
-
+  - the response will have status code of "200" and will have the ID of the unpinned post
+  - ```JSON
+    {
+        "id": "<postID>"
+    }
+    ```
+- on unauthorized:
+  - the response will have status code "401" which represents a missing authentication token
+- on forbidden:
+  - the response will have status code "403" which represents an invalid authentication token
 - On failure: 
   - the response will have the appropriate non "2XX" status code and will have a string with the reason of failure
   - status code in the form of "4XX" are for user input error
   - status code in the form of "5XX" are for server error
   - ```
-    "Media update failed - <reasonForError>"
-    ```
+    "Pinning the post was not successful - <reasonForError>"
+    
+### Posts (```/api/post```)
 
-## Posts
+The post route is used for all requests that create, edit, fetch, delete, like, or mutate posts. All requests to this route are handled by the controller located at ```/controllers/post.js```.
+
 #### Get Post 
 ###### Gets a lists of post from the database and which match the search requirements, must be public posts or belong to the searching user
 Request to: `/api/post/get` as a `POST` request
@@ -1286,8 +1234,11 @@ Responses:
   - ```
     "Like post not successful - <reasonForError>"
     ```
+    
+### Comments (```/api/comment```)
 
-## Comments
+The comment route is used for all requests that create, delete, or like comments. All requests to this route are handled by the controller located at ```/controllers/comment.js```.
+
 #### Add Comment 
 ###### Adds a comment to a post for a logged in user
 Request to: `/api/comment/add` as a `POST` request
@@ -1467,6 +1418,135 @@ Responses:
     "Unlike comment not successful - <reasonForError>"
     ```
 
+## Style Guide
+### Code Style
+- #### Arrow functions with one parameter should have brackets:
+    - wrong:
+    - ```javascript
+      const myFunc = param => {};
+      ```
+    - right:
+    - ```javascript
+      const myFunc = (param) => {};
+      ```
+- #### Use promises over callbacks when possible:
+  - may not be possible in all scenarios
+  - wrong:
+  - ```javascript
+    synchronousFunc(param, (err, result) => {});
+    ```
+  - right:
+  - ```javascript
+    synchronousFunc(param).then(result).catch(err);
+
+- #### Camel case is used for variable and function names
+  - wrong:
+  - ```javascript
+    const myvariablename = 5;
+    const my_variable_name = 5;
+    
+    const myfuncname = (param) => {};
+    const my_func_name = (param) => {};
+    ```
+  - right:
+  - ```javascript
+    const myVariableName = 5;
+    
+    const myFuncName = (param) => {};
+    ```
+    
+- #### When possible, Australian English spelling is used
+  - May not be possible for specific packages
+  - wrong:
+  - ```javascript
+    const bestColor = "#4132";
+    ```
+  - right:
+  - ```javascript
+    const bestColour = "#4132";
+    ```
+- #### Spaces after double slash for comments
+  - wrong:
+  - ```javascript
+    //This is a function
+    const myFunc = () => {};
+    ```
+  - right:
+  - ```javascript
+    // This is a function
+    const myFunc = () => {};
+    ```
+- #### Use FIXME and TODO to annoate
+  - wrong:
+  - ```javascript
+    // this needs to be fixed
+    const brokenFunc = () => {};
+    
+    // need to add error handling
+    ```
+  - right:
+  - ```javascript
+    // FIXME brokenFunc does not work
+        const brokenFunc = () => {};
+        
+    // TODO need to add error handling
+    ```
+- We are currently using a modified version of airbnb's style guide. Read more about it 
+[here](https://medium.com/docon/airbnb-javascript-style-guide-key-takeaways-ffd0370c053) and 
+[here](https://airbnb.io/javascript/).
+### Console Logs
+- console logs should be done should be done before every `res.send()` is done in the backend
+    - console logs should have the structure: `"<Func> (not) successful - <reasonOrInformation"`
+- there should be no console logs in the frontend code and should be present in development
+- console log should always be informative:
+    - wrong:
+    - ```javascript
+      console.log("testing");
+      ```
+    - right:
+    - ```javascript
+      console.log("successfully trimmed firstName from user input");
+      ```
+### API Responses
+- in a successful response, the error code should be in the form of "2XX" and be a JSON with
+relevant data:
+    - wrong:
+    - ```javascript
+      res.status(300);
+      res.send("Successful request!");
+      ```
+    - right:
+    - ```javascript
+      res.status(201)
+      res.send({ id: userID, email: user.email });
+      ```
+- in an unsuccessful response, the error code should be in the form of not "2XX" and be 
+a string with the correct form:
+    - the correct form is of `"<request> not successful - <reasonOrError>"`
+    - the response string should be in a form that can be directly shown to a front end user
+    - status codes in the form "4XX" are used for user error
+    - status codes in the form "5XX" are used for server error
+    - wrong:
+    - ```javascript
+      res.status(500);
+      res.send("formidable.parse parse error");
+      
+      
+      res.status(400);
+      res.send("updateUser not successful - mongoose error: duplicate key: { email }");
+      ```
+    - right:
+    - ```javascript
+      res.status(400);
+      res.send("Update user not successful - an account with that email already exists");
+      
+      res.status(500);
+      res.send("File upload not successful - something went wrong, try again");
+      ```
+
+### Documentation:
+- code must have relevant comments explaining what blocks do
+- API routes should be updated into this read me with all details included
+
 ## Tests Case
 Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
-

@@ -1681,6 +1681,7 @@ Test cases can be found in the `/test` directory. The directory can be accessed 
 
 ## Design Architecture
 
+Assets used in our front-end (eg. image missing thumbnails) are stored in the ```/client/src/assets``` directory. Source code for components is stored in the ```client/src/components``` directory.
 #### Header
 
 The website header is displayed on every page. Related files are stored in ```/client/src/header``` which contains:
@@ -1695,27 +1696,61 @@ The website header is displayed on every page. Related files are stored in ```/c
 
 The home page is shown after successful login or clicking on logo in the header. Related files are stored in ```/client/src/header```, which contains:
 
-- Home page
-- Welcome message
+- A welcome message component
+- The home screen
 
 #### Profile page
 
 The user profile can be accessed through the search screen or by clicking on a link to the user's profile. Related files are stored in ```/client/src/profile```, which contains:
 
-- Infinite scrolling list of posts
-- Pinned posts
-- User's profile details
+- Components for the infinite scroll of posts
+- Components for the display of pinned posts
+- Components for the display of a user's profile details
+- The profile page
 
 
 #### Posts
 
-Posts appear in the search screen, in a user's feed, and when a post is expanded. Related files are stored in ```/client/src/Post```
+Posts appear in the search screen, in a user's feed, and when a post is expanded. Related files are stored in ```/client/src/Post```, which contains:
 
-Each post contains:
+- Comments
+- Likes
+- Forms for adding and editing posts
 
-- comments
-- likes
-- edit post
+#### Login 
+
+The login page is used to log users in and give them new auth tokens. Related files are stored in ```/client/src/login```, which contains:
+
+- Components for the login form
+- The login page
+
+#### Signup
+
+The signup page is used to create new user accounts. Related files are stored in ```/client/src/signup```, which contains:
+
+- Components and forms for different stages of the signup process
+- The signup page
+
+#### Search
+
+The search screen is used to display search results. Related files are stored in ```/client/src/search```, which contains:
+
+- Components for helping carry out search logic
+- The search results page
+
+#### Settings
+
+The settings form is used to update a user's account details and settings. Related files are stored in ```/client/src/settings```, which contains:
+
+- Components for different stages of the account update process
+- The settings page
+
+#### Utils
+
+Our system makes use of utiliy functions to simply our media requests. Related files are stored in ```/client/src/utils```, which contains:
+
+- Utility functions for fetching media with and without tokens
+- Utility functions for uploading media files
 
 [## introduction]: https://github.com/arrikenw/IT-Project#introduction-1
 [/docs]: /docs

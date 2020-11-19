@@ -1779,13 +1779,13 @@ The matrices are provided below:
 
 #### Traceability Matrix - Acceptance Criteria: 
 <p align="center">
-  <img src="images/acceptanceCriteria.PNG.png"  width="1000" >
+  <img src="images/acceptanceCriteria.PNG"  width="1000" >
 </p>
 
 
 #### Traceability Matrix - Other Functional Requirements: 
 <p align="center">
-  <img src="images/otherRequirements.PNG.png"  width="1000" >
+  <img src="images/otherRequirements.PNG"  width="1000" >
 </p>
 
 

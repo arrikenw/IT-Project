@@ -36,7 +36,7 @@
   - [Code Style](#code-style)
   - [Console Logs](#console-logs)
   - [API Responses](#api-responses)
-- [Tests Case](#Test-Case)
+- [Tests Cases](#Test-Cases)
 
 ## Introduction
 

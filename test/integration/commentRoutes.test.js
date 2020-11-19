@@ -65,40 +65,26 @@ const getMediaID = async (token) => {
 };
 
 // 1
-describe("test /api/post/add route and the addPost controller", () => {
+describe("test /api/comment/add route and the addComment controller", () => {
   let token;
-  let mediaID;
+  let postID;
   // clear database before each test
   beforeEach(async () => {
     await database.clearCollections();
     token = await getUserToken();
-    // mediaID = await getMediaID();
+    postID = await getPostID(token);
   });
 
   // 1.1
-  test("addPost with valid inputs", async (done) => {
-    console.log(token);
-
-    const mediaResponse = await request(app)
-      .post("/api/media/add")
-      .set("Authorization", token)
-      .set("Content-Type", "multipart/form-data")
-      .field("isPrivate", false)
-      .field("givenFileName", "test txt")
-      .attach("mediafile", "./test/resources/test.png");
+  test("addComment with valid inputs", async (done) => {
     const payload = {
-      title: "Test post title",
-      description: "test post description",
-      mediaID: mediaResponse.body._id,
-      private: true,
+      filters: { _id: postID },
     };
-
     const response = await request(app)
-      .post("/api/post/add")
+      .post("/api/post/get")
       .send(payload)
       .set("Authorization", token);
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("id");
+    expect(response.status).toBe(200);
     done();
   });
 });

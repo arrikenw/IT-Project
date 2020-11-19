@@ -1346,12 +1346,17 @@ The website header is displayed on every page, its files are stored in header wh
 - Logout button
 
 ####Home
-The home page is shown when after successful login or clicking on
+The home page is shown after successful login or clicking on logo in the header
+
+Its files are stored in the home folder which contains 
+- Home page 
+- Welcome message
+
 ####Profile page 
 The user profile page contains:
- - Infinite scroll of posts
+ - Infinite scrolling list of posts
  - Pinned posts
- - Profile details
+ - User's profile details
 
 These files are located in the profile folder
  

@@ -270,15 +270,12 @@ Navigate back to the "Deploy" tab and select the branch to be deployed under "Ma
 Our database stores account data, comments, media file metadata, and posts created by users.
 File storage for uploaded media is not handled by our database – instead, the files are stored in an AWS S3 bucket and their key stored in our database.
 
-Our fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format. All database schemas also store timestamps for when a document is created and when it was last updated.
+Key fields fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format. Additionally, all database documents store timestamps for the document creation and the document's most recent update.
 
-#### Technology rationale
-
-We selected MongoDB as our database for a handful of reasons:
-
-- The document-store / schemaless approach allowed us to quickly iterate on our design
+#### Selection rationale
+We selected MongoDB as our database for two main reasons:
+- The schemaless nature of the database allowed us to quickly iterate on our design and add or remove features
 - Our team was familiar with mongoDB and had previously used it to build other systems
-- Our data was well suited to a “document” style – many fields are **\_** FILL IN HERE\***\*\_\_\_\_\*\***
 
 #### Document description
 
@@ -408,10 +405,6 @@ The flow of control during the handling of a request is as follows:
 6. Response is sent
 
 We provide an in-depth review of our authentication process and controller functionality below.
-
-### Unconventional algorithms
-
-Our post search performs a regex string search across post content and tags. This has a complexity of O(n), where n is the length of the entire corpus of our site. WE DOOMED, WHAT AN ALGORITHM!!!
 
 ### User authentication
 

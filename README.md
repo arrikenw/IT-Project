@@ -263,6 +263,17 @@ Navigate to the "Settings" tab and select the "Reveal Config Vars" icon. Within 
 
 Navigate back to the "Deploy" tab and select the branch to be deployed under "Manual Deploy" and select "Deploy Branch". Automatic deploys can be also be enabled if desired. This should deploy the Efolio project to the link `<appname>.herokuapp.com`. The creation of the build of the frontend is handled by the script `heroku-postbuild` which can be found in the file `./package.json`.
 
+## Costs and licencing considerations
+
+- Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries commercially, a licencing fee must be paid.
+  A licence can be obtained [here](https://www.pdftron.com/licensing/).
+
+- Our system is currently using the free-tier of AWS. Once in production, the system will need to be linked to a new amazon account and S3 bucket, and relevant usage fees will need to be paid.
+  Pricing information can be found [here](https://aws.amazon.com/pricing/).
+
+- Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply.
+  Pricing information can be found [here](https://www.mongodb.com/pricing).
+  
 ## Database
 
 #### Database description
@@ -372,17 +383,6 @@ We provide a brief sketch of the role of the CI/CD pipeline in the development c
 5. Review and approve merge, pull onto master
 6. \[CD\] Merge onto master triggers an automatic deployment to Heroku using Github actions
 7. Heroku will install relevant packages and start the server. The site is now deployed and reflects the latest changes from master
-
-## Costs and licencing considerations
-
-- Our system makes use of PDFTRON's node.js PDF libraries. To use these libraries commercially, a licencing fee must be paid.
-  A licence can be obtained [here](https://www.pdftron.com/licensing/).
-
-- Our system is currently using the free-tier of AWS. Once in production, the system will need to be linked to a new amazon account and S3 bucket, and relevant usage fees will need to be paid.
-  Pricing information can be found [here](https://aws.amazon.com/pricing/).
-
-- Our system currently makes use of a cloud hosted mongoDB server. If an externally hosted server will also be used in production, usage fees will apply.
-  Pricing information can be found [here](https://www.mongodb.com/pricing).
 
 ## Backend Architecture
 
@@ -1675,10 +1675,6 @@ Responses:
     "Unlike comment not successful - <reasonForError>"
     ```
 
-## Test Cases
-
-Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
-
 ## Front-end Architecture
 
 Assets used in our front-end (eg. image missing thumbnails) are stored in the ```/client/src/assets``` directory. Source code for components is stored in the ```client/src/components``` directory.
@@ -1756,6 +1752,10 @@ Our system makes use of utiliy functions to simply our media requests. Related f
 [## introduction]: https://github.com/arrikenw/IT-Project#introduction-1
 [/docs]: /docs
 [### motivation for e-folio]: /docs
+
+## Test Cases
+
+Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
 
 ## Style Guide
 

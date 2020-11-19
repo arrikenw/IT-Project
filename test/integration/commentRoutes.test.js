@@ -65,44 +65,41 @@ const getMediaID = async (token) => {
 };
 
 // 1
-describe("test /api/comment/add route and the getPost controller", () => {
+describe("test /api/post/add route and the addPost controller", () => {
   let token;
-  let postID;
+  let mediaID;
   // clear database before each test
-  /* beforeEach(async () => {
+  beforeEach(async () => {
     await database.clearCollections();
     token = await getUserToken();
-    postID = await getPostID(token);
-  }); */
+    // mediaID = await getMediaID();
+  });
 
   // 1.1
-  test("add a comment with valid inputs", async (done) => {
-    await database.clearCollections();
-    token = await getUserToken();
-    postID = await getPostID(token);
+  test("addPost with valid inputs", async (done) => {
+    console.log(token);
 
+    const mediaResponse = await request(app)
+      .post("/api/media/add")
+      .set("Authorization", token)
+      .set("Content-Type", "multipart/form-data")
+      .field("isPrivate", false)
+      .field("givenFileName", "test txt")
+      .attach("mediafile", "./test/resources/test.png");
     const payload = {
-      postID,
-      comment: "test comment",
+      title: "Test post title",
+      description: "test post description",
+      mediaID: mediaResponse.body._id,
+      private: true,
     };
 
     const response = await request(app)
-      .post("/api/comment/add")
+      .post("/api/post/add")
       .send(payload)
       .set("Authorization", token);
     expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("id");
     done();
-    /* const payload2 = {
-      filters: { _id: postID },
-    };
-
-    const response2 = await request(app)
-      .post("/api/post/get")
-      .send(payload)
-      .set("Authorization", token);
-    expect(response2.status).toBe(200);
-    expect(response2.body[0].comments[0].comment).toBe("test comment");
-    done(); */
   });
 });
 

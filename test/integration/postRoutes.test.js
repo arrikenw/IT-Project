@@ -75,6 +75,7 @@ describe("test /api/post/add route and the addPost controller", () => {
     // mediaID = await getMediaID();
   });
 
+  // 1.1
   test("addPost with valid inputs", async (done) => {
     console.log(token);
 
@@ -113,6 +114,7 @@ describe("test /api/post/get route and the getPost controller", () => {
     postID = await getPostID(token);
   });
 
+  // 2.1
   test("getPost with valid inputs", async (done) => {
     const payload = {
       search: "Test post title",

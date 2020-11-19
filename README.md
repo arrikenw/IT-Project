@@ -224,7 +224,8 @@ Navigate back to the "Deploy" tab and select the branch to be deployed under "Ma
 #### Database description
 Our database stores account data, comments, media file metadata, and posts created by users. 
 File storage for uploaded media is not handled by our database – instead, the files are stored in an AWS S3 bucket and their key stored in our database. 
-Our fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format.
+
+Our fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format. All database schemas also store timestamps for when a document is created and when it was last updated.
 #### Technology rationale
 We selected MongoDB as our database for a handful of reasons:
 - The document-store / schemaless approach allowed us to quickly iterate on our design
@@ -233,54 +234,65 @@ We selected MongoDB as our database for a handful of reasons:
 
 #### Document description
 ##### Media
-The media document type is used to store media metadata. The id of the media file is used as a key for the media content stored in our S3 bucket. 
+The media document type is used to store media metadata. The ID of the media file is used as a key for the media content stored in our S3 bucket. Files must be less than 15mb.
 
 The document stores:
-- A general "content category"
-- The MIME-type and extension of the file
-- Privacy settings
+- mimeType: The MIME-type and extension of the file
+- isPrivate: The privacy of the media
+- givenFileName: The name of the media
 
 The document also stores the following references:
-- The id of the <b>user</b> who uploaded the media file
+- creator: The ID of the <b>User</b> who uploaded the media file
 ##### Posts
 The post document is used to represent the user-produced content that our e-folio system displays. 
 
 The document stores:
-- Privacy settings
-- A tile and description
-- Tags and a general "content category"
-- A list of <b>Comment</b> documents representing the comments made on a post 
+- title: The title of the post
+- description: The description of the post (optional)
+- private: The privacy of the post
+- isUserPrivate: The privacy of the user who made the post
+- tags: An array of tags which posts can be searched by
+- comments: An array of <b>Comment</b> documents representing the comments made on a post 
 
 The document also stores the following references:
-- The ids of the <b>media</b> documents that contain the thumbnails and files used in the post
-- The id of the <b>user</b> who created the post
-- An array of <b>user</b> ids that represent the users permitted to access a private post
+- mediaID: The ID of the <b>Media</b> document for the post content
+- thumbnailURL: The ID of the <b>Media</b> document for the post thumbnail (optional)
+- userID: The ID of the <b>User</b> who created the post
 ##### User
 The user document represents the users of our website.
 
 The document stores:
-- Privacy settings
-- Contact details
-- Biographical data
-- Username and a hashed password
+- email: The email address of the user which is used to log into the user's account
+- firstName: The first name of the user
+- lastName: The last name of the user
+- UserName: The username of the user
+- pinnedPosts: An array of <b>Post</b> documents which are pinned by the user
+- password: a hashed and salted version of the user's password
+- organisation: The organisation of the user (optional)
+- professionalFields: An array of fields which a user can be search by
+- dateOfBirth: The date of birth of the user (optional)
+- phoneNumber: The phone number of the user (optional)
+- biography: A introduction or biography of the user (optional)
+- private: The privacy of the user
+- phoneNumberPrivate: The privacy of the user's phone number
+- emailPrivate: The privacy of the user's email
 
 The document also stores the following references:
-- The id of a <b>media</b> document that contains the profile picture of the user.
+- profilePic: The ID of a <b>Media</b> document that contains the profile picture of the user
 
 ##### Comment
 The comment document is used to store data about comments made on user posts.
 
 The document stores:
-- The comment body
-- Timestamps and other dating information
+- comment: The comment body
 
 The document also stores the following references
-- The ids of the <b>users</b> who have liked the post
-- The id of the <b>user</b> who posted the comment
+- likedBy: The IDs of the <b>Users</b> who have liked the post
+- userID: The ID of the <b>User</b> who posted the comment
 
 ##### Diagram
 We have provided a "crows-foot" diagram of the relations between documents used in our database. Note that the S3 bucket included in the diagram is <b>NOT</b> part of our database.
-<img src="/images/db.png"/> 
+<img src="/images/db.png"/>
 
 #### CI/CD Pipeline
 We have built a simple CI/CD pipeline to improve code quality and assist in the deployment of updates. 

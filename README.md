@@ -1773,3 +1773,19 @@ Responses:
 ## Test Cases
 
 Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
+
+We have provided traceability matrices for both the acceptance criteria, and for other functional requirements we identified. 
+The matrices are provided below:
+
+#### Traceability Matrix - Acceptance Criteria: 
+<p align="center">
+  <img src="images/acceptanceCriteria.PNG.png"  width="1000" >
+</p>
+
+
+#### Traceability Matrix - Other Functional Requirements: 
+<p align="center">
+  <img src="images/otherRequirements.PNG.png"  width="1000" >
+</p>
+
+

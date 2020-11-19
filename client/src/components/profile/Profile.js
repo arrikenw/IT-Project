@@ -81,7 +81,7 @@ function Profile({ user, token, history, location }) {
     }
     if (!currentUser || currentUser === "" || currentUser.userName !== userName) {
       const payload = {'filters': {userName}}
-      Axios.post('api/user/getPublic', payload).then((res) => {
+      Axios.post('/api/user/getPublic', payload).then((res) => {
         if (res.data.length > 0) {
           setCurrentUser(res.data[0])
         }

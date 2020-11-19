@@ -13,8 +13,8 @@ import {
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import MuiAlert from "@material-ui/lab/Alert";
-import add from "../utils/addMedia"
-import GenericMedia from "../utils/GenericMedia";
+import add from "../../utils/addMedia"
+import GenericMedia from "../../utils/GenericMedia";
 
 const useStyles = makeStyles({
   mainContainer: {

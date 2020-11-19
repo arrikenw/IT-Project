@@ -20,10 +20,10 @@ import Divider from '@material-ui/core/Divider';
 import Axios from "axios";
 import PropTypes from "prop-types";
 import * as timeago from 'timeago.js';
-import CommentList from "./CommentList";
+import CommentList from "./comment/CommentList";
 import fetchMediaUtil from "../utils/fetchMedia";
-import CommentForm from "./CommentForm";
-import LikeButtons from "./LikeButtons";
+import CommentForm from "./comment/CommentForm";
+import LikeButtons from "./likes/LikeButtons";
 import GenericMedia from "../utils/GenericMedia";
 
 

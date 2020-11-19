@@ -8,7 +8,7 @@ import {
 import {makeStyles} from "@material-ui/core/styles";
 import {withRouter} from "react-router-dom";
 import EditPostForm from "./EditPostForm";
-import fetchMediaUtil from "../utils/fetchMedia";
+import fetchMediaUtil from "../../utils/fetchMedia";
 
 
 const useStyles = makeStyles({

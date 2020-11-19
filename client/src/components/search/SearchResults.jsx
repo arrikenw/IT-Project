@@ -16,7 +16,7 @@ import { withRouter } from 'react-router-dom'
 
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import SearchPost from '../profile/SearchPost'
+import SearchPost from '../Post/SearchPost'
 
 
 

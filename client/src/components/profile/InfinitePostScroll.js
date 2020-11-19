@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 import PropTypes from "prop-types";
-import usePostSearch from './usePostSearch'
-import ProfilePost from './ProfilePost'
+import usePostSearch from '../search/usePostSearch'
+import ProfilePost from '../Post/ProfilePost'
 // https://www.youtube.com/watch?v=NZKUirTtxcg
 
 export default function InfinitePostScroll({ sortDirection, sortField, currentUser, token, filterTag, user}) {

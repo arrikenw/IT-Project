@@ -49,8 +49,8 @@ A hosted demo of the project can be found [here](https://efolio.herokuapp.com/).
 We have provided a demo account so that you can see a fully fleshed out account. However, feel free to create new user accounts and posts. 
 
 Demo credentials
-- Email: _______
-- Password: _______
+- Email: johnsmith1@gmail.com   
+- Password: demo1234
 
 ## Database
 #### Database description

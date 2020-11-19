@@ -83,7 +83,7 @@ This folder, `/docs `, includes:
   - The system implemented for this project has a frontend; which is responsible for the user interface, a backend server; which handles
     requests from the frontend; and finally a database which provides the necessary data to the backend server.
 
-![archectureDiagram](/images/architecture.png)
+![architectureDiagram](/images/architecture.png)
 
 ### Demo
 
@@ -131,11 +131,11 @@ We provide a brief outline of the key features of our system.
 
 #### Installing Packages
 
-To install the required Node.js packages, run the command `npm install` in both the root directory and in the `/client` directory of this repository. In order to use the npm, ensure Node.js is installed.
+To install the required Node.js packages, run the command `npm install` in both the root directory and in the `/client` directory of this repository. In order to use npm, ensure Node.js is installed.
 
 #### Creating MongoDB Database
 
-Efolio uses a database maintained by MongoDB to store and retreive the websites data. These instructions are for using MongoDB's cloud hosted database. However, a locally hosted MongoDB server can be used [instead](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/).
+Our system uses a MongoDB to store and retreive data. These instructions are for using MongoDB's cloud hosted database. However, a locally hosted MongoDB server can be used [instead](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/).
 
 To create a database to use with Efolio, first make an account and create a cluster with their [website](https://www.mongodb.com/). The currently deployed version of Efolio uses the free tier of MongoDB.
 
@@ -155,7 +155,7 @@ Next, navigate to the "Database Access" tab and create a new database user. Ensu
 
 Efolio uses an AWS S3 Bucket to store user's uploaded files, such as images, videos and other documents. In the currently deployed version, a free S3 Bucket is used with limited monthly requests.
 
-To create a AWS S3 Bucket, first create an AWS account [here](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start). Next navigate to the service called "S3". This can be done by simply searching for "S3" in the Find Services search box.
+To create an AWS S3 Bucket, first create an AWS account [here](https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=default&redirect_url=https%3A%2F%2Faws.amazon.com%2Fregistration-confirmation#/start). Next navigate to the service called "S3". This can be done by simply searching for "S3" in the Find Services search box.
 
  <p align="center">
   <img src="images/aws_bucket_search.png"  width="1000" >
@@ -200,15 +200,19 @@ Attributes:
 - <b>\<secretAcessKeyForAWSBucket></b> Should be the Secret Key created earlier when setting up the AWS S3 Bucket.
 - <b>\<AWSBucketName></b> Should be the Bucket name created earlier when setting up the AWS S3 Bucket.
 
-#### GitHub Actions Continuous Integration
+#### Setting up CI with GitHub Actions
 
-Continuous Inegration testing allows the code to automatically tested whenever a new pull request to the Master branch is made. The GitHub action can be found within the `.github` directory and the testing is done the package Jest.
+Continuous integration testing allows our code to be automatically tested whenever a new pull request to the Master branch is made. 
+We have chosen to use the Jest testing package for our integration tests.
 
-To set up the continuous integration testing, the attributes from the `.env.test` file made prior must be replicated within the GitHub secrets of the repository. Navigate to the repository settings and click onto he "Secrets" tab. Enter the `.env.test` attributes with the same key and value pairs.
+In order to set up continuous integration testing, you must copy the attributes from the `.env.test` file into the GitHub secrets section of your repository. 
+To access secrets, navigate to repository settings and click on the "Secrets" tab. Make sure that you enter the key value pairs exactly as they appear in `.env.test`.
 
  <p align="center">
   <img src="images/github_actions.png"  width="1000" >
 </p>
+
+If you would like to customise the CI testing, our GitHub Actions workflow can be found within the `.github` directory. 
 
 ## System Requirements
 
@@ -259,7 +263,7 @@ Demo Commands:
 
 #### Remote Deployment
 
-The process for remote deployment is same to local deployment. Repeat the above process on the chosen remoting hosting solution. The rest of this guide will foucs of deployment on Heroku, which the project was streamlined for.
+The process for remote deployment is same as local deployment. Repeat the above process on the chosen remote hosting solution. The rest of this guide will focus on deployment on Heroku, which the project was streamlined for.
 
 #### Heroku Deployment
 
@@ -295,7 +299,7 @@ Navigate back to the "Deploy" tab and select the branch to be deployed under "Ma
 Our system uses a MongoDB database to store account data, comments, media file metadata, and posts created by users.
 File storage for uploaded media is not handled by our database – instead, the files are stored in an AWS S3 bucket and their key stored in our database.
 
-Key fields fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format. Additionally, all database documents store timestamps for the document creation and the document's most recent update.
+Key fields have basic validation on length and content, and custom validation is used to ensure that emails used by accounts have a valid format. Additionally, all database documents store timestamps for the document creation and the document's most recent update.
 
 #### Selection rationale
 We selected MongoDB as our database for two main reasons:
@@ -393,16 +397,16 @@ We provide a brief sketch of the role of the CI/CD pipeline in the development c
 1. Create feature branch
 2. Write new code, test locally
 3. Make pull request
-4. \[CI\] Integration tests are automatically run using Github actions
+4. <b>\[CI\]</b> Integration tests are automatically run using Github actions
    - If tests fail, the merge cannot be completed. Return to step 2
    - If tests pass, proceed to step 5
 5. Review and approve merge, pull onto master
-6. \[CD\] Merge onto master triggers an automatic deployment to Heroku using Github actions
+6. <b>\[CD\]</b> Merge onto master triggers an automatic deployment to Heroku using Github actions
 7. Heroku will install relevant packages and start the server. The site is now deployed and reflects the latest changes from master
 
 ## Frontend Architecture
 
-Assets used in our front-end (eg. image missing thumbnails) are stored in the ```/client/src/assets``` directory. Source code for components is stored in the ```client/src/components``` directory.
+Assets used in our front-end (eg. default thumbnails) are stored in the ```/client/src/assets``` directory. Source code for components is stored in the ```client/src/components``` directory.
 #### Header
 
 The website header is displayed on every page. Related files are stored in ```/client/src/header``` which contains:

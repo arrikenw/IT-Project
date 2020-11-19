@@ -83,6 +83,19 @@ Demo credentials
 - Email: _______
 - Password: _______
 
+## Features implemented
+Our E-Folio comes with useful features which enhance the user experience:
+- Create account: E-Folio gives users the ability to create their own accounts for work sharing purposes. Also, by distinguishing contents by their creators and giving each user a profile page, users can visit each other and view others contents. This is a crucial requirement from our clients to give users the ability to view other users’ work.
+- Upload file: Our website let users upload Microsoft documents, images, videos, as well as audio and pdfs. The clients ask for the ability to upload different file types to make the E-Folio more diverse in content.
+- Edit post: Another request from the clients is to be able to edit the post after posting it. We implement this through a setting button for every post. This feature gives the post owner the power to change every aspect of the post to suit the purpose, from post description, files to privacy settings of the post.
+- Edit account: Users can change their user information like name, phone number, email, or profile picture to suit their user information.
+- Header: Every page of the website is fitted with a header on top. All headers have a home shortcut button, a search bar and its filter, a user profile shortcut button, as well as a login/logout button.
+- Profile detail: Every page in our website contains a profile detail component, either of the user or other users when visiting their site. Each profile detail component contains the user’s information, as well as a filter button.
+- Filter: Each profile can filter posts through their tags. This is a requisite from the clients, and we implement the filter feature through creating tags for posts for easier filtering.
+- Search: the search bar can be found on the header to search for users or posts. The clients required for this feature, so we implement……
+- Interaction: Another request from the clients is to add comments for each post. Therefore, we implement like button, comment, and share button for each post to increase the level of interaction between users.
+- Pinned bar: We come up with this idea to emphasize the important or significant posts that the user wants to put up front in an easy spot to see. The pinned bar is a carousel below the header, which can hold 20 pinned posts…..
+
 ## Set Up
 #### Installing Packages
 To install the required Node.js packages, run the command `npm install` in both the root directory and in the `/client` directory of this repository. In order to use the npm, ensure Node.js is installed. 
@@ -1546,7 +1559,7 @@ a string with the correct form:
 
 ### Documentation:
 - code must have relevant comments explaining what blocks do
-- API routes should be updated into this read me with all details included
+- API routes should be updated into this read me with all details include
 
 ## Tests Case
 Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).

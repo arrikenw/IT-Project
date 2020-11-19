@@ -3,7 +3,7 @@ const app = require("../../app");
 const database = require("../../models");
 const fs = require("fs").promises;
 
-// addMedia testing
+// 1 addMedia testing
 describe("test POST /api/media/add route and the addMedia controller", () => {
   // clear database before each test
   let token;
@@ -26,6 +26,7 @@ describe("test POST /api/media/add route and the addMedia controller", () => {
     return true;
   });
 
+  // 1.1
   test("addMedia with valid inputs ", async (done) => {
     const response = await request(app)
       .post("/api/media/add")
@@ -47,6 +48,7 @@ describe("test POST /api/media/add route and the addMedia controller", () => {
   });
 });
 
+// 2
 describe("test POST /api/media/ route and the serveMedia controller", () => {
   // clear database before each test
   let token;
@@ -69,6 +71,7 @@ describe("test POST /api/media/ route and the serveMedia controller", () => {
     return true;
   });
 
+  // 2.1
   test("retrieveMedia with valid inputs", async (done) => {
     const response = await request(app)
       .post("/api/media/add")
@@ -97,7 +100,7 @@ describe("test POST /api/media/ route and the serveMedia controller", () => {
     done();
   });
 
-  // test with incorrect inputs
+  // 2.2 test with incorrect inputs
   test("retrieveMedia with missing media id", async (done) => {
     const response = await request(app)
       .post("/api/media/add")
@@ -127,6 +130,7 @@ describe("test POST /api/media/ route and the serveMedia controller", () => {
   });
 });
 
+// 3
 describe("test POST /api/media/delete route and the deleteMedia controller", () => {
   // clear database before each test
   let token;
@@ -149,6 +153,7 @@ describe("test POST /api/media/delete route and the deleteMedia controller", () 
     return true;
   });
 
+  // 3.1
   test("deleteMedia", async (done) => {
     const response = await request(app)
       .post("/api/media/add")

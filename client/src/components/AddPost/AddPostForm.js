@@ -218,11 +218,11 @@ function AddPostForm({ user, token, history }){
           console.error(err)
         });
       }
-      add(rawMedia, postPrivacy, mediaName, token, callback);
+      add(rawMedia, false, mediaName, token, callback);
     }
 
     if (rawMediaTN) {
-      add(rawMediaTN, postPrivacy, mediaNameTN, token, firstCallBack)
+      add(rawMediaTN, false, mediaNameTN, token, firstCallBack)
     }
     else {
       firstCallBack("")

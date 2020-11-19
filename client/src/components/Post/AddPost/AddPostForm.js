@@ -80,6 +80,8 @@ function AddPostForm({ user, token, history }){
   const [warning, setWarning] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
 
+  const [posting, setPosting] = useState(false)
+
   const changeTitle = (e) => {
       setTitle(e.target.value)
   }
@@ -195,6 +197,8 @@ function AddPostForm({ user, token, history }){
     if (validateFields() === 1) {
       return
     }
+    if (posting) return
+    setPosting(true)
   const firstCallBack = (resOne) => {
       const callback = (resTwo) => {
         const payload = {
@@ -216,6 +220,7 @@ function AddPostForm({ user, token, history }){
           redirect();
         }).catch((err) => {
           console.error(err)
+          setPosting(false)
         });
       }
       add(rawMedia, false, mediaName, token, callback);

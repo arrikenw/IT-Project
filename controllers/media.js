@@ -62,7 +62,6 @@ const saveBucket = (res, fileData, DBEntry) => {
       contentCategory: DBEntry.contentCategory,
       extension: DBEntry.extension,
       isPrivate: DBEntry.isPrivate,
-      canAccess: DBEntry.canAccess,
       creator: DBEntry.creator,
       givenFileName: DBEntry.givenFileName,
     };
@@ -282,9 +281,7 @@ const serveMedia = async (req, res) => {
       if (
         !(
           doc.creator.toString() === req.user.id.toString() ||
-          doc.isPrivate === false ||
-          (doc.isPrivate === true &&
-            doc.canAccess.includes(mongoose.Types.ObjectId(req.user.id)))
+          doc.isPrivate === false
         )
       ) {
         console.log("user does not have permission to view media");
@@ -420,7 +417,6 @@ const performMediaUpdate = (res, id, update, mediaDoc) => {
     extension: mediaDoc.extension,
     creator: mediaDoc.creator,
     isPrivate: update.isPrivate,
-    canAccess: update.canAccess,
     givenFileName: update.givenFileName,
   };
 
@@ -469,17 +465,8 @@ const updateMediaData = (req, res) => {
     return;
   }
 
-  if (!req.body.canAccess) {
-    sendHelper(res, {
-      status: 400,
-      msg: "Media update failed - access information was absent",
-    });
-    return;
-  }
-
   const update = {
     isPrivate: req.body.isPrivate,
-    canAccess: req.body.canAccess,
     givenFileName: req.body.givenFileName,
   };
 

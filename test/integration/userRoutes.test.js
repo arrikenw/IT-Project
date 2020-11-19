@@ -4,13 +4,14 @@ const request = require("supertest");
 const app = require("../../app");
 const database = require("../../models");
 
-// addUser testing
+// 1 addUser testing
 describe("test /api/user/add route and the addUser controller", () => {
   // clear database before each test
   beforeEach(() => {
     return database.clearCollections();
   });
 
+  // 1.1
   test("addUser with valid inputs", async (done) => {
     const payload = {
       email: "test@email.com",
@@ -26,6 +27,7 @@ describe("test /api/user/add route and the addUser controller", () => {
     done();
   });
 
+  // 1.2
   test("addUser with password too short", async (done) => {
     const payload = {
       email: "test@email.com",
@@ -43,7 +45,7 @@ describe("test /api/user/add route and the addUser controller", () => {
   });
 });
 
-//  loginUser testing
+// 2 loginUser testing
 describe("test /api/user/login route and the loginUser controller", () => {
   // add database entry to test loginUser
   beforeAll(async () => {
@@ -59,6 +61,7 @@ describe("test /api/user/login route and the loginUser controller", () => {
     return true;
   });
 
+  // 2.1
   test("loginUser with valid inputs ", async (done) => {
     const payload = {
       email: "test@email.com",
@@ -71,7 +74,7 @@ describe("test /api/user/login route and the loginUser controller", () => {
   });
 });
 
-// getUser testing
+// 3 getUser testing
 describe("test /api/user/add route and the addUser controller", () => {
   // add database entry and get token to test getUser
   let token;
@@ -96,6 +99,7 @@ describe("test /api/user/add route and the addUser controller", () => {
     return true;
   });
 
+  // 3.1
   test("getUser with valid token", async (done) => {
     const response = await request(app)
       .get("/api/user/get")
@@ -106,7 +110,7 @@ describe("test /api/user/add route and the addUser controller", () => {
   });
 });
 
-// getPublicUser testing
+// 4 getPublicUser testing
 describe("test /api/user/getPublic route and the getPublicUser controller", () => {
   // add database entries and get ids to test getPublicUser
   const users = {
@@ -142,6 +146,7 @@ describe("test /api/user/getPublic route and the getPublicUser controller", () =
     return true;
   });
 
+  // 4.1
   test("getPublicUser with valid input", async (done) => {
     const response = await request(app)
       .post("/api/user/getPublic")
@@ -162,7 +167,7 @@ describe("test /api/user/getPublic route and the getPublicUser controller", () =
   });
 });
 
-// updateUser testing
+// 5 updateUser testing
 describe("test /api/user/update route and the updateUser controller", () => {
   // add database entry and get token to test updateUser
   let token;
@@ -187,6 +192,7 @@ describe("test /api/user/update route and the updateUser controller", () => {
     return true;
   });
 
+  // 5.1
   test("updateUser with valid input", async (done) => {
     const payload = {
       password: "testing123",
@@ -204,7 +210,7 @@ describe("test /api/user/update route and the updateUser controller", () => {
   });
 });
 
-/// deleteUser testing
+/// 6 deleteUser testing
 describe("test /api/user/delete route and the deleteUser controller", () => {
   // add database entry and get token to test updateUser
   let token;
@@ -229,6 +235,7 @@ describe("test /api/user/delete route and the deleteUser controller", () => {
     return true;
   });
 
+  // 6.1
   test("updateUser with valid input", async (done) => {
     const payload = {
       password: "testing123",

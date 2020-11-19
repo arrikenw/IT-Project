@@ -64,6 +64,7 @@ const getMediaID = async (token) => {
   return response.body._id;
 };
 
+// 1
 describe("test /api/post/add route and the addPost controller", () => {
   let token;
   let mediaID;
@@ -74,6 +75,7 @@ describe("test /api/post/add route and the addPost controller", () => {
     // mediaID = await getMediaID();
   });
 
+  // 1.1
   test("addPost with valid inputs", async (done) => {
     console.log(token);
 
@@ -101,6 +103,7 @@ describe("test /api/post/add route and the addPost controller", () => {
   });
 });
 
+// 2
 describe("test /api/post/get route and the getPost controller", () => {
   let token;
   let postID;
@@ -111,6 +114,7 @@ describe("test /api/post/get route and the getPost controller", () => {
     postID = await getPostID(token);
   });
 
+  // 2.1
   test("getPost with valid inputs", async (done) => {
     const payload = {
       search: "Test post title",
@@ -132,6 +136,61 @@ describe("test /api/post/get route and the getPost controller", () => {
       "test post description"
     );
     expect(response.body[0]).toHaveProperty("private", true);
+    done();
+  });
+});
+
+// 3
+describe("test /api/post/update route and updatePost controller", () => {
+  let token;
+  let postID;
+  // clear database before each test
+  beforeEach(async () => {
+    await database.clearCollections();
+    token = await getUserToken();
+    postID = await getPostID(token);
+  });
+
+  // 3.1
+  test("updatePost with valid inputs", async (done) => {
+    const payload = {
+      update: {
+        title: "updated title",
+      },
+      postID,
+    };
+    const response = await request(app)
+      .post("/api/post/update")
+      .send(payload)
+      .set("Authorization", token);
+    expect(response.status).toBe(200);
+    expect(response.body.postID).toMatch(/[a-z0-9]{24}/);
+    done();
+  });
+});
+
+// 4
+describe("test /api/comment/add route and addComment controller", () => {
+  let token;
+  let postID;
+  // clear database before each test
+  beforeEach(async () => {
+    await database.clearCollections();
+    token = await getUserToken();
+    postID = await getPostID(token);
+  });
+
+  // 4.1
+  test("addComment with valid inputs", async (done) => {
+    const payload = {
+      postID,
+      comment: "Test comment",
+    };
+    const response = await request(app)
+      .post("/api/comment/add")
+      .send(payload)
+      .set("Authorization", token);
+    expect(response.status).toBe(201);
     done();
   });
 });

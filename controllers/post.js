@@ -78,6 +78,7 @@ const getPost = (req, res) => {
   const sort = {};
   sort[sortField] = sortDirection;
   PostModel.find(query)
+    .collation({ locale: "en" })
     .sort(sort)
     .skip(skip)
     .limit(limit)
@@ -162,6 +163,7 @@ const getPublicPost = (req, res) => {
   console.log(skip);
   console.log(limit);
   PostModel.find(query)
+    .collation({ locale: "en" })
     .sort(sort)
     .skip(skip)
     .limit(limit)

@@ -1,6 +1,7 @@
 # E-FOLIO:
 
 ## Table of Contents
+
 * [Introduction](#introduction)
     - Motivation for E-FOLIO
     - Demo 
@@ -8,39 +9,71 @@
 * [System Requirements](#system-requirements)
 * [Running](#running)
 * [Deployment](#deployment)
-- #### Style Guide
+* [Style Guide](style-guide)
   - Code Style
   - Console Logging
   - API Responses
   - GitHub
   - Documentation
-- #### API Documentation
- - Users
- - Media
- - Post
- - Comments
-- #### Test Cases
+- [Features](#features)
+- [API Documentation](#API-documentation)
+  - Users
+  - Midia
+  - Post
+  - comments
+- [Tests Case](#Test-Case)
+
   
 
-
 ## Introduction
-E-folio is a web-based digital portfolio system. It allows users to post work that they hope to share with the world. Users can explore and search the posts of others and leave feedback and likes.
 
-The system is composed of:
-- A backend server that uses node.js with express middleware
-- A react.js frontend that makes use of MaterialUI for styling
-- A mongoDB database
-- An Amazon S3 Bucket file server 
+The problem that we as a software development team have answered is to construct a digital portfolio system primarily for students to 
+display their work, but could be used by anyone as a digital portfolio. The concept is essentially for a user to be able to showcase
+work that they are proud of on a digital platform. In the case of students the platform they also have to be able to reflect on their 
+work and be able to submit assessable work. This means a balance between the privacy (to ensure no plagiarism) and display work they are 
+proud of.  For this digital portfolio system to be compatible with many fields it must accept many file types. And finally allow the user
+to reflect on their work so that they may develop.  
+ 
+As an answer to this problem Podoju has developed the “E-FOLIO”, and is a web based digital portfolio system. E-FOLIO, allows users to 
+‘post’ work that they wish to showcase to their profile, share their profile with others.  This project was created by the Podoju was 
+consists of a backend server using node.js, Express and Mongoose;a frontend written using html, css, node.js, react.js, and Material UI;
+a database using mongoDB, and a file server using AWS S3 Bucket. 
 
 ### Motivation for E-FOLIO 
-Documentation on the core vision of our system can be found in our [/docs directory](/docs).
+E-Foilio as the response to the problem was motivated by the idea that this platform should be able to be used by anyone who wanted
+to show case their work, but is primarily for the academic arena. In order to grasp the differnt user types we made personas. 
 
-The  `/docs ` directory includes the following items: 
-- User Stories 
+
+[Vision Documentation](/docs)
+
+This folder, `/docs `, includes: 
 - Personas
-- Motivational Model 
-- Class Diagram
+     - Building a range of personas help as understand the users needs, behaviours, goals and experiences. Four Sets of uses were
+      identified, the undergraduate student, the post graduate student, the lecturer, and industry representatives.  
+- Motivational Model
+     - We used a Motivational Model to represent the requirement of this project.  Motivational Models are created using the DO-BE-FEEL 
+     method of questioning in meetings with the client.  What should the system DO? What should the system BE? How should the user FEEl? 
+     These answers are then mapped to a diagram, the parallelograms are the "DO", the cloud is the "BE", and the heart is the "FEEL". 
+
+![motivationalModel](/docs/motivationalModel.pdf)
+
+- User Stories
+    - The user stories created to help define the features fo this project were drived form the motivational model and the personas. There
+     are general user stories for all types of users, but there are also specific user stories that answer the needs of that specific user 
+     group.
+- Class Diagram 
+    - How the pages in the frontend interact is demonstrated in this diagram. 
+
+![classDiagram](/docs/Class%20Diagram.pdf)
 - Architecture Diagram 
+    - The system implemented for this project has a frontend; which is responsible for the user interface, a backend server; which handles 
+    requests from the frontend; and finally a database which provides the necessary data to the backend server. 
+
+![archectureDiagram](/docs/Architecture%20Diagram.pdf)
+### Demo
+Bellow is a link to a demo the hosted project: 
+[https://efolio.herokuapp.com/](https://efolio.herokuapp.com/)
+
 
 ### Demo
 A hosted demo of the project can be found [here](https://efolio.herokuapp.com/).
@@ -453,10 +486,14 @@ made for the new functionality
 - a pull request **must be reviewed by another** before being approved
 - when a pull request is made, the relevant trello post is **moved into review**
 - when a pull request is approved, the relevant trello post is **moved into done**
-
 ### Documentation:
 - code must have relevant comments explaining what blocks do
 - API routes should be updated into this read me with all details included
+
+## Features
+
+
+
 
 ## API Documentation
 Here is the needed documentation of the APIs used by the frontend to request to the backend.
@@ -1421,15 +1458,3 @@ Responses:
 ## Tests Case
 Test cases can be found in the `/test` directory. The directory can be accessed [here](/test).
 
-
-[## Introduction]: https://github.com/arrikenw/IT-Project#introduction-1
-
-[/docs]: /docs
-
-[### Motivation for E-FOLIO]: /docs
-
-[## Set Up]: /docs
-
-[## Set Up]: /setup
-
-[##-set-up]: ##-set-up

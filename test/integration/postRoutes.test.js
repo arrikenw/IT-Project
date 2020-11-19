@@ -9,7 +9,6 @@ const sendHelper = (res, response) => {
   res.status(response.status).send(response.msg);
 };
 
-
 const getUserToken = async () => {
   const payloadAdd = {
     email: "test@email.com",
@@ -31,14 +30,13 @@ const getUserToken = async () => {
 };
 
 const getPostID = async (token) => {
-
   const mediaResponse = await request(app)
-      .post("/api/media/add")
-      .set("Authorization", token)
-      .set("Content-Type", "multipart/form-data")
-      .field("isPrivate", false)
-      .field("givenFileName", "test txt")
-      .attach("mediafile", "./test/resources/test.txt");
+    .post("/api/media/add")
+    .set("Authorization", token)
+    .set("Content-Type", "multipart/form-data")
+    .field("isPrivate", false)
+    .field("givenFileName", "test txt")
+    .attach("mediafile", "./test/resources/test.png");
 
   const payload = {
     title: "Test post title",
@@ -54,25 +52,38 @@ const getPostID = async (token) => {
   return response.body.id;
 };
 
+const getMediaID = async (token) => {
+  const response = await request(app)
+    .post("/api/media/add")
+    .set("Authorization", `Bearer ${token}`)
+    .set("Content-Type", "multipart/form-data")
+    .field("isPrivate", false)
+    .field("givenFileName", "test txt")
+    .attach("mediafile", "./test/resources/test.png");
+
+  return response.body._id;
+};
+
 describe("test /api/post/add route and the addPost controller", () => {
   let token;
+  let mediaID;
   // clear database before each test
   beforeEach(async () => {
     await database.clearCollections();
     token = await getUserToken();
+    // mediaID = await getMediaID();
   });
-
 
   test("addPost with valid inputs", async (done) => {
     console.log(token);
 
     const mediaResponse = await request(app)
-        .post("/api/media/add")
-        .set("Authorization", token)
-        .set("Content-Type", "multipart/form-data")
-        .field("isPrivate", false)
-        .field("givenFileName", "test txt")
-        .attach("mediafile", "./test/resources/test.txt");
+      .post("/api/media/add")
+      .set("Authorization", token)
+      .set("Content-Type", "multipart/form-data")
+      .field("isPrivate", false)
+      .field("givenFileName", "test txt")
+      .attach("mediafile", "./test/resources/test.png");
     const payload = {
       title: "Test post title",
       description: "test post description",
